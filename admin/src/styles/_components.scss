@@ -1,0 +1,124 @@
+.room-card {
+  width: 100%;
+  height: 16rem;
+  background-color: #fff;
+  border-radius: 2rem;
+  animation: zoom-in .5s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+  box-shadow: $shadow;
+
+  &__building-name {
+    font-size: 1.8rem;
+    color: $color-primary;
+    font-weight: bold;
+  }
+
+  &__room-number {
+    font-size: 1.2rem;
+  }
+
+  &__room-name {
+    font-size: 1.2rem;
+  }
+}
+
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0;
+  }
+  100% {
+    opacity: 100%;
+    transform: scale(1, 1);
+  }
+}
+//Card Overview
+
+.card-container--covid-overview {
+  width: 100%;
+  height: 43.5rem;
+  padding: .5rem;
+  display: flex;
+  position: relative;
+  background-color: #fff;
+  border-radius: 2rem;
+  box-shadow: $shadow;
+  
+
+  &__card-description {
+    width: 28.9rem;
+    height: 42.5rem;
+    background-color: #F5F5F5;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+   
+  }
+
+  &__table-container {
+    width: 68.3rem;
+    height: 54.4rem;
+    overflow-y: auto;
+
+  }
+
+  &__id-overview {
+    font-size: 1.2rem;
+    color: $color-text-dark;
+  }
+
+  &__name-title {
+    font-size: 1.6rem;
+    color: $color-primary;
+    font-weight: bold;
+    margin-top: .5rem;
+  }
+
+  &__date-overview {
+    font-size: 1.1rem;
+    color: #939393;
+    margin-top: .5rem;
+  }
+
+  &__selection-overview {
+    width: 24.9rem;
+    height: 3.1rem;
+    border-radius: 1rem;
+    border: 1.5px solid #28CD41;
+    margin-top: 5rem;
+    padding-left: 1.5rem;
+    font-size: 1.6rem;
+    color: $color-primary;
+    outline: none; 
+  }
+
+
+  &__card-tab {
+    display: flex;
+    flex-direction: column;
+    margin-left: 7.9rem;
+  }
+  
+  &__1st-degree {
+    font-size: 2.6rem;
+    font-weight: bold;
+    margin-top: 4rem;
+    color: $color-text-dark;
+    margin-left: 3rem;
+    margin-bottom: 2rem;
+  }
+  &__tab {
+    width: 90%;
+    height: 100%;
+    margin: 0 auto;
+    box-shadow: $shadow;
+  }
+}
+
+
+  

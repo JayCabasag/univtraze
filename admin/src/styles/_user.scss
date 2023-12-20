@@ -1,0 +1,91 @@
+:root {
+    --color-primary: #28cd41;
+    --color-text-dark: #364d39;
+    --color-bg: #e1f5e4;
+    --color-text-light: #e1f5e4;
+    --color-secondary: #28cd93;
+    --primary-gradient: linear-gradient(#6bf27f, #28cd41);
+    --secondary-gradient: linear-gradient(#ffffff,#E9F2EB);
+    --color-input: #E1F5E4;
+    --color-red-pastel: #F5E3E1;
+    --color-card-gradient: linear-gradient(#5C7AE8,#294CCC);
+    
+    --body-text: 1.6rem;
+    --shadow:0 .8rem 1.6rem rgba(0, 0, 0, .16);
+  }
+
+  .container {
+    max-width: 114rem;
+    margin: 0 auto;
+  }
+
+  .users {
+    width: 100%;
+    height: 100vh;
+    padding-bottom: 4rem;
+  }
+  
+  .dash {
+    display: flex;
+    margin-top: 4.2rem;
+  }
+  
+  .back-icon {
+    width: 4.4rem;
+    height: 4.4rem;
+    margin-right: 3rem;
+    margin-left: -.9rem;
+    cursor: pointer;
+   
+  }
+  .dash-text {
+    font-size: 1.6rem;
+  }
+  .user-text {
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
+  
+  .user-title {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-top: 6rem;
+  }
+  
+  
+  table{
+    
+    width: 113.5rem;
+    height: 8rem;
+    margin-top: 2rem;
+    border-radius: 2rem;
+    border-collapse: collapse;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 4rem;
+  }
+
+  td {
+    text-align: center;
+    border-bottom: 1px solid #E1F5E4;
+    height: 4.3rem;
+    background-color: #fff;
+  
+  }
+  th {
+    border-bottom: 1px solid #E1F5E4;
+    background-image: var(--primary-gradient);
+    font-size: 22px;
+    color: #fff;
+    height: 6rem;
+  
+  }
+  .nam {
+    cursor: pointer;
+  }
+
+  .spacer {
+    width: 100px;
+    height: 100px; 
+    margin-top: 4rem;
+  }
