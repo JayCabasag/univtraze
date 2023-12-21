@@ -135,6 +135,7 @@ export default function DiseaseReports() {
       <div className="container container--report">
         <h2 className="covid-report">Disease Reports</h2>
         <div className="card-table">
+          <div>
           <table className="table-covid">
             <thead>
               <tr>
@@ -188,6 +189,15 @@ export default function DiseaseReports() {
               })}
             </tbody>
           </table>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <a href="#" class="pagination-btn previous round">
+              &#8249;
+            </a>
+            <a href="#" class="pagination-btn next round">
+              &#8250;
+            </a>
+          </div> 
+          </div>
           <div className="card-details">
             <button
               className="btn-notify"

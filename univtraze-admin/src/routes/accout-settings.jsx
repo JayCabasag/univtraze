@@ -24,17 +24,7 @@ export default function AccountSettingsPage() {
 
   // Clinic admin credentials previewer variables
   const [showPreviewer, setShowPreviewer] = useState(false);
-
-  useEffect(() => {}, []);
-
-  const admin = () => {
-    navigate('/admin');
-  };
-
-  // const handleRegisterClinicAdmin = async () => {
-
-  // }
-
+  
   const handleChangeAdminCredentials = async () => {
     if (validator.isEmpty(username)) {
       setSuccess(false);

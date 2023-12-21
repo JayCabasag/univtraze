@@ -1,6 +1,6 @@
 import Breadcrumbs from '../components/Breadcrumbs';
 import Header from '../components/Header';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 export default function AdminPage() {
   const navigate = useNavigate();
@@ -9,14 +9,18 @@ export default function AdminPage() {
     navigate(-1);
   };
 
+  const location = useLocation();
+
+  const isAdminRoute = location.pathname === "/admin"
+
   return (
     <div className="dashboard">
       <Header />
-      <Breadcrumbs
+      {!isAdminRoute && <Breadcrumbs
         event={handleGoBack}
         identifier="Dashboard / "
-        current="Users"
-      />
+        current={location.pathname}
+      />}
       <Outlet />
     </div>
   );

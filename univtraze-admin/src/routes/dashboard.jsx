@@ -96,7 +96,7 @@ export default function DashboardPage() {
 
   return (
     <div className="section">
-      <div className="container space-top">
+      <div className="container">
         <h3 className="welcome-back">Welcome Back, Admin</h3>
         <h1 className="update">Here's an update for today</h1>
       </div>
