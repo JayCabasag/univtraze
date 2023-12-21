@@ -1,0 +1,25 @@
+.pagination-btn {
+    text-decoration: none;
+    display: inline-block;
+    padding: 6px 20px;
+  }
+  
+.pagination:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  .previous {
+    background-color: #f1f1f1;
+    color: black;
+  }
+  
+  .next {
+    background-color: #28cd41;
+    color: white;
+  }
+  
+  .round {
+    border-radius: 50%;
+    font-size: 2rem;
+  }

@@ -8,6 +8,7 @@
     --secondary-gradient: linear-gradient(#ffffff,#E9F2EB);
     --color-input: #E1F5E4;
     --color-red-pastel: #F5E3E1;
+    --color-red: #FF0000;
     --color-card-gradient: linear-gradient(#5C7AE8,#294CCC);
     
     --body-text: 1.6rem;
@@ -65,7 +66,6 @@
     display: flex;
     justify-content: flex-end;
   }
-
   .menu-container {
     width: 21.5rem;
     height: 26rem;
@@ -97,6 +97,10 @@
 
   .links:not(:last-child) {
     border-bottom: 2px solid var(--color-bg);
+  }
+
+  .log-out-link {
+    color: var(--color-red)
   }
 
   .links:hover {

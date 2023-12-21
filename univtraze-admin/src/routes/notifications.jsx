@@ -151,19 +151,12 @@ export default function Notifications() {
     <div className='users'>
          <div className="container">
          <Breadcrumbs event={admin} identifier="Dashboard / " current="Notifications"/>
-
-          <div style={{display: 'flex', flexDirection: 'row'}}>
-            <p style={{fontWeight: 'bold', width: '15px', backgroundColor: 'white', textAlign: 'center', cursor: 'pointer'}} onClick={() => backPage()}>{'<'}</p>
-            <p style={{fontWeight: 'bold', width: '15px', borderWidth: '1px', textAlign: 'center'}}>{currentPageNumber}</p>
-            <p style={{fontWeight: 'bold', width: '15px', backgroundColor: 'white', textAlign: 'center',  cursor: 'pointer'}} onClick={() => nextPage()}>{'>'}</p>
-          </div>
           <table>
             <tr>
               <th>Notifications</th>
             </tr>
               {
                 notificationLists && notificationLists?
-                
                 notificationLists.map((notificationList) => {
                   return  <tr key={notificationList.id} onClick={() => {handleUpdateNotificationStatus(notificationList.id, notificationList.notification_type)}}>
                             <td style={{cursor: 'pointer',textAlign: 'left', paddingLeft: '15px', display: 'flex', width: '100%', alignItems: 'center'}}>
@@ -176,12 +169,13 @@ export default function Notifications() {
                           </tr>
                 })
                 :
-                null
-              }
-            
+                <p>Hello</p>
+              } 
           </table>
-
-
+          <div style={{display: 'flex', flexDirection: 'row'}}>
+          <a href="#" class="pagination-btn previous round">&#8249;</a>
+          <a href="#" class="pagination-btn next round">&#8250;</a>
+          </div>
          </div>
          <div className="spacer"></div>
          </div>

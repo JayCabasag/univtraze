@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import logoDark from '../assets/logo-full.png'
 import notification from '../assets/notification-bell.png'
@@ -6,13 +6,12 @@ import menuIcon from "../assets/menu.png"
 import Menu from "./Menu"
 import axios from 'axios'
 
-
-
 const Header = () => {
   const navigate = useNavigate()
 
   const [isActive, setIsActive] = useState(false);
   const [totalNotifications, setTotalNotifications] = useState(0);
+  const menuRef = useRef();
 
   const dashboard = () => {
     navigate('/admin')
@@ -39,9 +38,11 @@ const Header = () => {
       ).then(resp => {
         setTotalNotifications(resp.data.total_active_notifications);
     });
-
   }
-  
+
+  const handleCloseMenu = () => {
+    setIsActive(false)
+  }
 
   return (
    <header className="header">
@@ -58,7 +59,7 @@ const Header = () => {
             </div>
         </div>
         <div className="container container--menu">
-          {isActive && <Menu /> }
+          {isActive && <Menu ref={menuRef} handleCloseMenu={handleCloseMenu}/> }
         </div>
    </header>
   )
