@@ -1666,6 +1666,11 @@ th {
   background-color: #f5f5f5;
 }
 
+.links:hover {
+  background-color: #f5f5f5;
+  border-radius: 1rem;
+}
+
 .spinner-container {
   display: none;
 }
