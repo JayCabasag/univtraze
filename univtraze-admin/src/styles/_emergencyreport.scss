@@ -1,0 +1,87 @@
+:root {
+  --color-primary: #28cd41;
+  --color-text-dark: #364d39;
+  --color-bg: #e1f5e4;
+  --color-text-light: #e1f5e4;
+  --color-secondary: #28cd93;
+  --primary-gradient: linear-gradient(#6bf27f, #28cd41);
+  --secondary-gradient: linear-gradient(#ffffff, #e9f2eb);
+  --color-input: #e1f5e4;
+  --color-red-pastel: #f5e3e1;
+  --color-card-gradient: linear-gradient(#5c7ae8, #294ccc);
+
+  --body-text: 1.6rem;
+  --shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.16);
+}
+.h2-container {
+  width: 100%;
+  height: 15rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__emergency {
+    font-size: 2.8rem;
+    font-weight: bold;
+    position: relative;
+  }
+  &__calendar {
+    width: 24rem;
+    height: 4.4rem;
+    border-radius: 1rem;
+    padding-right: 20px;
+    outline: none;
+    display: flex;
+    right: 0;
+    box-shadow: $shadow;
+    padding-left: 1.5rem;
+    font-size: 1.6rem;
+    color: $color-text-dark;
+    background-color: #e1f5e4;
+  }
+}
+
+.card-cons {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(auto, 1fr);
+  grid-gap: 2rem;
+}
+
+.baraha {
+  width: 35rem;
+  height: 25rem;
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 2rem;
+  position: relative;
+  box-shadow: var(--shadow);
+}
+.disease {
+  font-size: 2.2rem;
+  color: #cc3429;
+  font-weight: bold;
+}
+
+.box {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  width: 6.7rem;
+  height: 2.4rem;
+  background-color: #e1f5e4;
+  border-radius: 1rem;
+  padding: 0.3rem 2.3rem;
+  color: var(--color-primary);
+}
+
+.name {
+  font-size: 1.6rem;
+}
+
+.paragraph {
+  font-size: 1.1rem;
+  margin-top: 2rem;
+}
