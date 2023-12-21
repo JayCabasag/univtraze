@@ -1,16 +1,12 @@
 import React, {useState} from 'react'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Header from '../components/Header'
-import {useNavigate, Link} from 'react-router-dom'
-import {QRCodeSVG} from 'qrcode.react';
-import { Base64, decode } from 'js-base64';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import validator from 'validator';
 import { useEffect } from 'react';
-import jwtDecode from 'jwt-decode';
 
-
-const AccountSettings = () => {
+export default function AccountSettingsPage(){
     const navigate = useNavigate()
 
     const [currentEmail, setCurrentEmail] = useState('')
@@ -34,10 +30,7 @@ const AccountSettings = () => {
     const [showPreviewer, setShowPreviewer] = useState(false)
 
     useEffect(() => {
-      const decodedToken = jwtDecode(localStorage.getItem('token'))
-      setCurrentEmail(decodedToken.result.email)
-      setCurrentAdminId(decodedToken.result.id)
-      setUsername(decodedToken.result.email)
+
     }, [])
     
 
@@ -152,8 +145,6 @@ const AccountSettings = () => {
     }
 
   return (
-    <>
-        <Header/>
         <div className="container">
             <Breadcrumbs  event={admin} identifier='Dashboard / ' current='Account settings'/>
             <div className="add-room">
@@ -216,8 +207,5 @@ const AccountSettings = () => {
                 </div>
             </div>
         </div>
-    </>
   )
 }
-
-export default AccountSettings

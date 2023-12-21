@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import logoDark from '../assets/logo-dark.png';
+import logoDark from '../assets/logo-full.png';
 import axios from 'axios';
 import validator from 'validator';
 

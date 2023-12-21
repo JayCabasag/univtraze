@@ -47,7 +47,6 @@ const Attendance = () => {
 
   return (
     <div className='attendance'>
-        <Header/>
         <div className="container">
             <Breadcrumbs event={admin} identifier="Dashboard / " current="Attendance"/>
             <div className="cons">

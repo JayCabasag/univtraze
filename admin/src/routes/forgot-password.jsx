@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
-import logoDark from '../assets/logo-dark.png';
+import logoDark from '../assets/logo-full.png';
 import axios from 'axios';
 import validator from 'validator'
 
@@ -92,7 +92,7 @@ const ForgotPassword = () => {
           SEND VIA EMAIL
         </button>
 
-        <p className='forgot-password' onClick={() => {navigate('/')}}>Return to Login</p>
+        <p className='forgot-password' onClick={() => {navigate('/login')}}>Return to Login</p>
       </div>
     </div>
   );

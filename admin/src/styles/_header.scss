@@ -16,7 +16,7 @@
 
 .header {
     width: 100%;
-    height: 7rem;
+    height: 8rem;
     background-color: #fff;
     box-shadow: var(--shadow);
   }
@@ -31,7 +31,7 @@
   }
   
   .logo-dark--dashboard {
-    width: 16.4rem;
+    width: 15.4rem;
     cursor: pointer;
   }
   
@@ -44,8 +44,8 @@
   }
   
   .notification-bell {
-    width: 2rem;
-    height: 2.5rem;
+    width: 2.5rem;
+    height: 2.75rem;
     cursor: pointer;
   }
   
@@ -54,6 +54,11 @@
     width: 4.3rem;
     align-items: center;
     cursor: pointer;
+  }
+
+  .menu-icon {
+    height: 38px;
+    width: 38px;
   }
 
   .container--menu {
@@ -65,12 +70,10 @@
     width: 21.5rem;
     height: 26rem;
     background-color: #fff;
-    margin-top: 2rem;
+    margin-top: 1rem;
     border-radius: 1rem;
     box-shadow: var(--shadow);
     z-index: 2;
-    transition: .2s all;
-    animation: animateMenu .2s ease-out; 
   }
 
   .menus {
@@ -89,6 +92,7 @@
     padding-left: 1.5rem;
     font-size: 1.6rem;
     color: var(--color-text-dark);
+    text-decoration: none;
   }
 
   .links:not(:last-child) {

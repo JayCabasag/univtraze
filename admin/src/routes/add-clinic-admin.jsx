@@ -2,8 +2,6 @@ import React, {useState} from 'react'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Header from '../components/Header'
 import {useNavigate, Link} from 'react-router-dom'
-import {QRCodeSVG} from 'qrcode.react';
-import { Base64 } from 'js-base64';
 import axios from 'axios'
 import validator from 'validator';
 
@@ -121,9 +119,7 @@ const AddClinicAdmin = () => {
     }
 
   return (
-    <>
-        <Header/>
-        <div className="container">
+    <div className="container">
             <Breadcrumbs  event={admin} identifier='Dashboard / ' current='Add Clinic Admin'/>
             <div className="add-room">
                 <div className="add-room__form">
@@ -182,7 +178,6 @@ const AddClinicAdmin = () => {
                 </div>
             </div>
         </div>
-    </>
   )
 }
 

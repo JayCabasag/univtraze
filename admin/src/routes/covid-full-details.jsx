@@ -50,49 +50,22 @@ export default function Covidfulldetails() {
       }
   return (
     <div className='covidfulldetails'>
-        <Header/>
-
         <div className="container">
         <Breadcrumbs event={admin} identifier="Dashboard / " current="Local covid report"/>
         <p className="covid-local">Covid Local Full Report</p>
         
         <div className="card-container">
             <Card  label="Local Cases" data=  {
-                  whileCounting === true ?
-                  <CountUp
-                    start={0}
-                    end={localCases}
-                    duration={2} 
-                    onStart={() => {setWhileCounting(true)}}
-                    onEnd={() => {setWhileCounting(false)}}        
-                  />
-                  :
+                  
                   localCases.toLocaleString()
                 } 
                 design="cards card-1"icon={user} />
             <Card  label="Today Cases" data=  {
-                  whileCounting === true ?
-                  <CountUp
-                    start={0}
-                    end={todayCases}
-                    duration={2} 
-                    onStart={() => {setWhileCounting(true)}}
-                    onEnd={() => {setWhileCounting(false)}}        
-                  />
-                  :
+                  
                   todayCases.toLocaleString()
                 } 
                 design="secondary-cards card-2" icon={cases}/>
             <Card label="Deaths" data={
-                  whileCounting === true ?
-                  <CountUp
-                    start={0}
-                    end={deaths}
-                    duration={2} 
-                    onStart={() => {setWhileCounting(true)}}
-                    onEnd={() => {setWhileCounting(false)}}        
-                  />
-                  :
                   deaths.toLocaleString()
                 }  
                 design="secondary-cards card-3" icon={death}/>

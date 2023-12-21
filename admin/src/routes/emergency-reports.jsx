@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
-import Datepicker from 'react-datepicker';
 import moment from 'moment';
 import axios from 'axios';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
+import { format } from 'date-fns';
 
 export default function Emergencyreports() {
   const navigate = useNavigate();
-  const [selectedDate, setselectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const [allEmergencyReports, setAllEmergencyReports] = useState([]);
 
@@ -66,6 +67,11 @@ export default function Emergencyreports() {
       });
   };
 
+  let footer = <p>Please pick a day.</p>;
+  if (selectedDate) {
+    footer = <p>You picked {format(selectedDate, 'PP')}.</p>;
+  }
+
   const searchDate = async (date) => {
     setAllEmergencyReports([]);
     setshowNoResultsFound(false);
@@ -110,9 +116,10 @@ export default function Emergencyreports() {
       });
   };
 
+  const [showDatePicker, setShowDatePicker ] = useState(false)
+
   return (
     <div className='emergency-report'>
-      <Header />
       <div className='container'>
         <Breadcrumbs
           event={admin}
@@ -122,12 +129,7 @@ export default function Emergencyreports() {
         <div className='h2-container'>
           <h3 className='h2-container__emergency'>Emergency Report</h3>
           <div className='date-container'>
-            <Datepicker
-              className='h2-container__calendar'
-              dateFormat='yyyy-MM-dd'
-              selected={selectedDate}
-              onChange={(date) => searchDate(date)}
-            />
+            <input className='h2-container__calendar' type='date' />
           </div>
         </div>
         <div className='card-cons'>

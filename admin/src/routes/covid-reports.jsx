@@ -6,7 +6,7 @@ import next from '../assets/next-icon.png';
 import axios from 'axios'
 
 
-export default function Covidreports() {
+export default function DiseaseReports() {
     
     const navigate = useNavigate()
     const [name, setName] = useState('')
@@ -119,10 +119,9 @@ export default function Covidreports() {
 
   return (
     <div className='covidreport'>
-        <Header/>
         <div className="container container--report">  
-        <Breadcrumbs event={users} identifier="Dashboard / " current="Communicable Disease Reports"/>
-                <h2 className='covid-report'> Communicable Disease Reports</h2>
+        <Breadcrumbs event={users} identifier="Dashboard / " current="Disease Reports"/>
+                <h2 className='covid-report'>Disease Reports</h2>
                 <div className="card-table">
                     <table className='table-covid'>
                         

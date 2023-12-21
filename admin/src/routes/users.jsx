@@ -46,7 +46,6 @@ export default function Users({users}) {
     
   return (
     <div className='users'>
-         <Header />
          <div className="container">
          <Breadcrumbs event={admin} identifier="Dashboard / " current="Users"/>
             <p className="user-title">Users ({allUsers.length})</p>

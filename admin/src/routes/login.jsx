@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
-import logoDark from '../assets/logo-dark.png';
+import logoDark from '../assets/logo-full.png';
 import axios from 'axios';
 
 function Login() {

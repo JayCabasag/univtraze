@@ -6,7 +6,7 @@ import QRCode from 'qrcode.react';
 import { Base64 } from 'js-base64';
 import axios from 'axios';
 
-function ViewRoom() {
+export default function Rooms() {
   const [allRooms, setAllRooms] = useState([]);
 
   useEffect(() => {
@@ -145,8 +145,6 @@ function ViewRoom() {
   }
 
   return (
-    <>
-      <Header />
       <div className='container'>
         <Breadcrumbs
           event={admin}
@@ -164,7 +162,6 @@ function ViewRoom() {
                 searchRoom(e.target.value * 1);
               }}
             />
-
           </div>
         </div>
         <div className='rooms-container'>
@@ -217,8 +214,5 @@ function ViewRoom() {
           </div>
         </div>
       </div>
-    </>
   );
 }
-
-export default ViewRoom;

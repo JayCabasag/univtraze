@@ -149,7 +149,6 @@ export default function Notifications() {
 
   return (
     <div className='users'>
-         <Header />
          <div className="container">
          <Breadcrumbs event={admin} identifier="Dashboard / " current="Notifications"/>
 

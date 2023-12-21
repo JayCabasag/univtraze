@@ -8,7 +8,7 @@ export default function CovidOverview() {
 
     const {userId, caseId, userType} = useParams()
     const admin = () => {
-        navigate('/admin/communicable-disease')
+        navigate('/admin/disease-reports')
     }
 
 

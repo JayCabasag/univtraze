@@ -113,8 +113,6 @@ function AddRoom() {
     }
 
   return (
-    <>
-        <Header/>
         <div className="container">
             <Breadcrumbs  event={admin} identifier='Dashboard / ' current='Add room'/>
             <div className="add-room">
@@ -192,7 +190,6 @@ function AddRoom() {
                 </div>
             </div>
         </div>
-    </>
   )
 }
 

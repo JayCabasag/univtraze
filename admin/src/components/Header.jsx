@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import logoDark from '../assets/logo-dark.png'
+import logoDark from '../assets/logo-full.png'
 import notification from '../assets/notification-bell.png'
 import menuIcon from "../assets/menu.png"
-import Menu from "./menu"
+import Menu from "./Menu"
 import axios from 'axios'
 
 
@@ -52,14 +52,13 @@ const Header = () => {
               {totalNotifications === 0 ? null : <div style={{position: 'absolute', backgroundColor: 'red', width: '15px', height: '15px', textAlign: 'center', color: 'white', borderRadius: '50%'}}>{totalNotifications}</div>}
                 <img src={notification} alt="" className="notification-bell" />
               </div>
-             
               <div className="menu">
                 <img src={menuIcon} onClick={()=> isActive ? setIsActive(false) : setIsActive(true)} className="menu-icon" />
               </div>
             </div>
         </div>
         <div className="container container--menu">
-        { isActive ? <Menu /> : null }
+          {isActive && <Menu /> }
         </div>
    </header>
   )
