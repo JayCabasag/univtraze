@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Breadcrumbs from '../components/Breadcrumbs';
 import moment from 'moment';
 import axios from 'axios';
-import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { format } from 'date-fns';
 
@@ -23,7 +21,7 @@ export default function Emergencyreports() {
     navigate('/admin');
   };
 
-  const getEmergencyReportForToday = async (date) => {
+  const getEmergencyReportForToday = async date => {
     setAllEmergencyReports([]);
     setshowNoResultsFound(false);
 
@@ -46,9 +44,9 @@ export default function Emergencyreports() {
         data,
         {
           headers: headers,
-        }
+        },
       )
-      .then((response) => {
+      .then(response => {
         var returnArr = [];
         returnArr.push(response.data.data);
 
@@ -62,7 +60,7 @@ export default function Emergencyreports() {
         setshowNoResultsFound(false);
       })
 
-      .catch((error) => {
+      .catch(error => {
         console.log('Error ' + error);
       });
   };
@@ -72,7 +70,7 @@ export default function Emergencyreports() {
     footer = <p>You picked {format(selectedDate, 'PP')}.</p>;
   }
 
-  const searchDate = async (date) => {
+  const searchDate = async date => {
     setAllEmergencyReports([]);
     setshowNoResultsFound(false);
 
@@ -96,9 +94,9 @@ export default function Emergencyreports() {
         data,
         {
           headers: headers,
-        }
+        },
       )
-      .then((response) => {
+      .then(response => {
         var returnArr = [];
         returnArr.push(response.data.data);
         setAllEmergencyReports(returnArr[0]);
@@ -111,40 +109,35 @@ export default function Emergencyreports() {
         setshowNoResultsFound(false);
       })
 
-      .catch((error) => {
+      .catch(error => {
         console.log('Error ' + error);
       });
   };
 
-  const [showDatePicker, setShowDatePicker ] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   return (
-    <div className='emergency-report'>
-      <div className='container'>
-        <Breadcrumbs
-          event={admin}
-          identifier='Dashboard / '
-          current='Emergency report'
-        />
-        <div className='h2-container'>
-          <h3 className='h2-container__emergency'>Emergency Report</h3>
-          <div className='date-container'>
-            <input className='h2-container__calendar' type='date' />
+    <div className="emergency-report">
+      <div className="container">
+        <div className="h2-container">
+          <h3 className="h2-container__emergency">Emergency Report</h3>
+          <div className="date-container">
+            <input className="h2-container__calendar" type="date" />
           </div>
         </div>
-        <div className='card-cons'>
+        <div className="card-cons">
           {showNoResultsFound ? (
             <p>
               No results found for {moment(selectedDate).format('yyyy-MM-DD')}
             </p>
           ) : null}
-          {allEmergencyReports.map((emergencyReport) => {
+          {allEmergencyReports.map(emergencyReport => {
             return (
-              <div className='card-cons'>
-                <div className='baraha'>
-                  <p className='disease'>
+              <div className="card-cons">
+                <div className="baraha">
+                  <p className="disease">
                     {JSON.parse(emergencyReport.medical_condition).map(
-                      (condition) => {
+                      condition => {
                         var counter = 0;
                         counter = counter + 1;
 
@@ -163,13 +156,13 @@ export default function Emergencyreports() {
                           condition.slice(1) +
                           ' '
                         );
-                      }
+                      },
                     )}
                   </p>
-                  <p className='name'>{emergencyReport.patient_name}</p>
-                  <p className='paragraph'>{emergencyReport.description}</p>
-                  <div className='box'>
-                    <p className='numero'>{emergencyReport.room_number}</p>
+                  <p className="name">{emergencyReport.patient_name}</p>
+                  <p className="paragraph">{emergencyReport.description}</p>
+                  <div className="box">
+                    <p className="numero">{emergencyReport.room_number}</p>
                   </div>
                 </div>
               </div>
@@ -177,7 +170,7 @@ export default function Emergencyreports() {
           })}
         </div>
       </div>
-      <div className='spacer'></div>
+      <div className="spacer"></div>
     </div>
   );
 }

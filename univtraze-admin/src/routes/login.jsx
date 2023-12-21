@@ -34,7 +34,7 @@ function Login() {
     };
     await axios
       .post('http://univtraze.herokuapp.com/api/admin/loginAdmin', data)
-      .then((res) => {
+      .then(res => {
         if (res.data.success === 1) {
           localStorage.setItem('token', res.data.token);
 
@@ -53,7 +53,7 @@ function Login() {
           setIsLoading(false);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         setError(true);
         setErrorMessage('Network error');
         setSuccess(false);
@@ -65,40 +65,40 @@ function Login() {
   };
 
   return (
-    <div className='login-component'>
-      <div className='login-card__container'>
-        {isLoading ? <p className='loader'>Logging you in...</p> : null}
-        {error ? <p className='loader--error'>{errorMessage}</p> : null}
+    <div className="login-component">
+      <div className="login-card__container">
+        {isLoading ? <p className="loader">Logging you in...</p> : null}
+        {error ? <p className="loader--error">{errorMessage}</p> : null}
 
-        {success ? <p className='loader--error'>{successMessage}</p> : null}
+        {success ? <p className="loader--error">{successMessage}</p> : null}
 
-        <img src={logoDark} alt='' className='logo-dark' />
-        <h3 className='login-card_title'>Login</h3>
-        <div className='login-card_form'></div>
-        <div className='input-container'>
-          <p className='form-label'>Username</p>
+        <img src={logoDark} alt="" className="logo-dark" />
+        <h3 className="login-card_title">Login</h3>
+        <div className="login-card_form"></div>
+        <div className="input-container">
+          <p className="form-label">Username</p>
           <input
-            type='text'
-            placeholder='Email or Username'
-            className='form-input'
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Email or Username"
+            className="form-input"
+            onChange={e => setEmail(e.target.value)}
           />
         </div>
-        <div className='input-container'>
-          <p className='form-label'>Password</p>
-          <div className='password-container'>
+        <div className="input-container">
+          <p className="form-label">Password</p>
+          <div className="password-container">
             <input
-              name='pwd'
-              placeholder='Password'
+              name="pwd"
+              placeholder="Password"
               type={isPwd ? 'password' : 'text'}
               value={pwd}
-              className='form-input password-input'
-              onChange={(e) => setPwd(e.target.value)}
+              className="form-input password-input"
+              onChange={e => setPwd(e.target.value)}
             />
 
             <button
-              className='show-password'
-              onClick={() => setIsPwd((prevState) => !prevState)}
+              className="show-password"
+              onClick={() => setIsPwd(prevState => !prevState)}
             >
               {isPwd ? 'Show' : 'Hide'}
             </button>
@@ -106,7 +106,7 @@ function Login() {
         </div>
 
         <button
-          className='btn-primary'
+          className="btn-primary"
           onClick={() => {
             login();
           }}
@@ -114,7 +114,14 @@ function Login() {
           LOG IN
         </button>
 
-        <p className='forgot-password' onClick={() => { navigate('/forgot-password');}}>Forgot Password</p>
+        <p
+          className="forgot-password"
+          onClick={() => {
+            navigate('/forgot-password');
+          }}
+        >
+          Forgot Password
+        </p>
       </div>
     </div>
   );

@@ -13,21 +13,21 @@
   --color-text-light: #e1f5e4;
   --color-secondary: #28cd93;
   --primary-gradient: linear-gradient(#6bf27f, #28cd41);
-  --secondary-gradient: linear-gradient(#ffffff,#E9F2EB);
-  --color-input: #E1F5E4;
-  --color-red-pastel: #F5E3E1;
-  --color-card-gradient: linear-gradient(#5C7AE8,#294CCC);
-  
+  --secondary-gradient: linear-gradient(#ffffff, #e9f2eb);
+  --color-input: #e1f5e4;
+  --color-red-pastel: #f5e3e1;
+  --color-card-gradient: linear-gradient(#5c7ae8, #294ccc);
+
   --body-text: 1.6rem;
-  --shadow:0 .8rem 1.6rem rgba(0, 0, 0, .16);
+  --shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.16);
 }
 
 html {
-  font-size: 62.5%; 
+  font-size: 62.5%;
 }
 
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   line-height: 1.7;
   color: var(--color-text-dark);
   background-color: var(--color-bg);
@@ -35,14 +35,12 @@ body {
 
 .deaths {
   margin-top: 1.5rem;
-
 }
 .btn-details {
   width: 27.7rem;
   height: 5.5rem;
   background-image: var(--primary-gradient);
   margin-top: 3.4rem;
-  
 }
 .secondary-cards {
   padding: 3rem;
@@ -70,7 +68,7 @@ body {
 .loader--error {
   width: 100%;
   height: 4.4rem;
-  background-color: #F5E3E1;
+  background-color: #f5e3e1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,25 +78,27 @@ body {
   border-radius: 1rem;
 }
 
-button, input[type="submit"], input[type="reset"] {
-	background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	cursor: pointer;
-	outline: inherit;
+button,
+input[type='submit'],
+input[type='reset'] {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 input,
 button,
 select,
 textarea {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    outline: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-    background: transparent;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
 }

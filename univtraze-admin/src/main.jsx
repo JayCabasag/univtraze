@@ -1,11 +1,8 @@
 import React from 'react';
-import { createRoot } from "react-dom/client";
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import './styles/main.css';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './routes/login.jsx';
 import ForgotPassword from './routes/forgot-password.jsx';
 import ResetPasswordFromEmail from './routes/reset-password.jsx';
@@ -111,10 +108,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById('root')).render(
   <UserContextProvider>
     <AuthContextProvider>
       <RouterProvider router={router} />
     </AuthContextProvider>
-  </UserContextProvider>
+  </UserContextProvider>,
 );

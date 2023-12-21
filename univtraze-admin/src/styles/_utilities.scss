@@ -1,23 +1,22 @@
-  .spacer {
-    width: 100px;
-    height: 100px; 
-  }
+.spacer {
+  width: 100px;
+  height: 100px;
+}
 
-  .container {
-    max-width: 114rem;
-    margin: 0 auto;
-    margin-bottom: 4rem;
-  }
+.container {
+  max-width: 114rem;
+  margin: 0 auto;
+  margin-bottom: 4rem;
+}
 
-  ::-webkit-scrollbar {
-    width: 0;
-  }
+::-webkit-scrollbar {
+  width: 0;
+}
 
-  ::-webkit-scrollbar-track {
-    background: $color-bg;
-  }
+::-webkit-scrollbar-track {
+  background: $color-bg;
+}
 
-  ::-webkit-scrollbar-thumb {
-    background: $color-primary;
-  }
-
+::-webkit-scrollbar-thumb {
+  background: $color-primary;
+}

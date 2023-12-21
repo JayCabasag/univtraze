@@ -1,118 +1,113 @@
 .add-room {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+
+  &__form {
+    width: 45rem;
+    background-color: #fff;
+    padding: 4rem;
+    border-radius: 2rem;
+    box-shadow: $shadow;
+  }
+
+  &__title {
+    font-size: 2.8rem;
+    color: $color-text-dark;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+  }
+
+  &__input-container:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  &__label {
+    font-size: 1.6rem;
+    color: rgba($color-text-dark, 0.7);
+    margin-bottom: 0.5rem;
+  }
+
+  &__input {
     width: 100%;
+    height: 4.4rem;
+    padding-left: 1.5rem;
+    background-color: $color-bg;
+    border-radius: 1rem;
+    font-size: 1.6rem;
+    outline: none;
+  }
+
+  &__input:focus {
+    border: 3px solid rgba($color-primary, 0.4);
+  }
+
+  &__qr-container {
+    width: 65.7rem;
+    background-color: #fff;
+    border-radius: 2rem;
+    box-shadow: $shadow;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__qr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__qr-code {
+    width: 17rem;
+    height: 17rem;
+    color: $color-text-dark;
+  }
+
+  &__qr-info {
+    width: 55.3rem;
     display: flex;
     justify-content: space-between;
-    margin-top: 3rem;
+  }
 
-    &__form {
-        width: 45rem;
-        background-color: #fff;
-        padding: 4rem;
-        border-radius: 2rem;
-        box-shadow: $shadow;
-    }
+  &__qr-details {
+    width: 23.7rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 
-    &__title {
-        font-size: 2.8rem;
-        color: $color-text-dark;
-        font-weight: bold;
-        margin-bottom: 2.5rem;
-    }
+  &__qr {
+    width: 25rem;
+    height: 25rem;
+    border: 1rem solid $color-primary;
+    border-radius: 4rem;
+  }
 
-    &__input-container:not(:last-child) {
-        margin-bottom: 1rem;
-    }
+  &__room-number {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: $color-text-dark;
+  }
 
-    &__label {
-        font-size: 1.6rem;
-        color: rgba($color-text-dark, .7);
-        margin-bottom: .5rem;
-    }
+  &__building-name,
+  &__room-name {
+    font-size: 2.2rem;
+    color: $color-text-dark;
+  }
+  &__error {
+    font-size: 1.6rem;
+    font-weight: normal;
+    color: red;
+    padding-left: 5rem;
+    width: 100%;
+  }
 
-    &__input {
-        width: 100%;
-        height: 4.4rem;
-        padding-left: 1.5rem;
-        background-color: $color-bg;
-        border-radius: 1rem;
-        font-size: 1.6rem;
-        outline: none;
-    }
-
-    &__input:focus {
-        border: 3px solid rgba($color-primary, .4);
-    }
-
-    &__qr-container {
-        width: 65.7rem;
-        background-color: #fff;
-        border-radius: 2rem;
-        box-shadow: $shadow;
-        display: flex;
-        flex-direction: column;
-       
-    }
-
-
-
-    &__qr {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    &__qr-code {
-        width: 17rem;
-        height: 17rem; 
-        color: $color-text-dark;
-    }
-
-    &__qr-info {
-        width: 55.3rem;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    &__qr-details {
-        width: 23.7rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    &__qr {
-        width: 25rem;
-        height: 25rem;
-        border: 1rem solid $color-primary;
-        border-radius: 4rem;
-    }
-
-    &__room-number {
-        font-size: 1.6rem;
-        font-weight: bold;
-        color: $color-text-dark;
-    }
-
-    &__building-name, 
-    &__room-name {
-        font-size: 2.2rem;
-        color: $color-text-dark;
-    }
-    &__error {
-        font-size: 1.6rem;
-        font-weight: normal;
-        color: red;
-        padding-left: 5rem;
-        width: 100%;
-        
-    }
-
-    &__loading {
-        font-size: 1.6rem;
-        font-weight: normal;
-        color: $color-primary;
-        padding-left: 5rem;
-        width: 100%;
-    }
+  &__loading {
+    font-size: 1.6rem;
+    font-weight: normal;
+    color: $color-primary;
+    padding-left: 5rem;
+    width: 100%;
+  }
 }
-
