@@ -24,7 +24,7 @@ import { AntDesign } from '@expo/vector-icons'
 import { useToast } from 'react-native-toast-notifications'
 import * as ImagePicker from 'expo-image-picker'
 
-const UpdatePersonalInfo = ({ navigation, route }) => {
+const UpdatePersonalInformationScreen = ({ navigation, route }) => {
   const toast = useToast()
   // console.log(route.params.token)
 
@@ -330,7 +330,7 @@ const UpdatePersonalInfo = ({ navigation, route }) => {
     </SafeAreaView>
   )
 }
-export default UpdatePersonalInfo
+export default UpdatePersonalInformationScreen
 
 const styles = StyleSheet.create({
   container: {

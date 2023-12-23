@@ -23,7 +23,7 @@ import Menu from '../MenuComponents/Menu'
 import Notifications from '../MenuComponents/Notifications'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-const Dashboard = ({ navigation, route }) => {
+const IndexScreen = ({ navigation, route }) => {
   //covid api variables
   const [population, setPopulation] = useState(0)
   const [cases, setCases] = useState(0)
@@ -488,7 +488,8 @@ const Dashboard = ({ navigation, route }) => {
     </SafeAreaView>
   )
 }
-export default Dashboard
+export default IndexScreen
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E1F5E4'

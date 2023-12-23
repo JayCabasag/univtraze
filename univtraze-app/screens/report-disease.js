@@ -23,7 +23,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
 
-const ReportCovidCase = ({
+const ReportDiseaseScreen = ({
   navigation,
   route: {
     params: { id, type }
@@ -356,7 +356,7 @@ const ReportCovidCase = ({
     </SafeAreaView>
   )
 }
-export default ReportCovidCase
+export default ReportDiseaseScreen
 
 const styles = StyleSheet.create({
   container: {

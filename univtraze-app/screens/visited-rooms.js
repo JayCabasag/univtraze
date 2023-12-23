@@ -17,7 +17,7 @@ import axios from 'axios'
 import moment from 'moment'
 import { DataTable } from 'react-native-paper'
 
-const RoomVisited = ({
+const VisitedRoomsScreen = ({
   navigation,
   route: {
     params: { id, type }
@@ -142,7 +142,7 @@ const RoomVisited = ({
                 <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Time</Text>
               </DataTable.Title>
             </DataTable.Header>
-            {roomVisited === [] ? (
+            {roomVisited ? (
               <View>
                 <Text style={styles.rowBody}>No rooms visited</Text>
               </View>
@@ -177,7 +177,7 @@ const RoomVisited = ({
   )
 }
 
-export default RoomVisited
+export default VisitedRoomsScreen
 
 const styles = StyleSheet.create({
   mainContainer: {

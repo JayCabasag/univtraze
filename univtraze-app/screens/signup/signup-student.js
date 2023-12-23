@@ -24,7 +24,7 @@ import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
 import DropDownPicker from 'react-native-dropdown-picker'
 
-const SignUpUserCredentialsStudent = ({ navigation, route }) => {
+const SignUpStudentScreen = ({ navigation, route }) => {
   const [date, setDate] = useState('')
   const [type, setType] = useState(route.params.type)
   const [userId, setUserId] = useState(0)
@@ -312,7 +312,7 @@ const SignUpUserCredentialsStudent = ({ navigation, route }) => {
   )
 }
 
-export default SignUpUserCredentialsStudent
+export default SignUpStudentScreen
 
 const styles = StyleSheet.create({
   header: {

@@ -8,7 +8,7 @@ import jwtDecode from 'jwt-decode'
 import { AntDesign } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
 
-const SignUpCredentialsDocuments = ({ navigation, route }) => {
+const SignUpDocsScreen = ({ navigation, route }) => {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
 
@@ -667,7 +667,7 @@ const SignUpCredentialsDocuments = ({ navigation, route }) => {
   )
 }
 
-export default SignUpCredentialsDocuments
+export default SignUpDocsScreen
 
 const styles = StyleSheet.create({
   header: {

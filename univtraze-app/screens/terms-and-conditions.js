@@ -2,12 +2,10 @@ import { KeyboardAvoidingView, Image, StyleSheet, TextInput, View, TouchableOpac
 import Checkbox from 'expo-checkbox'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import ConfettiCannon from 'react-native-confetti-cannon'
-import ModalSuccess from 'react-native-modal'
 import { Dimensions } from 'react-native'
 import { ScrollView } from 'react-native'
 
-const TermsAndConditions = ({ navigation }) => {
+const TermsAndConditionsScreen = ({ navigation }) => {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
 
@@ -311,7 +309,7 @@ const TermsAndConditions = ({ navigation }) => {
   )
 }
 
-export default TermsAndConditions
+export default TermsAndConditionsScreen
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height

@@ -12,7 +12,7 @@ const image = {
   uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Famico.png?alt=media&token=45feb25c-00e8-43f6-8189-2c83cb0175a3'
 }
 
-const SignUpUserType = ({ navigation: { navigate } }) => {
+const SignUpUserTypeScreen = ({ navigation: { navigate } }) => {
   const [isChecked, setIsChecked] = useState('Student')
 
   const [token, setToken] = useState('')
@@ -71,7 +71,7 @@ const SignUpUserType = ({ navigation: { navigate } }) => {
   )
 }
 
-export default SignUpUserType
+export default SignUpUserTypeScreen
 
 const styles = StyleSheet.create({
   mainView: {

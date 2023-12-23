@@ -15,27 +15,29 @@ import { Picker } from '@react-native-picker/picker'
 import React, { useState, useEffect } from 'react'
 import * as SecureStore from 'expo-secure-store'
 import jwt_decode from 'jwt-decode'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { StackActions } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
 
-const SignUpUserCredentialsVisitor = ({ navigation, route }) => {
+const SignUpEmployeeScreen = ({ navigation, route }) => {
   const [date, setDate] = useState('')
   const [type, setType] = useState(route.params.type)
   const [userId, setUserId] = useState(0)
-  const [studentNumber, setStudentNumber] = useState('')
+  const [employeeNumber, setEmployeeNumber] = useState('')
   const [firstName, setFirstName] = useState('')
   const [middleName, setMiddleName] = useState('')
   const [lastName, setLastName] = useState('')
   const [address, setAddress] = useState('')
   const [suffix, setSuffix] = useState('')
   const [gender, setGender] = useState('Rather not say')
-  const [course, setCourse] = useState('')
+  const [department, setDepartment] = useState('')
+  const [position, setPosition] = useState('')
   const [email, setEmail] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState(new Date())
-  const [yearAndSection, setYearAndSection] = useState('')
 
   const [showDatePicker, setShowDatePicker] = useState(false)
 
@@ -48,6 +50,11 @@ const SignUpUserCredentialsVisitor = ({ navigation, route }) => {
   const nextScreen = async () => {
     if (type === null || type === '') {
       return navigation.dispatch(StackActions.popToTop())
+    }
+    if (employeeNumber === null || employeeNumber === '') {
+      setError(true)
+      setErrorMessage('Please enter your employee number')
+      return
     }
     if (firstName === null || firstName === '') {
       setError(true)
@@ -73,7 +80,16 @@ const SignUpUserCredentialsVisitor = ({ navigation, route }) => {
       setErrorMessage('Please enter your date of birth')
       return
     }
-
+    if (department === null || department === '') {
+      setError(true)
+      setErrorMessage('Please enter your department')
+      return
+    }
+    if (position === null || position === '') {
+      setError(true)
+      setErrorMessage('Please enter your position')
+      return
+    }
     const totalYears = moment().diff(moment(dateOfBirth), 'Years')
 
     if (totalYears < 12) {
@@ -87,7 +103,19 @@ const SignUpUserCredentialsVisitor = ({ navigation, route }) => {
 
     const dob = moment(dateOfBirth).format('yyyy-MM-DD')
 
-    navigation.navigate('SignUpCredentialsDocuments', { type, firstName, lastName, middleName, suffix, gender, address, dob })
+    navigation.navigate('SignUpCredentialsDocuments', {
+      type,
+      employeeNumber,
+      firstName,
+      lastName,
+      middleName,
+      suffix,
+      gender,
+      address,
+      dob,
+      department,
+      position
+    })
   }
 
   return (
@@ -99,6 +127,24 @@ const SignUpUserCredentialsVisitor = ({ navigation, route }) => {
         </View>
 
         <ScrollView style={styles.inputContainer}>
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              backgroundColor: '#E1F5E4'
+            }}
+          >
+            <Text style={styles.label}>Employee no.</Text>
+            <TextInput
+              placeholder='Employee no.'
+              defaultValue={''}
+              onChangeText={(text) => {
+                setEmployeeNumber(text)
+              }}
+              style={styles.input}
+            />
+          </View>
+
           <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
             <Text style={styles.label}>First name</Text>
             <TextInput
@@ -203,6 +249,34 @@ const SignUpUserCredentialsVisitor = ({ navigation, route }) => {
             />
           ) : null}
 
+          <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
+            <View style={{ width: '80%', flexDirection: 'row' }}>
+              <View style={{ width: '50%' }}>
+                <Text style={styles.label}>Department</Text>
+                <TextInput
+                  placeholder='Department'
+                  defaultValue={''}
+                  onChangeText={(text) => {
+                    setDepartment(text)
+                  }}
+                  style={styles.courseInput}
+                />
+              </View>
+
+              <View style={{ width: '50%' }}>
+                <Text style={styles.label}>Position </Text>
+                <TextInput
+                  placeholder='Position'
+                  defaultValue={''}
+                  onChangeText={(text) => {
+                    setPosition(text)
+                  }}
+                  style={styles.yearAndSectionInput}
+                />
+              </View>
+            </View>
+          </View>
+
           {error ? <Text style={styles.errorMessage}>*{errorMessage}</Text> : <Text style={styles.errorMessage}></Text>}
 
           <View
@@ -235,7 +309,8 @@ const SignUpUserCredentialsVisitor = ({ navigation, route }) => {
     </SafeAreaView>
   )
 }
-export default SignUpUserCredentialsVisitor
+
+export default SignUpEmployeeScreen
 
 const styles = StyleSheet.create({
   header: {

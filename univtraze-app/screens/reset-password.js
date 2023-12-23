@@ -5,7 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import * as SecureStore from 'expo-secure-store'
 import { Dimensions } from 'react-native'
 
-const ResetPassword = ({
+const ResetPasswordScreen = ({
   navigation,
   route: {
     params: { email, recovery_password }
@@ -148,7 +148,7 @@ const ResetPassword = ({
   )
 }
 
-export default ResetPassword
+export default ResetPasswordScreen
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height

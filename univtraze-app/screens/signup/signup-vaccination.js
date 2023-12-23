@@ -29,7 +29,7 @@ import axios from 'axios'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
-const SignUpVaccination = ({ navigation, route }) => {
+const SignUpVaccinationScreen = ({ navigation, route }) => {
   const [token, setToken] = useState(null)
 
   const [firstDoseDate, setFirstDoseDate] = useState(new Date())
@@ -350,7 +350,7 @@ const SignUpVaccination = ({ navigation, route }) => {
   )
 }
 
-export default SignUpVaccination
+export default SignUpVaccinationScreen
 
 const styles = StyleSheet.create({
   mainContainer: {

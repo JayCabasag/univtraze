@@ -21,7 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
-const Login = ({ navigation }) => {
+const SignInScreen = ({ navigation }) => {
   const image = {
     uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Flogin_image.png?alt=media&token=ebb53e48-2bc0-485d-8456-fe8a31683061'
   }
@@ -191,7 +191,7 @@ const Login = ({ navigation }) => {
   )
 }
 
-export default Login
+export default SignInScreen
 
 const styles = StyleSheet.create({
   image: {

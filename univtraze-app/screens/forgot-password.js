@@ -8,7 +8,7 @@ import * as SecureStore from 'expo-secure-store'
 import jwtDecode from 'jwt-decode'
 import { Dimensions } from 'react-native'
 
-const ForgotPassword = ({ navigation }) => {
+const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
   const [showCodeInput, setShowCodeInput] = useState(false)
   const [codeInput, setCodeInput] = useState('')
@@ -194,7 +194,7 @@ const ForgotPassword = ({ navigation }) => {
   )
 }
 
-export default ForgotPassword
+export default ForgotPasswordScreen
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height

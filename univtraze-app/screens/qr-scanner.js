@@ -5,7 +5,7 @@ import base64 from 'base-64'
 import axios from 'axios'
 import moment from 'moment'
 
-export default function QrScanner({ navigation, route }) {
+export default function QrScannerScreen({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null)
   const [scanned, setScanned] = useState(false)
   const [text, setText] = useState('Not yet scanned')

@@ -23,7 +23,7 @@ import jwtDecode from 'jwt-decode'
 import { AntDesign } from '@expo/vector-icons'
 import { useToast } from 'react-native-toast-notifications'
 
-const AccountSettings = ({ navigation, route: { params } }) => {
+const AccountSettingsScreen = ({ navigation, route: { params } }) => {
   const toast = useToast()
 
   const [showPasswordModal, setShowPasswordModal] = useState(false)
@@ -205,7 +205,7 @@ const AccountSettings = ({ navigation, route: { params } }) => {
     </SafeAreaView>
   )
 }
-export default AccountSettings
+export default AccountSettingsScreen
 
 const styles = StyleSheet.create({
   container: {

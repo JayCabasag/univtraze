@@ -9,7 +9,7 @@ import * as SecureStore from 'expo-secure-store'
 import jwtDecode from 'jwt-decode'
 import { Dimensions } from 'react-native'
 
-const SignUp = ({ navigation }) => {
+const SignUpScreen = ({ navigation }) => {
   const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
 
@@ -259,7 +259,7 @@ const SignUp = ({ navigation }) => {
   )
 }
 
-export default SignUp
+export default SignUpScreen
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height

@@ -20,7 +20,7 @@ import axios from 'axios'
 import { DataTable } from 'react-native-paper'
 import moment from 'moment'
 
-const TemperatureHistory = ({
+const TemperatureHistoryScreen = ({
   navigation,
   route: {
     params: { id, type }
@@ -29,7 +29,7 @@ const TemperatureHistory = ({
   const [token, setToken] = useState('')
   //Variables for data
   const [currentUserTemperature, setCurrentUserTemperature] = useState('00.0')
-  const [allTemperatureHistory, setAllTemperatureHistory] = useState([])
+  const [allTemperatureHistoryScreen, setAllTemperatureHistory] = useState([])
 
   //Variables for loading
 
@@ -268,7 +268,7 @@ const TemperatureHistory = ({
     </SafeAreaView>
   )
 }
-export default TemperatureHistory
+export default TemperatureHistoryScreen
 
 const styles = StyleSheet.create({
   container: {

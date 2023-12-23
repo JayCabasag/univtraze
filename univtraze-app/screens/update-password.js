@@ -23,7 +23,7 @@ import jwtDecode from 'jwt-decode'
 import { AntDesign } from '@expo/vector-icons'
 import { useToast } from 'react-native-toast-notifications'
 
-const UpdatePassword = ({ navigation, route }) => {
+const UpdatePasswordScreen = ({ navigation, route }) => {
   const toast = useToast()
   // console.log(route.params.token)
 
@@ -166,7 +166,7 @@ const UpdatePassword = ({ navigation, route }) => {
     </SafeAreaView>
   )
 }
-export default UpdatePassword
+export default UpdatePasswordScreen
 
 const styles = StyleSheet.create({
   container: {

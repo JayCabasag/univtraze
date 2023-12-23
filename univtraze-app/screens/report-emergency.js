@@ -34,7 +34,7 @@ const UselessTextInput = (props) => {
   )
 }
 
-const ReportEmergency = ({ navigation }) => {
+const ReportEmergencyScreen = ({ navigation }) => {
   const [textArea, onChangeTextArea] = React.useState('')
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState([])
@@ -411,7 +411,7 @@ const ReportEmergency = ({ navigation }) => {
     </SafeAreaView>
   )
 }
-export default ReportEmergency
+export default ReportEmergencyScreen
 
 const styles = StyleSheet.create({
   container: {
