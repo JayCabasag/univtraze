@@ -18,9 +18,10 @@ import axios from 'axios'
 import { PieChart } from 'react-native-chart-kit'
 import moment from 'moment'
 import jwtDecode from 'jwt-decode'
-import Menu from '../MenuComponents/Menu'
-import Notifications from '../MenuComponents/Notifications'
+
+import Notifications from '../components/Notifications'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { COLORS } from '../utils/app_constants'
 
 const IndexScreen = ({ navigation, route }) => {
   //covid api variables
@@ -180,12 +181,12 @@ const IndexScreen = ({ navigation, route }) => {
       const success = response.data.success
 
       if (success === 0 && message === 'No data found for this user') {
-        return navigation.navigate('SignUpUserType')
+        return navigation.navigate('signup-user-type')
       }
 
       if (success === 0 && message === 'Invalid token') {
         alert('Please re-login to continue')
-        return navigation.navigate('Login')
+        return navigation.navigate('signin')
       }
 
       setFullname(response.data.data.firstname + ' ' + response.data.data.lastname)
@@ -350,14 +351,14 @@ const IndexScreen = ({ navigation, route }) => {
             <View style={styles.casesContainer}>
               <ImageBackground source={require('../assets/confirmed_case_icon.png')} resizeMode='stretch' style={styles.confirmCasesCard}>
                 <Text style={{ fontSize: 10 }}>Confirmed</Text>
-                <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#28CD41' }}>
+                <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
                   {reportedCommunicableDiseaseOnGoing && reportedCommunicableDiseaseOnGoing ? reportedCommunicableDiseaseOnGoing.length : 0}
                 </Text>
               </ImageBackground>
 
               <ImageBackground source={require('../assets/confirmed_case_icon.png')} resizeMode='stretch' style={styles.confirmCasesCard}>
                 <Text style={{ fontSize: 10 }}>Recovered</Text>
-                <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#28CD41' }}>
+                <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
                   {reportedCommunicableDiseaseResolved && reportedCommunicableDiseaseResolved
                     ? reportedCommunicableDiseaseResolved.length
                     : 0}
@@ -407,7 +408,7 @@ const IndexScreen = ({ navigation, route }) => {
                     {
                       name: 'Population',
                       population: population,
-                      color: '#28CD41',
+                      color: COLORS.PRIMARY,
                       legendFontColor: '#7F7F7F',
                       legendFontSize: 10
                     },
@@ -538,7 +539,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41'
+    backgroundColor: COLORS.PRIMARY
   },
   bodyContainer: {
     zIndex: -1,
@@ -641,6 +642,6 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41'
+    backgroundColor: COLORS.PRIMARY
   }
 })

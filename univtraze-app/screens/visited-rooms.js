@@ -15,6 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'
 import moment from 'moment'
 import { DataTable } from 'react-native-paper'
+import BackIcon from '../assets/back-icon.png'
+import { COLORS } from '../utils/app_constants'
 
 const VisitedRoomsScreen = ({
   navigation,
@@ -88,7 +90,7 @@ const VisitedRoomsScreen = ({
                 navigation.goBack()
               }}
             >
-              <ImageBackground source={require('../assets/back-icon.png')} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -100,12 +102,12 @@ const VisitedRoomsScreen = ({
             style={{
               borderWidth: 1,
               borderRadius: 10,
-              borderColor: '#28CD41'
+              borderColor: COLORS.PRIMARY
             }}
           >
             <DataTable.Header
               style={{
-                backgroundColor: '#28CD41',
+                backgroundColor: COLORS.PRIMARY,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
                 elevation: 5
@@ -210,13 +212,13 @@ const styles = StyleSheet.create({
   listWrapperHeader: {
     height: 45,
     width: '100%',
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     flexDirection: 'row',
     flexWrap: 'wrap',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     elevation: 15,
-    shadowColor: '#28CD41'
+    shadowColor: COLORS.PRIMARY
   },
   listWrapper: {
     height: 45,

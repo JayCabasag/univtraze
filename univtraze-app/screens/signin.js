@@ -6,7 +6,6 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Alert,
   StatusBar,
   Modal,
   Dimensions,
@@ -16,6 +15,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { COLORS } from '../utils/app_constants'
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
@@ -111,7 +111,7 @@ const SignInScreen = ({ navigation }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <ActivityIndicator size={"large"} />
+            <ActivityIndicator size={'large'} />
             <Text style={styles.modalText}>{loadingMessage}</Text>
           </View>
         </View>
@@ -152,7 +152,7 @@ const SignInScreen = ({ navigation }) => {
           <Text
             style={styles.forgotPassword}
             onPress={() => {
-              navigation.navigate('ForgotPassword')
+              navigation.navigate('forgot-password')
             }}
           >
             Forgot Password?
@@ -161,7 +161,7 @@ const SignInScreen = ({ navigation }) => {
 
         <View style={styles.buttonContainer}>
           {/* onPress={() =>navigation.navigate("Dashboard")} */}
-          <TouchableOpacity onPress={() => loginNow()} style={styles.button}>
+          <TouchableOpacity onPress={() => loginNow()} style={styles.signInBtn}>
             <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
         </View>
@@ -206,38 +206,40 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   inputContainer: {
-    marginTop: 10
+    marginTop: 10,
+    width: '100%',
+    paddingHorizontal: 30,
+    display: 'flex'
   },
   label: {
     color: '#4d7861',
-    marginLeft: 41
+    marginTop: 15
   },
 
   input: {
-    margin: 5,
+    width: '100%',
     height: 50,
-    width: 340,
-    borderColor: '#7a42f4',
     paddingHorizontal: 15,
-    borderWidth: 0.1,
-    borderRadius: 2,
-    marginLeft: 41,
-    marginRight: 41,
-    paddingVertical: 1,
-    fontSize: 16,
-    color: '#4d7861',
+    borderRadius: 5,
+    marginTop: 10,
     backgroundColor: '#ffff'
   },
-  button: {
-    backgroundColor: '#28CD41',
+  signInBtn: {
+    marginBottom: 10,
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
-    width: 380,
     borderRadius: 10,
     width: 340,
-    marginLeft: 41,
-    marginRight: 41,
     marginTop: 5,
-    paddingVertical: 18
+    paddingVertical: 18,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3
   },
   buttonText: {
     color: '#FFF',
@@ -254,17 +256,15 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     width: windowWidth,
     textTransform: 'uppercase',
-    marginLeft: 41
+    paddingHorizontal: 30
   },
   errorMessage: {
     textAlign: 'left',
-    marginLeft: 41,
     color: 'red',
     paddingVertical: 7.5
   },
   forgotPassword: {
     textAlign: 'right',
-    marginRight: 41,
     textDecorationLine: 'underline',
     color: '#4d7861',
     marginBottom: 10
@@ -331,5 +331,9 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center'
+  },
+  buttonContainer: {
+    width: '100%',
+    paddingHorizontal: 30
   }
 })

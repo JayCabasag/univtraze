@@ -10,12 +10,11 @@ const TermsAndConditionsScreen = ({ navigation }) => {
   const windowHeight = Dimensions.get('window').height
 
   return (
-    <SafeAreaView style={{ height: '100%', backgroundColor: '#E1F5E4' }}>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' barStyle='dark-content' />
+    <SafeAreaView style={styles.safeAreaContainer}>
       <KeyboardAvoidingView style={styles.container} behavior='height'>
-        <ScrollView style={{ height: windowHeight }}>
+        <ScrollView style={{ height: windowHeight }} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
           <View style={{ width: '100%' }}>
-            <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>Terms Conditions</Text>
+            <Text style={{ fontWeight: 'bold', textAlign: 'center', fontSize: 30, paddingVertical: 15 }}>Terms Conditions</Text>
             <Text>
               UnivTraze Contact Tracing is an application that can perform the contact tracing of individuals and all the persons whom he
               got in contact within seconds. UnivTraze Contact Tracing application software is developed and owned Mr. Edmar G. Tan and
@@ -315,6 +314,7 @@ const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
 
 const styles = StyleSheet.create({
+  safeAreaContainer: { flex: 1, backgroundColor: '#E1F5E4' },
   buttonContainer: {
     backgroundColor: 'transparent'
   },

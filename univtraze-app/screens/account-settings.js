@@ -19,6 +19,8 @@ import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { AntDesign } from '@expo/vector-icons'
 import { useToast } from 'react-native-toast-notifications'
+import BackIcon from '../assets/back-icon.png'
+import { COLORS } from '../utils/app_constants'
 
 const AccountSettingsScreen = ({ navigation, route: { params } }) => {
   const toast = useToast()
@@ -69,7 +71,7 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
         if (success === 1) {
           setIsLoading(false)
           setError(false)
-          navigation.navigate('Login')
+          navigation.navigate('signin')
           toast.show('Account deactivated...', {
             type: 'normal',
             placement: 'bottom',
@@ -114,7 +116,7 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
               {error ? (
                 <Text style={{ color: 'red' }}>{errorMessage}</Text>
               ) : isLoading ? (
-                <Text style={{ color: '#28CD41' }}>Please wait ...</Text>
+                <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text>
               ) : null}
               <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <TouchableOpacity
@@ -144,7 +146,7 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
                 navigation.goBack()
               }}
             >
-              <ImageBackground source={require('../assets/back-icon.png')} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -242,7 +244,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41'
+    backgroundColor: COLORS.PRIMARY
   },
   modalButton: {
     width: 80,
@@ -252,7 +254,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     borderWidth: 1
   },
 
@@ -268,7 +270,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: '100%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,

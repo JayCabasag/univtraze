@@ -1,11 +1,23 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Image, Modal, ActivityIndicator } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+  KeyboardAvoidingView,
+  Image,
+  Modal,
+  ActivityIndicator
+} from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
-import jwtDecode from 'jwt-decode'
-import { AntDesign } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
+import BackIcon from '../../assets/back-icon.png'
+import StepperIcon2 from '../../assets/reg2_identifier.png'
+import { COLORS } from '../../utils/app_constants'
 
 const SignUpDocsScreen = ({ navigation, route }) => {
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -404,14 +416,14 @@ const SignUpDocsScreen = ({ navigation, route }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-            <ActivityIndicator size={"large"}/>
+              <ActivityIndicator size={'large'} />
               <Text style={styles.modalText}>{loadingMessage}</Text>
             </View>
           </View>
         </Modal>
 
         <View style={styles.header}>
-          <Image source={require('../assets/reg2_identifier.png')} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+          <Image src={StepperIcon2} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
         </View>
         <ScrollView
           style={{
@@ -483,7 +495,7 @@ const SignUpDocsScreen = ({ navigation, route }) => {
                     width: 120,
                     height: 120,
                     borderRadius: 100,
-                    borderColor: '#28CD41',
+                    borderColor: COLORS.PRIMARY,
                     borderWidth: 2,
                     shadowColor: 'black'
                   }}
@@ -546,7 +558,7 @@ const SignUpDocsScreen = ({ navigation, route }) => {
                       height: 150,
                       shadowColor: 'black',
                       borderWidth: 1,
-                      borderColor: '#28CD41',
+                      borderColor: COLORS.PRIMARY,
                       borderRadius: 5
                     }}
                   />
@@ -598,7 +610,7 @@ const SignUpDocsScreen = ({ navigation, route }) => {
                       height: 150,
                       shadowColor: 'black',
                       borderWidth: 1,
-                      borderColor: '#28CD41',
+                      borderColor: COLORS.PRIMARY,
                       borderRadius: 5
                     }}
                   />
@@ -629,7 +641,7 @@ const SignUpDocsScreen = ({ navigation, route }) => {
             }}
             style={styles.backbutton}
           >
-            <Image source={require('../assets/back-icon.png')} style={{ width: 60, height: 60 }} />
+            <Image src={BackIcon} style={{ width: 60, height: 60 }} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -669,7 +681,7 @@ const styles = StyleSheet.create({
     margin: 5,
     width: '80%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
@@ -680,7 +692,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffff'
   },
   saveButton: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
     marginTop: 5,

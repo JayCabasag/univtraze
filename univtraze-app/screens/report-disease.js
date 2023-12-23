@@ -1,4 +1,3 @@
-import reactDom from 'react-dom'
 import {
   StyleSheet,
   StatusBar,
@@ -19,6 +18,8 @@ import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
+import BackIcon from '../assets/back-icon.png'
+import { COLORS } from '../utils/app_constants'
 
 const ReportDiseaseScreen = ({
   navigation,
@@ -46,7 +47,7 @@ const ReportDiseaseScreen = ({
   //Error Handler variables
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  
+
   const pickDocumentForProofDoc = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -147,7 +148,7 @@ const ReportDiseaseScreen = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-            <ActivityIndicator size={"large"} />
+              <ActivityIndicator size={'large'} />
               <Text style={styles.modalText}>{loadingMessage}</Text>
             </View>
           </View>
@@ -161,7 +162,7 @@ const ReportDiseaseScreen = ({
                 navigation.goBack()
               }}
             >
-              <ImageBackground source={require('../assets/back-icon.png')} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
 
@@ -411,7 +412,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41'
+    backgroundColor: COLORS.PRIMARY
   },
 
   bodyContainer: {
@@ -464,7 +465,7 @@ const styles = StyleSheet.create({
     margin: 5,
     height: 50,
     width: '100%',
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 1,
@@ -491,11 +492,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     marginTop: 5,
-    borderColor: '#28CD41'
+    borderColor: COLORS.PRIMARY
   },
   button: {
     width: '100%',
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
 
@@ -513,7 +514,7 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     elevation: 5,
     borderWidth: 1,
-    borderColor: '#28CD41'
+    borderColor: COLORS.PRIMARY
   },
   buttonText: {
     color: '#FFF',
@@ -523,7 +524,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   buttonCancelText: {
-    color: '#28CD41',
+    color: COLORS.PRIMARY,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 16,

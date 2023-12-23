@@ -1,8 +1,20 @@
-import { KeyboardAvoidingView, Image, StyleSheet, TextInput, View, TouchableOpacity, Text, StatusBar, Modal, ActivityIndicator } from 'react-native'
+import {
+  KeyboardAvoidingView,
+  Image,
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Text,
+  StatusBar,
+  Modal,
+  ActivityIndicator
+} from 'react-native'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dimensions } from 'react-native'
+import { COLORS } from '../utils/app_constants'
 
 const ResetPasswordScreen = ({
   navigation,
@@ -98,7 +110,7 @@ const ResetPasswordScreen = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <ActivityIndicator size={"large"}/>
+              <ActivityIndicator size={'large'} />
               <Text style={styles.modalText}>{loadingMessage}</Text>
             </View>
           </View>
@@ -135,7 +147,7 @@ const ResetPasswordScreen = ({
             <Text
               style={styles.returnHomeText}
               onPress={() => {
-                navigation.navigate('Login')
+                navigation.navigate('signin')
               }}
             >
               Return to login
@@ -260,7 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   },
   button: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     width: 380,
     borderRadius: 10,
@@ -323,7 +335,7 @@ const styles = StyleSheet.create({
   successMessage: {
     textAlign: 'left',
     marginLeft: 41,
-    color: '#28CD41',
+    color: COLORS.PRIMARY,
     paddingVertical: 7.5
   },
   errorMessage: {
@@ -333,7 +345,7 @@ const styles = StyleSheet.create({
     paddingVertical: 7.5
   },
   buttonContinue: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
     paddingVertical: 18,

@@ -18,7 +18,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker'
-menu_jpg
+import BackIcon from '../assets/back-icon.png'
+import { COLORS } from '../utils/app_constants'
 
 const menu_jpg = {
   uri: 'https://firebasestorage.googleapis.com/v0/b/fir-phoneauth-74be7.appspot.com/o/menu.png?alt=media&token=e20ee94a-4632-467a-841c-c66659a2a3df'
@@ -187,7 +188,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
       })
       .then((response) => {
         if (response.data.success === 0 && response.data.message === 'Invalid token') {
-          navigation.navigate('Login')
+          navigation.navigate('signin')
           return
         }
 
@@ -245,7 +246,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-            <ActivityIndicator size={"large"}/>
+              <ActivityIndicator size={'large'} />
               <Text style={styles.modalText}>{loadingModalMessage}</Text>
             </View>
           </View>
@@ -259,7 +260,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
                 navigation.goBack()
               }}
             >
-              <ImageBackground source={require('../assets/back-icon.png')} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -363,7 +364,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
                 style={{
                   width: 'auto',
                   height: 60,
-                  backgroundColor: '#28CD41',
+                  backgroundColor: COLORS.PRIMARY,
                   borderRadius: 10,
                   marginTop: 10,
                   alignItems: 'center',
@@ -460,7 +461,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41'
+    backgroundColor: COLORS.PRIMARY
   },
   // body style
   bodyContainer: {

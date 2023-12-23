@@ -17,6 +17,8 @@ import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'
 import { useToast } from 'react-native-toast-notifications'
+import BackIcon from '../assets/back-icon.png'
+import { COLORS } from '../utils/app_constants'
 
 const UpdatePasswordScreen = ({ navigation, route }) => {
   const toast = useToast()
@@ -119,7 +121,7 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
                 navigation.goBack()
               }}
             >
-              <ImageBackground source={require('../assets/back-icon.png')} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -150,8 +152,8 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
             onChangeText={(text) => setConfirmNewPassword(text)}
           />
           {error ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
-          {success ? <Text style={{ color: '#28CD41' }}>Password updated successfully</Text> : null}
-          {isLoading ? <Text style={{ color: '#28CD41' }}>Please wait ...</Text> : null}
+          {success ? <Text style={{ color: COLORS.PRIMARY }}>Password updated successfully</Text> : null}
+          {isLoading ? <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text> : null}
 
           <TouchableOpacity style={styles.buttons} onPress={() => handleUpdatePassword()}>
             <Text style={{ fontSize: 15, color: 'white' }}>Update password</Text>
@@ -221,7 +223,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41'
+    backgroundColor: COLORS.PRIMARY
   },
   modalButton: {
     width: 80,
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     borderWidth: 1
   },
 
@@ -247,7 +249,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: '100%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,

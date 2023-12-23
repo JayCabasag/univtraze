@@ -16,9 +16,8 @@ import {
 import { BottomSheet } from 'react-native-btr'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
-import { Button, CheckBox } from 'react-native-elements'
-
-const symptomdata = require('../Symptoms.json')
+import CheckBox from 'expo-checkbox'
+import { COLORS } from '../utils/app_constants'
 
 const menu_jpg = {
   uri: 'https://firebasestorage.googleapis.com/v0/b/fir-phoneauth-74be7.appspot.com/o/menu.png?alt=media&token=e20ee94a-4632-467a-841c-c66659a2a3df'
@@ -183,7 +182,7 @@ const DailyAssessmentScreen = () => {
                         width: 120,
                         height: 'auto',
                         borderWidth: 2,
-                        borderColor: '#28CD41',
+                        borderColor: COLORS.PRIMARY,
                         borderRadius: 50,
                         padding: 5,
                         justifyContent: 'center',
@@ -192,7 +191,7 @@ const DailyAssessmentScreen = () => {
                       }}
                       onPress={() => setModalVisible(true)}
                     >
-                      <Text style={{ color: '#28CD41', fontWeight: 'bold' }}> View QR Code</Text>
+                      <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}> View QR Code</Text>
                     </TouchableOpacity>
                   </View>
                   <Modal
@@ -209,7 +208,7 @@ const DailyAssessmentScreen = () => {
                         <Text
                           style={{
                             fontSize: 28,
-                            color: '#28CD41',
+                            color: COLORS.PRIMARY,
                             fontWeight: 'bold'
                           }}
                         >
@@ -222,7 +221,7 @@ const DailyAssessmentScreen = () => {
                             width: 210,
                             height: 210,
                             borderWidth: 2,
-                            borderColor: '#28CD41',
+                            borderColor: COLORS.PRIMARY,
                             borderRadius: 20,
                             marginTop: 5
                           }}
@@ -278,7 +277,7 @@ const DailyAssessmentScreen = () => {
                     style={{
                       width: '100%',
                       height: 54,
-                      backgroundColor: '#28CD41',
+                      backgroundColor: COLORS.PRIMARY,
                       borderRadius: 10,
                       flexDirection: 'row',
                       alignItems: 'center'
@@ -667,7 +666,7 @@ const DailyAssessmentScreen = () => {
                 style={{
                   width: '100%',
                   height: 60,
-                  backgroundColor: '#28CD41',
+                  backgroundColor: COLORS.PRIMARY,
                   borderRadius: 15,
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -755,7 +754,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#28CD41'
+    backgroundColor: COLORS.PRIMARY
   },
   // bodyContainer style
   bodyContainer: {

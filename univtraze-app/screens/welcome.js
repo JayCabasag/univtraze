@@ -1,6 +1,7 @@
 import { StyleSheet, Text, Image, View, ImageBackground, TouchableOpacity, StatusBar } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { COLORS } from '../utils/app_constants'
 
 const WelcomeScreen = ({ navigation }) => {
   const image = {
@@ -12,14 +13,14 @@ const WelcomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar animated={true} backgroundColor='#28CD41' />
+      <StatusBar animated={true} backgroundColor={COLORS.PRIMARY} />
       <ImageBackground source={image} resizeMode='cover' style={styles.univTrazeLogo}>
         <View style={{ width: '80%', height: 45, marginTop: '35%' }}>
           <Image style={styles.image} source={uniTrazeLogo} resizeMode='contain' />
         </View>
 
         <View style={{ paddingTop: 10, marginLeft: 30 }}>
-          <Text style={{ color: '#ffff', fontSize: 16 }}>University content tracing app {'\n'} makes tracing easier</Text>
+          <Text style={{ color: '#ffff', fontSize: 16 }}>University content tracing app {'\n'}makes tracing easier</Text>
         </View>
 
         <View
@@ -30,11 +31,11 @@ const WelcomeScreen = ({ navigation }) => {
             alignItems: 'center'
           }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.button}>
+          <TouchableOpacity onPress={() => navigation.navigate('signin')} style={styles.loginBtn}>
             <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={styles.createAnAccountButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('signup')} style={styles.createAnAccountButton}>
             <Text style={styles.createAnAccountText}>Create an account</Text>
           </TouchableOpacity>
         </View>
@@ -65,9 +66,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
-  button: {
+  loginBtn: {
     marginBottom: 10,
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
     width: 340,
@@ -80,7 +81,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
-
     elevation: 3
   },
   buttonText: {
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     elevation: 3
   },
   createAnAccountText: {
-    color: '#28CD41',
+    color: COLORS.PRIMARY,
     fontStyle: 'normal',
     fontWeight: 'bold',
     fontSize: 16,

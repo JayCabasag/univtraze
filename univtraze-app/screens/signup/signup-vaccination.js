@@ -22,7 +22,8 @@ import moment from 'moment'
 import { AntDesign } from '@expo/vector-icons'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
-
+import StepperIcon3 from '../../assets/reg3_identifier.png'
+import { COLORS } from '../../utils/app_constants'
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
@@ -107,14 +108,14 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <ActivityIndicator size={"large"}/>
+              <ActivityIndicator size={'large'} />
               <Text style={styles.modalText}>Please wait...</Text>
             </View>
           </View>
         </Modal>
 
         <View style={styles.header}>
-          <Image source={require('../assets/reg3_identifier.png')} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+          <Image src={StepperIcon3} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
         </View>
 
         <ScrollView style={styles.bodyContainer}>
@@ -152,7 +153,7 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
               <AntDesign
                 name='calendar'
                 size={37}
-                color='#28CD41'
+                color={COLORS.PRIMARY}
                 style={{ marginRight: 5 }}
                 onPress={() => setShowFirstDoseDatePicker(true)}
               />
@@ -208,7 +209,7 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
               <AntDesign
                 name='calendar'
                 size={37}
-                color='#28CD41'
+                color={COLORS.PRIMARY}
                 style={{ marginRight: 5 }}
                 onPress={() => setShowSecondDoseDatePicker(true)}
               />
@@ -264,7 +265,7 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
               <AntDesign
                 name='calendar'
                 size={37}
-                color='#28CD41'
+                color={COLORS.PRIMARY}
                 style={{ marginRight: 5 }}
                 onPress={() => setShowBoosterDoseDatePicker(true)}
               />
@@ -341,7 +342,7 @@ const styles = StyleSheet.create({
     margin: 5,
     width: '70%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
@@ -375,14 +376,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     borderWidth: 1,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     borderRadius: 10
   },
   input: {
     margin: 5,
     width: '100%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     borderWidth: 1,
     borderRadius: 10,
     overflow: 'hidden',
@@ -393,7 +394,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffff'
   },
   button: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
     paddingVertical: 15,
@@ -414,7 +415,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     backgroundColor: 'white',
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     justifyContent: 'center'
   },
   centeredView: {

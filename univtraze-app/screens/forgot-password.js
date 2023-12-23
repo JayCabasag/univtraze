@@ -1,11 +1,20 @@
-import { KeyboardAvoidingView, Image, StyleSheet, TextInput, View, TouchableOpacity, Text, StatusBar, Modal, ActivityIndicator } from 'react-native'
+import {
+  KeyboardAvoidingView,
+  Image,
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Text,
+  StatusBar,
+  Modal,
+  ActivityIndicator
+} from 'react-native'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import ConfettiCannon from 'react-native-confetti-cannon'
-import ModalSuccess from 'react-native-modal'
-import jwtDecode from 'jwt-decode'
 import { Dimensions } from 'react-native'
+import { COLORS } from '../utils/app_constants'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
@@ -126,70 +135,67 @@ const ForgotPasswordScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ height: windowHeight, backgroundColor: '#E1F5E4' }}>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' barStyle='dark-content' />
-      <KeyboardAvoidingView style={styles.container} behavior='height'>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={showLoadingModal}
-          onRequestClose={() => {
-            setShowLoadingModal(!showLoadingModal)
+    <KeyboardAvoidingView style={styles.container} behavior='height'>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={showLoadingModal}
+        onRequestClose={() => {
+          setShowLoadingModal(!showLoadingModal)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator size={'large'} />
+            <Text style={styles.modalText}>{loadingMessage}</Text>
+          </View>
+        </View>
+      </Modal>
+      <View style={styles.inputContainer}>
+        <Text style={styles.loginText}>Forgot password</Text>
+        <Text style={styles.label}>Email</Text>
+        <TextInput placeholder='Email Address' defaultValue={email} onChangeText={(text) => setEmail(text)} style={styles.input} />
+
+        {showCodeInput && (
+          <>
+            <Text style={styles.label}>Code</Text>
+            <TextInput
+              placeholder='Recovery code'
+              defaultValue={codeInput}
+              onChangeText={(text) => setCodeInput(text)}
+              style={styles.input}
+            />
+          </>
+        )}
+
+        {error ? (
+          <Text style={styles.errorMessage}>*{errorMessage}</Text>
+        ) : success ? (
+          <Text style={styles.successMessage}>Recovery password sent to your email</Text>
+        ) : null}
+
+        <TouchableOpacity onPress={() => validateUserInput()} style={styles.confirmEmailBtn}>
+          {showCodeInput ? <Text style={styles.buttonText}>Resend to Email</Text> : <Text style={styles.buttonText}>Send to Email</Text>}
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.buttonContainer}>
+        {showCodeInput ? (
+          <TouchableOpacity onPress={() => verifyViaEmailRecovery()} style={styles.button}>
+            <Text style={styles.buttonText}>Verify</Text>
+          </TouchableOpacity>
+        ) : null}
+
+        <Text
+          style={styles.returnHomeText}
+          onPress={() => {
+            navigation.goBack()
           }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size={"large"}/>
-              <Text style={styles.modalText}>{loadingMessage}</Text>
-            </View>
-          </View>
-        </Modal>
-        <View style={styles.inputContainer}>
-          <Text style={styles.loginText}>Forgot password</Text>
-          <Text style={styles.label}>Email</Text>
-          <TextInput placeholder='Email Address' defaultValue={email} onChangeText={(text) => setEmail(text)} style={styles.input} />
-
-          {showCodeInput ? (
-            <>
-              <Text style={styles.label}>Code</Text>
-              <TextInput
-                placeholder='Recovery code'
-                defaultValue={codeInput}
-                onChangeText={(text) => setCodeInput(text)}
-                style={styles.input}
-              />
-            </>
-          ) : null}
-
-          {error ? (
-            <Text style={styles.errorMessage}>*{errorMessage}</Text>
-          ) : success ? (
-            <Text style={styles.successMessage}>Recovery password sent to your email</Text>
-          ) : null}
-
-          <TouchableOpacity onPress={() => validateUserInput()} style={styles.button}>
-            {showCodeInput ? <Text style={styles.buttonText}>Resend to Email</Text> : <Text style={styles.buttonText}>Send to Email</Text>}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.buttonContainer}>
-          {showCodeInput ? (
-            <TouchableOpacity onPress={() => verifyViaEmailRecovery()} style={styles.button}>
-              <Text style={styles.buttonText}>Verify</Text>
-            </TouchableOpacity>
-          ) : null}
-
-          <Text
-            style={styles.returnHomeText}
-            onPress={() => {
-              navigation.goBack()
-            }}
-          >
-            Return to login
-          </Text>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          Return to login
+        </Text>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -278,35 +284,29 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    height: windowHeight,
+    flex: 1,
+    backgroundColor: '#E1F5E4',
     justifyContent: 'center',
     alignItems: 'center'
   },
   label: {
     color: '#4d7861',
-    marginLeft: 41
+    width: '100%'
   },
-
   input: {
-    margin: 5,
+    width: '100%',
     height: 50,
-    width: 340,
-    borderColor: '#7a42f4',
     paddingHorizontal: 15,
-    borderWidth: 0.1,
-    borderRadius: 2,
-    marginLeft: 41,
-    marginRight: 41,
-    paddingVertical: 1,
-    fontSize: 16,
-    color: '#4d7861',
+    borderRadius: 5,
+    marginTop: 10,
     backgroundColor: '#ffff'
   },
   inputContainer: {
-    backgroundColor: 'transparent'
+    borderWidth: 2,
+    paddingHorizontal: 30
   },
   button: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     width: 380,
     borderRadius: 10,
@@ -330,7 +330,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     lineHeight: 30,
     textTransform: 'uppercase',
-    marginLeft: 41,
     paddingVertical: 30
   },
   forgotPassword: {
@@ -369,7 +368,7 @@ const styles = StyleSheet.create({
   successMessage: {
     textAlign: 'left',
     marginLeft: 41,
-    color: '#28CD41',
+    color: COLORS.PRIMARY,
     paddingVertical: 7.5
   },
   errorMessage: {
@@ -379,12 +378,29 @@ const styles = StyleSheet.create({
     paddingVertical: 7.5
   },
   buttonContinue: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
     paddingVertical: 18,
     marginVertical: 15,
     width: 308,
     height: 60
+  },
+  confirmEmailBtn: {
+    marginBottom: 10,
+    backgroundColor: COLORS.PRIMARY,
+    padding: 10,
+    borderRadius: 10,
+    width: '100%',
+    marginTop: 15,
+    paddingVertical: 18,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3
   }
 })

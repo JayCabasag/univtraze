@@ -18,6 +18,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { StackActions } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
+import StepperIcon1 from '../../assets/reg_identifier.png'
+import BackIcon from '../../assets/back-icon.png'
+import { COLORS } from '../../utils/app_constants'
 
 const SignUpEmployeeScreen = ({ navigation, route }) => {
   const [date, setDate] = useState('')
@@ -119,7 +122,7 @@ const SignUpEmployeeScreen = ({ navigation, route }) => {
       <StatusBar animated={true} backgroundColor='#E1F5E4' barStyle='dark-content' />
       <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
         <View style={styles.header}>
-          <Image source={require('../assets/reg_identifier.png')} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+          <Image src={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
         </View>
 
         <ScrollView style={styles.inputContainer}>
@@ -229,7 +232,13 @@ const SignUpEmployeeScreen = ({ navigation, route }) => {
                 style={styles.dobInput}
                 editable={false}
               />
-              <AntDesign name='calendar' size={37} color='#28CD41' style={{ marginRight: 5 }} onPress={() => setShowDatePicker(true)} />
+              <AntDesign
+                name='calendar'
+                size={37}
+                color={COLORS.PRIMARY}
+                style={{ marginRight: 5 }}
+                onPress={() => setShowDatePicker(true)}
+              />
             </View>
           </View>
 
@@ -288,7 +297,7 @@ const SignUpEmployeeScreen = ({ navigation, route }) => {
               }}
               style={styles.backbutton}
             >
-              <Image source={require('../assets/back-icon.png')} style={{ width: 60, height: 60 }} />
+              <Image src={BackIcon} style={{ width: 60, height: 60 }} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -335,7 +344,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     width: '80%',
     borderRadius: 10,
@@ -364,7 +373,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: '80%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
@@ -381,7 +390,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: '95%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
@@ -398,7 +407,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: '100%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
@@ -416,7 +425,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: '95%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
@@ -433,7 +442,7 @@ const styles = StyleSheet.create({
     marginRight: 0,
     width: '100%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
@@ -447,7 +456,7 @@ const styles = StyleSheet.create({
     margin: 5,
     width: '70%',
     height: 50,
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
@@ -458,7 +467,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffff'
   },
   button: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
     marginTop: 5,
@@ -482,7 +491,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     backgroundColor: 'white',
-    borderColor: '#28CD41',
+    borderColor: COLORS.PRIMARY,
     justifyContent: 'center'
   }
 })

@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Button, ImageBackground, TouchableOpacity, Image, Dimensions } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import React, { useState } from 'react'
+import { COLORS } from '../../utils/app_constants'
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     width: windowWidth
   },
   button: {
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     padding: 10,
     width: '80%',
     borderRadius: 10,

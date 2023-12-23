@@ -4,6 +4,8 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 import base64 from 'base-64'
 import axios from 'axios'
 import moment from 'moment'
+import BackIcon from '../assets/back-icon.png'
+import { COLORS } from '../utils/app_constants'
 
 export default function QrScannerScreen({ navigation, route }) {
   const [hasPermission, setHasPermission] = useState(null)
@@ -153,7 +155,7 @@ export default function QrScannerScreen({ navigation, route }) {
               navigation.goBack()
             }}
           >
-            <ImageBackground source={require('../assets/back-icon.png')} resizeMode='contain' style={styles.image}></ImageBackground>
+            <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
           </TouchableWithoutFeedback>
         </View>
 
@@ -307,7 +309,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: 'tomato',
     borderWidth: 5,
-    borderColor: '#28CD41'
+    borderColor: COLORS.PRIMARY
   },
   centeredView: {
     flex: 1,
@@ -344,7 +346,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingHorizontal: 15,
     elevation: 2,
-    backgroundColor: '#28CD41',
+    backgroundColor: COLORS.PRIMARY,
     marginLeft: 'auto',
     marginRight: 0
   },
