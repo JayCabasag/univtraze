@@ -9,11 +9,10 @@ import {
   Alert,
   StatusBar,
   Modal,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from 'react-native'
-import React, { useContext, useState } from 'react'
-import { AuthContext } from '../AuthContext/AuthContext'
-import * as SecureStore from 'expo-secure-store'
+import React, { useState } from 'react'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -25,14 +24,6 @@ const SignInScreen = ({ navigation }) => {
   const image = {
     uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Flogin_image.png?alt=media&token=ebb53e48-2bc0-485d-8456-fe8a31683061'
   }
-  const googleLogo = {
-    uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Fgoogle-icon3.png?alt=media&token=61a34454-dda9-4b6d-8dc6-198bb59ccbfb'
-  }
-  const facebookLogo = {
-    uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Ffacebook-icons.png?alt=media&token=0ec86a8b-f095-40dd-b4e9-4b31b2846068'
-  }
-
-  const val = useContext(AuthContext)
 
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -120,7 +111,7 @@ const SignInScreen = ({ navigation }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Image source={require('../assets/loading_icon.gif')} resizeMode='contain' style={{ width: 100, height: 100 }} />
+            <ActivityIndicator size={"large"} />
             <Text style={styles.modalText}>{loadingMessage}</Text>
           </View>
         </View>

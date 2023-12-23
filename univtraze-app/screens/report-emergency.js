@@ -1,5 +1,3 @@
-import reactDom from 'react-dom'
-import * as SecureStore from 'expo-secure-store'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import {
@@ -14,7 +12,8 @@ import {
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  ScrollView
+  ScrollView,
+  ActivityIndicator
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
@@ -57,33 +56,6 @@ const ReportEmergencyScreen = ({ navigation }) => {
   //Loading modal Variables
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingModalMessage, setLoadingModalMessage] = useState('Please wait...')
-
-  useEffect(() => {
-    getValueFor('x-token')
-  }, [])
-
-  async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key)
-    if (result) {
-      setToken(result)
-      decodeJwt(result)
-    } else {
-      alert('Invalid token, please re-login to continue.')
-      navigation.navigate('Login')
-    }
-  }
-
-  const decodeJwt = (currentToken) => {
-    var decodedToken = jwtDecode(currentToken)
-
-    setCurrentUserId(decodedToken.result.id)
-
-    if (decodedToken.result.type === null) {
-      navigation.navigate('SignUpUserType')
-      return
-    }
-  }
-
   // variables for user inputs
 
   const [patientName, setPatientName] = useState('')
@@ -273,7 +245,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Image source={require('../assets/loading_icon.gif')} resizeMode='contain' style={{ width: 100, height: 100 }} />
+            <ActivityIndicator size={"large"}/>
               <Text style={styles.modalText}>{loadingModalMessage}</Text>
             </View>
           </View>

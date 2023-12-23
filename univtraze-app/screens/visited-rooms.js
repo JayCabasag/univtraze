@@ -12,7 +12,6 @@ import {
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import * as SecureStore from 'expo-secure-store'
 import axios from 'axios'
 import moment from 'moment'
 import { DataTable } from 'react-native-paper'
@@ -24,20 +23,6 @@ const VisitedRoomsScreen = ({
   }
 }) => {
   const [roomVisited, setRoomVisited] = useState([])
-  const [token, setToken] = useState(null)
-
-  useEffect(() => {
-    getValueFor('x-token')
-  }, [])
-
-  async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key)
-    if (result) {
-      handleGetUserVisitedRooms(id, type, result)
-    } else {
-      alert('No values stored under that jwt-token.')
-    }
-  }
 
   const handleGetUserVisitedRooms = async (uid, userType, currentToken) => {
     const config = {

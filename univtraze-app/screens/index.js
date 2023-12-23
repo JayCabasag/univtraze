@@ -17,7 +17,6 @@ import React, { useState, useEffect, useLayoutEffect } from 'react'
 import axios from 'axios'
 import { PieChart } from 'react-native-chart-kit'
 import moment from 'moment'
-import * as SecureStore from 'expo-secure-store'
 import jwtDecode from 'jwt-decode'
 import Menu from '../MenuComponents/Menu'
 import Notifications from '../MenuComponents/Notifications'
@@ -60,23 +59,6 @@ const IndexScreen = ({ navigation, route }) => {
     setNotifVisible(!notifVisible)
     handleUpdateNotificationStatus(userId, 1, token)
     handleGetNotifications(userId, 0, token)
-  }
-
-  useEffect(() => {
-    getValueFor('x-token')
-  }, [])
-
-  async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key)
-    if (result) {
-      setToken(result)
-      decodeJwt(result)
-      getOnGoingCommunicableDiseaseCase(result)
-      getResolvedCommunicableDiseaseCase(result)
-      getTotalActiveNotifications(result)
-    } else {
-      alert('No values stored under that jwt-token.')
-    }
   }
 
   const handleUpdateNotificationStatus = async (userId, notification_is_viewed, currentToken) => {

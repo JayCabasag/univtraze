@@ -1,11 +1,10 @@
-import { KeyboardAvoidingView, Image, StyleSheet, TextInput, View, TouchableOpacity, Text, StatusBar, Modal } from 'react-native'
+import { KeyboardAvoidingView, Image, StyleSheet, TextInput, View, TouchableOpacity, Text, StatusBar, Modal, ActivityIndicator } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ConfettiCannon from 'react-native-confetti-cannon'
 import ModalSuccess from 'react-native-modal'
-import * as SecureStore from 'expo-secure-store'
 import jwtDecode from 'jwt-decode'
 import { Dimensions } from 'react-native'
 
@@ -161,7 +160,7 @@ const SignUpScreen = ({ navigation }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Image source={require('../assets/loading_icon.gif')} resizeMode='contain' style={{ width: 100, height: 100 }} />
+              <ActivityIndicator size={"large"}/>
               <Text style={styles.modalText}>{loadingMessage}</Text>
             </View>
           </View>

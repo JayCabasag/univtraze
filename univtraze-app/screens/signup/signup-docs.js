@@ -1,9 +1,8 @@
-import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Image, Modal } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, ScrollView, KeyboardAvoidingView, Image, Modal, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
-import * as SecureStore from 'expo-secure-store'
 import jwtDecode from 'jwt-decode'
 import { AntDesign } from '@expo/vector-icons'
 import { Ionicons } from '@expo/vector-icons'
@@ -31,26 +30,6 @@ const SignUpDocsScreen = ({ navigation, route }) => {
   //Getting current user token
   const [token, setToken] = useState('')
   const [userId, setUserId] = useState(null)
-
-  useEffect(() => {
-    getValueFor('x-token')
-  }, [])
-
-  async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key)
-    if (result) {
-      setToken(result)
-      decodeJwt(result)
-    } else {
-      alert('No values stored under that jwt-token.')
-    }
-  }
-
-  const decodeJwt = (currentToken) => {
-    var decodedToken = jwtDecode(currentToken)
-    setUserId(decodedToken.result.id)
-    setEmail(decodedToken.result.email)
-  }
 
   const pickDocumentForProfilePhoto = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -425,7 +404,7 @@ const SignUpDocsScreen = ({ navigation, route }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Image source={require('../assets/loading_icon.gif')} resizeMode='contain' style={{ width: 100, height: 100 }} />
+            <ActivityIndicator size={"large"}/>
               <Text style={styles.modalText}>{loadingMessage}</Text>
             </View>
           </View>

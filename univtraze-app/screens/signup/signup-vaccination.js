@@ -11,20 +11,18 @@ import {
   ImageBackground,
   Button,
   Dimensions,
-  Modal
+  Modal,
+  ActivityIndicator
 } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import React, { useState, useEffect } from 'react'
-import * as SecureStore from 'expo-secure-store'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import DropDownPicker from 'react-native-dropdown-picker'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment'
 import { AntDesign } from '@expo/vector-icons'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 
-//Import Library to make a cannon
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
@@ -54,25 +52,6 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
   const [showLoadingModal, setShowLoadingModal] = useState(false)
 
   const [userId, setUserId] = useState(null)
-
-  useEffect(() => {
-    getValueFor('x-token')
-  }, [])
-
-  async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key)
-    if (result) {
-      setToken(result)
-      decodeJwt(result)
-    } else {
-      alert('No values stored under that jwt-token.')
-    }
-  }
-
-  const decodeJwt = (currentToken) => {
-    var decodedToken = jwtDecode(currentToken)
-    setUserId(decodedToken.result.id)
-  }
 
   const handleUpdateVaccineData = async () => {
     try {
@@ -128,7 +107,7 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Image source={require('../assets/loading_icon.gif')} resizeMode='contain' style={{ width: 100, height: 100 }} />
+              <ActivityIndicator size={"large"}/>
               <Text style={styles.modalText}>Please wait...</Text>
             </View>
           </View>

@@ -14,11 +14,8 @@ import {
   Alert
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import * as SecureStore from 'expo-secure-store'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'
-import { DataTable } from 'react-native-paper'
-import moment from 'moment'
 import jwtDecode from 'jwt-decode'
 import { AntDesign } from '@expo/vector-icons'
 import { useToast } from 'react-native-toast-notifications'
@@ -88,26 +85,6 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
       setError(true)
       setErrorMessage('Network error')
     }
-  }
-
-  useEffect(() => {
-    getValueFor('x-token')
-  }, [])
-
-  async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key)
-    if (result) {
-      setToken(result)
-      decodeJwt(result)
-    } else {
-      alert('No values stored under that jwt-token.')
-    }
-  }
-
-  const decodeJwt = (currentToken) => {
-    var decodedToken = jwtDecode(currentToken)
-    setUserId(decodedToken.result.id)
-    setUserType(decodedToken.result.type || params.type)
   }
 
   return (

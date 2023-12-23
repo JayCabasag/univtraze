@@ -7,14 +7,12 @@ import {
   Pressable,
   Image,
   Modal,
-  TextInput,
   ScrollView,
-  TouchableOpacity,
   TouchableWithoutFeedback,
-  Alert
+  Alert,
+  ActivityIndicator
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import * as SecureStore from 'expo-secure-store'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'
 import { DataTable } from 'react-native-paper'
@@ -39,21 +37,6 @@ const TemperatureHistoryScreen = ({
   //Error Handler variables
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-
-  useEffect(() => {
-    getValueFor('x-token')
-  }, [])
-
-  async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key)
-    if (result) {
-      setToken(result)
-      handleGetUserTemperature(result, id)
-      handleGetAllUserTemperatureHistory(result, id)
-    } else {
-      alert('No values stored under that jwt-token.')
-    }
-  }
 
   const handleGetUserTemperature = async (token, id) => {
     setAllTemperatureHistory([])
@@ -159,7 +142,7 @@ const TemperatureHistoryScreen = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Image source={require('../assets/loading_icon.gif')} resizeMode='contain' style={{ width: 100, height: 100 }} />
+              <ActivityIndicator size={"large"}/>
               <Text style={styles.modalText}>{loadingMessage}</Text>
             </View>
           </View>

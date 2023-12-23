@@ -17,7 +17,6 @@ import { BottomSheet } from 'react-native-btr'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
 import { Button, CheckBox } from 'react-native-elements'
-import { Checkbox } from 'react-native-paper'
 
 const symptomdata = require('../Symptoms.json')
 

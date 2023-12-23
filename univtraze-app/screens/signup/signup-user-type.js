@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View, Button, ImageBackground, TouchableOpacity, Image, Dimensions } from 'react-native'
 import { RadioButton } from 'react-native-paper'
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import * as SecureStore from 'expo-secure-store'
-import jwt_decode from 'jwt-decode'
+import React, { useState } from 'react'
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height
@@ -14,11 +11,6 @@ const image = {
 
 const SignUpUserTypeScreen = ({ navigation: { navigate } }) => {
   const [isChecked, setIsChecked] = useState('Student')
-
-  const [token, setToken] = useState('')
-  const [userEmail, setUserEmail] = useState('')
-  const [userType, setUserType] = useState('')
-  const [userId, setUserId] = useState(0)
 
   const SubmitUserType = async () => {
     if (isChecked === 'Student') {

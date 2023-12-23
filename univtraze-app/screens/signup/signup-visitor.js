@@ -13,7 +13,6 @@ import {
 } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import React, { useState, useEffect } from 'react'
-import * as SecureStore from 'expo-secure-store'
 import jwt_decode from 'jwt-decode'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { SafeAreaView } from 'react-native-safe-area-context'

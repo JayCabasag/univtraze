@@ -12,13 +12,10 @@ import {
   ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Alert
+  ActivityIndicator
 } from 'react-native'
-import { BottomSheet } from 'react-native-btr'
 import { RadioButton } from 'react-native-paper'
 import React, { useState, useEffect } from 'react'
-import { borderColor } from 'react-native/Libraries/Components/View/ReactNativeStyleAttributes'
-import * as SecureStore from 'expo-secure-store'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
@@ -49,20 +46,7 @@ const ReportDiseaseScreen = ({
   //Error Handler variables
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-
-  useEffect(() => {
-    getValueFor('x-token')
-  }, [])
-
-  async function getValueFor(key) {
-    let result = await SecureStore.getItemAsync(key)
-    if (result) {
-      setToken(result)
-    } else {
-      alert('No values stored under that jwt-token.')
-    }
-  }
-
+  
   const pickDocumentForProofDoc = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -163,7 +147,7 @@ const ReportDiseaseScreen = ({
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Image source={require('../assets/loading_icon.gif')} resizeMode='contain' style={{ width: 100, height: 100 }} />
+            <ActivityIndicator size={"large"} />
               <Text style={styles.modalText}>{loadingMessage}</Text>
             </View>
           </View>
