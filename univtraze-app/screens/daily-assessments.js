@@ -442,7 +442,7 @@ const DailyAssessmentScreen = () => {
                       <Text
                         style={{
                           color: COLORS.TEXT_BLACK,
-                          fontSize: 12,
+                          fontSize: 14,
                           fontWeight: '900'
                         }}
                       >
@@ -492,7 +492,7 @@ const DailyAssessmentScreen = () => {
                         <Text
                           style={{
                             color: COLORS.TEXT_BLACK,
-                            fontSize: 12,
+                            fontSize: 14,
                             fontWeight: '900'
                           }}
                         >
@@ -542,7 +542,7 @@ const DailyAssessmentScreen = () => {
                         <Text
                           style={{
                             color: COLORS.TEXT_BLACK,
-                            fontSize: 12,
+                            fontSize: 14,
                             fontWeight: '900'
                           }}
                         >

@@ -2,51 +2,55 @@ const { create,emailCheck, getUsers, getUserById, getUserByEmail, updateUserType
         updateStudentDetails, addEmployeeDetails, checkEmployeeDetailsExist, updateEmployeeDetails, checkVisitorDetailsExist, 
         updateVisitorDetails,addVisitorDetails,updateEmployeeDocs, updateStudentDocs, updateVisitorDocs, addAccountCreatedNotificationToUser, deactivateAccount,
         getEmployeeDetailsById, getVisitorDetailsById, getStudentDetailsById, getAllUsers, updateUserRecoveryPassword, sendLinkToEmail, checkIfEmailAndRecoveryPasswordMatched, 
-        updateUserPassword, checkIfIdAndPasswordMatched, updateProfileInfoStudent, updateProfileInfoEmployee, updateProfileInfoVisitor} = require("./user.service");
+        updateUserPassword, updateProfileInfoStudent, updateProfileInfoEmployee, updateProfileInfoVisitor} = require("./user.service");
 const {genSaltSync, hashSync, compareSync} = require('bcrypt');
 const { sign } = require("jsonwebtoken")
 var generator = require('generate-password');
+const schemas = require("../../utils/helpers/schemas");
 
 module.exports = {
     createUser: (req, res) => {
         const body = req.body;
+        const { error } = schemas.signupSchema(body);
+
+        if (error) {
+            const errorMessage = error.details[0].message;
+            return res.status(400).json({
+                message: errorMessage ?? 'Invalid payload'
+            })
+        }
+
         const salt = genSaltSync(10);
         body.password = hashSync(body.password, salt)
 
         emailCheck(body, (err, results) => {
-            
             if(err){
-                console.log(err)
-                return res.json({
-                    success: 0,
-                    message: "Database connection Error"
+                return res.status(500).json({
+                    message: "Internal server error"
                 });
             }
 
             if(results.length !== 0){
-                return res.json({
-                    success: 0,
+                return res.status(409).json({
                     message: "Email already have an account"
                 });
             }
 
             create(body, async (err, results) => {
                 if(err){
-                    console.log(err)
-                    return res.json({
-                        success: 0,
-                        message: "Database connection Error"
+                    return res.status(500).json({
+                        message: "Internal server error"
                     });
                 }
 
                 await new Promise((resolve, reject) => {
                     addAccountCreatedNotificationToUser({    
-                    notification_title: 'Account created successfully',
-                    notification_description: 'Account has been created successfully', 
-                    notification_source: 'create_account', 
-                    notification_type: 'create_account', 
-                    notification_is_viewed: 0,
-                    notification_for: results.insertId
+                        notification_title: 'Account created successfully',
+                        notification_description: 'Account has been created successfully', 
+                        notification_source: 'create_account', 
+                        notification_type: 'create_account', 
+                        notification_is_viewed: 0,
+                        notification_for: results.insertId
                     }, (err, results) => {
                         if(err){
                             return reject('Failed adding notification: ' + err.message)
@@ -56,15 +60,14 @@ module.exports = {
                     })
                 })
 
-    
                 return res.status(200).json({
-                    success: 1,
-                    data: results
+                    results
                 });
             });
 
         });
     },
+
     getUsers: (req, res) => {
 
         getUsers((err, results) => {

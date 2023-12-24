@@ -26,7 +26,8 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(express.json());
 
-app.use("/api/user", userRouter);
+app.get("/", (req, res) => res.send("Hello Univtraze"))
+app.use("/api/users", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/vaccine_info", vaccination_info);
 app.use("/api/rooms", roomRouter);

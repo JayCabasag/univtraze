@@ -13,3 +13,9 @@ export const FONT_FAMILY = {
     POPPINS_SEMI_BOLD: 'Poppins-SemiBold',
     POPPINS_BOLD: 'Poppins-Bold',
   };
+
+  export const USER_TYPE = {
+    STUDENT: 'student',
+    EMPLOYEE: 'employee',
+    VISITOR: 'visitor'
+  }

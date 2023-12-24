@@ -1,21 +1,22 @@
 import { KeyboardAvoidingView, StyleSheet, TextInput, View, TouchableOpacity, Text, Modal, ScrollView } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import ConfettiCannon from 'react-native-confetti-cannon'
 import jwtDecode from 'jwt-decode'
 import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
 import Header from '../../components/Header'
 import LoadingModal from '../../components/LoadingModal'
+import { emailRegEx } from '../../utils/regex'
 
 const SignUpScreen = ({ navigation }) => {
   const [email, onChangeEmail] = useState('')
   const [password, onChangePassword] = useState('')
   const [confirmPassword, onChangeConfirmPassword] = useState('')
   const [provider, setProvider] = useState('email/password')
+  const scrollViewContainerRef = useRef()
 
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
 
@@ -24,14 +25,12 @@ const SignUpScreen = ({ navigation }) => {
   }
 
   const validateUserInput = async () => {
+    scrollViewContainerRef.current.scrollToEnd({ animated: true })
     if (email === '') {
       setError(true)
       setErrorMessage('Please input your email address')
     } else {
-      let re =
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-      if (re.test(email)) {
+      if (emailRegEx.test(email)) {
         if (password === '') {
           setError(true)
           setErrorMessage('Please input password')
@@ -42,8 +41,6 @@ const SignUpScreen = ({ navigation }) => {
           setError(true)
           setErrorMessage('Confirm password did not match!')
         } else {
-          //Data checking with api
-
           setShowLoadingModal(true)
 
           const data = {
@@ -90,7 +87,6 @@ const SignUpScreen = ({ navigation }) => {
   const [shoot, setShoot] = useState(false)
 
   useEffect(() => {
-    //Time out to fire the cannon
     setTimeout(() => {
       setShoot(true)
     }, 1000)
@@ -132,28 +128,22 @@ const SignUpScreen = ({ navigation }) => {
 
     navigation.navigate('Dashboard')
   }
-  
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
       <Header navigation={navigation} />
       <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
       <Text style={styles.loginText}>Sign Up</Text>
-      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={styles.scrollViewContainer}>
+      <ScrollView
+        ref={scrollViewContainerRef}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        style={styles.scrollViewContainer}
+      >
         <Text style={styles.label}>Email</Text>
-        <TextInput
-          placeholder='Email Address'
-          defaultValue={email}
-          onChangeText={onChangeEmail}
-          style={styles.input}
-        />
+        <TextInput placeholder='Email Address' defaultValue={email} onChangeText={onChangeEmail} style={styles.input} />
         <Text style={styles.label}>Password</Text>
-        <TextInput
-          placeholder='Password'
-          defaultValue={password}
-          onChangeText={onChangePassword}
-          style={styles.input}
-          secureTextEntry
-        />
+        <TextInput placeholder='Password' defaultValue={password} onChangeText={onChangePassword} style={styles.input} secureTextEntry />
         <Text style={styles.label}>Confirm Password</Text>
         <TextInput
           placeholder='Confirm Password'
@@ -166,7 +156,10 @@ const SignUpScreen = ({ navigation }) => {
       </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => validateUserInput()} style={styles.signUpBtn}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+          <Text style={styles.buttonText}>Next</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('signin')}>
+          <Text style={styles.goToLoginText}>Login to an existing account</Text>
         </TouchableOpacity>
       </View>
       <Modal visible={isModalVisible}>
@@ -324,6 +317,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
+  },
+  goToLoginText: {
+    fontSize: 14,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    color: '#4d7861',
+    width: '100%',
+    textAlign: 'center'
   },
   loginText: {
     fontWeight: 'bold',

@@ -16,6 +16,8 @@ import jwtDecode from 'jwt-decode'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoginImage from '../assets/login_image.png'
+import { emailRegEx } from '../utils/regex'
+import LoadingModal from '../components/LoadingModal'
 
 const windowWidth = Dimensions.get('screen').width
 
@@ -41,10 +43,7 @@ const SignInScreen = ({ navigation }) => {
       setError(true)
       setErrorMessage('Please input your email address')
     } else {
-      let re =
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-      if (re.test(emailInput)) {
+      if (emailRegEx.test(emailInput)) {
         if (passwordInput === '') {
           setError(true)
           setErrorMessage('Please input password')
@@ -52,8 +51,6 @@ const SignInScreen = ({ navigation }) => {
           setError(true)
           setErrorMessage('Password field Minimum of 8 characters')
         } else {
-          //Data checking with api
-
           const data = {
             email: emailInput,
             password: passwordInput
@@ -96,21 +93,7 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ backgroundColor: '#E1F5E4' }}>
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={showLoadingModal}
-        onRequestClose={() => {
-          setShowLoadingModal(!showLoadingModal)
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ActivityIndicator size={'large'} />
-            <Text style={styles.modalText}>{loadingMessage}</Text>
-          </View>
-        </View>
-      </Modal>
+      <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={LoginImage} />
@@ -151,25 +134,11 @@ const SignInScreen = ({ navigation }) => {
             Forgot Password?
           </Text>
         </View>
-
         <View style={styles.buttonContainer}>
-          {/* onPress={() =>navigation.navigate("Dashboard")} */}
           <TouchableOpacity onPress={() => loginNow()} style={styles.signInBtn}>
             <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
         </View>
-
-        {/* <Text style={styles.orText}>or</Text>
-
-			<View style={styles.socialMediaContainer}>
-				<TouchableOpacity onPress={() => {}}>
-					<Image style={styles.googleImage} source={googleLogo} />
-				</TouchableOpacity>
-
-				<TouchableOpacity onPress={() => {}}>
-					<Image style={styles.facebookImage} source={facebookLogo} />
-				</TouchableOpacity>
-			</View> */}
       </KeyboardAvoidingView>
     </SafeAreaView>
   )

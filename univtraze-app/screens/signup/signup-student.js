@@ -21,9 +21,9 @@ import StepperIcon1 from '../../assets/reg_identifier.png'
 import BackIcon from '../../assets/back-icon.png'
 import { COLORS } from '../../utils/app_constants'
 
-const SignUpStudentScreen = ({ navigation, route }) => {
+const SignUpStudentScreen = ({ navigation }) => {
   const [date, setDate] = useState('')
-  const [type, setType] = useState(route.params.type)
+  const [type, setType] = useState('student')
   const [userId, setUserId] = useState(0)
   const [studentNumber, setStudentNumber] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -118,205 +118,206 @@ const SignUpStudentScreen = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView>
-      <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
-        <View style={styles.header}>
-          <Image src={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+    <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
+      <View style={styles.header}>
+        <Image source={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+      </View>
+
+      <ScrollView style={styles.inputContainer}>
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            backgroundColor: '#E1F5E4'
+          }}
+        >
+          <Text style={styles.label}>Student no.</Text>
+          <TextInput
+            placeholder='Student no.'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setStudentNumber(text)
+            }}
+            style={styles.input}
+          />
         </View>
 
-        <ScrollView style={styles.inputContainer}>
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              backgroundColor: '#E1F5E4'
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>First name</Text>
+          <TextInput
+            placeholder='First name'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setFirstName(text)
             }}
-          >
-            <Text style={styles.label}>Student no.</Text>
-            <TextInput
-              placeholder='Student no.'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setStudentNumber(text)
-              }}
-              style={styles.input}
-            />
-          </View>
+            style={styles.input}
+          />
+        </View>
 
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>First name</Text>
-            <TextInput
-              placeholder='First name'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setFirstName(text)
-              }}
-              style={styles.input}
-            />
-          </View>
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>Middle name </Text>
+          <TextInput
+            placeholder='Middle name'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setMiddleName(text)
+            }}
+            style={styles.input}
+          />
+        </View>
 
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>Middle name </Text>
-            <TextInput
-              placeholder='Middle name'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setMiddleName(text)
-              }}
-              style={styles.input}
-            />
-          </View>
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>Last name</Text>
+          <TextInput
+            placeholder='Last name'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setLastName(text)
+            }}
+            style={styles.input}
+          />
+        </View>
 
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>Last name</Text>
-            <TextInput
-              placeholder='Last name'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setLastName(text)
-              }}
-              style={styles.input}
-            />
-          </View>
-
-          <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
-            <View style={{ width: '80%', flexDirection: 'row' }}>
-              <View style={{ width: '50%' }}>
-                <Text style={styles.label}>Suffix </Text>
-                <TextInput
-                  placeholder='Suffix'
-                  defaultValue={''}
-                  onChangeText={(text) => {
-                    setSuffix(text)
-                  }}
-                  style={styles.suffixInput}
-                />
-              </View>
-
-              <View style={{ width: '50%' }}>
-                <Text style={styles.label}>Gender </Text>
-                <Picker
-                  style={{ width: '100%', height: 50, color: '#4d7861' }}
-                  selectedValue={gender}
-                  onValueChange={(value) => setGender(value)}
-                  mode='dialog'
-                >
-                  <Picker.Item label='Rather not say' value='Rather not say' />
-                  <Picker.Item label='Male' value='Male' />
-                  <Picker.Item label='Female' value='Female' />
-                </Picker>
-              </View>
-            </View>
-          </View>
-
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>Address</Text>
-            <TextInput
-              placeholder='Address'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setAddress(text)
-              }}
-              style={styles.input}
-            />
-          </View>
-
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>Date of birth</Text>
-
-            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+        <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
+          <View style={{ width: '80%', flexDirection: 'row' }}>
+            <View style={{ width: '50%' }}>
+              <Text style={styles.label}>Suffix </Text>
               <TextInput
-                placeholder='Date of birth'
-                defaultValue={moment(dateOfBirth).format('yyyy-MM-DD')}
-                style={styles.dobInput}
-                editable={false}
-              />
-              <AntDesign
-                name='calendar'
-                size={37}
-                color={COLORS.PRIMARY}
-                style={{ marginRight: 5 }}
-                onPress={() => setShowDatePicker(true)}
+                placeholder='Suffix'
+                defaultValue={''}
+                onChangeText={(text) => {
+                  setSuffix(text)
+                }}
+                style={styles.suffixInput}
               />
             </View>
-          </View>
 
-          {showDatePicker === true ? (
-            <DateTimePicker
-              value={dateOfBirth}
-              mode={'date'}
-              is24Hour={true}
-              onChange={(event, date) => {
-                setShowDatePicker(false)
-                setDateOfBirth(new Date(date))
-              }}
-            />
-          ) : null}
-
-          <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
-            <View style={{ width: '80%', flexDirection: 'row' }}>
-              <View style={{ width: '50%' }}>
-                <Text style={styles.label}>Course</Text>
-                <TextInput
-                  placeholder='Course'
-                  defaultValue={''}
-                  onChangeText={(text) => {
-                    setCourse(text)
-                  }}
-                  style={styles.courseInput}
-                />
-              </View>
-
-              <View style={{ width: '50%' }}>
-                <Text style={styles.label}>Year and Section </Text>
-                <TextInput
-                  placeholder='Year and Section'
-                  defaultValue={''}
-                  onChangeText={(text) => {
-                    setYearAndSection(text)
-                  }}
-                  style={styles.yearAndSectionInput}
-                />
-              </View>
+            <View style={{ width: '50%' }}>
+              <Text style={styles.label}>Gender </Text>
+              <Picker
+                style={{ width: '100%', height: 50, color: '#4d7861' }}
+                selectedValue={gender}
+                onValueChange={(value) => setGender(value)}
+                mode='dialog'
+              >
+                <Picker.Item label='Rather not say' value='Rather not say' />
+                <Picker.Item label='Male' value='Male' />
+                <Picker.Item label='Female' value='Female' />
+              </Picker>
             </View>
           </View>
+        </View>
 
-          {error ? <Text style={styles.errorMessage}>*{errorMessage}</Text> : <Text style={styles.errorMessage}></Text>}
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginBottom: 20
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>Address</Text>
+          <TextInput
+            placeholder='Address'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setAddress(text)
             }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack()
-              }}
-              style={styles.backbutton}
-            >
-              <Image src={BackIcon} style={{ width: 60, height: 60 }} />
-            </TouchableOpacity>
+            style={styles.input}
+          />
+        </View>
 
-            <TouchableOpacity
-              onPress={() => {
-                nextScreen()
-              }}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity>
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>Date of birth</Text>
+
+          <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+            <TextInput
+              placeholder='Date of birth'
+              defaultValue={moment(dateOfBirth).format('yyyy-MM-DD')}
+              style={styles.dobInput}
+              editable={false}
+            />
+            <AntDesign
+              name='calendar'
+              size={37}
+              color={COLORS.PRIMARY}
+              style={{ marginRight: 5 }}
+              onPress={() => setShowDatePicker(true)}
+            />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </View>
+
+        {showDatePicker === true ? (
+          <DateTimePicker
+            value={dateOfBirth}
+            mode={'date'}
+            is24Hour={true}
+            onChange={(event, date) => {
+              setShowDatePicker(false)
+              setDateOfBirth(new Date(date))
+            }}
+          />
+        ) : null}
+
+        <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
+          <View style={{ width: '80%', flexDirection: 'row' }}>
+            <View style={{ width: '50%' }}>
+              <Text style={styles.label}>Course</Text>
+              <TextInput
+                placeholder='Course'
+                defaultValue={''}
+                onChangeText={(text) => {
+                  setCourse(text)
+                }}
+                style={styles.courseInput}
+              />
+            </View>
+
+            <View style={{ width: '50%' }}>
+              <Text style={styles.label}>Year and Section </Text>
+              <TextInput
+                placeholder='Year and Section'
+                defaultValue={''}
+                onChangeText={(text) => {
+                  setYearAndSection(text)
+                }}
+                style={styles.yearAndSectionInput}
+              />
+            </View>
+          </View>
+        </View>
+
+        {error ? <Text style={styles.errorMessage}>*{errorMessage}</Text> : <Text style={styles.errorMessage}></Text>}
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginBottom: 20
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack()
+            }}
+            style={styles.backbutton}
+          >
+            <Image source={BackIcon} style={{ width: 60, height: 60 }} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              nextScreen()
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 
 export default SignUpStudentScreen
 
 const styles = StyleSheet.create({
+  safeAreaViewContainer: {
+    flex: 1
+  },
   header: {
     width: '100%',
     height: '20%',

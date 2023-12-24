@@ -24,7 +24,7 @@ const WelcomeScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('signup')} style={styles.createAnAccountButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('signup-user-type')} style={styles.createAnAccountButton}>
             <Text style={styles.createAnAccountText}>Create an account</Text>
           </TouchableOpacity>
         </View>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   headerSubText: {
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     color: COLORS.WHITE,
-    fontSize: 12,
+    fontSize: 14,
     marginLeft: 10
   },
   image: {
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 14,
+    fontSize: 16,
     textTransform: 'capitalize',
     textAlign: 'center',
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
   },
   createAnAccountText: {
     color: COLORS.PRIMARY,
-    fontSize: 14,
+    fontSize: 16,
     textTransform: 'capitalize',
     textAlign: 'center',
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD

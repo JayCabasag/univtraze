@@ -1,4 +1,15 @@
-import { StyleSheet, Text, View, Button, ImageBackground, TouchableOpacity, Image, Dimensions, KeyboardAvoidingView, ScrollView } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  ImageBackground,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  KeyboardAvoidingView,
+  ScrollView
+} from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
@@ -18,7 +29,12 @@ const SignUpUserTypeScreen = ({ navigation }) => {
         <Text style={styles.botContainSubtxt}>Before we continue, we are happy {'\n'}to know you more</Text>
         <Text style={styles.radioTtl}>Please select below</Text>
         <View style={styles.radioButtonOption}>
-          <RadioButton value='Student' status={isChecked === 'Student' ? 'checked' : 'unchecked'} onPress={() => setIsChecked('Student')} />
+          <RadioButton
+            color={COLORS.PRIMARY}
+            value='Student'
+            status={isChecked === 'Student' ? 'checked' : 'unchecked'}
+            onPress={() => setIsChecked('Student')}
+          />
           <Text style={styles.radioLabel}>Student</Text>
         </View>
         <View style={styles.radioButtonOption}>
@@ -26,12 +42,18 @@ const SignUpUserTypeScreen = ({ navigation }) => {
             value='Employee'
             status={isChecked === 'Employee' ? 'checked' : 'unchecked'}
             onPress={() => setIsChecked('Employee')}
+            color={COLORS.PRIMARY}
           />
           <Text style={styles.radioLabel}>Employee</Text>
         </View>
 
         <View style={styles.radioButtonOption}>
-          <RadioButton value='Visitor' status={isChecked === 'Visitor' ? 'checked' : 'unchecked'} onPress={() => setIsChecked('Visitor')} />
+          <RadioButton
+            color={COLORS.PRIMARY}
+            value='Visitor'
+            status={isChecked === 'Visitor' ? 'checked' : 'unchecked'}
+            onPress={() => setIsChecked('Visitor')}
+          />
           <Text style={styles.radioLabel}>Visitor</Text>
         </View>
       </ScrollView>
@@ -57,20 +79,20 @@ const styles = StyleSheet.create({
   topContainer: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   signUpUserTypeImage: {
     width: 200,
     height: 200,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   scrollViewContainer: {
-    width: '100%',
+    width: '100%'
   },
   scrollViewContent: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   botContainer: {
     width: '100%'
@@ -83,7 +105,7 @@ const styles = StyleSheet.create({
   },
   botContainSubtxt: {
     marginTop: 10,
-    fontSize: 12,
+    fontSize: 14,
     width: '100%',
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM
   },
@@ -98,7 +120,7 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   },
   radioLabel: {
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM
   },
   radioButtonOption: {
@@ -132,6 +154,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
-  },
-  
+  }
 })

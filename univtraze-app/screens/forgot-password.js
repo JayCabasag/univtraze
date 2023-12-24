@@ -6,6 +6,7 @@ import { Dimensions } from 'react-native'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
 import Header from '../components/Header'
+import { emailRegEx } from '../utils/regex'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
@@ -29,10 +30,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       setErrorMessage('Please input your email address')
       setShowCodeInput(false)
     } else {
-      let re =
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-
-      if (re.test(email)) {
+      if (emailRegEx.test(email)) {
         setError(false)
         setErrorMessage('')
         setShowCodeInput(true)
@@ -159,7 +157,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
       <View style={styles.buttonContainer}>
         {showCodeInput ? (
-          <TouchableOpacity onPress={() => verifyViaEmailRecovery()} style={styles.button}>
+          <TouchableOpacity onPress={() => verifyViaEmailRecovery()} style={styles.verifyBtn}>
             <Text style={styles.buttonText}>Verify</Text>
           </TouchableOpacity>
         ) : null}
@@ -173,57 +171,9 @@ export default ForgotPasswordScreen
 const windowWidth = Dimensions.get('screen').width
 
 const styles = StyleSheet.create({
-  sendToEmailText: {
-    textAlign: 'left',
-    color: '#4d7861',
-    marginBottom: 5,
-    textAlign: 'left',
-    width: 340,
-    marginLeft: 41,
-    marginRight: 41
-  },
-
-  returnHomeText: {
-    textAlign: 'center',
-    lineHeight: 25,
-    marginTop: 15,
-    width: windowWidth,
-    textDecorationLine: 'underline',
-    color: '#4d7861',
-    marginBottom: 10,
-    alignSelf: 'center'
-  },
   buttonContainer: {
-    backgroundColor: 'transparent'
+    width: '100%'
   },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: '#F194FF'
-  },
-  buttonClose: {
-    backgroundColor: '#2196F3'
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center'
-  },
-  image: {
-    justifyContent: 'center',
-    width: '100%',
-    height: 200,
-    resizeMode: 'center'
-  },
-
-  imageContainer: {
-    width: '100%',
-    height: 'auto'
-  },
-
   container: {
     flex: 1,
     backgroundColor: '#E1F5E4',
@@ -242,7 +192,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     fontFamily: FONT_FAMILY.POPPINS_REGULAR,
-    backgroundColor: '#ffff'
+    backgroundColor: '#ffff',
+    borderWidth: 1,
+    borderColor: COLORS.PRIMARY
   },
   inputContainer: {
     display: 'flex',
@@ -250,21 +202,16 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10
   },
-  button: {
+  verifyBtn: {
     backgroundColor: COLORS.PRIMARY,
-    padding: 10,
-    width: 380,
     borderRadius: 10,
-    width: 340,
-    marginLeft: 41,
-    marginRight: 41,
+    width: '100%',
     marginTop: 5,
     paddingVertical: 15
   },
   buttonText: {
     color: '#FFF',
     fontSize: 16,
-    textTransform: 'capitalize',
     textAlign: 'center',
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   },
@@ -278,42 +225,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     fontFamily: FONT_FAMILY.POPPINS_BOLD
   },
-  forgotPassword: {
-    textAlign: 'right',
-    marginRight: 41,
-    textDecorationLine: 'underline',
-    color: '#4d7861',
-    paddingVertical: 7.5
-  },
-  orText: {
-    color: '#4d7861',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center',
-    paddingVertical: 7.5
-  },
-  socialMediaContainer: {
-    flexDirection: 'row',
-    width: windowWidth,
-    alignSelf: 'center',
-    justifyContent: 'center'
-  },
-  googleImage: {
-    width: 50,
-    height: 50,
-    marginRight: 7
-  },
-
-  facebookImage: {
-    width: 36,
-    height: 36,
-    marginTop: 4,
-    marginLeft: 7
-  },
   successMessage: {
     textAlign: 'left',
-    marginLeft: 41,
     color: COLORS.PRIMARY,
     fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     paddingVertical: 7.5
@@ -323,19 +236,9 @@ const styles = StyleSheet.create({
     color: 'red',
     paddingVertical: 7.5
   },
-  buttonContinue: {
-    backgroundColor: COLORS.PRIMARY,
-    padding: 10,
-    borderRadius: 10,
-    paddingVertical: 15,
-    marginVertical: 15,
-    width: 308,
-    height: 60
-  },
   confirmEmailBtn: {
     marginBottom: 10,
     backgroundColor: COLORS.PRIMARY,
-    padding: 10,
     borderRadius: 10,
     width: '100%',
     marginTop: 15,

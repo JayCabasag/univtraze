@@ -231,13 +231,13 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     padding: 15,
-    fontSize: 12,
+    fontSize: 14,
     color: '#E1F5E4'
   },
   rowBody: {
     flex: 1,
     padding: 15,
-    fontSize: 12,
+    fontSize: 14,
     color: COLORS.TEXT_BLACK
   },
   topContainer: {

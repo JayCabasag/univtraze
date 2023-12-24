@@ -396,7 +396,7 @@ const IndexScreen = ({ navigation, route }) => {
                       marginRight: 25,
                       marginLeft: 'auto',
                       paddingVertical: 10,
-                      fontSize: 12
+                      fontSize: 14
                     }}
                   >
                     As of {moment().format('MMM Do')}

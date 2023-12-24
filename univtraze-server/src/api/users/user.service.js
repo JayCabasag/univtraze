@@ -33,7 +33,7 @@ module.exports = {
             [
                 data.email
             ],
-            (error, results, fields) => {
+            (error, results, _fields) => {
                 if(error) {
                     return callBack(error)
                 }
