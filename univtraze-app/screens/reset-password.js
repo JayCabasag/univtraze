@@ -98,7 +98,6 @@ const ResetPasswordScreen = ({
 
   return (
     <SafeAreaView style={{ height: windowHeight, backgroundColor: '#E1F5E4' }}>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' barStyle='dark-content' />
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <Modal
           animationType='slide'
@@ -292,7 +291,7 @@ const styles = StyleSheet.create({
   loginText: {
     fontWeight: 'bold',
     textAlign: 'left',
-    color: '#364D39',
+    color: COLORS.TEXT_BLACK,
     fontSize: 30,
     lineHeight: 30,
     textTransform: 'uppercase',

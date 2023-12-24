@@ -1,20 +1,11 @@
-import {
-  KeyboardAvoidingView,
-  Image,
-  StyleSheet,
-  TextInput,
-  View,
-  TouchableOpacity,
-  Text,
-  StatusBar,
-  Modal,
-  ActivityIndicator
-} from 'react-native'
-import React, { useState, useEffect } from 'react'
+import { KeyboardAvoidingView, StyleSheet, TextInput, View, TouchableOpacity, Text, Image } from 'react-native'
+import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dimensions } from 'react-native'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import LoadingModal from '../components/LoadingModal'
+import Header from '../components/Header'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
@@ -136,28 +127,15 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
-      <Modal
-        animationType='slide'
-        transparent={true}
-        visible={showLoadingModal}
-        onRequestClose={() => {
-          setShowLoadingModal(!showLoadingModal)
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ActivityIndicator size={'large'} />
-            <Text style={styles.modalText}>{loadingMessage}</Text>
-          </View>
-        </View>
-      </Modal>
+      <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
+      <Header navigation={navigation} />
       <View style={styles.inputContainer}>
-        <Text style={styles.loginText}>Forgot password</Text>
+        <Text style={styles.headerText}>Forgot password</Text>
         <Text style={styles.label}>Email</Text>
         <TextInput placeholder='Email Address' defaultValue={email} onChangeText={(text) => setEmail(text)} style={styles.input} />
 
         {showCodeInput && (
-          <>
+          <Fragment>
             <Text style={styles.label}>Code</Text>
             <TextInput
               placeholder='Recovery code'
@@ -165,7 +143,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
               onChangeText={(text) => setCodeInput(text)}
               style={styles.input}
             />
-          </>
+          </Fragment>
         )}
 
         {error ? (
@@ -175,7 +153,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         ) : null}
 
         <TouchableOpacity onPress={() => validateUserInput()} style={styles.confirmEmailBtn}>
-          {showCodeInput ? <Text style={styles.buttonText}>Resend to Email</Text> : <Text style={styles.buttonText}>Send to Email</Text>}
+          {<Text style={styles.buttonText}>{showCodeInput ? 'Resend code' : 'Send to email'}</Text>}
         </TouchableOpacity>
       </View>
 
@@ -185,15 +163,6 @@ const ForgotPasswordScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Verify</Text>
           </TouchableOpacity>
         ) : null}
-
-        <Text
-          style={styles.returnHomeText}
-          onPress={() => {
-            navigation.goBack()
-          }}
-        >
-          Return to login
-        </Text>
       </View>
     </KeyboardAvoidingView>
   )
@@ -202,31 +171,8 @@ const ForgotPasswordScreen = ({ navigation }) => {
 export default ForgotPasswordScreen
 
 const windowWidth = Dimensions.get('screen').width
-const windowHeight = Dimensions.get('screen').height
 
 const styles = StyleSheet.create({
-  centeredView: {
-    backgroundColor: 'rgba(250, 250, 250, .7)',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  modalView: {
-    width: '80%',
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
   sendToEmailText: {
     textAlign: 'left',
     color: '#4d7861',
@@ -266,11 +212,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center'
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
-    color: '#4d7861'
-  },
   image: {
     justifyContent: 'center',
     width: '100%',
@@ -286,24 +227,28 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#E1F5E4',
-    justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 30
   },
   label: {
     color: '#4d7861',
-    width: '100%'
+    width: '100%',
+    marginTop: 10,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
   input: {
-    width: '100%',
     height: 50,
     paddingHorizontal: 15,
     borderRadius: 5,
     marginTop: 10,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     backgroundColor: '#ffff'
   },
   inputContainer: {
-    borderWidth: 2,
-    paddingHorizontal: 30
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    marginTop: 10
   },
   button: {
     backgroundColor: COLORS.PRIMARY,
@@ -318,19 +263,20 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFF',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: 16,
-    textAlign: 'center'
+    textTransform: 'capitalize',
+    textAlign: 'center',
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
   },
-  loginText: {
+  headerText: {
+    width: '100%',
     fontWeight: 'bold',
     textAlign: 'left',
-    color: '#364D39',
+    color: COLORS.TEXT_BLACK,
     fontSize: 30,
-    lineHeight: 30,
     textTransform: 'uppercase',
-    paddingVertical: 30
+    paddingVertical: 20,
+    fontFamily:FONT_FAMILY.POPPINS_BOLD
   },
   forgotPassword: {
     textAlign: 'right',
@@ -369,11 +315,11 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginLeft: 41,
     color: COLORS.PRIMARY,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     paddingVertical: 7.5
   },
   errorMessage: {
     textAlign: 'left',
-    marginLeft: 41,
     color: 'red',
     paddingVertical: 7.5
   },

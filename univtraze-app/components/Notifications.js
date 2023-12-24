@@ -67,7 +67,7 @@ const Notifications = ({ notifVisible, toggleNotifNavigationView, props: { userI
                         </Text>
                         <Text
                           style={{
-                            color: '#364D39',
+                            color: COLORS.TEXT_BLACK,
                             fontSize: 12,
                             fontWeight: '900'
                           }}

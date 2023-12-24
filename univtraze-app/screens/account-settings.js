@@ -91,12 +91,12 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
 
   return (
     <SafeAreaView>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' />
       <View style={styles.container}>
         <Modal
           animationType='slide'
           transparent={true}
           visible={showPasswordModal}
+          statusBarTranslucent
           onRequestClose={() => {
             setShowPasswordModal(!showPasswordModal)
           }}
@@ -146,7 +146,7 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
                 navigation.goBack()
               }}
             >
-              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
+              <Image src={BackIcon} resizeMode='contain' style={styles.image} />
             </TouchableWithoutFeedback>
           </View>
         </View>

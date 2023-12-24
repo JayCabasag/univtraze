@@ -103,7 +103,6 @@ const DailyAssessmentScreen = () => {
   }
   return (
     <SafeAreaView>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' />
       <View style={styles.container}>
         {/* Notification View */}
         <View style={styles.topContainer}>
@@ -442,7 +441,7 @@ const DailyAssessmentScreen = () => {
                       </Text>
                       <Text
                         style={{
-                          color: '#364D39',
+                          color: COLORS.TEXT_BLACK,
                           fontSize: 12,
                           fontWeight: '900'
                         }}
@@ -492,7 +491,7 @@ const DailyAssessmentScreen = () => {
                         </Text>
                         <Text
                           style={{
-                            color: '#364D39',
+                            color: COLORS.TEXT_BLACK,
                             fontSize: 12,
                             fontWeight: '900'
                           }}
@@ -542,7 +541,7 @@ const DailyAssessmentScreen = () => {
                         </Text>
                         <Text
                           style={{
-                            color: '#364D39',
+                            color: COLORS.TEXT_BLACK,
                             fontSize: 12,
                             fontWeight: '900'
                           }}

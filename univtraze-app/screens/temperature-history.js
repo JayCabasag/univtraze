@@ -132,7 +132,6 @@ const TemperatureHistoryScreen = ({
 
   return (
     <SafeAreaView>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' />
       <View style={styles.container}>
         <Modal
           animationType='slide'

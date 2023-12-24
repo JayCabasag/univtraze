@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dimensions } from 'react-native'
 import { ScrollView } from 'react-native'
+import { COLORS } from '../utils/app_constants'
 
 const TermsAndConditionsScreen = ({ navigation }) => {
   const windowWidth = Dimensions.get('window').width
@@ -299,7 +300,7 @@ const TermsAndConditionsScreen = ({ navigation }) => {
               }}
               style={styles.button}
             >
-              <Text style={styles.buttonText}>Return to sign up</Text>
+              <Text style={styles.buttonText}>Agree</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -317,11 +318,6 @@ const styles = StyleSheet.create({
   safeAreaContainer: { flex: 1, backgroundColor: '#E1F5E4' },
   buttonContainer: {
     backgroundColor: 'transparent'
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
   },
   buttonOpen: {
     backgroundColor: '#F194FF'
@@ -385,7 +381,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#28CD41',
     padding: 10,
     borderRadius: 10,
-    width: '80%',
+    width: '100%',
     marginTop: 5,
     paddingVertical: 18,
     alignSelf: 'center',
@@ -401,7 +397,7 @@ const styles = StyleSheet.create({
   loginText: {
     fontWeight: 'bold',
     textAlign: 'left',
-    color: '#364D39',
+    color: COLORS.TEXT_BLACK,
     fontSize: 30,
     lineHeight: 30,
     textTransform: 'uppercase',

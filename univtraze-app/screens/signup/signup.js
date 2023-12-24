@@ -1,27 +1,13 @@
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  TextInput,
-  View,
-  TouchableOpacity,
-  Text,
-  StatusBar,
-  Modal,
-  ActivityIndicator
-} from 'react-native'
-import Checkbox from 'expo-checkbox'
+import { KeyboardAvoidingView, StyleSheet, TextInput, View, TouchableOpacity, Text, Modal } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import ConfettiCannon from 'react-native-confetti-cannon'
 import jwtDecode from 'jwt-decode'
-import { Dimensions } from 'react-native'
-import { COLORS } from '../../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
+import Header from '../../components/Header'
+import LoadingModal from '../../components/LoadingModal'
 
 const SignUpScreen = ({ navigation }) => {
-  const windowWidth = Dimensions.get('window').width
-  const windowHeight = Dimensions.get('window').height
-
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -29,7 +15,6 @@ const SignUpScreen = ({ navigation }) => {
 
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const [agreeWithTermsAndCondition, setAgreeWithTermsAndCondition] = useState(false)
 
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
@@ -39,11 +24,6 @@ const SignUpScreen = ({ navigation }) => {
   }
 
   const validateUserInput = async () => {
-    if (!agreeWithTermsAndCondition) {
-      setError(true)
-      setErrorMessage('Please agree with our app terms and conditions')
-      return
-    }
     if (email === '') {
       setError(true)
       setErrorMessage('Please input your email address')
@@ -158,21 +138,8 @@ const SignUpScreen = ({ navigation }) => {
   }
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
-      <Modal
-        animationType='slide'
-        transparent={true}
-        visible={showLoadingModal}
-        onRequestClose={() => {
-          setShowLoadingModal(!showLoadingModal)
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ActivityIndicator size={'large'} />
-            <Text style={styles.modalText}>{loadingMessage}</Text>
-          </View>
-        </View>
-      </Modal>
+      <Header navigation={navigation} />
+      <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
       <View style={styles.inputContainer}>
         <Text style={styles.loginText}>Sign Up</Text>
         <Text style={styles.label}>Email</Text>
@@ -195,40 +162,10 @@ const SignUpScreen = ({ navigation }) => {
         />
         {error && <Text style={styles.errorMessage}>*{errorMessage}</Text>}
       </View>
-      <View style={styles.termsAndContditionsContainer}>
-        <Checkbox
-          value={agreeWithTermsAndCondition}
-          onValueChange={() => {
-            setAgreeWithTermsAndCondition(!agreeWithTermsAndCondition)
-          }}
-          style={{ marginRight: 15 }}
-        />
-        <Text
-          style={{ color: '#4d7861' }}
-          onPress={() => {
-            viewTermsAndConditions()
-          }}
-        >
-          Agree with our Terms and conditions
-        </Text>
-      </View>
-
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => validateUserInput()} style={styles.signUpBtn}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-
-        {/* <Text style={styles.orText}>or</Text>
-				
-				<View style={styles.socialMediaContainer}>
-					<TouchableOpacity onPress={() => {}}>
-						<Image style={styles.googleImage} source={googleLogo} />
-					</TouchableOpacity>
-
-					<TouchableOpacity onPress={() => {}}>
-						<Image style={styles.facebookImage} source={facebookLogo} />
-					</TouchableOpacity>
-				</View> */}
 
         <Modal visible={isModalVisible}>
           <View
@@ -242,8 +179,8 @@ const SignUpScreen = ({ navigation }) => {
               borderRadius: 15
             }}
           >
-            <Text style={{ fontSize: 28, fontWeight: '700', color: '#29CC42' }}> Sign Up {'\n'}Successful</Text>
-            <Text style={{ fontSize: 14, fontWeight: '400', color: '#364D39', lineHeight: 19.5 }}>
+            <Text style={{ fontFamily: FONT_FAMILY.POPPINS_MEDIUM, fontSize: 28, fontWeight: '700', color: '#29CC42' }}> Sign Up {'\n'}Successful</Text>
+            <Text style={{ fontFamily: FONT_FAMILY.POPPINS_MEDIUM, fontSize: 14, fontWeight: '400', color: COLORS.TEXT_BLACK, lineHeight: 19.5 }}>
               {' '}
               Awesome, you will now being {'\n'} redirected to user profiling area
             </Text>
@@ -290,10 +227,8 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   buttonContainer: {
-    backgroundColor: 'transparent',
     marginTop: 10,
-    width: '100%',
-    paddingHorizontal: 30
+    width: '100%'
   },
   buttonOpen: {
     backgroundColor: '#F194FF'
@@ -327,12 +262,12 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     backgroundColor: '#E1F5E4',
-    justifyContent: 'center',
-    alignItems: 'center'
+    paddingHorizontal: 30
   },
   label: {
     color: '#4d7861',
-    marginTop: 10
+    marginTop: 10,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
 
   input: {
@@ -341,11 +276,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     marginTop: 10,
-    backgroundColor: '#ffff'
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
   inputContainer: {
+    marginTop: 20,
     width: '100%',
-    paddingHorizontal: 30,
     marginBottom: 5
   },
   termsAndContditionsContainer: {
@@ -376,16 +312,16 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFF',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: 16,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   },
   loginText: {
     fontWeight: 'bold',
     textAlign: 'left',
-    color: '#364D39',
+    color: COLORS.TEXT_BLACK,
     fontSize: 30,
+    fontFamily: FONT_FAMILY.POPPINS_BOLD,
     textTransform: 'uppercase'
   },
   errorMessage: {

@@ -1,26 +1,15 @@
 import { StyleSheet, Text, Image, View, ImageBackground, TouchableOpacity, StatusBar } from 'react-native'
 import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import WelcomeImgBackground from '../assets/welcome-bg.png'
 
 const WelcomeScreen = ({ navigation }) => {
-  const image = {
-    uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Fbackground%20image.png?alt=media&token=707b9706-c43e-48ed-a859-07e786939a81'
-  }
-  const uniTrazeLogo = {
-    uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Flogo-light.png?alt=media&token=9417a00a-2c1d-4091-8923-59dab5e286b1'
-  }
-
   return (
     <View style={styles.container}>
-      <StatusBar animated={true} backgroundColor={COLORS.PRIMARY} />
-      <ImageBackground source={image} resizeMode='cover' style={styles.univTrazeLogo}>
-        <View style={{ width: '80%', height: 45, marginTop: '35%' }}>
-          <Image style={styles.image} source={uniTrazeLogo} resizeMode='contain' />
-        </View>
-
-        <View style={{ paddingTop: 10, marginLeft: 30 }}>
-          <Text style={{ color: '#ffff', fontSize: 16 }}>University content tracing app {'\n'}makes tracing easier</Text>
+      <ImageBackground source={WelcomeImgBackground} resizeMode='cover' style={styles.univTrazeLogo}>
+        <View style={styles.welcomeHeaderContainer}>
+          <Image style={styles.image} source={require('../assets/logo-full.png')} />
+          <Text style={styles.headerSubText}>University content tracing app {'\n'}makes tracing easier</Text>
         </View>
 
         <View
@@ -50,9 +39,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  welcomeHeaderContainer: {
+    paddingTop: 10,
+    marginTop: 100,
+    paddingHorizontal: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10
+  },
+  headerSubText: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    color: COLORS.WHITE, 
+    fontSize: 12,
+    marginLeft: 10
+  },
   image: {
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    minHeight: 60,
+    width: 230
   },
   text: {
     color: 'white',
@@ -85,15 +90,15 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFF',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center'
+    fontSize: 14,
+    textTransform: 'capitalize',
+    textAlign: 'center',
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
   },
   loginText: {
     fontWeight: 'bold',
     textAlign: 'left',
-    color: '#364D39',
+    color: COLORS.TEXT_BLACK,
     fontSize: 30,
     lineHeight: 30,
     textTransform: 'uppercase',
@@ -119,9 +124,9 @@ const styles = StyleSheet.create({
   },
   createAnAccountText: {
     color: COLORS.PRIMARY,
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center'
+    fontSize: 14,
+    textTransform: 'capitalize',
+    textAlign: 'center',
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
   }
 })

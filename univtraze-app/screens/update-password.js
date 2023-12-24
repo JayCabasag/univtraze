@@ -112,7 +112,6 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' />
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <View style={styles.backIcon}>
@@ -299,7 +298,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontWeight: 'bold',
     textAlign: 'left',
-    color: '#364D39',
+    color: COLORS.TEXT_BLACK,
     fontSize: 25,
     lineHeight: 30,
     textTransform: 'uppercase',

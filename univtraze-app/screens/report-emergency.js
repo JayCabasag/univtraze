@@ -234,7 +234,6 @@ const ReportEmergencyScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' />
       <View style={styles.container}>
         <Modal
           animationType='fade'
@@ -270,7 +269,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
           style={{
             height: 'auto',
             fontSize: 28,
-            color: '#364D39',
+            color: COLORS.TEXT_BLACK,
             fontWeight: '700',
             marginHorizontal: 40,
             padding: 10

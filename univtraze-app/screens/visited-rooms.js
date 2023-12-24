@@ -81,7 +81,6 @@ const VisitedRoomsScreen = ({
 
   return (
     <SafeAreaView>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' />
       <View style={styles.mainContainer}>
         <View style={styles.topContainer}>
           <View style={styles.backIcon}>
@@ -173,7 +172,7 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   roomVisitedText: {
-    color: '#364D39',
+    color: COLORS.TEXT_BLACK,
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 10
@@ -239,7 +238,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     fontSize: 12,
-    color: '#364D39'
+    color: COLORS.TEXT_BLACK
   },
   topContainer: {
     zIndex: 1,

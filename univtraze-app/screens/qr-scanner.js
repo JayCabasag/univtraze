@@ -147,7 +147,6 @@ export default function QrScannerScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' barStyle='dark-content' />
       <View style={styles.topContainer}>
         <View style={styles.backIcon}>
           <TouchableWithoutFeedback

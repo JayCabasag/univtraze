@@ -28,11 +28,11 @@ import { useAuth } from '../services/store/auth/AuthContext'
 
 const MainStack = createNativeStackNavigator()
 
-export default function MainNavigation() {
+export default function MainNavigation({ onLayoutView }) {
   const { state, isAppReady } = useAuth()
 
   return (
-    <NavigationContainer>
+    <NavigationContainer onReady={onLayoutView}>
       <MainStack.Navigator screenOptions={{ headerShown: false }}>
         {isAppReady && <MainStack.Screen name='loading' component={SplashScreen} />}
         {state.userToken == null ? (
@@ -65,7 +65,6 @@ export default function MainNavigation() {
         )}
         <MainStack.Screen name='terms-and-conditions' component={TermsAndConditionsScreen} />
       </MainStack.Navigator>
-      <StatusBar style='auto' />
     </NavigationContainer>
   )
 }

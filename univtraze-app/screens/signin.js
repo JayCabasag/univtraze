@@ -6,7 +6,6 @@ import {
   View,
   TouchableOpacity,
   Text,
-  StatusBar,
   Modal,
   Dimensions,
   ActivityIndicator
@@ -15,15 +14,12 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import LoginImage from "../assets/login_image.png"
 
 const windowWidth = Dimensions.get('screen').width
-const windowHeight = Dimensions.get('screen').height
 
 const SignInScreen = ({ navigation }) => {
-  const image = {
-    uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Flogin_image.png?alt=media&token=ebb53e48-2bc0-485d-8456-fe8a31683061'
-  }
 
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -116,11 +112,9 @@ const SignInScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-
-      <StatusBar animated={true} backgroundColor='#E1F5E4' barStyle='dark-content' />
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <View style={styles.imageContainer}>
-          <Image style={styles.image} source={image} />
+          <Image style={styles.image} source={LoginImage} />
         </View>
 
         <Text style={styles.loginText}>Log in</Text>
@@ -213,7 +207,8 @@ const styles = StyleSheet.create({
   },
   label: {
     color: '#4d7861',
-    marginTop: 15
+    marginTop: 15,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
 
   input: {
@@ -222,6 +217,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 5,
     marginTop: 10,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     backgroundColor: '#ffff'
   },
   signInBtn: {
@@ -243,18 +239,17 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFF',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
     fontSize: 16,
-    textAlign: 'center'
+    textTransform: 'capitalize',
+    textAlign: 'center',
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
   },
   loginText: {
-    fontWeight: 'bold',
+    fontFamily: FONT_FAMILY.POPPINS_BOLD,
     textAlign: 'left',
-    color: '#364D39',
+    color: COLORS.TEXT_BLACK,
     fontSize: 30,
-    lineHeight: 30,
-    width: windowWidth,
+    width: '100%',
     textTransform: 'uppercase',
     paddingHorizontal: 30
   },
@@ -267,7 +262,8 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     textDecorationLine: 'underline',
     color: '#4d7861',
-    marginBottom: 10
+    marginBottom: 10,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
   orText: {
     color: '#4d7861',

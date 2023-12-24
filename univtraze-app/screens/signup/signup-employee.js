@@ -119,7 +119,6 @@ const SignUpEmployeeScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView>
-      <StatusBar animated={true} backgroundColor='#E1F5E4' barStyle='dark-content' />
       <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
         <View style={styles.header}>
           <Image src={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
