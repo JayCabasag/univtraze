@@ -185,7 +185,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#28CD4199',
     backgroundColor: '#FFFFFF',
-    padding: 10
+    padding: 10,
+    borderColor: COLORS.PRIMARY,
+    borderWidth: 1
   },
   inputss: {
     height: 120,

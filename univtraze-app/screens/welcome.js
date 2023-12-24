@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   headerSubText: {
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
-    color: COLORS.WHITE, 
+    color: COLORS.WHITE,
     fontSize: 12,
     marginLeft: 10
   },
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 340,
     marginTop: 5,
-    paddingVertical: 18,
+    paddingVertical: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textTransform: 'capitalize',
     textAlign: 'center',
-    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   },
   loginText: {
     fontWeight: 'bold',
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 340,
     marginTop: 5,
-    paddingVertical: 18,
+    paddingVertical: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -127,6 +127,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textTransform: 'capitalize',
     textAlign: 'center',
-    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   }
 })

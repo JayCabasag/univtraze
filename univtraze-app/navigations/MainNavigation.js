@@ -43,9 +43,9 @@ export default function MainNavigation({ onLayoutView }) {
             <MainStack.Screen name='signup-student' component={SignUpStudentScreen} />
             <MainStack.Screen name='signup-employee' component={SignUpEmployeeScreen} />
             <MainStack.Screen name='signup-visitor' component={SignUpVisitorScreen} />
-            <MainStack.Screen name='sign-user-type' component={SignUpUserTypeScreen} />
+            <MainStack.Screen name='signup-user-type' component={SignUpUserTypeScreen} />
             <MainStack.Screen name='signup-vaccination' component={SignUpVaccinationScreen} />
-            <MainStack.Screen name='signup-docs-screen' component={SignUpDocsScreen} />
+            <MainStack.Screen name='signup-docs' component={SignUpDocsScreen} />
             <MainStack.Screen name='forgot-password' component={ForgotPasswordScreen} />
           </MainStack.Group>
         ) : (

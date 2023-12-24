@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     marginLeft: 41,
     marginRight: 41,
     marginTop: 5,
-    paddingVertical: 18
+    paddingVertical: 15
   },
   buttonText: {
     color: '#FFF',
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
-    paddingVertical: 18,
+    paddingVertical: 15,
     marginVertical: 15,
     width: 308,
     height: 60

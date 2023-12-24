@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     marginTop: 5,
-    paddingVertical: 18,
+    paddingVertical: 15,
     alignSelf: 'center',
     marginBottom: 10
   },
@@ -447,7 +447,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#28CD41',
     padding: 10,
     borderRadius: 10,
-    paddingVertical: 18,
+    paddingVertical: 15,
     marginVertical: 15,
     width: 308,
     height: 60

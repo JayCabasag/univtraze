@@ -259,14 +259,14 @@ const styles = StyleSheet.create({
     marginLeft: 41,
     marginRight: 41,
     marginTop: 5,
-    paddingVertical: 18
+    paddingVertical: 15
   },
   buttonText: {
     color: '#FFF',
     fontSize: 16,
     textTransform: 'capitalize',
     textAlign: 'center',
-    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   },
   headerText: {
     width: '100%',
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textTransform: 'uppercase',
     paddingVertical: 20,
-    fontFamily:FONT_FAMILY.POPPINS_BOLD
+    fontFamily: FONT_FAMILY.POPPINS_BOLD
   },
   forgotPassword: {
     textAlign: 'right',
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
-    paddingVertical: 18,
+    paddingVertical: 15,
     marginVertical: 15,
     width: 308,
     height: 60
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     marginTop: 15,
-    paddingVertical: 18,
+    paddingVertical: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,

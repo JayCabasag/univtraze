@@ -1,66 +1,46 @@
-import { StyleSheet, Text, View, Button, ImageBackground, TouchableOpacity, Image, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Button, ImageBackground, TouchableOpacity, Image, Dimensions, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import React, { useState } from 'react'
-import { COLORS } from '../../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
+import Header from '../../components/Header'
+import SelectTypeImage from '../../assets/select-type-image.png'
 
-const windowWidth = Dimensions.get('screen').width
-const windowHeight = Dimensions.get('screen').height
-
-const image = {
-  uri: 'https://firebasestorage.googleapis.com/v0/b/tcuhub-cf9e1.appspot.com/o/images%2Famico.png?alt=media&token=45feb25c-00e8-43f6-8189-2c83cb0175a3'
-}
-
-const SignUpUserTypeScreen = ({ navigation: { navigate } }) => {
+const SignUpUserTypeScreen = ({ navigation }) => {
   const [isChecked, setIsChecked] = useState('Student')
-
-  const SubmitUserType = async () => {
-    if (isChecked === 'Student') {
-      return navigate('SignUpUserCredentialsStudent', { type: 'Student' })
-    }
-
-    if (isChecked === 'Employee') {
-      return navigate('SignUpUserCredentialsEmployee', { type: 'Employee' })
-    }
-
-    navigate('SignUpUserCredentialsVisitor', { type: 'Visitor' })
-  }
-
   return (
-    <View style={styles.mainView}>
-      {/* <Text>SignUpUserTypess</Text> */}
+    <KeyboardAvoidingView style={styles.mainView}>
+      <Header navigation={navigation} />
+      <ScrollView contentContainerStyle={styles.scrollViewContent} style={styles.scrollViewContainer}>
+        <View style={styles.topContainer}>
+          <Image source={SelectTypeImage} style={styles.signUpUserTypeImage} />
+        </View>
+        <Text style={styles.botContainTxt1}>Welcome to {'\n'}UnivTraze</Text>
+        <Text style={styles.botContainSubtxt}>Before we continue, we are happy {'\n'}to know you more</Text>
+        <Text style={styles.radioTtl}>Please select below</Text>
+        <View style={styles.radioButtonOption}>
+          <RadioButton value='Student' status={isChecked === 'Student' ? 'checked' : 'unchecked'} onPress={() => setIsChecked('Student')} />
+          <Text style={styles.radioLabel}>Student</Text>
+        </View>
+        <View style={styles.radioButtonOption}>
+          <RadioButton
+            value='Employee'
+            status={isChecked === 'Employee' ? 'checked' : 'unchecked'}
+            onPress={() => setIsChecked('Employee')}
+          />
+          <Text style={styles.radioLabel}>Employee</Text>
+        </View>
 
-      <View style={styles.topContainer}>
-        <Image source={image} resizeMode='contain' style={styles.SignUpUserTypeLogo} />
+        <View style={styles.radioButtonOption}>
+          <RadioButton value='Visitor' status={isChecked === 'Visitor' ? 'checked' : 'unchecked'} onPress={() => setIsChecked('Visitor')} />
+          <Text style={styles.radioLabel}>Visitor</Text>
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('signup-visitor')} style={styles.signUpBtn}>
+          <Text style={styles.buttonText}>Next</Text>
+        </TouchableOpacity>
       </View>
-      <Text style={styles.botContainTxt1}>Welcome to {'\n'}UnivTraze</Text>
-      <Text style={styles.botContainSubtxt}>Before we continue, we are happy {'\n'}to know you more</Text>
-      <Text style={styles.radioTtl}>Please select below</Text>
-      <View style={styles.radioButtonOption}>
-        <RadioButton value='Student' status={isChecked === 'Student' ? 'checked' : 'unchecked'} onPress={() => setIsChecked('Student')} />
-        <Text style={styles.radioLabel}>Student</Text>
-      </View>
-      <View style={styles.radioButtonOption}>
-        <RadioButton
-          value='Employee'
-          status={isChecked === 'Employee' ? 'checked' : 'unchecked'}
-          onPress={() => setIsChecked('Employee')}
-        />
-        <Text style={styles.radioLabel}>Employee</Text>
-      </View>
-
-      <View style={styles.radioButtonOption}>
-        <RadioButton value='Visitor' status={isChecked === 'Visitor' ? 'checked' : 'unchecked'} onPress={() => setIsChecked('Visitor')} />
-        <Text style={styles.radioLabel}>Visitor</Text>
-      </View>
-      <TouchableOpacity
-        onPress={() => {
-          SubmitUserType()
-        }}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -68,74 +48,90 @@ export default SignUpUserTypeScreen
 
 const styles = StyleSheet.create({
   mainView: {
-    width: windowWidth,
-    height: windowHeight,
+    flex: 1,
     backgroundColor: '#E1F5E4',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 30
   },
   topContainer: {
-    marginTop: 10,
-    width: '100%',
-    height: '35%',
+    display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
-  SignUpUserTypeLogo: {
+  signUpUserTypeImage: {
     width: 200,
     height: 200,
-    marginTop: 0
+    alignSelf: 'center',
+  },
+  scrollViewContainer: {
+    width: '100%',
+  },
+  scrollViewContent: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   botContainer: {
-    width: '100%',
-    height: '65%'
+    width: '100%'
   },
   botContainTxt1: {
-    marginStart: 40,
-    width: windowWidth,
-    fontSize: 28,
-    fontWeight: 'bold'
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    width: '100%',
+    fontSize: 30,
+    marginTop: 30
   },
   botContainSubtxt: {
-    marginStart: 40,
     marginTop: 10,
-    fontSize: 16,
-    lineHeight: 25,
-    width: windowWidth
+    fontSize: 12,
+    width: '100%',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM
   },
   radioBox: {
     width: '100%',
     height: '100%'
   },
   radioTtl: {
-    fontSize: 18,
-    marginStart: 40,
-    width: windowWidth,
+    fontSize: 14,
+    width: '100%',
     marginTop: 10,
-    fontWeight: '700'
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   },
   radioLabel: {
-    fontSize: 16
+    fontSize: 12,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM
   },
   radioButtonOption: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingStart: 40,
-    width: windowWidth
+    width: '100%'
   },
-  button: {
+  buttonContainer: {
+    marginVertical: 10,
+    width: '100%'
+  },
+  signUpBtn: {
+    marginBottom: 10,
     backgroundColor: COLORS.PRIMARY,
     padding: 10,
-    width: '80%',
     borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: 15,
-    paddingVertical: 18
+    width: '100%',
+    marginTop: 5,
+    paddingVertical: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3
   },
   buttonText: {
+    color: '#FFF',
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#ffff'
-  }
+    textAlign: 'center',
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
+  },
+  
 })

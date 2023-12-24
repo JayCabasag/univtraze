@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, TextInput, View, TouchableOpacity, Text, Modal } from 'react-native'
+import { KeyboardAvoidingView, StyleSheet, TextInput, View, TouchableOpacity, Text, Modal, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import ConfettiCannon from 'react-native-confetti-cannon'
@@ -8,9 +8,9 @@ import Header from '../../components/Header'
 import LoadingModal from '../../components/LoadingModal'
 
 const SignUpScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [email, onChangeEmail] = useState('')
+  const [password, onChangePassword] = useState('')
+  const [confirmPassword, onChangeConfirmPassword] = useState('')
   const [provider, setProvider] = useState('email/password')
 
   const [error, setError] = useState(false)
@@ -132,23 +132,25 @@ const SignUpScreen = ({ navigation }) => {
 
     navigation.navigate('Dashboard')
   }
-
-  const viewTermsAndConditions = async () => {
-    navigation.navigate('terms-and-conditions')
-  }
+  
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
       <Header navigation={navigation} />
       <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
-      <View style={styles.inputContainer}>
-        <Text style={styles.loginText}>Sign Up</Text>
+      <Text style={styles.loginText}>Sign Up</Text>
+      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={styles.scrollViewContainer}>
         <Text style={styles.label}>Email</Text>
-        <TextInput placeholder='Email Address' defaultValue={email} onChangeText={(text) => setEmail(text)} style={styles.input} />
+        <TextInput
+          placeholder='Email Address'
+          defaultValue={email}
+          onChangeText={onChangeEmail}
+          style={styles.input}
+        />
         <Text style={styles.label}>Password</Text>
         <TextInput
           placeholder='Password'
           defaultValue={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={onChangePassword}
           style={styles.input}
           secureTextEntry
         />
@@ -156,47 +158,51 @@ const SignUpScreen = ({ navigation }) => {
         <TextInput
           placeholder='Confirm Password'
           defaultValue={confirmPassword}
-          onChangeText={(text) => setConfirmPassword(text)}
+          onChangeText={onChangeConfirmPassword}
           style={styles.input}
           secureTextEntry
         />
         {error && <Text style={styles.errorMessage}>*{errorMessage}</Text>}
-      </View>
+      </ScrollView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => validateUserInput()} style={styles.signUpBtn}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
+      </View>
+      <Modal visible={isModalVisible}>
+        <View
+          style={{
+            width: 348,
+            height: 227,
+            backgroundColor: 'white',
+            alignSelf: 'center',
+            alignItems: 'center',
+            paddingVertical: 20,
+            borderRadius: 15
+          }}
+        >
+          <Text style={{ fontFamily: FONT_FAMILY.POPPINS_MEDIUM, fontSize: 28, fontWeight: '700', color: '#29CC42' }}>
+            {' '}
+            Sign Up {'\n'}Successful
+          </Text>
+          <Text
+            style={{ fontFamily: FONT_FAMILY.POPPINS_MEDIUM, fontSize: 14, fontWeight: '400', color: COLORS.TEXT_BLACK, lineHeight: 19.5 }}
+          >
+            {' '}
+            Awesome, you will now being {'\n'} redirected to user profiling area
+          </Text>
 
-        <Modal visible={isModalVisible}>
-          <View
-            style={{
-              width: 348,
-              height: 227,
-              backgroundColor: 'white',
-              alignSelf: 'center',
-              alignItems: 'center',
-              paddingVertical: 20,
-              borderRadius: 15
+          <TouchableOpacity
+            style={styles.buttonContinue}
+            onPress={() => {
+              handleLoginUser(email, confirmPassword)
             }}
           >
-            <Text style={{ fontFamily: FONT_FAMILY.POPPINS_MEDIUM, fontSize: 28, fontWeight: '700', color: '#29CC42' }}> Sign Up {'\n'}Successful</Text>
-            <Text style={{ fontFamily: FONT_FAMILY.POPPINS_MEDIUM, fontSize: 14, fontWeight: '400', color: COLORS.TEXT_BLACK, lineHeight: 19.5 }}>
-              {' '}
-              Awesome, you will now being {'\n'} redirected to user profiling area
-            </Text>
-
-            <TouchableOpacity
-              style={styles.buttonContinue}
-              onPress={() => {
-                handleLoginUser(email, confirmPassword)
-              }}
-            >
-              <Text style={styles.buttonText}>Continue</Text>
-            </TouchableOpacity>
-          </View>
-          {shoot ? <ConfettiCannon count={200} origin={{ x: 0, y: 0 }} fadeOut='true' /> : null}
-        </Modal>
-      </View>
+            <Text style={styles.buttonText}>Continue</Text>
+          </TouchableOpacity>
+        </View>
+        {shoot ? <ConfettiCannon count={200} origin={{ x: 0, y: 0 }} fadeOut='true' /> : null}
+      </Modal>
     </KeyboardAvoidingView>
   )
 }
@@ -225,10 +231,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5
-  },
-  buttonContainer: {
-    marginTop: 10,
-    width: '100%'
   },
   buttonOpen: {
     backgroundColor: '#F194FF'
@@ -277,9 +279,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     backgroundColor: '#ffff',
-    fontFamily: FONT_FAMILY.POPPINS_REGULAR
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+    borderColor: COLORS.PRIMARY,
+    borderWidth: 1
   },
-  inputContainer: {
+  scrollViewContainer: {
+    flex: 1,
     marginTop: 20,
     width: '100%',
     marginBottom: 5
@@ -293,6 +298,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     marginTop: 5
   },
+  buttonContainer: {
+    marginVertical: 10,
+    width: '100%'
+  },
   signUpBtn: {
     marginBottom: 10,
     backgroundColor: COLORS.PRIMARY,
@@ -300,7 +309,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     marginTop: 5,
-    paddingVertical: 18,
+    paddingVertical: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -322,7 +331,8 @@ const styles = StyleSheet.create({
     color: COLORS.TEXT_BLACK,
     fontSize: 30,
     fontFamily: FONT_FAMILY.POPPINS_BOLD,
-    textTransform: 'uppercase'
+    textTransform: 'uppercase',
+    marginTop: 20
   },
   errorMessage: {
     textAlign: 'left',
@@ -333,7 +343,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
-    paddingVertical: 18,
+    paddingVertical: 15,
     marginVertical: 15,
     width: 308,
     height: 60

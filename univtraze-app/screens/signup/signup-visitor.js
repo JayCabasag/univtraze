@@ -22,18 +22,14 @@ import StepperIcon1 from '../../assets/reg_identifier.png'
 import BackIcon from '../../assets/back-icon.png'
 import { COLORS } from '../../utils/app_constants'
 
-const SignUpVisitorScreen = ({ navigation, route }) => {
-  const [type, setType] = useState(route.params.type)
-  const [userId, setUserId] = useState(0)
-  const [studentNumber, setStudentNumber] = useState('')
+const SignUpVisitorScreen = ({ navigation }) => {
+  const [type, setType] = useState('visitor')
   const [firstName, setFirstName] = useState('')
   const [middleName, setMiddleName] = useState('')
   const [lastName, setLastName] = useState('')
   const [address, setAddress] = useState('')
   const [suffix, setSuffix] = useState('')
   const [gender, setGender] = useState('Rather not say')
-  const [course, setCourse] = useState('')
-  const [email, setEmail] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState(new Date())
   const [yearAndSection, setYearAndSection] = useState('')
 
@@ -94,7 +90,7 @@ const SignUpVisitorScreen = ({ navigation, route }) => {
     <SafeAreaView>
       <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
         <View style={styles.header}>
-          <Image src={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+          <Image source={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
         </View>
 
         <ScrollView style={styles.inputContainer}>
@@ -223,7 +219,7 @@ const SignUpVisitorScreen = ({ navigation, route }) => {
               }}
               style={styles.backbutton}
             >
-              <Image src={BackIcon} style={{ width: 60, height: 60 }} />
+              <Image source={BackIcon} style={{ width: 60, height: 60 }} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -396,7 +392,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginTop: 5,
-    paddingVertical: 18,
+    paddingVertical: 15,
     width: 122,
     height: 60,
     marginLeft: 'auto',

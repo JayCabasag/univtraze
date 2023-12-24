@@ -15,12 +15,11 @@ import axios from 'axios'
 import jwtDecode from 'jwt-decode'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
-import LoginImage from "../assets/login_image.png"
+import LoginImage from '../assets/login_image.png'
 
 const windowWidth = Dimensions.get('screen').width
 
 const SignInScreen = ({ navigation }) => {
-
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [emailInput, setEmailInput] = useState('')
@@ -218,16 +217,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     fontFamily: FONT_FAMILY.POPPINS_REGULAR,
-    backgroundColor: '#ffff'
+    backgroundColor: '#ffff',
+    borderColor: COLORS.PRIMARY,
+    borderWidth: 1
   },
   signInBtn: {
     marginBottom: 10,
     backgroundColor: COLORS.PRIMARY,
-    padding: 10,
     borderRadius: 10,
     width: 340,
     marginTop: 5,
-    paddingVertical: 18,
+    paddingVertical: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textTransform: 'capitalize',
     textAlign: 'center',
-    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   },
   loginText: {
     fontFamily: FONT_FAMILY.POPPINS_BOLD,

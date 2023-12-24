@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
 
-    paddingVertical: 18,
+    paddingVertical: 15,
     shadowColor: 'black',
     elevation: 5
   },
@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 10,
-    paddingVertical: 18,
+    paddingVertical: 15,
     shadowColor: 'black',
     elevation: 5,
     borderWidth: 1,

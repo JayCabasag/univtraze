@@ -10,7 +10,7 @@ import {
   Modal,
   ActivityIndicator
 } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
@@ -423,7 +423,7 @@ const SignUpDocsScreen = ({ navigation, route }) => {
         </Modal>
 
         <View style={styles.header}>
-          <Image src={StepperIcon2} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+          <Image source={StepperIcon2} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
         </View>
         <ScrollView
           style={{
@@ -696,7 +696,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginTop: 5,
-    paddingVertical: 18,
+    paddingVertical: 15,
     width: 122,
     height: 60
   },

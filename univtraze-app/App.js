@@ -7,7 +7,7 @@ import * as SplashScreen from 'expo-splash-screen'
 SplashScreen.preventAutoHideAsync()
 
 export default function App() {
-  const [fontsLoaded ] = useFonts({
+  const [fontsLoaded] = useFonts({
     'Poppins-ExtraLight': require('./assets/fonts/Poppins-ExtraLight.ttf'),
     'Poppins-Light': require('./assets/fonts/Poppins-Light.ttf'),
     'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
@@ -28,7 +28,7 @@ export default function App() {
 
   return (
     <AuthContextProvider>
-      <MainNavigation onLayoutView={onLayoutRootView}/>
+      <MainNavigation onLayoutView={onLayoutRootView} />
     </AuthContextProvider>
   )
 }
