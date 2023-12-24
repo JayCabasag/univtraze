@@ -7,9 +7,9 @@ const router = require("express").Router();
 const { checkToken } = require("../../auth/token_validator")
 
 router.post("/signup", createUser);
+router.post("/login", login)
 router.get("/", checkToken, getUsers);
 router.get("/getAllUsers", checkToken, getAllUsers);
-router.post("/login", login)
 router.post("/getUserDetailsById",checkToken, getUserDetailsById)
 router.post("/getUserDetailsByIds",checkToken, getUserDetailsByIds)
 router.post("/updateUserType",checkToken, updateUserType)
