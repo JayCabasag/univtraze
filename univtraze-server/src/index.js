@@ -3,8 +3,6 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
 
 const userRouter = require("./api/users/user.router");
 const adminRouter = require("./api/admins/admin.router");
@@ -37,14 +35,6 @@ app.use("/api/communicable_disease", communicable_disease)
 app.use("/api/mailer", mailerRouter)
 app.use("/api/victims", victimsRouter)
 app.use("/api/notifications", notificationsRouter)
-
-app.get('/', (req, res) => {
-  res.send("Welcome to univtraze server!!");
-});
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-});
 
 server.listen(process.env.PORT || 3001, () => {
   console.clear()
