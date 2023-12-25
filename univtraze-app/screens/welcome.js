@@ -24,7 +24,7 @@ const WelcomeScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('signup-user-type')} style={styles.createAnAccountButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('signup')} style={styles.createAnAccountButton}>
             <Text style={styles.createAnAccountText}>Create an account</Text>
           </TouchableOpacity>
         </View>

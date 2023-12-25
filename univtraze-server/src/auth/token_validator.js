@@ -1,33 +1,27 @@
-const { verify } = require("jsonwebtoken");
+const { verify } = require('jsonwebtoken');
 
 module.exports = {
-    checkToken: (req, res, next) => {
-        let token = req.get("authorization");
-        
+  checkToken: (req, res, next) => {
+    let token = req.get('authorization');
 
-        if(token){
+    if (token) {
+      token = token.slice(7);
 
-            token = token.slice(7)
-            
-            verify(token, process.env.JSON_KEY, (err, decoded)=>{
-                if(err){
-                    res.json({
-                        success: 0,
-                        message: "Invalid token"
-                    })
-
-                } else {
-                    next();
-                }
-            })
-
-            
-
+      verify(token, process.env.JSON_KEY, (err, decoded) => {
+        if (err) {
+          res.json({
+            success: 0,
+            message: 'Invalid token',
+          });
         } else {
-            res.json({
-                success: 0,
-                message: "Access denied, unauthorized user."
-            })
+          next();
         }
+      });
+    } else {
+      res.json({
+        success: 0,
+        message: 'Access denied, unauthorized user.',
+      });
     }
-}
+  },
+};

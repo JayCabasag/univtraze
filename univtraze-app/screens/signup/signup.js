@@ -133,7 +133,7 @@ const SignUpScreen = ({ navigation }) => {
     <KeyboardAvoidingView style={styles.container} behavior='height'>
       <Header navigation={navigation} />
       <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
-      <Text style={styles.loginText}>Sign Up</Text>
+      <Text style={styles.loginText}>Sign up</Text>
       <ScrollView
         ref={scrollViewContainerRef}
         showsHorizontalScrollIndicator={false}
