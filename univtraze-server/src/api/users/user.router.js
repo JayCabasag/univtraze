@@ -28,7 +28,7 @@ const router = require('express').Router();
 const { checkToken } = require('../../auth/token_validator');
 
 router.post('/signup', createUser);
-router.post('/login', login);
+router.post('/signin', login);
 router.get('/', checkToken, getUsers);
 router.get('/getAllUsers', checkToken, getAllUsers);
 router.post('/getUserDetailsById', checkToken, getUserDetailsById);
