@@ -25,42 +25,55 @@ import UpdatePasswordScreen from '../screens/update-password'
 import UpdatePersonalInformationScreen from '../screens/update-information'
 import TermsAndConditionsScreen from '../screens/terms-and-conditions'
 import { useAuth } from '../services/store/auth/AuthContext'
+import { useUser } from '../services/store/user/UserContext'
 
 const MainStack = createNativeStackNavigator()
 
 export default function MainNavigation({ onLayoutView }) {
-  const { state, isAppReady } = useAuth()
+  const { state: authState, isAppAuthReady } = useAuth()
+  const { state: userState, isAppUserReady } = useUser()
 
   return (
     <NavigationContainer onReady={onLayoutView}>
       <MainStack.Navigator screenOptions={{ headerShown: false }}>
-        {isAppReady && <MainStack.Screen name='loading' component={SplashScreen} />}
-        {state.userToken == null ? (
+        {!isAppAuthReady && <MainStack.Screen name='loading' component={SplashScreen} />}
+        {authState.userToken == null ? (
           <MainStack.Group>
             <MainStack.Screen name='welcome' component={WelcomeScreen} />
             <MainStack.Screen name='signin' component={SignInScreen} />
             <MainStack.Screen name='signup' component={SignUpScreen} />
-            <MainStack.Screen name='signup-student' component={SignUpStudentScreen} />
-            <MainStack.Screen name='signup-employee' component={SignUpEmployeeScreen} />
-            <MainStack.Screen name='signup-visitor' component={SignUpVisitorScreen} />
-            <MainStack.Screen name='signup-user-type' component={SignUpUserTypeScreen} />
-            <MainStack.Screen name='signup-vaccination' component={SignUpVaccinationScreen} />
-            <MainStack.Screen name='signup-docs' component={SignUpDocsScreen} />
             <MainStack.Screen name='forgot-password' component={ForgotPasswordScreen} />
           </MainStack.Group>
         ) : (
           <MainStack.Group>
-            <MainStack.Screen name='index' component={IndexScreen} />
-            <MainStack.Screen name='visited-rooms' component={VisitedRoomsScreen} />
-            <MainStack.Screen name='daily-assessment' component={DailyAssessmentScreen} />
-            <MainStack.Screen name='report-emergecy' component={ReportEmergencyScreen} />
-            <MainStack.Screen name='report-disease' component={ReportDiseaseScreen} />
-            <MainStack.Screen name='qr-scanner' component={QrScannerScreen} />
-            <MainStack.Screen name='temperature-history' component={TemperatureHistoryScreen} />
-            <MainStack.Screen name='reset-password' component={ResetPasswordScreen} />
-            <MainStack.Screen name='account-settings' component={AccountSettingsScreen} />
-            <MainStack.Screen name='update-password' component={UpdatePasswordScreen} />
-            <MainStack.Screen name='update-personal-information' component={UpdatePersonalInformationScreen} />
+            {!isAppUserReady && <MainStack.Screen name='loading' component={SplashScreen} />}
+            {userState.user?.type == null ? (
+              <MainStack.Group>
+                <MainStack.Screen name='signup-user-type' component={SignUpUserTypeScreen} />
+                <MainStack.Screen name='signup-student' component={SignUpStudentScreen} />
+                <MainStack.Screen name='signup-employee' component={SignUpEmployeeScreen} />
+                <MainStack.Screen name='signup-visitor' component={SignUpVisitorScreen} />
+                <MainStack.Screen name='signup-vaccination' component={SignUpVaccinationScreen} />
+                <MainStack.Screen name='signup-docs' component={SignUpDocsScreen} />
+              </MainStack.Group>
+            ) : (
+              <MainStack.Group>
+                <MainStack.Screen name='index' component={IndexScreen} />
+                <MainStack.Screen name='visited-rooms' component={VisitedRoomsScreen} />
+                <MainStack.Screen name='daily-assessment' component={DailyAssessmentScreen} />
+                <MainStack.Screen name='report-emergecy' component={ReportEmergencyScreen} />
+                <MainStack.Screen name='report-disease' component={ReportDiseaseScreen} />
+                <MainStack.Screen name='qr-scanner' component={QrScannerScreen} />
+                <MainStack.Screen name='temperature-history' component={TemperatureHistoryScreen} />
+                <MainStack.Screen name='reset-password' component={ResetPasswordScreen} />
+                <MainStack.Screen name='account-settings' component={AccountSettingsScreen} />
+                <MainStack.Screen name='update-password' component={UpdatePasswordScreen} />
+                <MainStack.Screen
+                  name='update-personal-information'
+                  component={UpdatePersonalInformationScreen}
+                />
+              </MainStack.Group>
+            )}
           </MainStack.Group>
         )}
         <MainStack.Screen name='terms-and-conditions' component={TermsAndConditionsScreen} />

@@ -65,27 +65,29 @@ const ResetPasswordScreen = ({
         new_password: confirmNewPassword
       }
 
-      await axios.post(`https://univtraze.herokuapp.com/api/user/updateUserPasswordFromRecovery`, data).then((response) => {
-        const success = response.data.success
+      await axios
+        .post(`https://univtraze.herokuapp.com/api/user/updateUserPasswordFromRecovery`, data)
+        .then((response) => {
+          const success = response.data.success
 
-        if (success === false) {
-          setError(true)
-          setErrorMessage(response.data.message)
-          setSuccess(false)
+          if (success === false) {
+            setError(true)
+            setErrorMessage(response.data.message)
+            setSuccess(false)
+            setShowLoadingModal(false)
+            setShowLoadingModal(false)
+            setShowLoadingModal('')
+            return
+          }
+
+          setError(false)
+          setErrorMessage('')
+          setSuccess(true)
           setShowLoadingModal(false)
           setShowLoadingModal(false)
           setShowLoadingModal('')
-          return
-        }
-
-        setError(false)
-        setErrorMessage('')
-        setSuccess(true)
-        setShowLoadingModal(false)
-        setShowLoadingModal(false)
-        setShowLoadingModal('')
-        alert('Password updated successfully.')
-      })
+          alert('Password updated successfully.')
+        })
     } catch (error) {
       console.log(error)
       setError(true)

@@ -72,24 +72,34 @@ const IndexScreen = ({ navigation, route }) => {
       notification_for: userId
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/notifications/updateUserNotificationStatus `, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(
+        `https://univtraze.herokuapp.com/api/notifications/updateUserNotificationStatus `,
+        data,
+        config
+      )
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
-        return
-      }
+        if (success === 0) {
+          return
+        }
 
-      if (success === 1) {
-        return
-      }
+        if (success === 1) {
+          return
+        }
 
-      alert('Something went wrong... Please try again')
-    })
+        alert('Something went wrong... Please try again')
+      })
   }
 
   const decodeJwt = (currentToken) => {
     var decodedToken = jwtDecode(currentToken)
-    getUserDetails(decodedToken.result.id, currentToken, decodedToken.result.type || route.params.type)
+    getUserDetails(
+      decodedToken.result.id,
+      currentToken,
+      decodedToken.result.type || route.params.type
+    )
     handleGetNotifications(decodedToken.result.id, 0, currentToken)
   }
 
@@ -102,19 +112,25 @@ const IndexScreen = ({ navigation, route }) => {
       user_id: userId
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/notifications/getTotalActiveUserNotifications`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(
+        `https://univtraze.herokuapp.com/api/notifications/getTotalActiveUserNotifications`,
+        data,
+        config
+      )
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
-        return alert('An error occured while getting on-going cases')
-      }
+        if (success === 0) {
+          return alert('An error occured while getting on-going cases')
+        }
 
-      if (success === 1) {
-        return setNotificationCounts(response.data.results.total_notifications)
-      }
+        if (success === 1) {
+          return setNotificationCounts(response.data.results.total_notifications)
+        }
 
-      alert('Something went wrong... Please try again')
-    })
+        alert('Something went wrong... Please try again')
+      })
   }
 
   const getOnGoingCommunicableDiseaseCase = async (currentToken) => {
@@ -127,7 +143,11 @@ const IndexScreen = ({ navigation, route }) => {
     }
 
     await axios
-      .post(`https://univtraze.herokuapp.com/api/communicable_disease/getCommunicableDiseaseByStatus`, data, config)
+      .post(
+        `https://univtraze.herokuapp.com/api/communicable_disease/getCommunicableDiseaseByStatus`,
+        data,
+        config
+      )
       .then((response) => {
         const success = response.data.success
 
@@ -153,7 +173,11 @@ const IndexScreen = ({ navigation, route }) => {
     }
 
     await axios
-      .post(`https://univtraze.herokuapp.com/api/communicable_disease/getCommunicableDiseaseByStatus`, data, config)
+      .post(
+        `https://univtraze.herokuapp.com/api/communicable_disease/getCommunicableDiseaseByStatus`,
+        data,
+        config
+      )
       .then((response) => {
         const success = response.data.success
 
@@ -177,23 +201,25 @@ const IndexScreen = ({ navigation, route }) => {
     const data = {
       id: userId
     }
-    await axios.post(`https://univtraze.herokuapp.com/api/user/${userType}`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/user/${userType}`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0 && message === 'No data found for this user') {
-        return navigation.navigate('signup-user-type')
-      }
+        if (success === 0 && message === 'No data found for this user') {
+          return navigation.navigate('signup-user-type')
+        }
 
-      if (success === 0 && message === 'Invalid token') {
-        alert('Please re-login to continue')
-        return navigation.navigate('signin')
-      }
+        if (success === 0 && message === 'Invalid token') {
+          alert('Please re-login to continue')
+          return navigation.navigate('signin')
+        }
 
-      setFullname(response.data.data.firstname + ' ' + response.data.data.lastname)
-      setUserId(userId)
-      setType(userType)
-      setProfileUrl(response.data.data.profile_url)
-    })
+        setFullname(response.data.data.firstname + ' ' + response.data.data.lastname)
+        setUserId(userId)
+        setType(userType)
+        setProfileUrl(response.data.data.profile_url)
+      })
   }
 
   useEffect(() => {
@@ -219,14 +245,20 @@ const IndexScreen = ({ navigation, route }) => {
       user_id: user_id,
       start_at: offset
     }
-    await axios.post(`https://univtraze.herokuapp.com/api/notifications/getUserNotificationsById`, data, config).then((response) => {
-      if (response.data.success === 0) {
-        return console.log(response.data)
-      }
+    await axios
+      .post(
+        `https://univtraze.herokuapp.com/api/notifications/getUserNotificationsById`,
+        data,
+        config
+      )
+      .then((response) => {
+        if (response.data.success === 0) {
+          return console.log(response.data)
+        }
 
-      let returnArray = response.data.results
-      return setNotificationLists(returnArray)
-    })
+        let returnArray = response.data.results
+        return setNotificationLists(returnArray)
+      })
   }
 
   // Return
@@ -237,7 +269,11 @@ const IndexScreen = ({ navigation, route }) => {
         <View style={styles.topContainer}>
           <View style={styles.menuLogo}>
             <TouchableWithoutFeedback onPress={toggleBottomNavigationView}>
-              <ImageBackground source={require('../assets/notifmenu_icon.png')} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground
+                source={require('../assets/notifmenu_icon.png')}
+                resizeMode='contain'
+                style={styles.image}
+              ></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
 
@@ -300,7 +336,11 @@ const IndexScreen = ({ navigation, route }) => {
             </View>
 
             <View style={styles.scrllBtnsContainer}>
-              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.scrllViewContainer}>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                style={styles.scrllViewContainer}
+              >
                 <TouchableOpacity
                   style={styles.btnScnQr}
                   onPress={() => {
@@ -348,14 +388,24 @@ const IndexScreen = ({ navigation, route }) => {
               <Text style={{ fontSize: 16, marginStart: 40, marginTop: 20 }}>University</Text>
             </View>
             <View style={styles.casesContainer}>
-              <ImageBackground source={require('../assets/confirmed_case_icon.png')} resizeMode='stretch' style={styles.confirmCasesCard}>
+              <ImageBackground
+                source={require('../assets/confirmed_case_icon.png')}
+                resizeMode='stretch'
+                style={styles.confirmCasesCard}
+              >
                 <Text style={{ fontSize: 10 }}>Confirmed</Text>
                 <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
-                  {reportedCommunicableDiseaseOnGoing && reportedCommunicableDiseaseOnGoing ? reportedCommunicableDiseaseOnGoing.length : 0}
+                  {reportedCommunicableDiseaseOnGoing && reportedCommunicableDiseaseOnGoing
+                    ? reportedCommunicableDiseaseOnGoing.length
+                    : 0}
                 </Text>
               </ImageBackground>
 
-              <ImageBackground source={require('../assets/confirmed_case_icon.png')} resizeMode='stretch' style={styles.confirmCasesCard}>
+              <ImageBackground
+                source={require('../assets/confirmed_case_icon.png')}
+                resizeMode='stretch'
+                style={styles.confirmCasesCard}
+              >
                 <Text style={{ fontSize: 10 }}>Recovered</Text>
                 <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
                   {reportedCommunicableDiseaseResolved && reportedCommunicableDiseaseResolved

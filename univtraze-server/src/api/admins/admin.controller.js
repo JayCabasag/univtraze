@@ -63,7 +63,7 @@ module.exports = {
       if (!results) {
         return res.json({
           success: 0,
-          data: 'Incorrect Email or Password',
+          message: 'Incorrect Email or Password',
         });
       }
 
@@ -83,7 +83,7 @@ module.exports = {
       } else {
         return res.json({
           success: 0,
-          data: 'Incorrect Email or Password',
+          message: 'Incorrect Email or Password',
         });
       }
     });

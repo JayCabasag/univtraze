@@ -82,26 +82,28 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
 
     setIsLoading(true)
     try {
-      await axios.post(`https://univtraze.herokuapp.com/api/user/changePassword`, data, config).then((response) => {
-        const success = response.data.success
+      await axios
+        .post(`https://univtraze.herokuapp.com/api/user/changePassword`, data, config)
+        .then((response) => {
+          const success = response.data.success
 
-        if (success === 0) {
-          setError(true)
-          setErrorMessage(response.data.message)
-          setSuccess(false)
+          if (success === 0) {
+            setError(true)
+            setErrorMessage(response.data.message)
+            setSuccess(false)
+            setIsLoading(false)
+            return
+          }
+
+          setError(false)
+          setErrorMessage('')
+          setSuccess(true)
           setIsLoading(false)
-          return
-        }
 
-        setError(false)
-        setErrorMessage('')
-        setSuccess(true)
-        setIsLoading(false)
-
-        setOldPassword('')
-        setNewPassword('')
-        setConfirmNewPassword('')
-      })
+          setOldPassword('')
+          setNewPassword('')
+          setConfirmNewPassword('')
+        })
     } catch (error) {
       setError(false)
       setErrorMessage('Network connection error.')
@@ -120,7 +122,11 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
                 navigation.goBack()
               }}
             >
-              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground
+                src={BackIcon}
+                resizeMode='contain'
+                style={styles.image}
+              ></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -151,7 +157,9 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
             onChangeText={(text) => setConfirmNewPassword(text)}
           />
           {error ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
-          {success ? <Text style={{ color: COLORS.PRIMARY }}>Password updated successfully</Text> : null}
+          {success ? (
+            <Text style={{ color: COLORS.PRIMARY }}>Password updated successfully</Text>
+          ) : null}
           {isLoading ? <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text> : null}
 
           <TouchableOpacity style={styles.buttons} onPress={() => handleUpdatePassword()}>

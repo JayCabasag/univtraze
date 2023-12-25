@@ -5,16 +5,20 @@ import SplashImage from '../assets/splash.png'
 export default function SplashScreen() {
   return (
     <View style={styles.container}>
-      <Image src={SplashImage} style={styles.splash} />
+      <Image source={SplashImage} style={styles.backgroundImage} />
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1
+  ccontainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  splash: {
-    flex: 1
+  backgroundImage: {
+    height: '100%',
+    width: '100%'
   }
 })

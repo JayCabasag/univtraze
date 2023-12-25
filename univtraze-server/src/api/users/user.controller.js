@@ -129,7 +129,7 @@ module.exports = {
 
       if (!result) {
         return res.status(401).json({
-          data: 'Incorrect Email or Password',
+          message: 'Incorrect Email or Password',
         });
       }
 

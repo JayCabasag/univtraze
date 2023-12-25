@@ -1,10 +1,8 @@
 import {
   StyleSheet,
-  StatusBar,
   Text,
   View,
   ImageBackground,
-  Pressable,
   Image,
   Modal,
   ScrollView,
@@ -12,7 +10,7 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'
 import { DataTable } from 'react-native-paper'
@@ -55,33 +53,35 @@ const TemperatureHistoryScreen = ({
       dateToday: finalDateToday
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/rooms/userTodaysTemperature`, data, config).then((response) => {
-      const success = response.data.success
-      if (success === 0 && response.data.data === 'Not set') {
-        return setCurrentUserTemperature('Not set')
-      }
-
-      if (success === 0) {
-        return alert('Please try again')
-      }
-
-      if (success === 1) {
-        //setTemp(response.data.data.temperature)
-        if (response.data.data === undefined) {
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/rooms/userTodaysTemperature`, data, config)
+      .then((response) => {
+        const success = response.data.success
+        if (success === 0 && response.data.data === 'Not set') {
           return setCurrentUserTemperature('Not set')
         }
 
-        if (
-          response.data.data.temperature === undefined ||
-          response.data.data.temperature === null ||
-          response.data.data.temperature === ''
-        ) {
-          return setCurrentUserTemperature('Not set')
+        if (success === 0) {
+          return alert('Please try again')
         }
 
-        setCurrentUserTemperature(response.data.data.temperature)
-      }
-    })
+        if (success === 1) {
+          //setTemp(response.data.data.temperature)
+          if (response.data.data === undefined) {
+            return setCurrentUserTemperature('Not set')
+          }
+
+          if (
+            response.data.data.temperature === undefined ||
+            response.data.data.temperature === null ||
+            response.data.data.temperature === ''
+          ) {
+            return setCurrentUserTemperature('Not set')
+          }
+
+          setCurrentUserTemperature(response.data.data.temperature)
+        }
+      })
   }
 
   const handleRefreshData = async (token, id) => {
@@ -98,16 +98,26 @@ const TemperatureHistoryScreen = ({
       user_id: id
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/rooms/userTemperatureHistory`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/rooms/userTemperatureHistory`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      const returnArray = response.data.data
+        const returnArray = response.data.data
 
-      setAllTemperatureHistory(returnArray)
-    })
+        setAllTemperatureHistory(returnArray)
+      })
   }
 
-  const viewHistoryData = (id, roomId, room_number, building_name, room_name, temperature, createdAt) => {
+  const viewHistoryData = (
+    id,
+    roomId,
+    room_number,
+    building_name,
+    room_name,
+    temperature,
+    createdAt
+  ) => {
     Alert.alert(
       'Temperature History',
       ' ID: ' +
@@ -156,12 +166,15 @@ const TemperatureHistoryScreen = ({
                 navigation.goBack()
               }}
             >
-              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground
+                src={BackIcon}
+                resizeMode='contain'
+                style={styles.image}
+              ></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
 
-        {/*End  Notification View */}
         <View style={styles.bodyContainer}>
           <View
             style={{
@@ -170,13 +183,26 @@ const TemperatureHistoryScreen = ({
             }}
           >
             <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
-            <Text style={{ fontSize: 60, paddingBottom: 10, color: COLORS.PRIMARY, fontWeight: '700' }}>
-              {currentUserTemperature === '' || currentUserTemperature === 'Not set' ? 'Not set' : currentUserTemperature + '°C'}
+            <Text
+              style={{ fontSize: 60, paddingBottom: 10, color: COLORS.PRIMARY, fontWeight: '700' }}
+            >
+              {currentUserTemperature === '' || currentUserTemperature === 'Not set'
+                ? 'Not set'
+                : currentUserTemperature + '°C'}
             </Text>
           </View>
 
           <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-            <Text style={{ fontSize: 25, paddingBottom: 10, color: '#000000', fontWeight: '700', marginLeft: 0, marginRight: 'auto' }}>
+            <Text
+              style={{
+                fontSize: 25,
+                paddingBottom: 10,
+                color: '#000000',
+                fontWeight: '700',
+                marginLeft: 0,
+                marginRight: 'auto'
+              }}
+            >
               History
             </Text>
             <TouchableWithoutFeedback
@@ -208,16 +234,16 @@ const TemperatureHistoryScreen = ({
                 }}
               >
                 <DataTable.Title>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Bldg name</Text>
+                  <Text style={styles.dataTableTitleText}>Bldg name</Text>
                 </DataTable.Title>
                 <DataTable.Title>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Temp</Text>
+                  <Text style={styles.dataTableTitleText}>Temp</Text>
                 </DataTable.Title>
                 <DataTable.Title>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Date</Text>
+                  <Text style={styles.dataTableTitleText}>Date</Text>
                 </DataTable.Title>
                 <DataTable.Title>
-                  <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Time</Text>
+                  <Text style={styles.dataTableTitleText}>Time</Text>
                 </DataTable.Title>
               </DataTable.Header>
               {allTemperatureHistory === undefined
@@ -240,8 +266,12 @@ const TemperatureHistoryScreen = ({
                       >
                         <DataTable.Cell>{tempHistory.building_name}</DataTable.Cell>
                         <DataTable.Cell>{tempHistory.temperature}</DataTable.Cell>
-                        <DataTable.Cell>{moment.utc(tempHistory.createdAt).local().format('ll')}</DataTable.Cell>
-                        <DataTable.Cell>{moment.utc(tempHistory.createdAt).local().format('LT')}</DataTable.Cell>
+                        <DataTable.Cell>
+                          {moment.utc(tempHistory.createdAt).local().format('ll')}
+                        </DataTable.Cell>
+                        <DataTable.Cell>
+                          {moment.utc(tempHistory.createdAt).local().format('LT')}
+                        </DataTable.Cell>
                       </DataTable.Row>
                     )
                   })}
@@ -330,5 +360,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '80%',
     paddingBottom: 70
+  },
+  dataTableTitleText: {
+    fontSize: 14,
+    fontWeight: 'bold'
   }
 })

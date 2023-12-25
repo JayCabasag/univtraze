@@ -3,9 +3,17 @@ import { BottomSheet } from 'react-native-btr'
 import moment from 'moment'
 import { COLORS } from '../utils/app_constants'
 
-const Notifications = ({ notifVisible, toggleNotifNavigationView, props: { userId, token, notificationLists } }) => {
+const Notifications = ({
+  notifVisible,
+  toggleNotifNavigationView,
+  props: { userId, token, notificationLists }
+}) => {
   return (
-    <BottomSheet visible={notifVisible} onBackButtonPress={toggleNotifNavigationView} onBackdropPress={toggleNotifNavigationView}>
+    <BottomSheet
+      visible={notifVisible}
+      onBackButtonPress={toggleNotifNavigationView}
+      onBackdropPress={toggleNotifNavigationView}
+    >
       {/*Bottom Sheet inner View*/}
       <View style={styles.bottomNavigationView}>
         <View style={{ width: '100%', height: '100%' }}>

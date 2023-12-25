@@ -7,7 +7,13 @@ import * as SecureStore from 'expo-secure-store'
 import { useToast } from 'react-native-toast-notifications'
 import { COLORS } from '../utils/app_constants'
 
-const Menu = ({ visible, toggleBottomNavigationView, props: { userId, fullname, type, profileUrl }, navigation, active }) => {
+const Menu = ({
+  visible,
+  toggleBottomNavigationView,
+  props: { userId, fullname, type, profileUrl },
+  navigation,
+  active
+}) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [dataToConvertToQr, setdataToConvertToQr] = useState('Invalid')
 
@@ -37,7 +43,11 @@ const Menu = ({ visible, toggleBottomNavigationView, props: { userId, fullname, 
   }
 
   return (
-    <BottomSheet visible={visible} onBackButtonPress={toggleBottomNavigationView} onBackdropPress={toggleBottomNavigationView}>
+    <BottomSheet
+      visible={visible}
+      onBackButtonPress={toggleBottomNavigationView}
+      onBackdropPress={toggleBottomNavigationView}
+    >
       {/*Bottom Sheet inner View*/}
       <View style={styles.bottomNavigationView}>
         <View style={{ width: '100%', height: '100%' }}>
@@ -93,7 +103,10 @@ const Menu = ({ visible, toggleBottomNavigationView, props: { userId, fullname, 
               }}
             >
               {/* POP-UP MODAL VIEW */}
-              <Pressable style={styles.centeredViews} onPress={() => setModalVisible(!modalVisible)}>
+              <Pressable
+                style={styles.centeredViews}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
                 <View style={styles.modalView}>
                   <Text
                     style={{
@@ -122,7 +135,9 @@ const Menu = ({ visible, toggleBottomNavigationView, props: { userId, fullname, 
                   </View>
 
                   {/* QR Code */}
-                  <Text style={{ color: 'rgba(54, 77, 57, 0.6)', textTransform: 'uppercase' }}>univtraze-{userId}</Text>
+                  <Text style={{ color: 'rgba(54, 77, 57, 0.6)', textTransform: 'uppercase' }}>
+                    univtraze-{userId}
+                  </Text>
                   {/* User Name */}
 
                   <Text style={{ fontSize: 28, marginTop: 10 }}>{fullname}</Text>
@@ -299,7 +314,10 @@ const Menu = ({ visible, toggleBottomNavigationView, props: { userId, fullname, 
                 alignItems: 'center'
               }}
             >
-              <TouchableOpacity onPress={() => logout()} style={{ flexDirection: 'row', width: '100%' }}>
+              <TouchableOpacity
+                onPress={() => logout()}
+                style={{ flexDirection: 'row', width: '100%' }}
+              >
                 <Image
                   source={require('../assets/logout_icon.png')}
                   resizeMode='contain'

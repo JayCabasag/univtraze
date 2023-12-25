@@ -1,4 +1,12 @@
-import { KeyboardAvoidingView, StyleSheet, TextInput, View, TouchableOpacity, Text, Image } from 'react-native'
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Text,
+  Image
+} from 'react-native'
 import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -40,23 +48,25 @@ const ForgotPasswordScreen = ({ navigation }) => {
             email: email
           }
 
-          await axios.post(`https://univtraze.herokuapp.com/api/user/sendRecoveryPasswordViaEmail`, data).then((response) => {
-            const success = response.data.success
+          await axios
+            .post(`https://univtraze.herokuapp.com/api/user/sendRecoveryPasswordViaEmail`, data)
+            .then((response) => {
+              const success = response.data.success
 
-            if (success === false) {
-              setError(true)
-              setErrorMessage(response.data.message)
-              setSuccess(false)
+              if (success === false) {
+                setError(true)
+                setErrorMessage(response.data.message)
+                setSuccess(false)
+                setShowLoadingModal(false)
+                return
+              }
+
+              setError(false)
+              setErrorMessage('')
+              setSuccess(true)
+              setShowCodeInput(true)
               setShowLoadingModal(false)
-              return
-            }
-
-            setError(false)
-            setErrorMessage('')
-            setSuccess(true)
-            setShowCodeInput(true)
-            setShowLoadingModal(false)
-          })
+            })
         } catch (error) {
           setError(true)
           setSuccess(false)
@@ -97,24 +107,26 @@ const ForgotPasswordScreen = ({ navigation }) => {
         recovery_password: codeInput
       }
 
-      await axios.post(`https://univtraze.herokuapp.com/api/user/checkRecoveryPasswordAndEmailMatched`, data).then((response) => {
-        const success = response.data.success
+      await axios
+        .post(`https://univtraze.herokuapp.com/api/user/checkRecoveryPasswordAndEmailMatched`, data)
+        .then((response) => {
+          const success = response.data.success
 
-        if (success === false) {
-          setError(true)
-          setErrorMessage(response.data.message)
-          setSuccess(false)
+          if (success === false) {
+            setError(true)
+            setErrorMessage(response.data.message)
+            setSuccess(false)
+            setShowLoadingModal(false)
+            return
+          }
+
+          setError(false)
+          setErrorMessage('')
+          setSuccess(true)
+          setShowCodeInput(true)
           setShowLoadingModal(false)
-          return
-        }
-
-        setError(false)
-        setErrorMessage('')
-        setSuccess(true)
-        setShowCodeInput(true)
-        setShowLoadingModal(false)
-        navigation.navigate('ResetPassword', { email, recovery_password: codeInput })
-      })
+          navigation.navigate('ResetPassword', { email, recovery_password: codeInput })
+        })
     } catch (error) {
       setError(true)
       setSuccess(false)
@@ -125,12 +137,21 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
-      <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
+      <LoadingModal
+        onRequestClose={() => setShowLoadingModal(false)}
+        open={showLoadingModal}
+        loadingMessage={loadingMessage}
+      />
       <Header navigation={navigation} />
       <View style={styles.inputContainer}>
         <Text style={styles.headerText}>Forgot password</Text>
         <Text style={styles.label}>Email</Text>
-        <TextInput placeholder='Email Address' defaultValue={email} onChangeText={(text) => setEmail(text)} style={styles.input} />
+        <TextInput
+          placeholder='Email Address'
+          defaultValue={email}
+          onChangeText={(text) => setEmail(text)}
+          style={styles.input}
+        />
 
         {showCodeInput && (
           <Fragment>

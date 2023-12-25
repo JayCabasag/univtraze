@@ -71,20 +71,22 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
       }
 
       setShowLoadingModal(true)
-      await axios.post(`https://univtraze.herokuapp.com/api/vaccine_info/addVaccineData`, data, config).then((response) => {
-        const success = response.data.success
-        setShowLoadingModal(false)
-        if (success === 0) {
-          return alert('An error occured while updating your vaccine record')
-        }
+      await axios
+        .post(`https://univtraze.herokuapp.com/api/vaccine_info/addVaccineData`, data, config)
+        .then((response) => {
+          const success = response.data.success
+          setShowLoadingModal(false)
+          if (success === 0) {
+            return alert('An error occured while updating your vaccine record')
+          }
 
-        if (success === 1) {
-          navigation.navigate('Dashboard', { type: route.params.type })
-          return alert('Successfully updated vaccine information.')
-        }
+          if (success === 1) {
+            navigation.navigate('Dashboard', { type: route.params.type })
+            return alert('Successfully updated vaccine information.')
+          }
 
-        alert('An error occured while updating your vaccine record')
-      })
+          alert('An error occured while updating your vaccine record')
+        })
     } catch (error) {
       alert('An error occured!. Please try again')
       setShowLoadingModal(false)
@@ -142,7 +144,14 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
                 <Picker.Item label='Others' value='Others' />
               </Picker>
             </View>
-            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+            <View
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row'
+              }}
+            >
               <Text style={{ marginLeft: 5 }}>Date : </Text>
               <TextInput
                 placeholder='Date of birth'
@@ -198,7 +207,14 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
               </Picker>
             </View>
 
-            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+            <View
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row'
+              }}
+            >
               <Text style={{ marginLeft: 5 }}>Date : </Text>
               <TextInput
                 placeholder='Date of birth'
@@ -254,7 +270,14 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
               </Picker>
             </View>
 
-            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+            <View
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row'
+              }}
+            >
               <Text style={{ marginLeft: 5 }}>Date : </Text>
               <TextInput
                 placeholder='Date of birth'

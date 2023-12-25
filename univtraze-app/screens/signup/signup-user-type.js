@@ -6,69 +6,80 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
-  Dimensions,
   KeyboardAvoidingView,
-  ScrollView
+  ScrollView,
+  SafeAreaView
 } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
-import Header from '../../components/Header'
 import SelectTypeImage from '../../assets/select-type-image.png'
 
 const SignUpUserTypeScreen = ({ navigation }) => {
   const [isChecked, setIsChecked] = useState('Student')
   return (
-    <KeyboardAvoidingView style={styles.mainView}>
-      <Header navigation={navigation} />
-      <ScrollView contentContainerStyle={styles.scrollViewContent} style={styles.scrollViewContainer}>
-        <View style={styles.topContainer}>
-          <Image source={SelectTypeImage} style={styles.signUpUserTypeImage} />
-        </View>
-        <Text style={styles.botContainTxt1}>Welcome to {'\n'}UnivTraze</Text>
-        <Text style={styles.botContainSubtxt}>Before we continue, we are happy {'\n'}to know you more</Text>
-        <Text style={styles.radioTtl}>Please select below</Text>
-        <View style={styles.radioButtonOption}>
-          <RadioButton
-            color={COLORS.PRIMARY}
-            value='Student'
-            status={isChecked === 'Student' ? 'checked' : 'unchecked'}
-            onPress={() => setIsChecked('Student')}
-          />
-          <Text style={styles.radioLabel}>Student</Text>
-        </View>
-        <View style={styles.radioButtonOption}>
-          <RadioButton
-            value='Employee'
-            status={isChecked === 'Employee' ? 'checked' : 'unchecked'}
-            onPress={() => setIsChecked('Employee')}
-            color={COLORS.PRIMARY}
-          />
-          <Text style={styles.radioLabel}>Employee</Text>
-        </View>
+    <SafeAreaView style={styles.safeAreaView}>
+      <KeyboardAvoidingView style={styles.mainView}>
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          style={styles.scrollViewContainer}
+        >
+          <View style={styles.topContainer}>
+            <Image source={SelectTypeImage} style={styles.signUpUserTypeImage} />
+          </View>
+          <Text style={styles.botContainTxt1}>Welcome to {'\n'}UnivTraze</Text>
+          <Text style={styles.botContainSubtxt}>
+            Before we continue, we are happy {'\n'}to know you more
+          </Text>
+          <Text style={styles.radioTtl}>Please select below</Text>
+          <View style={styles.radioButtonOption}>
+            <RadioButton
+              color={COLORS.PRIMARY}
+              value='Student'
+              status={isChecked === 'Student' ? 'checked' : 'unchecked'}
+              onPress={() => setIsChecked('Student')}
+            />
+            <Text style={styles.radioLabel}>Student</Text>
+          </View>
+          <View style={styles.radioButtonOption}>
+            <RadioButton
+              value='Employee'
+              status={isChecked === 'Employee' ? 'checked' : 'unchecked'}
+              onPress={() => setIsChecked('Employee')}
+              color={COLORS.PRIMARY}
+            />
+            <Text style={styles.radioLabel}>Employee</Text>
+          </View>
 
-        <View style={styles.radioButtonOption}>
-          <RadioButton
-            color={COLORS.PRIMARY}
-            value='Visitor'
-            status={isChecked === 'Visitor' ? 'checked' : 'unchecked'}
-            onPress={() => setIsChecked('Visitor')}
-          />
-          <Text style={styles.radioLabel}>Visitor</Text>
+          <View style={styles.radioButtonOption}>
+            <RadioButton
+              color={COLORS.PRIMARY}
+              value='Visitor'
+              status={isChecked === 'Visitor' ? 'checked' : 'unchecked'}
+              onPress={() => setIsChecked('Visitor')}
+            />
+            <Text style={styles.radioLabel}>Visitor</Text>
+          </View>
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('signup-visitor')}
+            style={styles.signUpBtn}
+          >
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
         </View>
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('signup-visitor')} style={styles.signUpBtn}>
-          <Text style={styles.buttonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 
 export default SignUpUserTypeScreen
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1
+  },
   mainView: {
     flex: 1,
     backgroundColor: '#E1F5E4',
@@ -82,6 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   signUpUserTypeImage: {
+    marginTop: 80,
     width: 200,
     height: 200,
     alignSelf: 'center'

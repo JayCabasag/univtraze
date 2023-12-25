@@ -1,4 +1,13 @@
-import { KeyboardAvoidingView, StyleSheet, TextInput, View, TouchableOpacity, Text, Modal, ScrollView } from 'react-native'
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  TextInput,
+  View,
+  TouchableOpacity,
+  Text,
+  Modal,
+  ScrollView
+} from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import ConfettiCannon from 'react-native-confetti-cannon'
@@ -132,7 +141,11 @@ const SignUpScreen = ({ navigation }) => {
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
       <Header navigation={navigation} />
-      <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
+      <LoadingModal
+        onRequestClose={() => setShowLoadingModal(false)}
+        open={showLoadingModal}
+        loadingMessage={loadingMessage}
+      />
       <Text style={styles.loginText}>Sign up</Text>
       <ScrollView
         ref={scrollViewContainerRef}
@@ -141,9 +154,20 @@ const SignUpScreen = ({ navigation }) => {
         style={styles.scrollViewContainer}
       >
         <Text style={styles.label}>Email</Text>
-        <TextInput placeholder='Email Address' defaultValue={email} onChangeText={onChangeEmail} style={styles.input} />
+        <TextInput
+          placeholder='Email Address'
+          defaultValue={email}
+          onChangeText={onChangeEmail}
+          style={styles.input}
+        />
         <Text style={styles.label}>Password</Text>
-        <TextInput placeholder='Password' defaultValue={password} onChangeText={onChangePassword} style={styles.input} secureTextEntry />
+        <TextInput
+          placeholder='Password'
+          defaultValue={password}
+          onChangeText={onChangePassword}
+          style={styles.input}
+          secureTextEntry
+        />
         <Text style={styles.label}>Confirm Password</Text>
         <TextInput
           placeholder='Confirm Password'
@@ -174,12 +198,25 @@ const SignUpScreen = ({ navigation }) => {
             borderRadius: 15
           }}
         >
-          <Text style={{ fontFamily: FONT_FAMILY.POPPINS_MEDIUM, fontSize: 28, fontWeight: '700', color: '#29CC42' }}>
+          <Text
+            style={{
+              fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+              fontSize: 28,
+              fontWeight: '700',
+              color: '#29CC42'
+            }}
+          >
             {' '}
             Sign Up {'\n'}Successful
           </Text>
           <Text
-            style={{ fontFamily: FONT_FAMILY.POPPINS_MEDIUM, fontSize: 14, fontWeight: '400', color: COLORS.TEXT_BLACK, lineHeight: 19.5 }}
+            style={{
+              fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+              fontSize: 14,
+              fontWeight: '400',
+              color: COLORS.TEXT_BLACK,
+              lineHeight: 19.5
+            }}
           >
             {' '}
             Awesome, you will now being {'\n'} redirected to user profiling area

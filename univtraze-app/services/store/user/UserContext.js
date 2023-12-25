@@ -1,12 +1,25 @@
-import { createContext, useContext, useReducer, useRef } from 'react'
+import { useAsyncStorage } from '@react-native-async-storage/async-storage'
+import React, { createContext, useContext, useReducer, useState } from 'react'
 
 const UserContext = createContext()
 
 export const UserContextProvider = ({ children }) => {
+  const {
+    getItem: getLocalStorageUser,
+    setItem: setLocalStorageUser,
+    removeItem: removeLocalStorageUser
+  } = useAsyncStorage('@UnivtrazeApp_User')
+  const [isAppUserReady, setIsAppUserReady] = useState(false)
+
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
         case 'SET_USER':
+          return {
+            ...prevState,
+            user: action.user
+          }
+        case 'RESTORE_USER':
           return {
             ...prevState,
             user: action.user
@@ -22,7 +35,47 @@ export const UserContextProvider = ({ children }) => {
       user: null
     }
   )
-  return <UserContext.Provider value={{ state, dispatch }}>{children}</UserContext.Provider>
+
+  React.useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      let user
+      try {
+        const stringifiedUser = await getLocalStorageToken()
+        user = JSON.parse(stringifiedUser)
+      } catch (e) {
+        // Restoring token failed
+      } finally {
+        setIsAppUserReady(true)
+      }
+      
+      dispatch({ type: 'RESTORE_USER', user })
+    }
+
+    bootstrapAsync()
+  }, [])
+
+  const userContext = React.useMemo(
+    () => ({
+      setUser: async ({ user }) => {
+        await setLocalStorageUser(user)
+        dispatch({ type: 'SET_USER', user })
+      },
+      clearUser: async () => {
+        await removeLocalStorageUser()
+        dispatch({ type: 'CLEAR_USER', user: null })
+      }
+    }),
+    []
+  )
+
+  return (
+    <UserContext.Provider
+      value={{ state, isAppUserReady, setUser: userContext.setUser, clearUser: userContext.clearUser }}
+    >
+      {children}
+    </UserContext.Provider>
+  )
 }
 
 export const useUser = () => useContext(UserContext)

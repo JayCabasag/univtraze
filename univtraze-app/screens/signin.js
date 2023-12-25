@@ -6,94 +6,94 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Modal,
-  Dimensions,
-  ActivityIndicator
+  Dimensions
 } from 'react-native'
 import React, { useState } from 'react'
-import axios from 'axios'
-import jwtDecode from 'jwt-decode'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoginImage from '../assets/login_image.png'
 import { emailRegEx } from '../utils/regex'
 import LoadingModal from '../components/LoadingModal'
+import { genericPostRequest } from '../services/api/genericPostRequest'
+import { useAuth } from '../services/store/auth/AuthContext'
+import { useUser } from '../services/store/user/UserContext'
 
 const windowWidth = Dimensions.get('screen').width
 
 const SignInScreen = ({ navigation }) => {
+  const { signIn } = useAuth()
+  const { setUser } = useUser()
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
-  const [emailInput, setEmailInput] = useState('')
-  const [passwordInput, setPasswordInput] = useState('')
-
-  //Variables for loading
+  const [email, onChangeEmail] = useState('')
+  const [password, onChnagePassword] = useState('')
 
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
 
-  async function save(key, value) {
-    await SecureStore.setItemAsync(key, value)
-  }
-
-  const loginNow = async () => {
-    setShowLoadingModal(true)
-    setLoadingMessage('Validating your credentials...please wait')
-    if (emailInput === '') {
+  const validateEmail = () => {
+    if (email === '') {
       setError(true)
       setErrorMessage('Please input your email address')
-    } else {
-      if (emailRegEx.test(emailInput)) {
-        if (passwordInput === '') {
-          setError(true)
-          setErrorMessage('Please input password')
-        } else if (passwordInput.length < 7) {
-          setError(true)
-          setErrorMessage('Password field Minimum of 8 characters')
-        } else {
-          const data = {
-            email: emailInput,
-            password: passwordInput
-          }
-          await axios.post('https://univtraze.herokuapp.com/api/user/login', data).then((response) => {
-            const success = response.data.success
-
-            if (success === 0) {
-              setError(true)
-              setErrorMessage(response.data.data)
-            } else {
-              setLoadingMessage('Loggin in...')
-              setError(false)
-              save('x-token', response.data.token)
-              setEmailInput('')
-              setPasswordInput('')
-
-              evaluateToken(response.data.token)
-            }
-          })
-        }
-      } else {
-        setError(true)
-        setErrorMessage('Invalid email address')
-      }
+      return false
+    } else if (!emailRegEx.test(email)) {
+      setError(true)
+      setErrorMessage('Invalid email address')
+      return false
     }
-    setShowLoadingModal(false)
-    setLoadingMessage('Please wait')
+    return true
   }
 
-  const evaluateToken = (currentToken) => {
-    var decodedToken = jwtDecode(currentToken)
-
-    if (decodedToken.result.type === null || decodedToken.result.type === '') {
-      return navigation.navigate('SignUpUserType')
+  const validatePassword = () => {
+    if (password === '') {
+      setError(true)
+      setErrorMessage('Please input password')
+      return false
+    } else if (password.length < 7) {
+      setError(true)
+      setErrorMessage('Password should be a minimum of 8 characters')
+      return false
     }
+    return true
+  }
 
-    navigation.navigate('Dashboard')
+  const onPressLogin = async () => {
+    setError(false)
+    setErrorMessage('')
+
+    try {
+      if (!validateEmail()) return
+      if (!validatePassword()) return
+
+      const payload = {
+        email: email,
+        password: password
+      }
+
+      setShowLoadingModal(true)
+      setLoadingMessage('Checking your credentials...')
+
+      const res = await genericPostRequest('users/signin', payload)
+      signIn({ token: res?.token ?? '' })
+      const stringifiedUser = JSON.stringify(res?.user)
+      setUser({ user: stringifiedUser })
+    } catch (error) {
+      setError(true)
+      console.log(error?.response?.data?.data?.message)
+      setErrorMessage('Unexpected error occurred')
+    } finally {
+      setShowLoadingModal(false)
+      setLoadingMessage('')
+    }
   }
 
   return (
     <SafeAreaView style={{ backgroundColor: '#E1F5E4' }}>
-      <LoadingModal onRequestClose={() => setShowLoadingModal(false)} open={showLoadingModal} loadingMessage={loadingMessage} />
+      <LoadingModal
+        onRequestClose={() => setShowLoadingModal(false)}
+        open={showLoadingModal}
+        loadingMessage={loadingMessage}
+      />
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={LoginImage} />
@@ -105,25 +105,25 @@ const SignInScreen = ({ navigation }) => {
           <Text style={styles.label}>Email</Text>
           <TextInput
             placeholder='Email Address'
-            defaultValue={emailInput}
-            onChangeText={(text) => {
-              setEmailInput(text)
-            }}
+            defaultValue={email}
+            onChangeText={onChangeEmail}
             style={styles.input}
           />
 
           <Text style={styles.label}>Password</Text>
           <TextInput
             placeholder='Password'
-            defaultValue={passwordInput}
-            onChangeText={(text) => {
-              setPasswordInput(text)
-            }}
+            defaultValue={password}
+            onChangeText={onChnagePassword}
             style={styles.input}
             secureTextEntry
           />
 
-          {error ? <Text style={styles.errorMessage}>*{errorMessage}</Text> : <Text style={styles.errorMessage}></Text>}
+          {error ? (
+            <Text style={styles.errorMessage}>*{errorMessage}</Text>
+          ) : (
+            <Text style={styles.errorMessage}></Text>
+          )}
 
           <Text
             style={styles.forgotPassword}
@@ -135,7 +135,7 @@ const SignInScreen = ({ navigation }) => {
           </Text>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => loginNow()} style={styles.signInBtn}>
+          <TouchableOpacity onPress={onPressLogin} style={styles.signInBtn}>
             <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
         </View>

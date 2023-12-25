@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, StyleSheet, Button, Modal, Pressable, Image, StatusBar, TouchableWithoutFeedback, ImageBackground } from 'react-native'
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  Modal,
+  Pressable,
+  Image,
+  StatusBar,
+  TouchableWithoutFeedback,
+  ImageBackground
+} from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import base64 from 'base-64'
 import axios from 'axios'
@@ -48,34 +59,36 @@ export default function QrScannerScreen({ navigation, route }) {
       dateToday: finalDateToday
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/rooms/userTodaysTemperature`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/rooms/userTodaysTemperature`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0 && response.data.data === 'Not set') {
-        return setTemp('Not set')
-      }
-
-      if (success === 0) {
-        return setTemp('Not set')
-      }
-
-      if (success === 1) {
-        //setTemp(response.data.data.temperature)
-        if (response.data.data === undefined) {
+        if (success === 0 && response.data.data === 'Not set') {
           return setTemp('Not set')
         }
 
-        if (
-          response.data.data.temperature === undefined ||
-          response.data.data.temperature === null ||
-          response.data.data.temperature === ''
-        ) {
+        if (success === 0) {
           return setTemp('Not set')
         }
 
-        setTemp(response.data.data.temperature)
-      }
-    })
+        if (success === 1) {
+          //setTemp(response.data.data.temperature)
+          if (response.data.data === undefined) {
+            return setTemp('Not set')
+          }
+
+          if (
+            response.data.data.temperature === undefined ||
+            response.data.data.temperature === null ||
+            response.data.data.temperature === ''
+          ) {
+            return setTemp('Not set')
+          }
+
+          setTemp(response.data.data.temperature)
+        }
+      })
   }
 
   // What happens when we scan the bar code
@@ -132,15 +145,17 @@ export default function QrScannerScreen({ navigation, route }) {
       temp: temp
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/rooms/addVisitedRoom`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/rooms/addVisitedRoom`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
-        return alert('Please try again')
-      }
-      alert('Scanned Succesfully')
-      return navigation.goBack()
-    })
+        if (success === 0) {
+          return alert('Please try again')
+        }
+        alert('Scanned Succesfully')
+        return navigation.goBack()
+      })
 
     //Axios data here to add a notification
   }
@@ -154,7 +169,11 @@ export default function QrScannerScreen({ navigation, route }) {
               navigation.goBack()
             }}
           >
-            <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
+            <ImageBackground
+              src={BackIcon}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
           </TouchableWithoutFeedback>
         </View>
 
@@ -232,7 +251,10 @@ export default function QrScannerScreen({ navigation, route }) {
 
       <View style={styles.barCodeContainer}>
         <View style={scanned ? styles.barcodeboxScanned : styles.barcodeboxScanning}>
-          <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={{ height: 400, width: 400 }} />
+          <BarCodeScanner
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={{ height: 400, width: 400 }}
+          />
         </View>
 
         <View

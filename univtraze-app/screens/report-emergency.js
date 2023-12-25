@@ -259,7 +259,11 @@ const ReportEmergencyScreen = ({ navigation }) => {
                 navigation.goBack()
               }}
             >
-              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground
+                src={BackIcon}
+                resizeMode='contain'
+                style={styles.image}
+              ></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -302,7 +306,15 @@ const ReportEmergencyScreen = ({ navigation }) => {
                 multiple={true}
                 mode='BADGE'
                 listMode='SCROLLVIEW'
-                badgeDotColors={['#e76f51', '#00b4d8', '#e9c46a', '##25cf41', '#8ac926', '#2536cf', '#d11f99']}
+                badgeDotColors={[
+                  '#e76f51',
+                  '#00b4d8',
+                  '#e9c46a',
+                  '##25cf41',
+                  '#8ac926',
+                  '#2536cf',
+                  '#d11f99'
+                ]}
                 style={{ borderColor: '#28CD4199' }}
               />
 

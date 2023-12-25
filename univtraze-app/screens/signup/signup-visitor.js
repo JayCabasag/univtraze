@@ -83,14 +83,27 @@ const SignUpVisitorScreen = ({ navigation }) => {
 
     const dob = moment(dateOfBirth).format('yyyy-MM-DD')
 
-    navigation.navigate('SignUpCredentialsDocuments', { type, firstName, lastName, middleName, suffix, gender, address, dob })
+    navigation.navigate('SignUpCredentialsDocuments', {
+      type,
+      firstName,
+      lastName,
+      middleName,
+      suffix,
+      gender,
+      address,
+      dob
+    })
   }
 
   return (
     <SafeAreaView>
       <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
         <View style={styles.header}>
-          <Image source={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+          <Image
+            source={StepperIcon1}
+            resizeMode='contain'
+            style={{ width: '80%', height: '80%' }}
+          />
         </View>
 
         <ScrollView style={styles.inputContainer}>
@@ -175,7 +188,14 @@ const SignUpVisitorScreen = ({ navigation }) => {
           <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
             <Text style={styles.label}>Date of birth</Text>
 
-            <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+            <View
+              style={{
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'row'
+              }}
+            >
               <TextInput
                 placeholder='Date of birth'
                 defaultValue={moment(dateOfBirth).format('yyyy-MM-DD')}
@@ -204,7 +224,11 @@ const SignUpVisitorScreen = ({ navigation }) => {
             />
           ) : null}
 
-          {error ? <Text style={styles.errorMessage}>*{errorMessage}</Text> : <Text style={styles.errorMessage}></Text>}
+          {error ? (
+            <Text style={styles.errorMessage}>*{errorMessage}</Text>
+          ) : (
+            <Text style={styles.errorMessage}></Text>
+          )}
 
           <View
             style={{

@@ -108,13 +108,21 @@ const DailyAssessmentScreen = () => {
         <View style={styles.topContainer}>
           <View style={styles.menuLogo}>
             <TouchableWithoutFeedback onPress={toggleBottomNavigationView}>
-              <ImageBackground source={menu_jpg} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground
+                source={menu_jpg}
+                resizeMode='contain'
+                style={styles.image}
+              ></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
 
           <View style={styles.notifLogo}>
             <TouchableWithoutFeedback onPress={toggleNotifNavigationView}>
-              <ImageBackground source={notif_jpg} resizeMode='contain' style={{ width: '75%', height: '75%' }}>
+              <ImageBackground
+                source={notif_jpg}
+                resizeMode='contain'
+                style={{ width: '75%', height: '75%' }}
+              >
                 {notificationCounts === 0 ? null : (
                   <Text
                     style={{
@@ -137,7 +145,11 @@ const DailyAssessmentScreen = () => {
             </TouchableWithoutFeedback>
           </View>
           {/*bottom navigation for user settings  */}
-          <BottomSheet visible={visible} onBackButtonPress={toggleBottomNavigationView} onBackdropPress={toggleBottomNavigationView}>
+          <BottomSheet
+            visible={visible}
+            onBackButtonPress={toggleBottomNavigationView}
+            onBackdropPress={toggleBottomNavigationView}
+          >
             {/*Bottom Sheet inner View*/}
             <View style={styles.bottomNavigationView}>
               <View style={{ width: '100%', height: '100%' }}>
@@ -190,7 +202,10 @@ const DailyAssessmentScreen = () => {
                       }}
                       onPress={() => setModalVisible(true)}
                     >
-                      <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}> View QR Code</Text>
+                      <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}>
+                        {' '}
+                        View QR Code
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <Modal
@@ -202,7 +217,10 @@ const DailyAssessmentScreen = () => {
                     }}
                   >
                     {/* POP-UP MODAL VIEW */}
-                    <Pressable style={styles.centeredViews} onPress={() => setModalVisible(!modalVisible)}>
+                    <Pressable
+                      style={styles.centeredViews}
+                      onPress={() => setModalVisible(!modalVisible)}
+                    >
                       <View style={styles.modalView}>
                         <Text
                           style={{
@@ -386,7 +404,11 @@ const DailyAssessmentScreen = () => {
 
           {/* start of botton sheet for notification */}
 
-          <BottomSheet visible={notifVisible} onBackButtonPress={toggleNotifNavigationView} onBackdropPress={toggleNotifNavigationView}>
+          <BottomSheet
+            visible={notifVisible}
+            onBackButtonPress={toggleNotifNavigationView}
+            onBackdropPress={toggleNotifNavigationView}
+          >
             {/*Bottom Sheet inner View*/}
             <View style={styles.bottomNavigationView}>
               <View style={{ width: '100%', height: '100%' }}>
@@ -581,8 +603,18 @@ const DailyAssessmentScreen = () => {
                 title='Fever'
                 checked={fever}
                 onPress={() => setFever(!fever)}
-                checkedIcon={<Image source={require('../assets/checkedbox.png')} style={{ width: 30, height: 30 }} />}
-                uncheckedIcon={<Image source={require('../assets/uncheck.png')} style={{ width: 30, height: 30 }} />}
+                checkedIcon={
+                  <Image
+                    source={require('../assets/checkedbox.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
+                uncheckedIcon={
+                  <Image
+                    source={require('../assets/uncheck.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',
@@ -593,8 +625,18 @@ const DailyAssessmentScreen = () => {
                 title='Cough or Colds'
                 checked={cough}
                 onPress={() => setCough(!cough)}
-                checkedIcon={<Image source={require('../assets/checkedbox.png')} style={{ width: 30, height: 30 }} />}
-                uncheckedIcon={<Image source={require('../assets/uncheck.png')} style={{ width: 30, height: 30 }} />}
+                checkedIcon={
+                  <Image
+                    source={require('../assets/checkedbox.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
+                uncheckedIcon={
+                  <Image
+                    source={require('../assets/uncheck.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',
@@ -605,8 +647,18 @@ const DailyAssessmentScreen = () => {
                 title='Sore Throat'
                 checked={soreThroat}
                 onPress={() => setSoreThroat(!soreThroat)}
-                checkedIcon={<Image source={require('../assets/checkedbox.png')} style={{ width: 30, height: 30 }} />}
-                uncheckedIcon={<Image source={require('../assets/uncheck.png')} style={{ width: 30, height: 30 }} />}
+                checkedIcon={
+                  <Image
+                    source={require('../assets/checkedbox.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
+                uncheckedIcon={
+                  <Image
+                    source={require('../assets/uncheck.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',
@@ -617,8 +669,18 @@ const DailyAssessmentScreen = () => {
                 title='Loss of smell or taste'
                 checked={lossOfSmell}
                 onPress={() => setLossOfSmell(!lossOfSmell)}
-                checkedIcon={<Image source={require('../assets/checkedbox.png')} style={{ width: 30, height: 30 }} />}
-                uncheckedIcon={<Image source={require('../assets/uncheck.png')} style={{ width: 30, height: 30 }} />}
+                checkedIcon={
+                  <Image
+                    source={require('../assets/checkedbox.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
+                uncheckedIcon={
+                  <Image
+                    source={require('../assets/uncheck.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',
@@ -629,8 +691,18 @@ const DailyAssessmentScreen = () => {
                 title='Body pains or fatigues'
                 checked={bodyPains}
                 onPress={() => setBodyPains(!bodyPains)}
-                checkedIcon={<Image source={require('../assets/checkedbox.png')} style={{ width: 30, height: 30 }} />}
-                uncheckedIcon={<Image source={require('../assets/uncheck.png')} style={{ width: 30, height: 30 }} />}
+                checkedIcon={
+                  <Image
+                    source={require('../assets/checkedbox.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
+                uncheckedIcon={
+                  <Image
+                    source={require('../assets/uncheck.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',
@@ -641,8 +713,18 @@ const DailyAssessmentScreen = () => {
                 title='Diarrhea'
                 checked={diarrhea}
                 onPress={() => setDiarrhea(!diarrhea)}
-                checkedIcon={<Image source={require('../assets/checkedbox.png')} style={{ width: 30, height: 30 }} />}
-                uncheckedIcon={<Image source={require('../assets/uncheck.png')} style={{ width: 30, height: 30 }} />}
+                checkedIcon={
+                  <Image
+                    source={require('../assets/checkedbox.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
+                uncheckedIcon={
+                  <Image
+                    source={require('../assets/uncheck.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',
@@ -653,8 +735,18 @@ const DailyAssessmentScreen = () => {
                 title='Breathing difficulties'
                 checked={breathingDiff}
                 onPress={() => setbreathingDiff(!breathingDiff)}
-                checkedIcon={<Image source={require('../assets/checkedbox.png')} style={{ width: 30, height: 30 }} />}
-                uncheckedIcon={<Image source={require('../assets/uncheck.png')} style={{ width: 30, height: 30 }} />}
+                checkedIcon={
+                  <Image
+                    source={require('../assets/checkedbox.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
+                uncheckedIcon={
+                  <Image
+                    source={require('../assets/uncheck.png')}
+                    style={{ width: 30, height: 30 }}
+                  />
+                }
                 containerStyle={{
                   backgroundColor: 'transparent',
                   borderColor: 'transparent',

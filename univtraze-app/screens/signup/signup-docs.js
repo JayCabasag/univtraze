@@ -125,19 +125,21 @@ const SignUpDocsScreen = ({ navigation, route }) => {
       type: route.params.type
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/user/updateUserType`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/user/updateUserType`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
+        if (success === 0) {
+          setShowLoadingModal(false)
+          return alert('Please try again')
+        }
+
         setShowLoadingModal(false)
-        return alert('Please try again')
-      }
+        setLoadingMessage('Updated successfully...')
 
-      setShowLoadingModal(false)
-      setLoadingMessage('Updated successfully...')
-
-      handleImageUploads(base64ProfilePhoto, base64FrontIdPhoto, base64BackIdPhoto)
-    })
+        handleImageUploads(base64ProfilePhoto, base64FrontIdPhoto, base64BackIdPhoto)
+      })
   }
 
   const handleImageUploads = async (profilePhoto, frontIdPhoto, backIdPhoto) => {
@@ -296,14 +298,16 @@ const SignUpDocsScreen = ({ navigation, route }) => {
       front_id_photo: imageFrontPhoto
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/user/addStudentDetails`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/user/addStudentDetails`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
-        return alert('Please try again now' + response.data.message)
-      }
-      navigation.navigate('SignUpVaccination', { type: type })
-    })
+        if (success === 0) {
+          return alert('Please try again now' + response.data.message)
+        }
+        navigation.navigate('SignUpVaccination', { type: type })
+      })
   }
 
   const handleAddEmployeeDetails = async (
@@ -347,14 +351,16 @@ const SignUpDocsScreen = ({ navigation, route }) => {
       front_id_photo: imageFrontPhoto
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/user/addEmployeeDetails`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/user/addEmployeeDetails`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
-        return alert('Please try again now' + response.data.message)
-      }
-      navigation.navigate('SignUpVaccination', { type: type })
-    })
+        if (success === 0) {
+          return alert('Please try again now' + response.data.message)
+        }
+        navigation.navigate('SignUpVaccination', { type: type })
+      })
   }
 
   const handleAddEVisitorDetails = async (
@@ -392,15 +398,17 @@ const SignUpDocsScreen = ({ navigation, route }) => {
       front_id_photo: imageFrontPhoto
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/user/addVisitorDetails`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/user/addVisitorDetails`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
-        return alert('Please try again now' + response.data.message)
-      }
+        if (success === 0) {
+          return alert('Please try again now' + response.data.message)
+        }
 
-      navigation.navigate('SignUpVaccination', { type: type })
-    })
+        navigation.navigate('SignUpVaccination', { type: type })
+      })
   }
 
   return (
@@ -423,7 +431,11 @@ const SignUpDocsScreen = ({ navigation, route }) => {
         </Modal>
 
         <View style={styles.header}>
-          <Image source={StepperIcon2} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+          <Image
+            source={StepperIcon2}
+            resizeMode='contain'
+            style={{ width: '80%', height: '80%' }}
+          />
         </View>
         <ScrollView
           style={{
@@ -502,7 +514,10 @@ const SignUpDocsScreen = ({ navigation, route }) => {
                 />
               </View>
 
-              <TouchableOpacity style={styles.editProfileButton} onPress={pickDocumentForProfilePhoto}>
+              <TouchableOpacity
+                style={styles.editProfileButton}
+                onPress={pickDocumentForProfilePhoto}
+              >
                 <Ionicons name='md-cloud-upload-outline' size={18} color='black' />
                 <Text> UPLOAD PHOTO </Text>
               </TouchableOpacity>
@@ -534,7 +549,9 @@ const SignUpDocsScreen = ({ navigation, route }) => {
                 >
                   <Text> Upload ID Photo(Front) </Text>
                 </TouchableOpacity>
-                <Text style={{ width: 145 }}>{frontIdPhoto === null ? null : frontIdPhoto.name}</Text>
+                <Text style={{ width: 145 }}>
+                  {frontIdPhoto === null ? null : frontIdPhoto.name}
+                </Text>
               </View>
 
               {/* Previewer Image front */}

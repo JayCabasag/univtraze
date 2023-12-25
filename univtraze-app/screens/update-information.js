@@ -70,51 +70,53 @@ const UpdatePersonalInformationScreen = ({ navigation, route }) => {
     }
 
     try {
-      await axios.post(`https://univtraze.herokuapp.com/api/user/getUserDetailsById`, data, config).then((response) => {
-        if (response.data.success === 0) {
-          setError(true)
-          setErrorMessage(response.data.message)
+      await axios
+        .post(`https://univtraze.herokuapp.com/api/user/getUserDetailsById`, data, config)
+        .then((response) => {
+          if (response.data.success === 0) {
+            setError(true)
+            setErrorMessage(response.data.message)
+            setIsLoading(false)
+            setSuccess(false)
+            return
+          }
+
+          setError(false)
+          setErrorMessage('')
           setIsLoading(false)
           setSuccess(false)
-          return
-        }
 
-        setError(false)
-        setErrorMessage('')
-        setIsLoading(false)
-        setSuccess(false)
+          setUserData(response.data.data)
 
-        setUserData(response.data.data)
+          // This is where I assign all data from the database to the available fields.
 
-        // This is where I assign all data from the database to the available fields.
+          console.log(response.data)
 
-        console.log(response.data)
+          if (response.data.data.profile_url !== undefined) {
+            setProfilePhoto({ uri: response.data.data.profile_url })
+            setCurrenProfilePhotoUri(response.data.data.profile_url)
+          }
 
-        if (response.data.data.profile_url !== undefined) {
-          setProfilePhoto({ uri: response.data.data.profile_url })
-          setCurrenProfilePhotoUri(response.data.data.profile_url)
-        }
+          if (response.data.data.mobile_number !== undefined) {
+            setMobileNumber(response.data.data.mobile_number)
+          }
 
-        if (response.data.data.mobile_number !== undefined) {
-          setMobileNumber(response.data.data.mobile_number)
-        }
+          if (response.data.data.year_section !== undefined) {
+            setStudentYearSection(response.data.data.year_section)
+          }
 
-        if (response.data.data.year_section !== undefined) {
-          setStudentYearSection(response.data.data.year_section)
-        }
+          if (response.data.data.course !== undefined) {
+            setStudentCourse(response.data.data.course)
+          }
 
-        if (response.data.data.course !== undefined) {
-          setStudentCourse(response.data.data.course)
-        }
+          if (response.data.data.department !== undefined) {
+            setEmployeeDepartment(response.data.data.department)
+          }
 
-        if (response.data.data.department !== undefined) {
-          setEmployeeDepartment(response.data.data.department)
-        }
-
-        if (response.data.data.position !== undefined) {
-          setEmployeePosition(response.data.data.position)
-        }
-      })
+          if (response.data.data.position !== undefined) {
+            setEmployeePosition(response.data.data.position)
+          }
+        })
     } catch (error) {
       setError(true)
       setErrorMessage('Network connection error')
@@ -191,21 +193,23 @@ const UpdatePersonalInformationScreen = ({ navigation, route }) => {
     }
 
     try {
-      await axios.post(`https://univtraze.herokuapp.com/api/user/updatePersonalInfo`, data, config).then((response) => {
-        if (response.data.success === 0) {
-          setError(true)
-          setErrorMessage(response.data.message)
-          setIsLoading(false)
-          setSuccess(false)
-          return
-        }
+      await axios
+        .post(`https://univtraze.herokuapp.com/api/user/updatePersonalInfo`, data, config)
+        .then((response) => {
+          if (response.data.success === 0) {
+            setError(true)
+            setErrorMessage(response.data.message)
+            setIsLoading(false)
+            setSuccess(false)
+            return
+          }
 
-        setError(false)
-        setErrorMessage('')
-        setIsLoading(false)
-        setSuccessMessage(response.data.message)
-        setSuccess(true)
-      })
+          setError(false)
+          setErrorMessage('')
+          setIsLoading(false)
+          setSuccessMessage(response.data.message)
+          setSuccess(true)
+        })
     } catch (error) {
       setError(true)
       setErrorMessage('Network connection error')
@@ -224,7 +228,11 @@ const UpdatePersonalInformationScreen = ({ navigation, route }) => {
                 navigation.goBack()
               }}
             >
-              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground
+                src={BackIcon}
+                resizeMode='contain'
+                style={styles.image}
+              ></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
@@ -234,8 +242,9 @@ const UpdatePersonalInformationScreen = ({ navigation, route }) => {
           <Text style={styles.headerText}>Update Personal Information</Text>
           <ScrollView>
             <Text style={{ color: COLORS.PRIMARY }}>
-              Only limited information can be updated in this section. Personal information e.g. Name, Address and Date of Birth cannot be
-              updated here, please contact adminitrator for further assistance.
+              Only limited information can be updated in this section. Personal information e.g.
+              Name, Address and Date of Birth cannot be updated here, please contact adminitrator
+              for further assistance.
             </Text>
 
             <Image
@@ -256,16 +265,29 @@ const UpdatePersonalInformationScreen = ({ navigation, route }) => {
                 alignSelf: 'center'
               }}
             />
-            <TouchableOpacity style={styles.editProfileButton} onPress={() => handlePickProfilePhoto()}>
+            <TouchableOpacity
+              style={styles.editProfileButton}
+              onPress={() => handlePickProfilePhoto()}
+            >
               <AntDesign name='edit' size={24} color='black' />
               <Text> EDIT PROFILE </Text>
             </TouchableOpacity>
 
             <View>
               <Text>User Id.</Text>
-              <TextInput placeholder='Id' style={styles.inputDisabled} value={userId + ''} editable={false} />
+              <TextInput
+                placeholder='Id'
+                style={styles.inputDisabled}
+                value={userId + ''}
+                editable={false}
+              />
               <Text>User Type</Text>
-              <TextInput placeholder='Type' style={styles.inputDisabled} value={userType} editable={false} />
+              <TextInput
+                placeholder='Type'
+                style={styles.inputDisabled}
+                value={userType}
+                editable={false}
+              />
               <Text>Mobile No.</Text>
               <TextInput
                 placeholder='Type'

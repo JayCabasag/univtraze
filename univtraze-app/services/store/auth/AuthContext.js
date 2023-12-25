@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from 'react'
 const AuthContext = createContext()
 
 export const AuthContextProvider = ({ children }) => {
-  const [isAppReady, setIsAppReady] = useState(false)
+  const [isAppAuthReady, setIsAppUserReady] = useState(false)
   const {
     getItem: getLocalStorageToken,
     setItem: setLocalStorageToken,
@@ -44,13 +44,12 @@ export const AuthContextProvider = ({ children }) => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken
-
       try {
         userToken = await getLocalStorageToken()
       } catch (e) {
         // Restoring token failed
       } finally {
-        setIsAppReady(true)
+        setIsAppUserReady(true)
       }
 
       // After restoring token, we may need to validate it in production apps
@@ -86,7 +85,7 @@ export const AuthContextProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        isAppReady,
+        isAppAuthReady,
         state,
         signIn: authContext.signIn,
         signOut: authContext.signOut,

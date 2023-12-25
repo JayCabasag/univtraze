@@ -223,7 +223,14 @@ const SignUpStudentScreen = ({ navigation }) => {
         <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
           <Text style={styles.label}>Date of birth</Text>
 
-          <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row'
+            }}
+          >
             <TextInput
               placeholder='Date of birth'
               defaultValue={moment(dateOfBirth).format('yyyy-MM-DD')}
@@ -280,7 +287,11 @@ const SignUpStudentScreen = ({ navigation }) => {
           </View>
         </View>
 
-        {error ? <Text style={styles.errorMessage}>*{errorMessage}</Text> : <Text style={styles.errorMessage}></Text>}
+        {error ? (
+          <Text style={styles.errorMessage}>*{errorMessage}</Text>
+        ) : (
+          <Text style={styles.errorMessage}></Text>
+        )}
 
         <View
           style={{

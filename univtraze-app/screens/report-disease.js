@@ -120,18 +120,24 @@ const ReportDiseaseScreen = ({
       document_proof_image: proofDocUrl
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/covid_cases/addCommunicableDiseaseCase`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(
+        `https://univtraze.herokuapp.com/api/covid_cases/addCommunicableDiseaseCase`,
+        data,
+        config
+      )
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
-        return alert('Please try again later : ' + response.data.message)
-      }
-      setShowLoadingModal(false)
-      setLoadingMessage('Submitted Successfully.')
+        if (success === 0) {
+          return alert('Please try again later : ' + response.data.message)
+        }
+        setShowLoadingModal(false)
+        setLoadingMessage('Submitted Successfully.')
 
-      alert('Reported disease successfully')
-      navigation.goBack()
-    })
+        alert('Reported disease successfully')
+        navigation.goBack()
+      })
   }
 
   return (
@@ -161,7 +167,11 @@ const ReportDiseaseScreen = ({
                 navigation.goBack()
               }}
             >
-              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground
+                src={BackIcon}
+                resizeMode='contain'
+                style={styles.image}
+              ></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
 
@@ -305,9 +315,21 @@ const ReportDiseaseScreen = ({
               </View>
 
               {proofDoc === null ? null : (
-                <View style={{ width: '100%', height: 150, justifyContent: 'center', alignItems: 'center', marginTop: 5 }}>
+                <View
+                  style={{
+                    width: '100%',
+                    height: 150,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 5
+                  }}
+                >
                   <View style={styles.imageContainer}>
-                    <Image source={{ uri: proofDoc.uri }} resizeMode='contain' style={{ width: '95%', height: '100%' }} />
+                    <Image
+                      source={{ uri: proofDoc.uri }}
+                      resizeMode='contain'
+                      style={{ width: '95%', height: '100%' }}
+                    />
                   </View>
                 </View>
               )}

@@ -58,30 +58,32 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
     setError(false)
 
     try {
-      await axios.post(`https://univtraze.herokuapp.com/api/user/deactivateAccount`, data, config).then((response) => {
-        const success = response.data.success
+      await axios
+        .post(`https://univtraze.herokuapp.com/api/user/deactivateAccount`, data, config)
+        .then((response) => {
+          const success = response.data.success
 
-        if (success === 0) {
-          setIsLoading(false)
-          setError(true)
-          setErrorMessage(response.data.message)
-          return
-        }
+          if (success === 0) {
+            setIsLoading(false)
+            setError(true)
+            setErrorMessage(response.data.message)
+            return
+          }
 
-        if (success === 1) {
-          setIsLoading(false)
-          setError(false)
-          navigation.navigate('signin')
-          toast.show('Account deactivated...', {
-            type: 'normal',
-            placement: 'bottom',
-            duration: 1000,
-            offset: 30,
-            animationType: 'slide-in'
-          })
-          return
-        }
-      })
+          if (success === 1) {
+            setIsLoading(false)
+            setError(false)
+            navigation.navigate('signin')
+            toast.show('Account deactivated...', {
+              type: 'normal',
+              placement: 'bottom',
+              duration: 1000,
+              offset: 30,
+              animationType: 'slide-in'
+            })
+            return
+          }
+        })
     } catch (error) {
       setIsLoading(false)
       setError(true)
@@ -103,7 +105,9 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={{ color: 'red' }}>*Once account is deleted it can no longer be retrieved.</Text>
+              <Text style={{ color: 'red' }}>
+                *Once account is deleted it can no longer be retrieved.
+              </Text>
               <TextInput
                 placeholder='Password'
                 defaultValue={''}
@@ -118,7 +122,14 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
               ) : isLoading ? (
                 <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text>
               ) : null}
-              <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between'
+                }}
+              >
                 <TouchableOpacity
                   style={styles.deactivateButton}
                   onPress={() => {
@@ -156,7 +167,11 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
           <TouchableOpacity
             style={styles.settingsOption}
             onPress={() => {
-              navigation.navigate('UpdatePersonalInfo', { id: params.id, type: params.type, token: token })
+              navigation.navigate('UpdatePersonalInfo', {
+                id: params.id,
+                type: params.type,
+                token: token
+              })
             }}
           >
             <Text style={{ fontSize: 15 }}>Update Personal Information</Text>
@@ -165,7 +180,11 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
           <TouchableOpacity
             style={styles.settingsOption}
             onPress={() => {
-              navigation.navigate('UpdatePassword', { id: params.id, type: params.type, token: token })
+              navigation.navigate('UpdatePassword', {
+                id: params.id,
+                type: params.type,
+                token: token
+              })
             }}
           >
             <Text style={{ fontSize: 15 }}>Update Password</Text>

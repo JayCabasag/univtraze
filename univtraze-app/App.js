@@ -3,6 +3,7 @@ import MainNavigation from './navigations/MainNavigation'
 import { AuthContextProvider } from './services/store/auth/AuthContext'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+import { UserContextProvider } from './services/store/user/UserContext'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -28,7 +29,9 @@ export default function App() {
 
   return (
     <AuthContextProvider>
-      <MainNavigation onLayoutView={onLayoutRootView} />
+      <UserContextProvider>
+        <MainNavigation onLayoutView={onLayoutRootView} />
+      </UserContextProvider>
     </AuthContextProvider>
   )
 }

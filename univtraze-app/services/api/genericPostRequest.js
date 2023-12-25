@@ -8,7 +8,9 @@ export const genericPostRequest = async (url, data, token = null) => {
       headers.Authorization = `Bearer ${token}`
     }
 
-    const response = await axios.post(`${process.env.EXPO_PUBLIC_SERVER_URL}${url}`, data, { headers })
+    const response = await axios.post(`${process.env.EXPO_PUBLIC_SERVER_URL}${url}`, data, {
+      headers
+    })
     return response.data
   } catch (error) {
     throw error

@@ -1,4 +1,12 @@
-import { StyleSheet, Text, Image, View, ImageBackground, TouchableOpacity, StatusBar } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  ImageBackground,
+  TouchableOpacity,
+  StatusBar
+} from 'react-native'
 import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import WelcomeImgBackground from '../assets/welcome-bg.png'
@@ -6,10 +14,16 @@ import WelcomeImgBackground from '../assets/welcome-bg.png'
 const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <ImageBackground source={WelcomeImgBackground} resizeMode='cover' style={styles.univTrazeLogo}>
+      <ImageBackground
+        source={WelcomeImgBackground}
+        resizeMode='cover'
+        style={styles.univTrazeLogo}
+      >
         <View style={styles.welcomeHeaderContainer}>
           <Image style={styles.image} source={require('../assets/logo-full.png')} />
-          <Text style={styles.headerSubText}>University content tracing app {'\n'}makes tracing easier</Text>
+          <Text style={styles.headerSubText}>
+            University content tracing app {'\n'}makes tracing easier
+          </Text>
         </View>
 
         <View
@@ -24,7 +38,10 @@ const WelcomeScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate('signup')} style={styles.createAnAccountButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('signup')}
+            style={styles.createAnAccountButton}
+          >
             <Text style={styles.createAnAccountText}>Create an account</Text>
           </TouchableOpacity>
         </View>

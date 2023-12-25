@@ -35,17 +35,19 @@ const VisitedRoomsScreen = ({
       user_id: uid
     }
 
-    await axios.post(`https://univtraze.herokuapp.com/api/rooms/userVisitedRooms`, data, config).then((response) => {
-      const success = response.data.success
+    await axios
+      .post(`https://univtraze.herokuapp.com/api/rooms/userVisitedRooms`, data, config)
+      .then((response) => {
+        const success = response.data.success
 
-      if (success === 0) {
-        return alert('An error has occured...')
-      }
+        if (success === 0) {
+          return alert('An error has occured...')
+        }
 
-      if (success === 1) {
-        return setRoomVisited(response.data.data)
-      }
-    })
+        if (success === 1) {
+          return setRoomVisited(response.data.data)
+        }
+      })
   }
 
   const [notificationCounts, setNotificationCounts] = useState(1)
@@ -89,7 +91,11 @@ const VisitedRoomsScreen = ({
                 navigation.goBack()
               }}
             >
-              <ImageBackground src={BackIcon} resizeMode='contain' style={styles.image}></ImageBackground>
+              <ImageBackground
+                src={BackIcon}
+                resizeMode='contain'
+                style={styles.image}
+              ></ImageBackground>
             </TouchableWithoutFeedback>
           </View>
         </View>
