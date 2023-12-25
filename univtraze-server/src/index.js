@@ -1,8 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const http = require('http');
-const server = http.createServer(app);
 
 const userRouter = require("./api/users/user.router");
 const adminRouter = require("./api/admins/admin.router");
