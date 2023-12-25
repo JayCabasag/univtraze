@@ -33,7 +33,7 @@ app.use('/api/mailer', mailerRouter);
 app.use('/api/victims', victimsRouter);
 app.use('/api/notifications', notificationsRouter);
 
-server.listen(process.env.PORT || 3001, () => {
+app.listen(process.env.PORT || 3001, () => {
   console.clear();
   console.log('listening on:', process.env.PORT);
 });

@@ -116,16 +116,14 @@ module.exports = {
     getAllUsers(async (err, results) => {
       if (err) {
         console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
+        return res.status(500).json({
+          message: 'Internal server error',
         });
       }
 
-      if (results === undefined) {
-        return res.status(200).json({
-          success: 0,
-          message: 'No data found for this user',
+      if (!results) {
+        return res.status(404).json({
+          message: 'No users found',
         });
       }
 
