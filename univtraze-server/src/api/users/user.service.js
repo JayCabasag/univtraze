@@ -32,7 +32,7 @@ module.exports = {
   create: (data, callBack) => {
     pool.query(
       `INSERT INTO users(email, provider, password, type) 
-                         VALUES (?,?,?, NULL)`,
+      VALUES (?, ?, ?, NULL);`,
       [data.email, data.provider, data.password],
       (error, results, fields) => {
         if (error) {

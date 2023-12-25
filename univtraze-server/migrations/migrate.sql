@@ -1,11 +1,13 @@
 CREATE TABLE if not exists users (
-    id VARCHAR(36) DEFAULT UUID() PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
     provider VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL,
+    type VARCHAR(50) DEFAULT NULL,
     recovery_password VARCHAR(255),
-    recovery_timestamp TIMESTAMP
+    recovery_timestamp TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE if not exists clinic_credentials (

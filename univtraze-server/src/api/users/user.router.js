@@ -1,7 +1,7 @@
 const {
   createUser,
   getUsers,
-  login,
+  signin,
   updateUserType,
   addStudentDetails,
   addEmployeeDetails,
@@ -28,7 +28,7 @@ const router = require('express').Router();
 const { checkToken } = require('../../auth/token_validator');
 
 router.post('/signup', createUser);
-router.post('/signin', login);
+router.post('/signin', signin);
 router.get('/', checkToken, getUsers);
 router.get('/getAllUsers', checkToken, getAllUsers);
 router.post('/getUserDetailsById', checkToken, getUserDetailsById);

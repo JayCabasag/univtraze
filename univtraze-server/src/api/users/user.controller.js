@@ -39,7 +39,7 @@ const schemas = require('../../utils/helpers/schemas');
 module.exports = {
   createUser: (req, res) => {
     const body = req.body;
-    const { error } = schemas.signupSchema(body);
+    const { error } = schemas.signupSchema.validate(body);
 
     if (error) {
       const errorMessage = error.details[0].message;
@@ -85,19 +85,65 @@ module.exports = {
               if (err) {
                 return reject('Failed adding notification: ' + err.message);
               }
-
               return resolve('Successfully added Notification');
             },
           );
         });
 
+        const tokenPayload = { id: results.insertId, email: body.email}
+        const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
+          expiresIn: '7d',
+        });
+  
         return res.status(200).json({
-          results,
+          user: { type: null, ...tokenPayload},
+          token: jsonToken,
         });
       });
     });
   },
+  signin: (req, res) => {
+    const body = req.body;
+    const { error } = schemas.siginSchema.validate(req.body);
 
+    if (error) {
+      const errorMessage = error.details[0].message;
+      return res.status(400).json({
+        message: errorMessage ?? 'Invalid payload',
+      });
+    }
+
+    getUserByEmail(body.email, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          message: 'Internal server error',
+        });
+      }
+      if (!results) {
+        return res.status(401).json({
+          message: 'Invalid credentials',
+        });
+      }
+
+      const result = compareSync(body.password, results.password);
+
+      if (!result) {
+        return res.status(401).json({
+          data: 'Incorrect Email or Password',
+        });
+      }
+
+      const tokenPayload = { id: results.id, email: body.email}
+        const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
+          expiresIn: '7d',
+        });
+
+      return res.status(200).json({
+        user: { type: results.type, ...tokenPayload },
+        token: jsonToken,
+      });
+    });
+  },
   getUsers: (req, res) => {
     getUsers((err, results) => {
       if (err) {
@@ -238,44 +284,6 @@ module.exports = {
         success: 1,
         data: results,
       });
-    });
-  },
-
-  login: (req, res) => {
-    const body = req.body;
-
-    getUserByEmail(body.email, (err, results) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-      if (!results) {
-        return res.json({
-          success: 0,
-          data: 'Incorrect Email or Password',
-        });
-      }
-
-      const result = compareSync(body.password, results.password);
-
-      if (result) {
-        result.password = undefined;
-
-        const jsonToken = sign({ result: results }, process.env.JSON_KEY, {
-          expiresIn: '7d',
-        });
-
-        return res.json({
-          success: 1,
-          message: 'Login successfully',
-          token: jsonToken,
-        });
-      } else {
-        return res.json({
-          success: 0,
-          data: 'Incorrect Email or Password',
-        });
-      }
     });
   },
 
