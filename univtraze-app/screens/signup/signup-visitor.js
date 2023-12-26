@@ -21,6 +21,7 @@ import moment from 'moment'
 import StepperIcon1 from '../../assets/reg_identifier.png'
 import BackIcon from '../../assets/back-icon.png'
 import { COLORS } from '../../utils/app_constants'
+import { Select, SelectItem } from '../../components/ui/Select'
 
 const SignUpVisitorScreen = ({ navigation }) => {
   const [type, setType] = useState('visitor')
@@ -33,6 +34,7 @@ const SignUpVisitorScreen = ({ navigation }) => {
   const [dateOfBirth, setDateOfBirth] = useState(new Date())
   const [yearAndSection, setYearAndSection] = useState('')
 
+  const [showDropdown, setShowDropdown] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
 
   // Error handlers
@@ -95,6 +97,10 @@ const SignUpVisitorScreen = ({ navigation }) => {
     })
   }
 
+  const onPressSelectItem = (item) => {
+    setGender(item)
+  }
+
   return (
     <SafeAreaView>
       <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
@@ -143,7 +149,7 @@ const SignUpVisitorScreen = ({ navigation }) => {
             />
           </View>
 
-          <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
+          <View style={{ width: '100%', borderRadius: 15, alignItems: 'center', zIndex: 2 }}>
             <View style={{ width: '80%', flexDirection: 'row' }}>
               <View style={{ width: '50%' }}>
                 <Text style={styles.label}>Suffix </Text>
@@ -159,16 +165,17 @@ const SignUpVisitorScreen = ({ navigation }) => {
 
               <View style={{ width: '50%' }}>
                 <Text style={styles.label}>Gender </Text>
-                <Picker
-                  style={{ width: '100%', height: 50, color: '#4d7861' }}
-                  selectedValue={gender}
-                  onValueChange={(value) => setGender(value)}
-                  mode='dialog'
+                <Select
+                  open={showDropdown}
+                  onToggleDropdown={() => setShowDropdown(!showDropdown)}
+                  value={gender}
+                  style={{ marginTop: 6 }}
+                  onSelectItem={setGender}
                 >
-                  <Picker.Item label='Rather not say' value='Rather not say' />
-                  <Picker.Item label='Male' value='Male' />
-                  <Picker.Item label='Female' value='Female' />
-                </Picker>
+                  <SelectItem label='Other' />
+                  <SelectItem label='Male' />
+                  <SelectItem label='Female' />
+                </Select>
               </View>
             </View>
           </View>

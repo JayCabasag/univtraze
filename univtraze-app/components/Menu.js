@@ -1,9 +1,8 @@
 import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableOpacity } from 'react-native'
 import { BottomSheet } from 'react-native-btr'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
 import base64 from 'base-64'
-import * as SecureStore from 'expo-secure-store'
 import { useToast } from 'react-native-toast-notifications'
 import { COLORS } from '../utils/app_constants'
 
@@ -24,10 +23,6 @@ const Menu = ({
     setdataToConvertToQr(base64.encode(JSON.stringify(rawData)))
 
     setModalVisible(true)
-  }
-
-  async function clear(key, value) {
-    await SecureStore.deleteItemAsync(key, value)
   }
 
   const logout = async () => {

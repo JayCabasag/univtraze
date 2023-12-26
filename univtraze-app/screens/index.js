@@ -22,6 +22,7 @@ import jwtDecode from 'jwt-decode'
 import Notifications from '../components/Notifications'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS } from '../utils/app_constants'
+import Menu from '../components/Menu'
 
 const IndexScreen = ({ navigation, route }) => {
   //covid api variables

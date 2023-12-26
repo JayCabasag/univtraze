@@ -14,11 +14,6 @@ export const UserContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
-        case 'SET_USER':
-          return {
-            ...prevState,
-            user: action.user
-          }
         case 'RESTORE_USER':
           return {
             ...prevState,
@@ -41,14 +36,14 @@ export const UserContextProvider = ({ children }) => {
     const bootstrapAsync = async () => {
       let user
       try {
-        const stringifiedUser = await getLocalStorageToken()
+        const stringifiedUser = await getLocalStorageUser()
         user = JSON.parse(stringifiedUser)
       } catch (e) {
         // Restoring token failed
       } finally {
         setIsAppUserReady(true)
       }
-      
+
       dispatch({ type: 'RESTORE_USER', user })
     }
 
@@ -58,8 +53,9 @@ export const UserContextProvider = ({ children }) => {
   const userContext = React.useMemo(
     () => ({
       setUser: async ({ user }) => {
-        await setLocalStorageUser(user)
-        dispatch({ type: 'SET_USER', user })
+        const stringifiedUser = JSON.stringify(user)
+        await setLocalStorageUser(stringifiedUser)
+        dispatch({ type: 'RESTORE_USER', user })
       },
       clearUser: async () => {
         await removeLocalStorageUser()
@@ -71,7 +67,12 @@ export const UserContextProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ state, isAppUserReady, setUser: userContext.setUser, clearUser: userContext.clearUser }}
+      value={{
+        state,
+        isAppUserReady,
+        setUser: userContext.setUser,
+        clearUser: userContext.clearUser
+      }}
     >
       {children}
     </UserContext.Provider>

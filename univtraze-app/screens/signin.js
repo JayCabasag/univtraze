@@ -75,12 +75,11 @@ const SignInScreen = ({ navigation }) => {
 
       const res = await genericPostRequest('users/signin', payload)
       signIn({ token: res?.token ?? '' })
-      const stringifiedUser = JSON.stringify(res?.user)
-      setUser({ user: stringifiedUser })
+      setUser({ user: res?.user ?? '' })
     } catch (error) {
       setError(true)
-      console.log(error?.response?.data?.data?.message)
-      setErrorMessage('Unexpected error occurred')
+      const errorMessage = error?.response?.data?.message ?? 'Unexpected error occurred'
+      setErrorMessage(errorMessage)
     } finally {
       setShowLoadingModal(false)
       setLoadingMessage('')

@@ -33,6 +33,8 @@ export default function MainNavigation({ onLayoutView }) {
   const { state: authState, isAppAuthReady } = useAuth()
   const { state: userState, isAppUserReady } = useUser()
 
+  console.log(userState?.user?.user)
+
   return (
     <NavigationContainer onReady={onLayoutView}>
       <MainStack.Navigator screenOptions={{ headerShown: false }}>

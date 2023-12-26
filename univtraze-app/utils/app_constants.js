@@ -2,7 +2,8 @@ export const COLORS = {
     PRIMARY: '#28CD41',
     BLACK: '#212121',
     WHITE: '#FFFFFF',
-    TEXT_BLACK: '#364D39'
+    TEXT_BLACK: '#364D39',
+    PLACEHOLDER_BLACK: '#364D39'
 }
 
 export const FONT_FAMILY = {
