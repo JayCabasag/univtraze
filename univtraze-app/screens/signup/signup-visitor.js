@@ -4,35 +4,30 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  FlatList,
   ScrollView,
   KeyboardAvoidingView,
-  Image,
-  ImageBackground,
-  StatusBar
+  Image
 } from 'react-native'
-import { Picker } from '@react-native-picker/picker'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { StackActions } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
 import StepperIcon1 from '../../assets/reg_identifier.png'
 import BackIcon from '../../assets/back-icon.png'
-import { COLORS } from '../../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
 import { Select, SelectItem } from '../../components/ui/Select'
 
 const SignUpVisitorScreen = ({ navigation }) => {
+  const scrollViewContainerRef = useRef()
   const [type, setType] = useState('visitor')
-  const [firstName, setFirstName] = useState('')
-  const [middleName, setMiddleName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [address, setAddress] = useState('')
-  const [suffix, setSuffix] = useState('')
-  const [gender, setGender] = useState('Rather not say')
+  const [firstName, onChangeFirstName] = useState('')
+  const [middleName, onChangeMiddleName] = useState('')
+  const [lastName, onChangeLastName] = useState('')
+  const [address, onChangeAddress] = useState('')
+  const [suffix, onChangeSuffix] = useState('')
+  const [gender, onChangeGender] = useState('Rather not say')
   const [dateOfBirth, setDateOfBirth] = useState(new Date())
-  const [yearAndSection, setYearAndSection] = useState('')
 
   const [showDropdown, setShowDropdown] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
@@ -43,7 +38,8 @@ const SignUpVisitorScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
 
-  const nextScreen = async () => {
+  const nextStep = async () => {
+    scrollViewContainerRef.current.scrollToEnd({ animated: true })
     if (type === null || type === '') {
       return navigation.dispatch(StackActions.popToTop())
     }
@@ -97,12 +93,7 @@ const SignUpVisitorScreen = ({ navigation }) => {
     })
   }
 
-  const onPressSelectItem = (item) => {
-    setGender(item)
-  }
-
   return (
-    <SafeAreaView>
       <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
         <View style={styles.header}>
           <Image
@@ -112,15 +103,13 @@ const SignUpVisitorScreen = ({ navigation }) => {
           />
         </View>
 
-        <ScrollView style={styles.inputContainer}>
+        <ScrollView ref={scrollViewContainerRef} style={styles.inputContainer}>
           <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
             <Text style={styles.label}>First name</Text>
             <TextInput
               placeholder='First name'
               defaultValue={''}
-              onChangeText={(text) => {
-                setFirstName(text)
-              }}
+              onChangeText={onChangeFirstName}
               style={styles.input}
             />
           </View>
@@ -130,9 +119,7 @@ const SignUpVisitorScreen = ({ navigation }) => {
             <TextInput
               placeholder='Middle name'
               defaultValue={''}
-              onChangeText={(text) => {
-                setMiddleName(text)
-              }}
+              onChangeText={onChangeMiddleName}
               style={styles.input}
             />
           </View>
@@ -142,9 +129,7 @@ const SignUpVisitorScreen = ({ navigation }) => {
             <TextInput
               placeholder='Last name'
               defaultValue={''}
-              onChangeText={(text) => {
-                setLastName(text)
-              }}
+              onChangeText={onChangeLastName}
               style={styles.input}
             />
           </View>
@@ -156,9 +141,7 @@ const SignUpVisitorScreen = ({ navigation }) => {
                 <TextInput
                   placeholder='Suffix'
                   defaultValue={''}
-                  onChangeText={(text) => {
-                    setSuffix(text)
-                  }}
+                  onChangeText={onChangeSuffix}
                   style={styles.suffixInput}
                 />
               </View>
@@ -169,10 +152,10 @@ const SignUpVisitorScreen = ({ navigation }) => {
                   open={showDropdown}
                   onToggleDropdown={() => setShowDropdown(!showDropdown)}
                   value={gender}
-                  style={{ marginTop: 6 }}
-                  onSelectItem={setGender}
+                  style={{ marginTop: 5 }}
+                  onSelectItem={onChangeGender}
                 >
-                  <SelectItem label='Other' />
+                  <SelectItem label='Rather not say' />
                   <SelectItem label='Male' />
                   <SelectItem label='Female' />
                 </Select>
@@ -185,16 +168,13 @@ const SignUpVisitorScreen = ({ navigation }) => {
             <TextInput
               placeholder='Address'
               defaultValue={''}
-              onChangeText={(text) => {
-                setAddress(text)
-              }}
+              onChangeText={onChangeAddress}
               style={styles.input}
             />
           </View>
 
           <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
             <Text style={styles.label}>Date of birth</Text>
-
             <View
               style={{
                 width: '100%',
@@ -236,35 +216,17 @@ const SignUpVisitorScreen = ({ navigation }) => {
           ) : (
             <Text style={styles.errorMessage}></Text>
           )}
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginBottom: 20
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack()
-              }}
-              style={styles.backbutton}
-            >
-              <Image source={BackIcon} style={{ width: 60, height: 60 }} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                nextScreen()
-              }}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
+        <View style={styles.actionBtnContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backbutton}>
+            <Image source={BackIcon} style={{ width: 60, height: 60 }} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={nextStep} style={styles.nextButton}>
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
   )
 }
 export default SignUpVisitorScreen
@@ -286,7 +248,10 @@ const styles = StyleSheet.create({
   },
   label: {
     width: '80%',
-    textAlign: 'left'
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK
   },
   errorMessage: {
     alignSelf: 'center',
@@ -295,19 +260,8 @@ const styles = StyleSheet.create({
     color: 'red'
   },
 
-  button: {
-    backgroundColor: COLORS.PRIMARY,
-    padding: 10,
-    width: '80%',
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center'
-  },
   backbutton: {
     paddingTop: 10,
-
-    marginLeft: 40,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -328,12 +282,13 @@ const styles = StyleSheet.create({
     borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: 'hidden',
     paddingVertical: 1,
-    fontSize: 16,
+    fontSize: 14,
     color: '#4d7861',
-    backgroundColor: '#ffff'
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
   suffixInput: {
     marginTop: 5,
@@ -345,7 +300,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: 'hidden',
     paddingVertical: 1,
     fontSize: 16,
@@ -418,16 +373,23 @@ const styles = StyleSheet.create({
     color: '#4d7861',
     backgroundColor: '#ffff'
   },
-  button: {
+  nextButton: {
+    marginBottom: 10,
     backgroundColor: COLORS.PRIMARY,
     padding: 10,
     borderRadius: 10,
+    width: '100%',
+    maxWidth: 140,
     marginTop: 5,
     paddingVertical: 15,
-    width: 122,
-    height: 60,
-    marginLeft: 'auto',
-    marginRight: 41
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3
   },
   buttonText: {
     color: '#FFF',
@@ -445,5 +407,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: COLORS.PRIMARY,
     justifyContent: 'center'
+  },
+  actionBtnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30
   }
 })

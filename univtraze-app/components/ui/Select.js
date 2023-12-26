@@ -4,19 +4,16 @@ import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
 import CarretDown from '../../assets/carret-down.png'
 
 const SelectItem = (props) => {
-    return (
-      <TouchableOpacity
-        style={[styles.itemStyle]}
-        onPress={() => props.onSelectItem(props.label)}
-      >
-        <Text style={[styles.itemLabelStyle, props.itemLabelStyle]}>{props.label}</Text>
-      </TouchableOpacity>
-    );
-  };
+  return (
+    <TouchableOpacity style={[styles.itemStyle]} onPress={() => props.onSelectItem(props.label)}>
+      <Text style={[styles.itemLabelStyle, props.itemLabelStyle]}>{props.label}</Text>
+    </TouchableOpacity>
+  )
+}
 
 const Select = (props) => {
   const handleSelectItem = (label) => {
-    props.onSelectItem(label);
+    props.onSelectItem(label)
     props.onToggleDropdown()
   }
 
@@ -49,8 +46,8 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '100%',
     backgroundColor: COLORS.WHITE,
-    height: 48,
-    borderRadius: 10,
+    height: 50,
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: COLORS.PRIMARY,
     display: 'flex',
