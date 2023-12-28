@@ -20,3 +20,9 @@ export const FONT_FAMILY = {
     EMPLOYEE: 'employee',
     VISITOR: 'visitor'
   }
+
+  export const GENDER = {
+    RATHER_NOT_SAY: 'Rather not say',
+    MALE: 'Male',
+    FEMALE: 'Female'
+  }
