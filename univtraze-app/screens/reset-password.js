@@ -99,7 +99,6 @@ const ResetPasswordScreen = ({
   }
 
   return (
-    <SafeAreaView style={{ height: windowHeight, backgroundColor: '#E1F5E4' }}>
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <Modal
           animationType='slide'
@@ -156,7 +155,6 @@ const ResetPasswordScreen = ({
           </View>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
   )
 }
 

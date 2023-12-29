@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 import React, { useState, useRef, useMemo } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { StackActions } from '@react-navigation/native'
 import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
 import StepperIcon1 from '../../assets/step-1-credentials.png'
@@ -20,12 +19,38 @@ import { PhAddress } from '../../services/address/ph-address'
 import { Picker } from '@react-native-picker/picker'
 import { PhoneNumbers } from '../../services/phone-numbers/phone-numbers'
 import useFormErrors from '../../hooks/useFormErrors'
+import { nameRegex, optionalNameRegex, phoneNumberRegex } from '../../utils/regex'
 
-const SignUpVisitorScreen = ({ navigation }) => {
+const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const scrollViewContainerRef = useRef()
-  const [type, setType] = useState('visitor')
-  const [forErrors, setFormErrors, resetFormErrors] = useFormErrors([
+  const publicProfileRef = useRef()
+  const contactInformationRef = useRef()
+  const currentAddressRef = useRef()
+
+  //User information
+  const [firstName, onChangeFirstName] = useState('')
+  const [middleName, onChangeMiddleName] = useState('')
+  const [lastName, onChangeLastName] = useState('')
+  const [suffix, onChangeSuffix] = useState('')
+  const [gender, onChangeGender] = useState('Rather not say')
+  const [dateOfBirth, setDateOfBirth] = useState(new Date())
+  const [showDatePicker, setShowDatePicker] = useState(false)
+
+  //Contact information
+  const [countryDialCode, setCountryDialCode] = useState('+63')
+  const [phoneNumber, onChangePhoneNumber] = useState('')
+
+  //Address information
+  const [addressRegion, setAddressRegion] = useState(null)
+  const [addressProvince, setAddressProvince] = useState(null)
+  const [addressCity, setAddressCity] = useState(null)
+  const [addressBrgy, setAddressBrgy] = useState(null)
+  const [addressStreet, setAddressStreet] = useState(null)
+
+  // Error handlers
+  const { formErrors, setFormErrors, resetFormErrors } = useFormErrors([
     'firstName',
+    'middleName',
     'lastName',
     'suffix',
     'gender',
@@ -39,74 +64,110 @@ const SignUpVisitorScreen = ({ navigation }) => {
     'street'
   ])
 
-  //User information
-  const [firstName, onChangeFirstName] = useState('')
-  const [middleName, onChangeMiddleName] = useState('')
-  const [lastName, onChangeLastName] = useState('')
+  const scrollToPublicProfile = () => {
+    scrollViewContainerRef.current.scrollTo({ y: 0, animated: true });
+  }
 
-  //Contact information
-  const [countryDialCode, setCountryDialCode] = useState('+63')
-  const [phoneNumber] = useState('')
+  const scrollToContactInfo = () => {
+    contactInformationRef.current.measure((x, y, width, height, pageX, pageY) => {
+      scrollViewContainerRef.current.scrollTo({ y: pageY, animated: true });
+    });
+  }
 
-  //Address information
-  const [address, onChangeAddress] = useState('')
-  const [addressRegion, setAddressRegion] = useState(null)
-  const [addressProvince, setAddressProvince] = useState(null)
-  const [addressCity, setAddressCity] = useState(null)
-  const [addressBrgy, setAddressBrgy] = useState(null)
-  const [addressStreet, setAddressStreet] = useState(null)
+  const scrollToCurrentAddress = () => {
+    scrollViewContainerRef.current.scrollTo({ y: 1000, animated: true });
+  }
 
-  const [suffix, onChangeSuffix] = useState('')
-  const [gender, onChangeGender] = useState('Rather not say')
-  const [dateOfBirth, setDateOfBirth] = useState(new Date())
-
-  const [showDatePicker, setShowDatePicker] = useState(false)
-
-  // Error handlers
-
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
 
   const nextStep = async () => {
-    scrollViewContainerRef.current.scrollToEnd({ animated: true })
-    if (type === null || type === '') {
-      return navigation.dispatch(StackActions.popToTop())
+    resetFormErrors()
+    if (userType === null || userType === '') {
+      return navigation.pop()
     }
+
     if (firstName === null || firstName === '') {
+      scrollToPublicProfile();
       return setFormErrors('firstName', 'First name is required')
     }
+
+    if (!nameRegex.test(firstName)) {
+      scrollToPublicProfile();
+      return setFormErrors('firstName', 'First name is not valid')
+    }
+
+    if (!optionalNameRegex.test(middleName)) {
+      scrollToPublicProfile();
+      return setFormErrors('middleName', 'Middle name is not valid')
+    }
+
     if (lastName === null || lastName === '') {
+      scrollToPublicProfile();
       return setFormErrors('lastName', 'Last name is required')
     }
+    if (!nameRegex.test(lastName)) {
+      scrollToPublicProfile();
+      return setFormErrors('lastName', 'Last name is not valid')
+    }
+
     if (gender === null || gender === '') {
+      scrollToPublicProfile();
       return setFormErrors('gender', 'Gender is required')
     }
 
     if (dateOfBirth === null || dateOfBirth === '') {
+      scrollToPublicProfile();
       return setFormErrors('dob', 'Date of birth is required')
     }
 
     const totalYears = moment().diff(moment(dateOfBirth), 'Years')
 
     if (totalYears < 12) {
+      scrollToPublicProfile();
       return setFormErrors('dob', "User below 12 yrs old can't use the app")
     }
 
-    // setError(false)
-    // setErrorMessage('')
+    if (countryDialCode == null || countryDialCode == '') {
+      scrollToContactInfo()
+      return setFormErrors('countryDialCode', "Country dial code is required")
+    }
 
-    // const dob = moment(dateOfBirth).format('yyyy-MM-DD')
+    if (phoneNumber == null || phoneNumber == '') {
+      scrollToContactInfo()
+      return setFormErrors('phoneNumber', "Phone number is required")
+    }
 
-    // navigation.navigate('SignUpCredentialsDocuments', {
-    //   type,
-    //   firstName,
-    //   lastName,
-    //   middleName,
-    //   suffix,
-    //   gender,
-    //   address,
-    //   dob
-    // })
+    if (!phoneNumberRegex.test(phoneNumber)) {
+      scrollToContactInfo()
+      return setFormErrors('phoneNumber', "Phone number is invalid")
+    }
+
+    if (addressRegion == null || addressRegion == '') {
+      scrollToCurrentAddress()
+      return setFormErrors('region', "Region address is required")
+    }
+
+    if (addressProvince == null || addressProvince == '') {
+      scrollToCurrentAddress()
+      return setFormErrors('province', "Province address is required")
+    }
+
+    if (addressCity == null || addressCity == '') {
+      scrollToCurrentAddress()
+      return setFormErrors('city', "City address is required")
+    }
+
+    if (addressBrgy == null || addressBrgy == '') {
+      scrollToCurrentAddress()
+      return setFormErrors('brgy', "Barangay address is required")
+    }
+
+    if (addressStreet == null || addressStreet == '') {
+      scrollToCurrentAddress()
+      return setFormErrors('street', "Street address is required")
+    }
+
+    navigation.navigate('user-documents')
+  
   }
 
   const countryDialCodes = useMemo(() => {
@@ -145,35 +206,44 @@ const SignUpVisitorScreen = ({ navigation }) => {
         ref={scrollViewContainerRef}
         contentContainerStyle={styles.scrollViewContent}
       >
-        <Text style={styles.sectionHeaderText}>Public profile</Text>
-        <View style={styles.inputWrapper}>
+        <Text ref={publicProfileRef} style={styles.sectionHeaderText}>Public profile</Text>
+        <View style={[styles.inputWrapper]}>
           <Text style={styles.label}>First name</Text>
           <TextInput
             placeholder='e.g John'
-            defaultValue={''}
+            value={firstName}
             onChangeText={onChangeFirstName}
-            style={styles.input}
+            style={[styles.input, formErrors.firstName?.hasError && styles.inputError]}
           />
+          {formErrors.firstName?.hasError && (
+            <Text style={styles.errorText}>{formErrors.firstName.message}</Text>
+          )}
         </View>
 
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Middle name (optional)</Text>
           <TextInput
             placeholder='Middle name'
-            defaultValue={''}
+            value={middleName}
             onChangeText={onChangeMiddleName}
-            style={styles.input}
+            style={[styles.input, formErrors.middleName?.hasError && styles.inputError]}
           />
+          {formErrors.middleName?.hasError && (
+            <Text style={styles.errorText}>{formErrors.middleName.message}</Text>
+          )}
         </View>
 
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Last name</Text>
           <TextInput
             placeholder='Last name'
-            defaultValue={''}
+            value={lastName}
             onChangeText={onChangeLastName}
-            style={styles.input}
+            style={[styles.input, formErrors.lastName?.hasError && styles.inputError]}
           />
+          {formErrors.lastName?.hasError && (
+            <Text style={styles.errorText}>{formErrors.lastName.message}</Text>
+          )}
         </View>
 
         <View style={styles.suffixContainer}>
@@ -182,7 +252,7 @@ const SignUpVisitorScreen = ({ navigation }) => {
               <Text style={styles.label}>Suffix </Text>
               <TextInput
                 placeholder='Suffix'
-                defaultValue={''}
+                value={suffix}
                 onChangeText={onChangeSuffix}
                 style={styles.suffixInput}
               />
@@ -214,10 +284,10 @@ const SignUpVisitorScreen = ({ navigation }) => {
 
         <View style={styles.dobContainer}>
           <Text style={styles.label}>Date of birth</Text>
-          <View style={styles.dobInputWrapper}>
+          <View style={[styles.dobInputWrapper, formErrors.dob?.hasError && styles.inputError]}>
             <TextInput
               placeholder='Date of birth'
-              defaultValue={moment(dateOfBirth).format('yyyy-MM-DD')}
+              value={moment(dateOfBirth).format('yyyy-MM-DD')}
               style={styles.dobInput}
               editable={false}
             />
@@ -229,6 +299,9 @@ const SignUpVisitorScreen = ({ navigation }) => {
               onPress={() => setShowDatePicker(true)}
             />
           </View>
+          {formErrors.dob?.hasError && (
+            <Text style={styles.errorText}>{formErrors.dob.message}</Text>
+          )}
 
           {showDatePicker && (
             <DateTimePicker
@@ -244,11 +317,11 @@ const SignUpVisitorScreen = ({ navigation }) => {
           )}
         </View>
 
-        <Text style={styles.sectionHeaderText}>Contact Information</Text>
+        <Text ref={contactInformationRef} style={styles.sectionHeaderText}>Contact Information</Text>
         <View style={styles.phoneNumberContainer}>
           <View style={styles.countryCodeWrapper}>
             <Text style={styles.label}>Country Dial Code</Text>
-            <View style={styles.countryDialCodePickerWrapper}>
+            <View style={[styles.countryDialCodePickerWrapper, formErrors.countryDialCode?.hasError && styles.inputError]}>
               <Picker
                 style={styles.countryDialCodePickerStyle}
                 selectedValue={countryDialCode}
@@ -266,22 +339,28 @@ const SignUpVisitorScreen = ({ navigation }) => {
                 })}
               </Picker>
             </View>
+            {formErrors.countryDialCode?.hasError && (
+              <Text style={styles.errorText}>{formErrors.countryDialCode.message}</Text>
+            )}
           </View>
           <View style={styles.phoneNumberWrapper}>
             <Text style={styles.label}>Phone number</Text>
             <TextInput
               placeholder='Phone number'
-              defaultValue={''}
-              onChangeText={onChangeFirstName}
-              style={styles.input}
+              value={phoneNumber}
+              onChangeText={onChangePhoneNumber}
+              style={[styles.input, formErrors.phoneNumber?.hasError && styles.inputError]}
             />
+            {formErrors.phoneNumber?.hasError && (
+              <Text style={styles.errorText}>{formErrors.phoneNumber.message}</Text>
+            )}
           </View>
         </View>
 
-        <Text style={styles.sectionHeaderText}>Current Address</Text>
+        <Text ref={currentAddressRef} style={styles.sectionHeaderText}>Current Address</Text>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Region</Text>
-          <View style={styles.addressPicketWrapper}>
+          <View style={[styles.addressPicketWrapper, formErrors.region?.hasError && styles.inputError]}>
             <Picker
               style={styles.addressPickerStyle}
               selectedValue={addressRegion}
@@ -299,10 +378,13 @@ const SignUpVisitorScreen = ({ navigation }) => {
               })}
             </Picker>
           </View>
+          {formErrors.region?.hasError && (
+            <Text style={styles.errorText}>{formErrors.region.message}</Text>
+          )}
         </View>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Province</Text>
-          <View style={styles.addressPicketWrapper}>
+          <View style={[styles.addressPicketWrapper, formErrors.province?.hasError && styles.inputError]}>
             <Picker
               style={styles.addressPickerStyle}
               selectedValue={addressProvince}
@@ -320,11 +402,14 @@ const SignUpVisitorScreen = ({ navigation }) => {
               })}
             </Picker>
           </View>
+          {formErrors.province?.hasError && (
+            <Text style={styles.errorText}>{formErrors.province.message}</Text>
+          )}
         </View>
 
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>City</Text>
-          <View style={styles.addressPicketWrapper}>
+          <View style={[styles.addressPicketWrapper, formErrors.city?.hasError && styles.inputError]}>
             <Picker
               style={styles.addressPickerStyle}
               selectedValue={addressCity}
@@ -338,11 +423,14 @@ const SignUpVisitorScreen = ({ navigation }) => {
               })}
             </Picker>
           </View>
+          {formErrors.province?.hasError && (
+              <Text style={styles.errorText}>{formErrors.province.message}</Text>
+            )}
         </View>
 
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Barangay</Text>
-          <View style={styles.addressPicketWrapper}>
+          <View style={[styles.addressPicketWrapper, formErrors.brgy?.hasError && styles.inputError]}>
             <Picker
               style={styles.addressPickerStyle}
               selectedValue={addressBrgy}
@@ -356,6 +444,9 @@ const SignUpVisitorScreen = ({ navigation }) => {
               })}
             </Picker>
           </View>
+          {formErrors.brgy?.hasError && (
+              <Text style={styles.errorText}>{formErrors.brgy.message}</Text>
+            )}
         </View>
 
         <View style={styles.inputWrapper}>
@@ -364,20 +455,17 @@ const SignUpVisitorScreen = ({ navigation }) => {
             placeholder='House/Lot/Apt. # St.'
             value={addressStreet}
             onChangeText={setAddressStreet}
-            style={styles.input}
+            style={[styles.input, formErrors.street?.hasError && styles.inputError]}
             editable={addressBrgy != null}
           />
+          {formErrors.street?.hasError && (
+            <Text style={styles.errorText}>{formErrors.street.message}</Text>
+          )}
         </View>
-
-        {error ? (
-          <Text style={styles.errorMessage}>*{errorMessage}</Text>
-        ) : (
-          <Text style={styles.errorMessage}></Text>
-        )}
       </ScrollView>
       <View style={styles.actionBtnContainer}>
         <TouchableOpacity onPress={navigation.goBack} style={styles.backbutton}>
-          <Image source={BackIcon} style={{ width: 60, height: 60 }} />
+          <Image source={BackIcon} style={{marginLeft: -15 , width: 60, height: 60 }} />
         </TouchableOpacity>
 
         <TouchableOpacity onPress={nextStep} style={styles.nextButton}>
@@ -387,7 +475,7 @@ const SignUpVisitorScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   )
 }
-export default SignUpVisitorScreen
+export default UserInformationScreen
 
 const styles = StyleSheet.create({
   keyboardAvoidingView: {
@@ -424,6 +512,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.TEXT_BLACK,
     marginTop: 10
+  },
+  errorText: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
   },
   genderPickerWrapper: {
     width: '100%',
@@ -529,6 +625,9 @@ const styles = StyleSheet.create({
     color: '#4d7861',
     backgroundColor: '#ffff',
     fontFamily: FONT_FAMILY.POPPINS_REGULAR
+  },
+  inputError: {
+    borderColor: COLORS.RED
   },
   suffixContainer: {
     width: '100%',

@@ -9,7 +9,7 @@ export class PhAddress {
   }
 
   static getProvincesByRegion(regionCode) {
-    let regionProvinces = [];
+    let regionProvinces = []
     for (let province of provinces) {
       if (province.region_code == regionCode) {
         regionProvinces.push(province)
@@ -19,7 +19,7 @@ export class PhAddress {
   }
 
   static getCitiesByProvince(provinceCode) {
-    let provinceCities = [];
+    let provinceCities = []
     for (let city of cities) {
       if (city.province_code == provinceCode) {
         provinceCities.push(city)
@@ -29,7 +29,7 @@ export class PhAddress {
   }
 
   static getBarangaysByCity(cityCode) {
-    let cityBarangays = [];
+    let cityBarangays = []
     for (let brgy of barangays) {
       if (brgy.city_code == cityCode) {
         cityBarangays.push(brgy)

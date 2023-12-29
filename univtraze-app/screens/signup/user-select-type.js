@@ -2,8 +2,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  ImageBackground,
   TouchableOpacity,
   Image,
   KeyboardAvoidingView,
@@ -12,13 +10,15 @@ import {
 } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import React, { useState } from 'react'
-import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
+import { COLORS, FONT_FAMILY, USER_TYPE } from '../../utils/app_constants'
 import SelectTypeImage from '../../assets/select-type-image.png'
 
-const SignUpUserTypeScreen = ({ navigation }) => {
-  const [isChecked, setIsChecked] = useState('Student')
+const UserSelectTypeScreen = ({ navigation }) => {
+  const [userType, setUserType] = useState(null)
+  const onNext = () => {
+    navigation.navigate('user-information', { userType })
+  }
   return (
-    <SafeAreaView style={styles.safeAreaView}>
       <KeyboardAvoidingView style={styles.mainView}>
         <ScrollView
           contentContainerStyle={styles.scrollViewContent}
@@ -36,16 +36,16 @@ const SignUpUserTypeScreen = ({ navigation }) => {
             <RadioButton
               color={COLORS.PRIMARY}
               value='Student'
-              status={isChecked === 'Student' ? 'checked' : 'unchecked'}
-              onPress={() => setIsChecked('Student')}
+              status={userType == USER_TYPE.STUDENT ? 'checked' : 'unchecked'}
+              onPress={() => setUserType(USER_TYPE.STUDENT)}
             />
             <Text style={styles.radioLabel}>Student</Text>
           </View>
           <View style={styles.radioButtonOption}>
             <RadioButton
               value='Employee'
-              status={isChecked === 'Employee' ? 'checked' : 'unchecked'}
-              onPress={() => setIsChecked('Employee')}
+              status={userType == USER_TYPE.EMPLOYEE ? 'checked' : 'unchecked'}
+              onPress={() => setUserType(USER_TYPE.EMPLOYEE)}
               color={COLORS.PRIMARY}
             />
             <Text style={styles.radioLabel}>Employee</Text>
@@ -55,26 +55,22 @@ const SignUpUserTypeScreen = ({ navigation }) => {
             <RadioButton
               color={COLORS.PRIMARY}
               value='Visitor'
-              status={isChecked === 'Visitor' ? 'checked' : 'unchecked'}
-              onPress={() => setIsChecked('Visitor')}
+              status={userType == USER_TYPE.VISITOR ? 'checked' : 'unchecked'}
+              onPress={() => setUserType(USER_TYPE.VISITOR)}
             />
             <Text style={styles.radioLabel}>Visitor</Text>
           </View>
         </ScrollView>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('signup-visitor')}
-            style={styles.signUpBtn}
-          >
+          <TouchableOpacity onPress={onNext} style={styles.signUpBtn}>
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
   )
 }
 
-export default SignUpUserTypeScreen
+export default UserSelectTypeScreen
 
 const styles = StyleSheet.create({
   safeAreaView: {

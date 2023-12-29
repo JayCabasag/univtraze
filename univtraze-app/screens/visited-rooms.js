@@ -82,7 +82,6 @@ const VisitedRoomsScreen = ({
   }
 
   return (
-    <SafeAreaView>
       <View style={styles.mainContainer}>
         <View style={styles.topContainer}>
           <View style={styles.backIcon}>
@@ -165,7 +164,6 @@ const VisitedRoomsScreen = ({
           </DataTable>
         </ScrollView>
       </View>
-    </SafeAreaView>
   )
 }
 

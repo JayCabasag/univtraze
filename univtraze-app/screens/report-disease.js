@@ -141,7 +141,6 @@ const ReportDiseaseScreen = ({
   }
 
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         <Modal
           animationType='slide'
@@ -359,7 +358,6 @@ const ReportDiseaseScreen = ({
           </View>
         </View>
       </View>
-    </SafeAreaView>
   )
 }
 export default ReportDiseaseScreen

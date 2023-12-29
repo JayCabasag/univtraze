@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SplashScreen from '../screens/splash'
@@ -8,7 +7,6 @@ import SignUpStudentScreen from '../screens/signup/signup-student'
 import SignUpScreen from '../screens/signup/signup'
 import SignUpEmployeeScreen from '../screens/signup/signup-employee'
 import SignUpVisitorScreen from '../screens/signup/signup-visitor'
-import SignUpUserTypeScreen from '../screens/signup/signup-user-type'
 import SignUpVaccinationScreen from '../screens/signup/signup-vaccination'
 import SignUpDocsScreen from '../screens/signup/signup-docs'
 import ForgotPasswordScreen from '../screens/forgot-password'
@@ -26,6 +24,9 @@ import UpdatePersonalInformationScreen from '../screens/update-information'
 import TermsAndConditionsScreen from '../screens/terms-and-conditions'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
+import UserInformationScreen from '../screens/signup/user-information'
+import UserSelectTypeScreen from '../screens/signup/user-select-type'
+import UserDocumentsScreen from '../screens/signup/user-documents'
 
 const MainStack = createNativeStackNavigator()
 
@@ -51,7 +52,9 @@ export default function MainNavigation({ onLayoutView }) {
             {!isAppUserReady && <MainStack.Screen name='loading' component={SplashScreen} />}
             {userState.user?.type == null ? (
               <MainStack.Group>
-                <MainStack.Screen name='signup-user-type' component={SignUpUserTypeScreen} />
+                <MainStack.Screen name='user-select-type' component={UserSelectTypeScreen} />
+                <MainStack.Screen name='user-information' component={UserInformationScreen} />
+                <MainStack.Screen name='user-documents' component={UserDocumentsScreen} />
                 <MainStack.Screen name='signup-student' component={SignUpStudentScreen} />
                 <MainStack.Screen name='signup-employee' component={SignUpEmployeeScreen} />
                 <MainStack.Screen name='signup-visitor' component={SignUpVisitorScreen} />

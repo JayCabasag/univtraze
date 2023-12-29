@@ -19,7 +19,7 @@ import BackIcon from '../../assets/back-icon.png'
 import StepperIcon2 from '../../assets/reg2_identifier.png'
 import { COLORS } from '../../utils/app_constants'
 
-const SignUpDocsScreen = ({ navigation, route }) => {
+const UserDocumentsScreen = ({ navigation, route }) => {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [email, setEmail] = useState('')
 
@@ -657,7 +657,7 @@ const SignUpDocsScreen = ({ navigation, route }) => {
             }}
             style={styles.backbutton}
           >
-            <Image src={BackIcon} style={{ width: 60, height: 60 }} />
+            <Image source={BackIcon} style={{ width: 60, height: 60 }} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -673,7 +673,7 @@ const SignUpDocsScreen = ({ navigation, route }) => {
   )
 }
 
-export default SignUpDocsScreen
+export default UserDocumentsScreen
 
 const styles = StyleSheet.create({
   header: {

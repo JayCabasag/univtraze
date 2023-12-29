@@ -233,7 +233,6 @@ const ReportEmergencyScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         <Modal
           animationType='fade'
@@ -390,9 +389,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
             </View>
           </View>
         </ScrollView>
-        {/*End of Body Container */}
       </View>
-    </SafeAreaView>
   )
 }
 export default ReportEmergencyScreen

@@ -113,7 +113,6 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <View style={styles.backIcon}>
@@ -167,7 +166,6 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
   )
 }
 export default UpdatePasswordScreen

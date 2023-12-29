@@ -264,7 +264,6 @@ const IndexScreen = ({ navigation, route }) => {
 
   // Return
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         {/* Notification View */}
         <View style={styles.topContainer}>
@@ -518,7 +517,6 @@ const IndexScreen = ({ navigation, route }) => {
           </View>
         </ScrollView>
       </View>
-    </SafeAreaView>
   )
 }
 export default IndexScreen

@@ -92,7 +92,6 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
   }
 
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         <Modal
           animationType='slide'
@@ -200,7 +199,6 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
   )
 }
 export default AccountSettingsScreen

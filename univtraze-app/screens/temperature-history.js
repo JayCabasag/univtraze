@@ -141,7 +141,6 @@ const TemperatureHistoryScreen = ({
   }
 
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         <Modal
           animationType='slide'
@@ -279,7 +278,6 @@ const TemperatureHistoryScreen = ({
           </ScrollView>
         </View>
       </View>
-    </SafeAreaView>
   )
 }
 export default TemperatureHistoryScreen

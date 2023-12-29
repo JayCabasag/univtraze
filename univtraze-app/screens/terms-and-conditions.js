@@ -21,7 +21,6 @@ const TermsAndConditionsScreen = ({ navigation }) => {
   const windowHeight = Dimensions.get('window').height
 
   return (
-    <SafeAreaView style={styles.safeAreaContainer}>
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <ScrollView
           style={{ height: windowHeight }}
@@ -410,7 +409,6 @@ const TermsAndConditionsScreen = ({ navigation }) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
   )
 }
 

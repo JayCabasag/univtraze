@@ -219,7 +219,6 @@ const UpdatePersonalInformationScreen = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         <View style={styles.topContainer}>
           <View style={styles.backIcon}>
@@ -346,7 +345,6 @@ const UpdatePersonalInformationScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
   )
 }
 export default UpdatePersonalInformationScreen

@@ -102,7 +102,6 @@ const DailyAssessmentScreen = () => {
     Alert.alert('Your symptoms are ' + symptomss.toString())
   }
   return (
-    <SafeAreaView>
       <View style={styles.container}>
         {/* Notification View */}
         <View style={styles.topContainer}>
@@ -771,8 +770,6 @@ const DailyAssessmentScreen = () => {
           </View>
         </ScrollView>
       </View>
-      {/* End of container */}
-    </SafeAreaView>
   )
 }
 

@@ -3,7 +3,8 @@ export const COLORS = {
     BLACK: '#212121',
     WHITE: '#FFFFFF',
     TEXT_BLACK: '#364D39',
-    PLACEHOLDER_BLACK: '#364D39'
+    PLACEHOLDER_BLACK: '#364D39',
+    RED: '#FF0000'
 }
 
 export const FONT_FAMILY = {

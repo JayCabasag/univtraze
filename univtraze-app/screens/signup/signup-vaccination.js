@@ -98,7 +98,6 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
   }
 
   return (
-    <SafeAreaView style={{ height: windowHeight }}>
       <View style={styles.mainContainer}>
         <Modal
           animationType='fade'
@@ -349,7 +348,6 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
           </View>
         </ScrollView>
       </View>
-    </SafeAreaView>
   )
 }
 
@@ -357,6 +355,7 @@ export default SignUpVaccinationScreen
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     height: '100%',
     paddingHorizontal: 40,
     backgroundColor: '#E1F5E4'

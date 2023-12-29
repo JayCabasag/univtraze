@@ -1,5 +1,6 @@
 import { useAsyncStorage } from '@react-native-async-storage/async-storage'
 import React, { createContext, useContext, useReducer, useState } from 'react'
+import { USER_TYPE } from '../../../utils/app_constants'
 
 const UserContext = createContext()
 
@@ -19,6 +20,16 @@ export const UserContextProvider = ({ children }) => {
             ...prevState,
             user: action.user
           }
+        case 'UPDATE_USER':
+          return {
+            ...prevState,
+            user: action.user
+          }
+        case 'UPDATE_PARTIAL_USER':
+            return {
+              ...prevState,
+              user: action.partialUser
+            }
         case 'CLEAR_USER':
           return {
             ...prevState,
@@ -27,7 +38,8 @@ export const UserContextProvider = ({ children }) => {
       }
     },
     {
-      user: null
+      user: null,
+      partialUser: null
     }
   )
 
@@ -60,6 +72,12 @@ export const UserContextProvider = ({ children }) => {
       clearUser: async () => {
         await removeLocalStorageUser()
         dispatch({ type: 'CLEAR_USER', user: null })
+      },
+      updateUser: ({ user }) => {
+        dispatch({ type: 'UPDATE_USER', user })
+      },
+      updatePartialUser: ({ partialUser }) => {
+        dispatch({ type: 'UPDATE_PARTIAL_USER', partialUser })
       }
     }),
     []
@@ -70,6 +88,7 @@ export const UserContextProvider = ({ children }) => {
       value={{
         state,
         isAppUserReady,
+        updateUserType: userContext.updateUser,
         setUser: userContext.setUser,
         clearUser: userContext.clearUser
       }}

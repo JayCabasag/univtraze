@@ -87,17 +87,10 @@ const SignInScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={{ backgroundColor: '#E1F5E4' }}>
-      <LoadingModal
-        onRequestClose={() => setShowLoadingModal(false)}
-        open={showLoadingModal}
-        loadingMessage={loadingMessage}
-      />
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={LoginImage} />
         </View>
-
         <Text style={styles.loginText}>Log in</Text>
 
         <View style={styles.inputContainer}>
@@ -138,8 +131,12 @@ const SignInScreen = ({ navigation }) => {
             <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
         </View>
+        <LoadingModal
+        onRequestClose={() => setShowLoadingModal(false)}
+        open={showLoadingModal}
+        loadingMessage={loadingMessage}
+      />
       </KeyboardAvoidingView>
-    </SafeAreaView>
   )
 }
 
