@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
   Image,
@@ -11,13 +10,14 @@ import {
   ActivityIndicator
 } from 'react-native'
 import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
 import { Ionicons } from '@expo/vector-icons'
 import BackIcon from '../../assets/back-icon.png'
 import StepperIcon2 from '../../assets/reg2_identifier.png'
 import { COLORS } from '../../utils/app_constants'
+import LoadingModal from '../../components/LoadingModal'
+import UserInformationFooter from '../../components/UserInformationFooter'
 
 const UserDocumentsScreen = ({ navigation, route }) => {
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -93,10 +93,6 @@ const UserDocumentsScreen = ({ navigation, route }) => {
 
   // Function for uploading user details to the database including the uploading of documents uwu
   const handleSaveUserDetails = async () => {
-    if (phoneNumber === '') {
-      return alert('Please add your mobile number!')
-    }
-
     if (profilePhoto === null) {
       return alert('Please select your profile photo!')
     }
@@ -412,23 +408,12 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   }
 
   return (
-      <View style={{ height: '100%' }}>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={showLoadingModal}
-          onRequestClose={() => {
-            setShowLoadingModal(!showLoadingModal)
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size={'large'} />
-              <Text style={styles.modalText}>{loadingMessage}</Text>
-            </View>
-          </View>
-        </Modal>
-
+      <View style={{ flex: 1 }}>
+      <LoadingModal
+        onRequestClose={() => setShowLoadingModal(false)}
+        open={showLoadingModal}
+        loadingMessage={loadingMessage}
+      />
         <View style={styles.header}>
           <Image
             source={StepperIcon2}
@@ -441,42 +426,6 @@ const UserDocumentsScreen = ({ navigation, route }) => {
             flexDirection: 'column'
           }}
         >
-          <KeyboardAvoidingView style={{ height: '100%' }}>
-            <View
-              style={{
-                alignItems: 'center',
-                backgroundColor: '#E1F5E4'
-              }}
-            >
-              <Text style={styles.label}>Phone no.</Text>
-              <TextInput
-                placeholder='Phone'
-                defaultValue={''}
-                onChangeText={(text) => {
-                  setPhoneNumber(text)
-                }}
-                style={styles.input}
-              />
-            </View>
-
-            <View
-              style={{
-                alignItems: 'center',
-                backgroundColor: '#E1F5E4'
-              }}
-            >
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                placeholder='Email'
-                defaultValue={email}
-                onChangeText={(text) => {
-                  setEmail(text)
-                }}
-                editable={false}
-                style={styles.input}
-              />
-            </View>
-
             <View
               style={{
                 paddingHorizontal: 40,
@@ -633,42 +582,9 @@ const UserDocumentsScreen = ({ navigation, route }) => {
                 </View>
               )}
             </View>
-
-            {/* {
-							error? 
-							<Text style={styles.errorMessage}>*{errorMessage}</Text>
-							:
-							<Text style={styles.errorMessage}></Text>
-						} */}
-          </KeyboardAvoidingView>
         </ScrollView>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 40,
-            marginBottom: 40
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('SignUpUserCredentialsStudent')
-            }}
-            style={styles.backbutton}
-          >
-            <Image source={BackIcon} style={{ width: 60, height: 60 }} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              handleSaveUserDetails()
-            }}
-            style={styles.saveButton}
-          >
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-        </View>
+        <UserInformationFooter onGoBack={navigation.goBack} onNext={() => console.log('Next')}/>
       </View>
   )
 }

@@ -1,27 +1,27 @@
 import {
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity,
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
-  Image
+  Image,
+  View
 } from 'react-native'
 import React, { useState, useRef, useMemo } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
 import StepperIcon1 from '../../assets/step-1-credentials.png'
-import BackIcon from '../../assets/back-icon.png'
 import { COLORS, FONT_FAMILY, GENDER } from '../../utils/app_constants'
 import { PhAddress } from '../../services/address/ph-address'
 import { Picker } from '@react-native-picker/picker'
 import { PhoneNumbers } from '../../services/phone-numbers/phone-numbers'
 import useFormErrors from '../../hooks/useFormErrors'
 import { nameRegex, optionalNameRegex, phoneNumberRegex } from '../../utils/regex'
+import UserInformationFooter from '../../components/UserInformationFooter'
 
-const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
+const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
+
   const scrollViewContainerRef = useRef()
   const publicProfileRef = useRef()
   const contactInformationRef = useRef()
@@ -79,7 +79,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   }
 
 
-  const nextStep = async () => {
+  const onNext = async () => {
     resetFormErrors()
     if (userType === null || userType === '') {
       return navigation.pop()
@@ -463,15 +463,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
           )}
         </View>
       </ScrollView>
-      <View style={styles.actionBtnContainer}>
-        <TouchableOpacity onPress={navigation.goBack} style={styles.backbutton}>
-          <Image source={BackIcon} style={{marginLeft: -15 , width: 60, height: 60 }} />
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={nextStep} style={styles.nextButton}>
-          <Text style={styles.buttonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
+      <UserInformationFooter onGoBack={navigation.goBack} onNext={onNext}/>
     </KeyboardAvoidingView>
   )
 }
@@ -589,19 +581,6 @@ const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'left',
     color: 'red'
-  },
-
-  backbutton: {
-    paddingTop: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    alignContent: 'center'
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#ffff'
   },
   inputWrapper: {
     width: '100%',
@@ -727,32 +706,6 @@ const styles = StyleSheet.create({
     color: '#4d7861',
     backgroundColor: '#ffff'
   },
-  nextButton: {
-    marginBottom: 10,
-    backgroundColor: COLORS.PRIMARY,
-    padding: 10,
-    borderRadius: 10,
-    width: '100%',
-    maxWidth: 140,
-    marginTop: 5,
-    paddingVertical: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1
-    },
-    shadowOpacity: 0.22,
-    shadowRadius: 2.22,
-    elevation: 3
-  },
-  buttonText: {
-    color: '#FFF',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center',
-    textTransform: 'uppercase'
-  },
   datePickerStyle: {
     width: '100%',
     height: 50,
@@ -761,14 +714,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: COLORS.PRIMARY,
     justifyContent: 'center'
-  },
-  actionBtnContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingBottom: 10,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 30
   }
 })
