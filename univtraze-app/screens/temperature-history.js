@@ -141,143 +141,143 @@ const TemperatureHistoryScreen = ({
   }
 
   return (
-      <View style={styles.container}>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={showLoadingModal}
-          onRequestClose={() => {
-            setShowLoadingModal(!showLoadingModal)
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size={'large'} />
-              <Text style={styles.modalText}>{loadingMessage}</Text>
-            </View>
-          </View>
-        </Modal>
-
-        <View style={styles.topContainer}>
-          <View style={styles.backIcon}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                navigation.goBack()
-              }}
-            >
-              <ImageBackground
-                src={BackIcon}
-                resizeMode='contain'
-                style={styles.image}
-              ></ImageBackground>
-            </TouchableWithoutFeedback>
+    <View style={styles.container}>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={showLoadingModal}
+        onRequestClose={() => {
+          setShowLoadingModal(!showLoadingModal)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator size={'large'} />
+            <Text style={styles.modalText}>{loadingMessage}</Text>
           </View>
         </View>
+      </Modal>
 
-        <View style={styles.bodyContainer}>
-          <View
-            style={{
-              width: '100%',
-              height: 'auto'
+      <View style={styles.topContainer}>
+        <View style={styles.backIcon}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.goBack()
             }}
           >
-            <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
-            <Text
-              style={{ fontSize: 60, paddingBottom: 10, color: COLORS.PRIMARY, fontWeight: '700' }}
-            >
-              {currentUserTemperature === '' || currentUserTemperature === 'Not set'
-                ? 'Not set'
-                : currentUserTemperature + '°C'}
-            </Text>
-          </View>
-
-          <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-            <Text
-              style={{
-                fontSize: 25,
-                paddingBottom: 10,
-                color: '#000000',
-                fontWeight: '700',
-                marginLeft: 0,
-                marginRight: 'auto'
-              }}
-            >
-              History
-            </Text>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                handleRefreshData(token, id)
-              }}
-            >
-              <Image
-                source={require('../assets/refresh_icon.png')}
-                resizeMode='contain'
-                style={{ width: 25, height: 25, marginLeft: 'auto', marginRight: 0 }}
-              />
-            </TouchableWithoutFeedback>
-          </View>
-          <ScrollView>
-            <DataTable
-              style={{
-                borderWidth: 1,
-                borderRadius: 10,
-                borderColor: COLORS.PRIMARY
-              }}
-            >
-              <DataTable.Header
-                style={{
-                  backgroundColor: COLORS.PRIMARY,
-                  borderTopLeftRadius: 10,
-                  borderTopRightRadius: 10,
-                  elevation: 5
-                }}
-              >
-                <DataTable.Title>
-                  <Text style={styles.dataTableTitleText}>Bldg name</Text>
-                </DataTable.Title>
-                <DataTable.Title>
-                  <Text style={styles.dataTableTitleText}>Temp</Text>
-                </DataTable.Title>
-                <DataTable.Title>
-                  <Text style={styles.dataTableTitleText}>Date</Text>
-                </DataTable.Title>
-                <DataTable.Title>
-                  <Text style={styles.dataTableTitleText}>Time</Text>
-                </DataTable.Title>
-              </DataTable.Header>
-              {allTemperatureHistory === undefined
-                ? null
-                : allTemperatureHistory.map((tempHistory) => {
-                    return (
-                      <DataTable.Row
-                        key={tempHistory.id}
-                        onPress={() => {
-                          viewHistoryData(
-                            tempHistory.id,
-                            tempHistory.room_id,
-                            tempHistory.room_number,
-                            tempHistory.building_name,
-                            tempHistory.room_name,
-                            tempHistory.temperature,
-                            tempHistory.createdAt
-                          )
-                        }}
-                      >
-                        <DataTable.Cell>{tempHistory.building_name}</DataTable.Cell>
-                        <DataTable.Cell>{tempHistory.temperature}</DataTable.Cell>
-                        <DataTable.Cell>
-                          {moment.utc(tempHistory.createdAt).local().format('ll')}
-                        </DataTable.Cell>
-                        <DataTable.Cell>
-                          {moment.utc(tempHistory.createdAt).local().format('LT')}
-                        </DataTable.Cell>
-                      </DataTable.Row>
-                    )
-                  })}
-            </DataTable>
-          </ScrollView>
+            <ImageBackground
+              src={BackIcon}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
+          </TouchableWithoutFeedback>
         </View>
       </View>
+
+      <View style={styles.bodyContainer}>
+        <View
+          style={{
+            width: '100%',
+            height: 'auto'
+          }}
+        >
+          <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
+          <Text
+            style={{ fontSize: 60, paddingBottom: 10, color: COLORS.PRIMARY, fontWeight: '700' }}
+          >
+            {currentUserTemperature === '' || currentUserTemperature === 'Not set'
+              ? 'Not set'
+              : currentUserTemperature + '°C'}
+          </Text>
+        </View>
+
+        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+          <Text
+            style={{
+              fontSize: 25,
+              paddingBottom: 10,
+              color: '#000000',
+              fontWeight: '700',
+              marginLeft: 0,
+              marginRight: 'auto'
+            }}
+          >
+            History
+          </Text>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              handleRefreshData(token, id)
+            }}
+          >
+            <Image
+              source={require('../assets/refresh_icon.png')}
+              resizeMode='contain'
+              style={{ width: 25, height: 25, marginLeft: 'auto', marginRight: 0 }}
+            />
+          </TouchableWithoutFeedback>
+        </View>
+        <ScrollView>
+          <DataTable
+            style={{
+              borderWidth: 1,
+              borderRadius: 10,
+              borderColor: COLORS.PRIMARY
+            }}
+          >
+            <DataTable.Header
+              style={{
+                backgroundColor: COLORS.PRIMARY,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                elevation: 5
+              }}
+            >
+              <DataTable.Title>
+                <Text style={styles.dataTableTitleText}>Bldg name</Text>
+              </DataTable.Title>
+              <DataTable.Title>
+                <Text style={styles.dataTableTitleText}>Temp</Text>
+              </DataTable.Title>
+              <DataTable.Title>
+                <Text style={styles.dataTableTitleText}>Date</Text>
+              </DataTable.Title>
+              <DataTable.Title>
+                <Text style={styles.dataTableTitleText}>Time</Text>
+              </DataTable.Title>
+            </DataTable.Header>
+            {allTemperatureHistory === undefined
+              ? null
+              : allTemperatureHistory.map((tempHistory) => {
+                  return (
+                    <DataTable.Row
+                      key={tempHistory.id}
+                      onPress={() => {
+                        viewHistoryData(
+                          tempHistory.id,
+                          tempHistory.room_id,
+                          tempHistory.room_number,
+                          tempHistory.building_name,
+                          tempHistory.room_name,
+                          tempHistory.temperature,
+                          tempHistory.createdAt
+                        )
+                      }}
+                    >
+                      <DataTable.Cell>{tempHistory.building_name}</DataTable.Cell>
+                      <DataTable.Cell>{tempHistory.temperature}</DataTable.Cell>
+                      <DataTable.Cell>
+                        {moment.utc(tempHistory.createdAt).local().format('ll')}
+                      </DataTable.Cell>
+                      <DataTable.Cell>
+                        {moment.utc(tempHistory.createdAt).local().format('LT')}
+                      </DataTable.Cell>
+                    </DataTable.Row>
+                  )
+                })}
+          </DataTable>
+        </ScrollView>
+      </View>
+    </View>
   )
 }
 export default TemperatureHistoryScreen

@@ -26,10 +26,10 @@ export const UserContextProvider = ({ children }) => {
             user: action.user
           }
         case 'UPDATE_PARTIAL_USER':
-            return {
-              ...prevState,
-              user: action.partialUser
-            }
+          return {
+            ...prevState,
+            user: action.partialUser
+          }
         case 'CLEAR_USER':
           return {
             ...prevState,

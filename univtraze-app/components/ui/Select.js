@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
 import CarretDown from '../../assets/carret-down.png'
 
@@ -12,6 +12,8 @@ const SelectItem = (props) => {
 }
 
 const Select = (props) => {
+
+  const [isOpen, setIsOpen] = useState(false)
   const handleSelectItem = (label) => {
     props.onSelectItem(label)
     props.onToggleDropdown()
@@ -23,12 +25,12 @@ const Select = (props) => {
         <Text style={[styles.labelStyle, props.labelStyle]}>{props.value}</Text>
       </View>
       <TouchableOpacity
-        onPress={props.onToggleDropdown}
+        onPress={()=> setIsOpen(!isOpen)}
         style={[styles.carretDownButtonStyle, props.carretDownButtonStyle]}
       >
         <Image source={CarretDown} style={[styles.carretDown, styles.icon]} />
       </TouchableOpacity>
-      {props.open && (
+      {isOpen && (
         <View style={[styles.dropdownContainerStyle, props.dropdownContainerStyle]}>
           {React.Children.map(props.children, (child) =>
             React.cloneElement(child, { onSelectItem: handleSelectItem })
@@ -52,7 +54,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.PRIMARY,
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 5
   },
   carretDown: {
     height: 9,

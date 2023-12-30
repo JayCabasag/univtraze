@@ -141,223 +141,223 @@ const ReportDiseaseScreen = ({
   }
 
   return (
-      <View style={styles.container}>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={showLoadingModal}
-          onRequestClose={() => {
-            setShowLoadingModal(!showLoadingModal)
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size={'large'} />
-              <Text style={styles.modalText}>{loadingMessage}</Text>
-            </View>
+    <View style={styles.container}>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={showLoadingModal}
+        onRequestClose={() => {
+          setShowLoadingModal(!showLoadingModal)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator size={'large'} />
+            <Text style={styles.modalText}>{loadingMessage}</Text>
           </View>
-        </Modal>
-
-        {/* Notification View */}
-        <View style={styles.topContainer}>
-          <View style={styles.backIcon}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                navigation.goBack()
-              }}
-            >
-              <ImageBackground
-                src={BackIcon}
-                resizeMode='contain'
-                style={styles.image}
-              ></ImageBackground>
-            </TouchableWithoutFeedback>
-          </View>
-
-          {/*bottom navigation for user settings  */}
-
-          {/*end of bottom navigation for user settings  */}
-
-          {/* start of botton sheet for notification */}
-
-          {/*end of botton sheet for notification */}
         </View>
-        {/*End  Notification View */}
-        <View style={styles.bodyContainer}>
-          <View style={{ paddingVertical: 10 }}>
-            <Text style={styles.reportCovidText}>Report a communicable disease case</Text>
-          </View>
+      </Modal>
 
-          <View style={{ paddingVertical: 5 }}>
-            <Text style={styles.bodyText}>Are you a communicable disease victim?</Text>
-            <Text style={styles.bodyText}>Let us know by reporting a case below</Text>
-          </View>
+      {/* Notification View */}
+      <View style={styles.topContainer}>
+        <View style={styles.backIcon}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.goBack()
+            }}
+          >
+            <ImageBackground
+              src={BackIcon}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
+          </TouchableWithoutFeedback>
+        </View>
 
-          <ScrollView>
+        {/*bottom navigation for user settings  */}
+
+        {/*end of bottom navigation for user settings  */}
+
+        {/* start of botton sheet for notification */}
+
+        {/*end of botton sheet for notification */}
+      </View>
+      {/*End  Notification View */}
+      <View style={styles.bodyContainer}>
+        <View style={{ paddingVertical: 10 }}>
+          <Text style={styles.reportCovidText}>Report a communicable disease case</Text>
+        </View>
+
+        <View style={{ paddingVertical: 5 }}>
+          <Text style={styles.bodyText}>Are you a communicable disease victim?</Text>
+          <Text style={styles.bodyText}>Let us know by reporting a case below</Text>
+        </View>
+
+        <ScrollView>
+          <View
+            style={{
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              marginVertical: 10,
+              paddingVertical: 5
+            }}
+          >
             <View
               style={{
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                marginVertical: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
                 paddingVertical: 5
               }}
             >
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 5
+              <RadioButton
+                value='Covid-19'
+                status={isChecked === 'Covid-19' ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setIsChecked('Covid-19')
+                  setSelectedDisease('Covid-19')
                 }}
-              >
-                <RadioButton
-                  value='Covid-19'
-                  status={isChecked === 'Covid-19' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setIsChecked('Covid-19')
-                    setSelectedDisease('Covid-19')
-                  }}
-                />
-                <Text style={styles.radioLabel}>Covid-19</Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 5
-                }}
-              >
-                <RadioButton
-                  value='Monkey Pox'
-                  status={isChecked === 'Monkey Pox' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setIsChecked('Monkey Pox')
-                    setSelectedDisease('Monkey Pox')
-                  }}
-                />
-                <Text style={styles.radioLabel}>Monkey Pox</Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 5
-                }}
-              >
-                <RadioButton
-                  value='Tuberculosis'
-                  status={isChecked === 'Tuberculosis' ? 'checked' : 'unchecked'}
-                  onPress={() => {
-                    setIsChecked('Tuberculosis')
-                    setSelectedDisease('Tuberculosis')
-                  }}
-                />
-                <Text style={styles.radioLabel}>Tuberculosis</Text>
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  paddingVertical: 5
-                }}
-              >
-                <RadioButton
-                  value='Others'
-                  status={isChecked === 'Others' ? 'checked' : 'unchecked'}
-                  onPress={() => setIsChecked('Others')}
-                />
-                <Text style={styles.radioLabel}>Others : </Text>
-              </View>
-
-              {isChecked === 'Others' ? (
-                <View
-                  style={{
-                    width: '100%',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    paddingVertical: 5
-                  }}
-                >
-                  <View style={{ width: '95%', justifyContent: 'center', alignItems: 'center' }}>
-                    <TextInput
-                      defaultValue={otherDiseaseName}
-                      style={styles.caseNumberInput}
-                      placeholder='Disease name'
-                      onChangeText={(text) => {
-                        setOtherDiseaseName(text)
-                      }}
-                    />
-                  </View>
-                </View>
-              ) : null}
-              <View
-                style={{
-                  marginTop: 'auto',
-                  marginBottom: 10,
-                  width: '100%',
-                  height: 'auto',
-                  alignSelf: 'center',
-                  alignItems: 'flex-end',
-                  flexDirection: 'column',
-                  marginBottom: 0
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    pickDocumentForProofDoc()
-                  }}
-                  style={styles.uploadProofButton}
-                >
-                  <Text style={{ textAlign: 'center', padding: 5 }}>Upload proof here</Text>
-                </TouchableOpacity>
-              </View>
-
-              {proofDoc === null ? null : (
-                <View
-                  style={{
-                    width: '100%',
-                    height: 150,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 5
-                  }}
-                >
-                  <View style={styles.imageContainer}>
-                    <Image
-                      source={{ uri: proofDoc.uri }}
-                      resizeMode='contain'
-                      style={{ width: '95%', height: '100%' }}
-                    />
-                  </View>
-                </View>
-              )}
+              />
+              <Text style={styles.radioLabel}>Covid-19</Text>
             </View>
-          </ScrollView>
-
-          <View
-            style={{
-              marginTop: 'auto',
-              marginBottom: 10,
-              width: '100%',
-              height: 'auto',
-              alignSelf: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-              marginBottom: 0
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                handleSubmitReportDisease()
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 5
               }}
-              style={styles.button}
             >
-              <Text style={styles.buttonText}>Submit</Text>
-            </TouchableOpacity>
+              <RadioButton
+                value='Monkey Pox'
+                status={isChecked === 'Monkey Pox' ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setIsChecked('Monkey Pox')
+                  setSelectedDisease('Monkey Pox')
+                }}
+              />
+              <Text style={styles.radioLabel}>Monkey Pox</Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 5
+              }}
+            >
+              <RadioButton
+                value='Tuberculosis'
+                status={isChecked === 'Tuberculosis' ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setIsChecked('Tuberculosis')
+                  setSelectedDisease('Tuberculosis')
+                }}
+              />
+              <Text style={styles.radioLabel}>Tuberculosis</Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 5
+              }}
+            >
+              <RadioButton
+                value='Others'
+                status={isChecked === 'Others' ? 'checked' : 'unchecked'}
+                onPress={() => setIsChecked('Others')}
+              />
+              <Text style={styles.radioLabel}>Others : </Text>
+            </View>
+
+            {isChecked === 'Others' ? (
+              <View
+                style={{
+                  width: '100%',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  paddingVertical: 5
+                }}
+              >
+                <View style={{ width: '95%', justifyContent: 'center', alignItems: 'center' }}>
+                  <TextInput
+                    defaultValue={otherDiseaseName}
+                    style={styles.caseNumberInput}
+                    placeholder='Disease name'
+                    onChangeText={(text) => {
+                      setOtherDiseaseName(text)
+                    }}
+                  />
+                </View>
+              </View>
+            ) : null}
+            <View
+              style={{
+                marginTop: 'auto',
+                marginBottom: 10,
+                width: '100%',
+                height: 'auto',
+                alignSelf: 'center',
+                alignItems: 'flex-end',
+                flexDirection: 'column',
+                marginBottom: 0
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  pickDocumentForProofDoc()
+                }}
+                style={styles.uploadProofButton}
+              >
+                <Text style={{ textAlign: 'center', padding: 5 }}>Upload proof here</Text>
+              </TouchableOpacity>
+            </View>
+
+            {proofDoc === null ? null : (
+              <View
+                style={{
+                  width: '100%',
+                  height: 150,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginTop: 5
+                }}
+              >
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={{ uri: proofDoc.uri }}
+                    resizeMode='contain'
+                    style={{ width: '95%', height: '100%' }}
+                  />
+                </View>
+              </View>
+            )}
           </View>
+        </ScrollView>
+
+        <View
+          style={{
+            marginTop: 'auto',
+            marginBottom: 10,
+            width: '100%',
+            height: 'auto',
+            alignSelf: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            marginBottom: 0
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              handleSubmitReportDisease()
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
         </View>
       </View>
+    </View>
   )
 }
 export default ReportDiseaseScreen

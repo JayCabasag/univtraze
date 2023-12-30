@@ -233,163 +233,163 @@ const ReportEmergencyScreen = ({ navigation }) => {
   }
 
   return (
-      <View style={styles.container}>
-        <Modal
-          animationType='fade'
-          transparent={true}
-          visible={showLoadingModal}
-          onRequestClose={() => {
-            setShowLoadingModal(!showLoadingModal)
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size={'large'} />
-              <Text style={styles.modalText}>{loadingModalMessage}</Text>
-            </View>
-          </View>
-        </Modal>
-
-        {/* Notification View */}
-        <View style={styles.topContainer}>
-          <View style={styles.backIcon}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                navigation.goBack()
-              }}
-            >
-              <ImageBackground
-                src={BackIcon}
-                resizeMode='contain'
-                style={styles.image}
-              ></ImageBackground>
-            </TouchableWithoutFeedback>
+    <View style={styles.container}>
+      <Modal
+        animationType='fade'
+        transparent={true}
+        visible={showLoadingModal}
+        onRequestClose={() => {
+          setShowLoadingModal(!showLoadingModal)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator size={'large'} />
+            <Text style={styles.modalText}>{loadingModalMessage}</Text>
           </View>
         </View>
-        {/*End  Notification View */}
-        {/* Body Container */}
-        <Text
-          style={{
-            height: 'auto',
-            fontSize: 28,
-            color: COLORS.TEXT_BLACK,
-            fontWeight: '700',
-            marginHorizontal: 40,
-            padding: 10
-          }}
-        >
-          Emergency {'\n'}Report
-        </Text>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.bodyContainer}>
-            <View style={styles.formContainer}>
-              <Text>Patient Name</Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={(e) => {
-                  setPatientName(e)
-                }}
-                value={patientName}
-                placeholder='e.g John Doe'
-              />
+      </Modal>
 
-              <Text style={{ marginTop: 20 }}>Medical condition</Text>
-              <DropDownPicker
-                open={open}
-                value={value}
-                items={items}
-                setOpen={setOpen}
-                setValue={setValue}
-                setItems={setItems}
-                theme='LIGHT'
-                multiple={true}
-                mode='BADGE'
-                listMode='SCROLLVIEW'
-                badgeDotColors={[
-                  '#e76f51',
-                  '#00b4d8',
-                  '#e9c46a',
-                  '##25cf41',
-                  '#8ac926',
-                  '#2536cf',
-                  '#d11f99'
-                ]}
-                style={{ borderColor: '#28CD4199' }}
-              />
+      {/* Notification View */}
+      <View style={styles.topContainer}>
+        <View style={styles.backIcon}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.goBack()
+            }}
+          >
+            <ImageBackground
+              src={BackIcon}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
+          </TouchableWithoutFeedback>
+        </View>
+      </View>
+      {/*End  Notification View */}
+      {/* Body Container */}
+      <Text
+        style={{
+          height: 'auto',
+          fontSize: 28,
+          color: COLORS.TEXT_BLACK,
+          fontWeight: '700',
+          marginHorizontal: 40,
+          padding: 10
+        }}
+      >
+        Emergency {'\n'}Report
+      </Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.bodyContainer}>
+          <View style={styles.formContainer}>
+            <Text>Patient Name</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(e) => {
+                setPatientName(e)
+              }}
+              value={patientName}
+              placeholder='e.g John Doe'
+            />
 
-              <Text style={{ marginTop: 20 }}>Description</Text>
+            <Text style={{ marginTop: 20 }}>Medical condition</Text>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={items}
+              setOpen={setOpen}
+              setValue={setValue}
+              setItems={setItems}
+              theme='LIGHT'
+              multiple={true}
+              mode='BADGE'
+              listMode='SCROLLVIEW'
+              badgeDotColors={[
+                '#e76f51',
+                '#00b4d8',
+                '#e9c46a',
+                '##25cf41',
+                '#8ac926',
+                '#2536cf',
+                '#d11f99'
+              ]}
+              style={{ borderColor: '#28CD4199' }}
+            />
 
-              <TextInput
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={(textArea) => onChangeTextArea(textArea)}
-                value={textArea}
-                style={styles.inputss}
-                placeholder='Condition description...'
-              />
+            <Text style={{ marginTop: 20 }}>Description</Text>
 
-              <Text style={{ marginTop: 20 }}>Room Number </Text>
-              <TextInput
-                style={styles.input}
-                onChangeText={(e) => {
-                  setRoomNumber(e)
-                }}
-                value={roomNumber}
-                placeholder='e.g 401'
-              />
-              {success ? (
-                <Text
-                  style={{
-                    paddingVertical: 10,
-                    color: '#28CD4199'
-                  }}
-                >
-                  Reported Successfully
-                </Text>
-              ) : null}
+            <TextInput
+              multiline={true}
+              numberOfLines={4}
+              onChangeText={(textArea) => onChangeTextArea(textArea)}
+              value={textArea}
+              style={styles.inputss}
+              placeholder='Condition description...'
+            />
 
-              {loading ? (
-                <Text
-                  style={{
-                    paddingVertical: 10,
-                    color: '#28CD4199'
-                  }}
-                >
-                  Please wait..
-                </Text>
-              ) : null}
-
-              {error ? (
-                <Text
-                  style={{
-                    paddingVertical: 10,
-                    color: 'red'
-                  }}
-                >
-                  {errorMessage}
-                </Text>
-              ) : null}
-
-              <TouchableOpacity
+            <Text style={{ marginTop: 20 }}>Room Number </Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(e) => {
+                setRoomNumber(e)
+              }}
+              value={roomNumber}
+              placeholder='e.g 401'
+            />
+            {success ? (
+              <Text
                 style={{
-                  width: 'auto',
-                  height: 60,
-                  backgroundColor: COLORS.PRIMARY,
-                  borderRadius: 10,
-                  marginTop: 10,
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-                onPress={() => {
-                  submitEmergencyReport()
+                  paddingVertical: 10,
+                  color: '#28CD4199'
                 }}
               >
-                <Text style={{ color: 'white', fontSize: 16, fontWeight: '700' }}>SUBMIT</Text>
-              </TouchableOpacity>
-            </View>
+                Reported Successfully
+              </Text>
+            ) : null}
+
+            {loading ? (
+              <Text
+                style={{
+                  paddingVertical: 10,
+                  color: '#28CD4199'
+                }}
+              >
+                Please wait..
+              </Text>
+            ) : null}
+
+            {error ? (
+              <Text
+                style={{
+                  paddingVertical: 10,
+                  color: 'red'
+                }}
+              >
+                {errorMessage}
+              </Text>
+            ) : null}
+
+            <TouchableOpacity
+              style={{
+                width: 'auto',
+                height: 60,
+                backgroundColor: COLORS.PRIMARY,
+                borderRadius: 10,
+                marginTop: 10,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              onPress={() => {
+                submitEmergencyReport()
+              }}
+            >
+              <Text style={{ color: 'white', fontSize: 16, fontWeight: '700' }}>SUBMIT</Text>
+            </TouchableOpacity>
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 export default ReportEmergencyScreen

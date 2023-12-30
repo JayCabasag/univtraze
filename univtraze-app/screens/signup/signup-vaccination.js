@@ -98,256 +98,256 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
   }
 
   return (
-      <View style={styles.mainContainer}>
-        <Modal
-          animationType='fade'
-          transparent={true}
-          visible={showLoadingModal}
-          onRequestClose={() => {
-            setShowLoadingModal(!showLoadingModal)
+    <View style={styles.mainContainer}>
+      <Modal
+        animationType='fade'
+        transparent={true}
+        visible={showLoadingModal}
+        onRequestClose={() => {
+          setShowLoadingModal(!showLoadingModal)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator size={'large'} />
+            <Text style={styles.modalText}>Please wait...</Text>
+          </View>
+        </View>
+      </Modal>
+
+      <View style={styles.header}>
+        <Image src={StepperIcon3} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+      </View>
+
+      <ScrollView style={styles.bodyContainer}>
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            alignItems: 'center'
           }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size={'large'} />
-              <Text style={styles.modalText}>Please wait...</Text>
-            </View>
-          </View>
-        </Modal>
+          <Text style={styles.label}>1st Dose</Text>
 
-        <View style={styles.header}>
-          <Image src={StepperIcon3} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+          <View style={styles.pickerContainer}>
+            <Picker
+              style={{ width: '100%', height: 45, color: '#4d7861' }}
+              selectedValue={firstDoseName}
+              onValueChange={(value) => setFirstDoseName(value)}
+              mode='dialog'
+            >
+              <Picker.Item label='None' value='None' />
+              <Picker.Item label='Moderna' value='Moderna' />
+              <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
+              <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
+              <Picker.Item label='Others' value='Others' />
+            </Picker>
+          </View>
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row'
+            }}
+          >
+            <Text style={{ marginLeft: 5 }}>Date : </Text>
+            <TextInput
+              placeholder='Date of birth'
+              defaultValue={moment(firstDoseDate).format('yyyy-MM-DD')}
+              style={styles.dateInput}
+              editable={false}
+            />
+            <AntDesign
+              name='calendar'
+              size={37}
+              color={COLORS.PRIMARY}
+              style={{ marginRight: 5 }}
+              onPress={() => setShowFirstDoseDatePicker(true)}
+            />
+          </View>
+          {showFirstDoseDatePicker === true ? (
+            <DateTimePicker
+              value={firstDoseDate}
+              mode={'date'}
+              is24Hour={true}
+              onChange={(event, date) => {
+                setShowFirstDoseDatePicker(false)
+                if (date === undefined) {
+                  setFirstDoseDate(new Date())
+                  return
+                }
+                setFirstDoseDate(new Date(date))
+              }}
+            />
+          ) : null}
         </View>
 
-        <ScrollView style={styles.bodyContainer}>
-          <View
-            style={{
-              width: '100%',
-              flex: 1,
-              alignItems: 'center'
-            }}
-          >
-            <Text style={styles.label}>1st Dose</Text>
-
-            <View style={styles.pickerContainer}>
-              <Picker
-                style={{ width: '100%', height: 45, color: '#4d7861' }}
-                selectedValue={firstDoseName}
-                onValueChange={(value) => setFirstDoseName(value)}
-                mode='dialog'
-              >
-                <Picker.Item label='None' value='None' />
-                <Picker.Item label='Moderna' value='Moderna' />
-                <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
-                <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
-                <Picker.Item label='Others' value='Others' />
-              </Picker>
-            </View>
-            <View
-              style={{
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'row'
-              }}
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            alignItems: 'center'
+          }}
+        >
+          <Text style={styles.label}>2nd Dose</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              style={{ width: '100%', height: 45, color: '#4d7861' }}
+              selectedValue={secondDoseName}
+              onValueChange={(value) => setSecondDoseName(value)}
+              mode='dialog'
             >
-              <Text style={{ marginLeft: 5 }}>Date : </Text>
-              <TextInput
-                placeholder='Date of birth'
-                defaultValue={moment(firstDoseDate).format('yyyy-MM-DD')}
-                style={styles.dateInput}
-                editable={false}
-              />
-              <AntDesign
-                name='calendar'
-                size={37}
-                color={COLORS.PRIMARY}
-                style={{ marginRight: 5 }}
-                onPress={() => setShowFirstDoseDatePicker(true)}
-              />
-            </View>
-            {showFirstDoseDatePicker === true ? (
-              <DateTimePicker
-                value={firstDoseDate}
-                mode={'date'}
-                is24Hour={true}
-                onChange={(event, date) => {
-                  setShowFirstDoseDatePicker(false)
-                  if (date === undefined) {
-                    setFirstDoseDate(new Date())
-                    return
-                  }
-                  setFirstDoseDate(new Date(date))
-                }}
-              />
-            ) : null}
+              <Picker.Item label='None' value='None' />
+              <Picker.Item label='Moderna' value='Moderna' />
+              <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
+              <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
+              <Picker.Item label='Others' value='Others' />
+            </Picker>
           </View>
 
           <View
             style={{
               width: '100%',
-              flex: 1,
-              alignItems: 'center'
-            }}
-          >
-            <Text style={styles.label}>2nd Dose</Text>
-            <View style={styles.pickerContainer}>
-              <Picker
-                style={{ width: '100%', height: 45, color: '#4d7861' }}
-                selectedValue={secondDoseName}
-                onValueChange={(value) => setSecondDoseName(value)}
-                mode='dialog'
-              >
-                <Picker.Item label='None' value='None' />
-                <Picker.Item label='Moderna' value='Moderna' />
-                <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
-                <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
-                <Picker.Item label='Others' value='Others' />
-              </Picker>
-            </View>
-
-            <View
-              style={{
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'row'
-              }}
-            >
-              <Text style={{ marginLeft: 5 }}>Date : </Text>
-              <TextInput
-                placeholder='Date of birth'
-                defaultValue={moment(secondDoseDate).format('yyyy-MM-DD')}
-                style={styles.dateInput}
-                editable={false}
-              />
-              <AntDesign
-                name='calendar'
-                size={37}
-                color={COLORS.PRIMARY}
-                style={{ marginRight: 5 }}
-                onPress={() => setShowSecondDoseDatePicker(true)}
-              />
-            </View>
-            {showSecondDoseDatePicker === true ? (
-              <DateTimePicker
-                value={secondDoseDate}
-                mode={'date'}
-                is24Hour={true}
-                onChange={(event, date) => {
-                  setShowSecondDoseDatePicker(false)
-                  if (date === undefined) {
-                    setSecondDoseDate(new Date())
-                    return
-                  }
-                  setSecondDoseDate(new Date(date))
-                }}
-              />
-            ) : null}
-          </View>
-
-          <View
-            style={{
-              width: '100%',
-              flex: 1,
-              alignItems: 'center'
-            }}
-          >
-            <Text style={styles.label}>Booster Dose</Text>
-            <View style={styles.pickerContainer}>
-              <Picker
-                style={{ width: '100%', height: 45, color: '#4d7861' }}
-                selectedValue={boosterDoseName}
-                onValueChange={(value) => setBoosterDoseName(value)}
-                mode='dialog'
-              >
-                <Picker.Item label='None' value='None' />
-                <Picker.Item label='Moderna' value='Moderna' />
-                <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
-                <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
-                <Picker.Item label='Others' value='Others' />
-              </Picker>
-            </View>
-
-            <View
-              style={{
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'row'
-              }}
-            >
-              <Text style={{ marginLeft: 5 }}>Date : </Text>
-              <TextInput
-                placeholder='Date of birth'
-                defaultValue={moment().format('yyyy-MM-DD')}
-                style={styles.dateInput}
-                editable={false}
-              />
-              <AntDesign
-                name='calendar'
-                size={37}
-                color={COLORS.PRIMARY}
-                style={{ marginRight: 5 }}
-                onPress={() => setShowBoosterDoseDatePicker(true)}
-              />
-            </View>
-            {showBoosterDoseDatePicker === true ? (
-              <DateTimePicker
-                value={boosterDoseDate}
-                mode={'date'}
-                is24Hour={true}
-                onChange={(event, date) => {
-                  setShowBoosterDoseDatePicker(false)
-                  if (date === undefined) {
-                    setBoosterDoseDate(new Date())
-                    return
-                  }
-                  setBoosterDoseDate(new Date(date))
-                }}
-              />
-            ) : null}
-          </View>
-          <View
-            style={{
-              width: '100%',
-              flex: 1,
-              alignItems: 'center'
-            }}
-          >
-            <TouchableOpacity></TouchableOpacity>
-          </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: 25,
-              paddingBottom: 35,
-              marginTop: 15
+              justifyContent: 'center',
+              flexDirection: 'row'
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                skipVaccinationtion()
-              }}
-              style={styles.backbutton}
-            >
-              <Text style={{ fontWeight: 'bold' }}>Later</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                handleUpdateVaccineData()
-              }}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Save</Text>
-            </TouchableOpacity>
+            <Text style={{ marginLeft: 5 }}>Date : </Text>
+            <TextInput
+              placeholder='Date of birth'
+              defaultValue={moment(secondDoseDate).format('yyyy-MM-DD')}
+              style={styles.dateInput}
+              editable={false}
+            />
+            <AntDesign
+              name='calendar'
+              size={37}
+              color={COLORS.PRIMARY}
+              style={{ marginRight: 5 }}
+              onPress={() => setShowSecondDoseDatePicker(true)}
+            />
           </View>
-        </ScrollView>
-      </View>
+          {showSecondDoseDatePicker === true ? (
+            <DateTimePicker
+              value={secondDoseDate}
+              mode={'date'}
+              is24Hour={true}
+              onChange={(event, date) => {
+                setShowSecondDoseDatePicker(false)
+                if (date === undefined) {
+                  setSecondDoseDate(new Date())
+                  return
+                }
+                setSecondDoseDate(new Date(date))
+              }}
+            />
+          ) : null}
+        </View>
+
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            alignItems: 'center'
+          }}
+        >
+          <Text style={styles.label}>Booster Dose</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              style={{ width: '100%', height: 45, color: '#4d7861' }}
+              selectedValue={boosterDoseName}
+              onValueChange={(value) => setBoosterDoseName(value)}
+              mode='dialog'
+            >
+              <Picker.Item label='None' value='None' />
+              <Picker.Item label='Moderna' value='Moderna' />
+              <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
+              <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
+              <Picker.Item label='Others' value='Others' />
+            </Picker>
+          </View>
+
+          <View
+            style={{
+              width: '100%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'row'
+            }}
+          >
+            <Text style={{ marginLeft: 5 }}>Date : </Text>
+            <TextInput
+              placeholder='Date of birth'
+              defaultValue={moment().format('yyyy-MM-DD')}
+              style={styles.dateInput}
+              editable={false}
+            />
+            <AntDesign
+              name='calendar'
+              size={37}
+              color={COLORS.PRIMARY}
+              style={{ marginRight: 5 }}
+              onPress={() => setShowBoosterDoseDatePicker(true)}
+            />
+          </View>
+          {showBoosterDoseDatePicker === true ? (
+            <DateTimePicker
+              value={boosterDoseDate}
+              mode={'date'}
+              is24Hour={true}
+              onChange={(event, date) => {
+                setShowBoosterDoseDatePicker(false)
+                if (date === undefined) {
+                  setBoosterDoseDate(new Date())
+                  return
+                }
+                setBoosterDoseDate(new Date(date))
+              }}
+            />
+          ) : null}
+        </View>
+        <View
+          style={{
+            width: '100%',
+            flex: 1,
+            alignItems: 'center'
+          }}
+        >
+          <TouchableOpacity></TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 25,
+            paddingBottom: 35,
+            marginTop: 15
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              skipVaccinationtion()
+            }}
+            style={styles.backbutton}
+          >
+            <Text style={{ fontWeight: 'bold' }}>Later</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              handleUpdateVaccineData()
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 

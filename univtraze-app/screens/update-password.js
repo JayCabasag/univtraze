@@ -113,59 +113,59 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
   }
 
   return (
-      <View style={styles.container}>
-        <View style={styles.topContainer}>
-          <View style={styles.backIcon}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                navigation.goBack()
-              }}
-            >
-              <ImageBackground
-                src={BackIcon}
-                resizeMode='contain'
-                style={styles.image}
-              ></ImageBackground>
-            </TouchableWithoutFeedback>
-          </View>
-        </View>
-
-        {/*End  Notification View */}
-        <View style={styles.bodyContainer}>
-          <Text style={styles.headerText}>Update Password</Text>
-
-          <TextInput
-            placeholder='Old password'
-            value={oldPassword}
-            style={styles.input}
-            secureTextEntry
-            onChangeText={(text) => setOldPassword(text)}
-          />
-          <TextInput
-            placeholder='New password'
-            value={newPassword}
-            style={styles.input}
-            secureTextEntry
-            onChangeText={(text) => setNewPassword(text)}
-          />
-          <TextInput
-            placeholder='Re-type password'
-            value={confirmNewPassword}
-            style={styles.input}
-            secureTextEntry
-            onChangeText={(text) => setConfirmNewPassword(text)}
-          />
-          {error ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
-          {success ? (
-            <Text style={{ color: COLORS.PRIMARY }}>Password updated successfully</Text>
-          ) : null}
-          {isLoading ? <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text> : null}
-
-          <TouchableOpacity style={styles.buttons} onPress={() => handleUpdatePassword()}>
-            <Text style={{ fontSize: 15, color: 'white' }}>Update password</Text>
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.topContainer}>
+        <View style={styles.backIcon}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.goBack()
+            }}
+          >
+            <ImageBackground
+              src={BackIcon}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
+          </TouchableWithoutFeedback>
         </View>
       </View>
+
+      {/*End  Notification View */}
+      <View style={styles.bodyContainer}>
+        <Text style={styles.headerText}>Update Password</Text>
+
+        <TextInput
+          placeholder='Old password'
+          value={oldPassword}
+          style={styles.input}
+          secureTextEntry
+          onChangeText={(text) => setOldPassword(text)}
+        />
+        <TextInput
+          placeholder='New password'
+          value={newPassword}
+          style={styles.input}
+          secureTextEntry
+          onChangeText={(text) => setNewPassword(text)}
+        />
+        <TextInput
+          placeholder='Re-type password'
+          value={confirmNewPassword}
+          style={styles.input}
+          secureTextEntry
+          onChangeText={(text) => setConfirmNewPassword(text)}
+        />
+        {error ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
+        {success ? (
+          <Text style={{ color: COLORS.PRIMARY }}>Password updated successfully</Text>
+        ) : null}
+        {isLoading ? <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text> : null}
+
+        <TouchableOpacity style={styles.buttons} onPress={() => handleUpdatePassword()}>
+          <Text style={{ fontSize: 15, color: 'white' }}>Update password</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   )
 }
 export default UpdatePasswordScreen

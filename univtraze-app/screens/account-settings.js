@@ -92,113 +92,113 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
   }
 
   return (
-      <View style={styles.container}>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={showPasswordModal}
-          statusBarTranslucent
-          onRequestClose={() => {
-            setShowPasswordModal(!showPasswordModal)
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={{ color: 'red' }}>
-                *Once account is deleted it can no longer be retrieved.
-              </Text>
-              <TextInput
-                placeholder='Password'
-                defaultValue={''}
-                onChangeText={(text) => {
-                  setPassword(text)
-                }}
-                secureTextEntry
-                style={styles.input}
-              />
-              {error ? (
-                <Text style={{ color: 'red' }}>{errorMessage}</Text>
-              ) : isLoading ? (
-                <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text>
-              ) : null}
-              <View
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <TouchableOpacity
-                  style={styles.deactivateButton}
-                  onPress={() => {
-                    deleteAccountPermanently(token, userId)
-                  }}
-                >
-                  <Text style={styles.deactivateButtonText}>Deactivate</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.cancelButton}
-                  onPress={() => {
-                    setShowPasswordModal(false)
-                  }}
-                >
-                  <Text style={styles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
-        <View style={styles.topContainer}>
-          <View style={styles.backIcon}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                navigation.goBack()
+    <View style={styles.container}>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={showPasswordModal}
+        statusBarTranslucent
+        onRequestClose={() => {
+          setShowPasswordModal(!showPasswordModal)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={{ color: 'red' }}>
+              *Once account is deleted it can no longer be retrieved.
+            </Text>
+            <TextInput
+              placeholder='Password'
+              defaultValue={''}
+              onChangeText={(text) => {
+                setPassword(text)
+              }}
+              secureTextEntry
+              style={styles.input}
+            />
+            {error ? (
+              <Text style={{ color: 'red' }}>{errorMessage}</Text>
+            ) : isLoading ? (
+              <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text>
+            ) : null}
+            <View
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between'
               }}
             >
-              <Image src={BackIcon} resizeMode='contain' style={styles.image} />
-            </TouchableWithoutFeedback>
+              <TouchableOpacity
+                style={styles.deactivateButton}
+                onPress={() => {
+                  deleteAccountPermanently(token, userId)
+                }}
+              >
+                <Text style={styles.deactivateButtonText}>Deactivate</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => {
+                  setShowPasswordModal(false)
+                }}
+              >
+                <Text style={styles.cancelButtonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-
-        {/*End  Notification View */}
-        <View style={styles.bodyContainer}>
-          <TouchableOpacity
-            style={styles.settingsOption}
+      </Modal>
+      <View style={styles.topContainer}>
+        <View style={styles.backIcon}>
+          <TouchableWithoutFeedback
             onPress={() => {
-              navigation.navigate('UpdatePersonalInfo', {
-                id: params.id,
-                type: params.type,
-                token: token
-              })
+              navigation.goBack()
             }}
           >
-            <Text style={{ fontSize: 15 }}>Update Personal Information</Text>
-            <AntDesign name='right' size={15} color='black' />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.settingsOption}
-            onPress={() => {
-              navigation.navigate('UpdatePassword', {
-                id: params.id,
-                type: params.type,
-                token: token
-              })
-            }}
-          >
-            <Text style={{ fontSize: 15 }}>Update Password</Text>
-            <AntDesign name='right' size={15} color='black' />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.deactivateButton}
-            onPress={() => {
-              setShowPasswordModal(true)
-            }}
-          >
-            <Text style={styles.deactivateButtonText}>Deactivate Account</Text>
-          </TouchableOpacity>
+            <Image src={BackIcon} resizeMode='contain' style={styles.image} />
+          </TouchableWithoutFeedback>
         </View>
       </View>
+
+      {/*End  Notification View */}
+      <View style={styles.bodyContainer}>
+        <TouchableOpacity
+          style={styles.settingsOption}
+          onPress={() => {
+            navigation.navigate('UpdatePersonalInfo', {
+              id: params.id,
+              type: params.type,
+              token: token
+            })
+          }}
+        >
+          <Text style={{ fontSize: 15 }}>Update Personal Information</Text>
+          <AntDesign name='right' size={15} color='black' />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.settingsOption}
+          onPress={() => {
+            navigation.navigate('UpdatePassword', {
+              id: params.id,
+              type: params.type,
+              token: token
+            })
+          }}
+        >
+          <Text style={{ fontSize: 15 }}>Update Password</Text>
+          <AntDesign name='right' size={15} color='black' />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deactivateButton}
+          onPress={() => {
+            setShowPasswordModal(true)
+          }}
+        >
+          <Text style={styles.deactivateButtonText}>Deactivate Account</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   )
 }
 export default AccountSettingsScreen

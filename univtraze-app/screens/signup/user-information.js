@@ -20,8 +20,7 @@ import useFormErrors from '../../hooks/useFormErrors'
 import { nameRegex, optionalNameRegex, phoneNumberRegex } from '../../utils/regex'
 import UserInformationFooter from '../../components/UserInformationFooter'
 
-const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
-
+const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const scrollViewContainerRef = useRef()
   const publicProfileRef = useRef()
   const contactInformationRef = useRef()
@@ -65,19 +64,18 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
   ])
 
   const scrollToPublicProfile = () => {
-    scrollViewContainerRef.current.scrollTo({ y: 0, animated: true });
+    scrollViewContainerRef.current.scrollTo({ y: 0, animated: true })
   }
 
   const scrollToContactInfo = () => {
     contactInformationRef.current.measure((x, y, width, height, pageX, pageY) => {
-      scrollViewContainerRef.current.scrollTo({ y: pageY, animated: true });
-    });
+      scrollViewContainerRef.current.scrollTo({ y: pageY, animated: true })
+    })
   }
 
   const scrollToCurrentAddress = () => {
-    scrollViewContainerRef.current.scrollTo({ y: 1000, animated: true });
+    scrollViewContainerRef.current.scrollTo({ y: 1000, animated: true })
   }
-
 
   const onNext = async () => {
     resetFormErrors()
@@ -86,88 +84,87 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
     }
 
     if (firstName === null || firstName === '') {
-      scrollToPublicProfile();
+      scrollToPublicProfile()
       return setFormErrors('firstName', 'First name is required')
     }
 
     if (!nameRegex.test(firstName)) {
-      scrollToPublicProfile();
+      scrollToPublicProfile()
       return setFormErrors('firstName', 'First name is not valid')
     }
 
     if (!optionalNameRegex.test(middleName)) {
-      scrollToPublicProfile();
+      scrollToPublicProfile()
       return setFormErrors('middleName', 'Middle name is not valid')
     }
 
     if (lastName === null || lastName === '') {
-      scrollToPublicProfile();
+      scrollToPublicProfile()
       return setFormErrors('lastName', 'Last name is required')
     }
     if (!nameRegex.test(lastName)) {
-      scrollToPublicProfile();
+      scrollToPublicProfile()
       return setFormErrors('lastName', 'Last name is not valid')
     }
 
     if (gender === null || gender === '') {
-      scrollToPublicProfile();
+      scrollToPublicProfile()
       return setFormErrors('gender', 'Gender is required')
     }
 
     if (dateOfBirth === null || dateOfBirth === '') {
-      scrollToPublicProfile();
+      scrollToPublicProfile()
       return setFormErrors('dob', 'Date of birth is required')
     }
 
     const totalYears = moment().diff(moment(dateOfBirth), 'Years')
 
     if (totalYears < 12) {
-      scrollToPublicProfile();
+      scrollToPublicProfile()
       return setFormErrors('dob', "User below 12 yrs old can't use the app")
     }
 
     if (countryDialCode == null || countryDialCode == '') {
       scrollToContactInfo()
-      return setFormErrors('countryDialCode', "Country dial code is required")
+      return setFormErrors('countryDialCode', 'Country dial code is required')
     }
 
     if (phoneNumber == null || phoneNumber == '') {
       scrollToContactInfo()
-      return setFormErrors('phoneNumber', "Phone number is required")
+      return setFormErrors('phoneNumber', 'Phone number is required')
     }
 
     if (!phoneNumberRegex.test(phoneNumber)) {
       scrollToContactInfo()
-      return setFormErrors('phoneNumber', "Phone number is invalid")
+      return setFormErrors('phoneNumber', 'Phone number is invalid')
     }
 
     if (addressRegion == null || addressRegion == '') {
       scrollToCurrentAddress()
-      return setFormErrors('region', "Region address is required")
+      return setFormErrors('region', 'Region address is required')
     }
 
     if (addressProvince == null || addressProvince == '') {
       scrollToCurrentAddress()
-      return setFormErrors('province', "Province address is required")
+      return setFormErrors('province', 'Province address is required')
     }
 
     if (addressCity == null || addressCity == '') {
       scrollToCurrentAddress()
-      return setFormErrors('city', "City address is required")
+      return setFormErrors('city', 'City address is required')
     }
 
     if (addressBrgy == null || addressBrgy == '') {
       scrollToCurrentAddress()
-      return setFormErrors('brgy', "Barangay address is required")
+      return setFormErrors('brgy', 'Barangay address is required')
     }
 
     if (addressStreet == null || addressStreet == '') {
       scrollToCurrentAddress()
-      return setFormErrors('street', "Street address is required")
+      return setFormErrors('street', 'Street address is required')
     }
 
     navigation.navigate('user-documents')
-  
   }
 
   const countryDialCodes = useMemo(() => {
@@ -191,7 +188,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
   }, [addressCity])
 
   return (
-    <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+    <KeyboardAvoidingView style={styles.keyboardAvoidingView} behavior='height'>
       <View style={styles.header}>
         <Image
           source={StepperIcon1}
@@ -206,7 +203,9 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
         ref={scrollViewContainerRef}
         contentContainerStyle={styles.scrollViewContent}
       >
-        <Text ref={publicProfileRef} style={styles.sectionHeaderText}>Public profile</Text>
+        <Text ref={publicProfileRef} style={styles.sectionHeaderText}>
+          Public profile
+        </Text>
         <View style={[styles.inputWrapper]}>
           <Text style={styles.label}>First name</Text>
           <TextInput
@@ -317,11 +316,18 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
           )}
         </View>
 
-        <Text ref={contactInformationRef} style={styles.sectionHeaderText}>Contact Information</Text>
+        <Text ref={contactInformationRef} style={styles.sectionHeaderText}>
+          Contact Information
+        </Text>
         <View style={styles.phoneNumberContainer}>
           <View style={styles.countryCodeWrapper}>
             <Text style={styles.label}>Country Dial Code</Text>
-            <View style={[styles.countryDialCodePickerWrapper, formErrors.countryDialCode?.hasError && styles.inputError]}>
+            <View
+              style={[
+                styles.countryDialCodePickerWrapper,
+                formErrors.countryDialCode?.hasError && styles.inputError
+              ]}
+            >
               <Picker
                 style={styles.countryDialCodePickerStyle}
                 selectedValue={countryDialCode}
@@ -357,10 +363,14 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
           </View>
         </View>
 
-        <Text ref={currentAddressRef} style={styles.sectionHeaderText}>Current Address</Text>
+        <Text ref={currentAddressRef} style={styles.sectionHeaderText}>
+          Current Address
+        </Text>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Region</Text>
-          <View style={[styles.addressPicketWrapper, formErrors.region?.hasError && styles.inputError]}>
+          <View
+            style={[styles.addressPicketWrapper, formErrors.region?.hasError && styles.inputError]}
+          >
             <Picker
               style={styles.addressPickerStyle}
               selectedValue={addressRegion}
@@ -384,7 +394,12 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
         </View>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Province</Text>
-          <View style={[styles.addressPicketWrapper, formErrors.province?.hasError && styles.inputError]}>
+          <View
+            style={[
+              styles.addressPicketWrapper,
+              formErrors.province?.hasError && styles.inputError
+            ]}
+          >
             <Picker
               style={styles.addressPickerStyle}
               selectedValue={addressProvince}
@@ -409,7 +424,9 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
 
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>City</Text>
-          <View style={[styles.addressPicketWrapper, formErrors.city?.hasError && styles.inputError]}>
+          <View
+            style={[styles.addressPicketWrapper, formErrors.city?.hasError && styles.inputError]}
+          >
             <Picker
               style={styles.addressPickerStyle}
               selectedValue={addressCity}
@@ -424,13 +441,15 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
             </Picker>
           </View>
           {formErrors.province?.hasError && (
-              <Text style={styles.errorText}>{formErrors.province.message}</Text>
-            )}
+            <Text style={styles.errorText}>{formErrors.province.message}</Text>
+          )}
         </View>
 
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Barangay</Text>
-          <View style={[styles.addressPicketWrapper, formErrors.brgy?.hasError && styles.inputError]}>
+          <View
+            style={[styles.addressPicketWrapper, formErrors.brgy?.hasError && styles.inputError]}
+          >
             <Picker
               style={styles.addressPickerStyle}
               selectedValue={addressBrgy}
@@ -445,8 +464,8 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
             </Picker>
           </View>
           {formErrors.brgy?.hasError && (
-              <Text style={styles.errorText}>{formErrors.brgy.message}</Text>
-            )}
+            <Text style={styles.errorText}>{formErrors.brgy.message}</Text>
+          )}
         </View>
 
         <View style={styles.inputWrapper}>
@@ -463,7 +482,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType }}) => {
           )}
         </View>
       </ScrollView>
-      <UserInformationFooter onGoBack={navigation.goBack} onNext={onNext}/>
+      <UserInformationFooter onGoBack={navigation.goBack} onNext={onNext} />
     </KeyboardAvoidingView>
   )
 }
@@ -520,7 +539,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.PRIMARY,
     borderRadius: 5,
     marginTop: 5,
-    height: 50,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -528,7 +546,6 @@ const styles = StyleSheet.create({
   genderPickerStyle: {
     width: '100%',
     backgroundColor: COLORS.WHITE,
-    borderWidth: 1,
     color: '#4d7861'
   },
   genderPickerItemStyle: {
@@ -551,7 +568,6 @@ const styles = StyleSheet.create({
     borderColor: COLORS.PRIMARY,
     borderRadius: 5,
     marginTop: 5,
-    height: 50,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -559,7 +575,6 @@ const styles = StyleSheet.create({
   countryDialCodePickerStyle: {
     width: '100%',
     backgroundColor: COLORS.WHITE,
-    borderWidth: 1,
     color: '#4d7861'
   },
   addressPicketWrapper: {
@@ -572,7 +587,6 @@ const styles = StyleSheet.create({
   addressPickerStyle: {
     width: '100%',
     backgroundColor: COLORS.WHITE,
-    borderWidth: 1,
     color: '#4d7861'
   },
   errorMessage: {

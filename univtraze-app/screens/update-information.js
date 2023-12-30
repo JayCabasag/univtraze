@@ -219,132 +219,132 @@ const UpdatePersonalInformationScreen = ({ navigation, route }) => {
   }
 
   return (
-      <View style={styles.container}>
-        <View style={styles.topContainer}>
-          <View style={styles.backIcon}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                navigation.goBack()
-              }}
-            >
-              <ImageBackground
-                src={BackIcon}
-                resizeMode='contain'
-                style={styles.image}
-              ></ImageBackground>
-            </TouchableWithoutFeedback>
-          </View>
-        </View>
-
-        {/*End  Notification View */}
-        <View style={styles.bodyContainer}>
-          <Text style={styles.headerText}>Update Personal Information</Text>
-          <ScrollView>
-            <Text style={{ color: COLORS.PRIMARY }}>
-              Only limited information can be updated in this section. Personal information e.g.
-              Name, Address and Date of Birth cannot be updated here, please contact adminitrator
-              for further assistance.
-            </Text>
-
-            <Image
-              source={{
-                uri:
-                  profilePhoto === null
-                    ? 'https://media.istockphoto.com/vectors/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-vector-id1130884625?k=20&m=1130884625&s=612x612&w=0&h=OITK5Otm_lRj7Cx8mBhm7NtLTEHvp6v3XnZFLZmuB9o='
-                    : profilePhoto.uri
-              }}
-              resizeMode='cover'
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 100,
-                borderColor: COLORS.PRIMARY,
-                borderWidth: 2,
-                shadowColor: 'black',
-                alignSelf: 'center'
-              }}
-            />
-            <TouchableOpacity
-              style={styles.editProfileButton}
-              onPress={() => handlePickProfilePhoto()}
-            >
-              <AntDesign name='edit' size={24} color='black' />
-              <Text> EDIT PROFILE </Text>
-            </TouchableOpacity>
-
-            <View>
-              <Text>User Id.</Text>
-              <TextInput
-                placeholder='Id'
-                style={styles.inputDisabled}
-                value={userId + ''}
-                editable={false}
-              />
-              <Text>User Type</Text>
-              <TextInput
-                placeholder='Type'
-                style={styles.inputDisabled}
-                value={userType}
-                editable={false}
-              />
-              <Text>Mobile No.</Text>
-              <TextInput
-                placeholder='Type'
-                style={styles.input}
-                defaultValue={mobileNumber}
-                onChangeText={(text) => setMobileNumber(text)}
-              />
-            </View>
-
-            {/* This is for Student only */}
-            {userType === 'Student' ? (
-              <View>
-                <Text>Course</Text>
-                <TextInput
-                  placeholder='Course'
-                  style={styles.input}
-                  defaultValue={studentCourse}
-                  onChangeText={(text) => setStudentCourse(text)}
-                />
-                <Text>Year and Section</Text>
-                <TextInput
-                  placeholder='Year and Section'
-                  style={styles.input}
-                  defaultValue={studentYearSection}
-                  onChangeText={(text) => setStudentYearSection(text)}
-                />
-              </View>
-            ) : null}
-
-            {/* This is for Employee only */}
-            {userType === 'Employee' ? (
-              <View>
-                <Text>Department/Faculty</Text>
-                <TextInput
-                  placeholder='Department/Faculty'
-                  style={styles.input}
-                  defaultValue={employeeDepartment}
-                  onChangeText={(text) => setEmployeeDepartment(text)}
-                />
-                <Text>Position</Text>
-                <TextInput
-                  placeholder='Position'
-                  style={styles.input}
-                  defaultValue={employeePosition}
-                  onChangeText={(text) => setEmployeePosition(text)}
-                />
-              </View>
-            ) : null}
-          </ScrollView>
-
-          {error ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
-          {success ? <Text style={{ color: COLORS.PRIMARY }}>{successMessage}</Text> : null}
-          {isLoading ? <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text> : null}
-          <TouchableOpacity style={styles.buttons} onPress={() => handleUpdateProfileData()}>
-            <Text style={{ fontSize: 15, color: 'white' }}>Update info</Text>
-          </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.topContainer}>
+        <View style={styles.backIcon}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.goBack()
+            }}
+          >
+            <ImageBackground
+              src={BackIcon}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
+          </TouchableWithoutFeedback>
         </View>
       </View>
+
+      {/*End  Notification View */}
+      <View style={styles.bodyContainer}>
+        <Text style={styles.headerText}>Update Personal Information</Text>
+        <ScrollView>
+          <Text style={{ color: COLORS.PRIMARY }}>
+            Only limited information can be updated in this section. Personal information e.g. Name,
+            Address and Date of Birth cannot be updated here, please contact adminitrator for
+            further assistance.
+          </Text>
+
+          <Image
+            source={{
+              uri:
+                profilePhoto === null
+                  ? 'https://media.istockphoto.com/vectors/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-vector-id1130884625?k=20&m=1130884625&s=612x612&w=0&h=OITK5Otm_lRj7Cx8mBhm7NtLTEHvp6v3XnZFLZmuB9o='
+                  : profilePhoto.uri
+            }}
+            resizeMode='cover'
+            style={{
+              width: 120,
+              height: 120,
+              borderRadius: 100,
+              borderColor: COLORS.PRIMARY,
+              borderWidth: 2,
+              shadowColor: 'black',
+              alignSelf: 'center'
+            }}
+          />
+          <TouchableOpacity
+            style={styles.editProfileButton}
+            onPress={() => handlePickProfilePhoto()}
+          >
+            <AntDesign name='edit' size={24} color='black' />
+            <Text> EDIT PROFILE </Text>
+          </TouchableOpacity>
+
+          <View>
+            <Text>User Id.</Text>
+            <TextInput
+              placeholder='Id'
+              style={styles.inputDisabled}
+              value={userId + ''}
+              editable={false}
+            />
+            <Text>User Type</Text>
+            <TextInput
+              placeholder='Type'
+              style={styles.inputDisabled}
+              value={userType}
+              editable={false}
+            />
+            <Text>Mobile No.</Text>
+            <TextInput
+              placeholder='Type'
+              style={styles.input}
+              defaultValue={mobileNumber}
+              onChangeText={(text) => setMobileNumber(text)}
+            />
+          </View>
+
+          {/* This is for Student only */}
+          {userType === 'Student' ? (
+            <View>
+              <Text>Course</Text>
+              <TextInput
+                placeholder='Course'
+                style={styles.input}
+                defaultValue={studentCourse}
+                onChangeText={(text) => setStudentCourse(text)}
+              />
+              <Text>Year and Section</Text>
+              <TextInput
+                placeholder='Year and Section'
+                style={styles.input}
+                defaultValue={studentYearSection}
+                onChangeText={(text) => setStudentYearSection(text)}
+              />
+            </View>
+          ) : null}
+
+          {/* This is for Employee only */}
+          {userType === 'Employee' ? (
+            <View>
+              <Text>Department/Faculty</Text>
+              <TextInput
+                placeholder='Department/Faculty'
+                style={styles.input}
+                defaultValue={employeeDepartment}
+                onChangeText={(text) => setEmployeeDepartment(text)}
+              />
+              <Text>Position</Text>
+              <TextInput
+                placeholder='Position'
+                style={styles.input}
+                defaultValue={employeePosition}
+                onChangeText={(text) => setEmployeePosition(text)}
+              />
+            </View>
+          ) : null}
+        </ScrollView>
+
+        {error ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
+        {success ? <Text style={{ color: COLORS.PRIMARY }}>{successMessage}</Text> : null}
+        {isLoading ? <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text> : null}
+        <TouchableOpacity style={styles.buttons} onPress={() => handleUpdateProfileData()}>
+          <Text style={{ fontSize: 15, color: 'white' }}>Update info</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   )
 }
 export default UpdatePersonalInformationScreen

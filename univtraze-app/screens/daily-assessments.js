@@ -102,336 +102,383 @@ const DailyAssessmentScreen = () => {
     Alert.alert('Your symptoms are ' + symptomss.toString())
   }
   return (
-      <View style={styles.container}>
-        {/* Notification View */}
-        <View style={styles.topContainer}>
-          <View style={styles.menuLogo}>
-            <TouchableWithoutFeedback onPress={toggleBottomNavigationView}>
-              <ImageBackground
-                source={menu_jpg}
-                resizeMode='contain'
-                style={styles.image}
-              ></ImageBackground>
-            </TouchableWithoutFeedback>
-          </View>
+    <View style={styles.container}>
+      {/* Notification View */}
+      <View style={styles.topContainer}>
+        <View style={styles.menuLogo}>
+          <TouchableWithoutFeedback onPress={toggleBottomNavigationView}>
+            <ImageBackground
+              source={menu_jpg}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
+          </TouchableWithoutFeedback>
+        </View>
 
-          <View style={styles.notifLogo}>
-            <TouchableWithoutFeedback onPress={toggleNotifNavigationView}>
-              <ImageBackground
-                source={notif_jpg}
-                resizeMode='contain'
-                style={{ width: '75%', height: '75%' }}
+        <View style={styles.notifLogo}>
+          <TouchableWithoutFeedback onPress={toggleNotifNavigationView}>
+            <ImageBackground
+              source={notif_jpg}
+              resizeMode='contain'
+              style={{ width: '75%', height: '75%' }}
+            >
+              {notificationCounts === 0 ? null : (
+                <Text
+                  style={{
+                    backgroundColor: 'red',
+                    width: 20,
+                    borderRadius: 100,
+                    textAlign: 'center',
+                    color: 'white',
+                    shadowColor: '#3F3D3D',
+                    borderWidth: 1,
+                    borderColor: 'white',
+                    elevation: 20
+                  }}
+                  onPress={toggleNotifNavigationView}
+                >
+                  {notificationCounts}
+                </Text>
+              )}
+            </ImageBackground>
+          </TouchableWithoutFeedback>
+        </View>
+        {/*bottom navigation for user settings  */}
+        <BottomSheet
+          visible={visible}
+          onBackButtonPress={toggleBottomNavigationView}
+          onBackdropPress={toggleBottomNavigationView}
+        >
+          {/*Bottom Sheet inner View*/}
+          <View style={styles.bottomNavigationView}>
+            <View style={{ width: '100%', height: '100%' }}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '25%',
+                  justifyContent: 'center',
+                  padding: 15,
+                  flexDirection: 'row',
+                  marginTop: 40
+                }}
               >
-                {notificationCounts === 0 ? null : (
-                  <Text
+                <View
+                  style={{
+                    width: '20%',
+                    height: '100%',
+                    borderColor: 'white',
+                    borderWidth: 3,
+                    borderRadius: 100,
+                    shadowColor: 'black',
+                    elevation: 20,
+                    marginStart: 40
+                  }}
+                >
+                  <Image
+                    source={dp_uri}
+                    resizeMode='cover'
                     style={{
-                      backgroundColor: 'red',
-                      width: 20,
-                      borderRadius: 100,
-                      textAlign: 'center',
-                      color: 'white',
-                      shadowColor: '#3F3D3D',
-                      borderWidth: 1,
-                      borderColor: 'white',
-                      elevation: 20
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: 100
                     }}
-                    onPress={toggleNotifNavigationView}
+                  />
+                </View>
+                <View style={{ width: '75%', padding: 10 }}>
+                  <Text style={{ fontSize: 22, fontWeight: 'bold' }}>John Doe Dimitry</Text>
+
+                  <TouchableOpacity
+                    style={{
+                      width: 120,
+                      height: 'auto',
+                      borderWidth: 2,
+                      borderColor: COLORS.PRIMARY,
+                      borderRadius: 50,
+                      padding: 5,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginTop: 5
+                    }}
+                    onPress={() => setModalVisible(true)}
                   >
-                    {notificationCounts}
-                  </Text>
-                )}
-              </ImageBackground>
-            </TouchableWithoutFeedback>
-          </View>
-          {/*bottom navigation for user settings  */}
-          <BottomSheet
-            visible={visible}
-            onBackButtonPress={toggleBottomNavigationView}
-            onBackdropPress={toggleBottomNavigationView}
-          >
-            {/*Bottom Sheet inner View*/}
-            <View style={styles.bottomNavigationView}>
-              <View style={{ width: '100%', height: '100%' }}>
+                    <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}> View QR Code</Text>
+                  </TouchableOpacity>
+                </View>
+                <Modal
+                  animationType='fade'
+                  transparent={true}
+                  visible={modalVisible}
+                  onRequestClose={() => {
+                    setModalVisible(!modalVisible)
+                  }}
+                >
+                  {/* POP-UP MODAL VIEW */}
+                  <Pressable
+                    style={styles.centeredViews}
+                    onPress={() => setModalVisible(!modalVisible)}
+                  >
+                    <View style={styles.modalView}>
+                      <Text
+                        style={{
+                          fontSize: 28,
+                          color: COLORS.PRIMARY,
+                          fontWeight: 'bold'
+                        }}
+                      >
+                        UnivTraze
+                      </Text>
+
+                      {/* QR Container */}
+                      <View
+                        style={{
+                          width: 210,
+                          height: 210,
+                          borderWidth: 2,
+                          borderColor: COLORS.PRIMARY,
+                          borderRadius: 20,
+                          marginTop: 5
+                        }}
+                      ></View>
+
+                      {/* QR Code */}
+                      <Text style={{ color: 'rgba(54, 77, 57, 0.6)' }}>42121329410</Text>
+                      {/* User Name */}
+
+                      <Text style={{ fontSize: 28, marginTop: 10 }}>John Doe Dimitry</Text>
+
+                      {/* User Type */}
+
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: 'rgba(54, 77, 57, 0.6)'
+                        }}
+                      >
+                        STUDENT
+                      </Text>
+
+                      {/* Download QR */}
+                      <Pressable
+                        style={[styles.buttons]}
+                        // onPress={() => setModalVisible(!modalVisible)}
+                      >
+                        <Text
+                          style={{
+                            color: 'white',
+                            fontSize: 16,
+                            fontWeight: '700'
+                          }}
+                        >
+                          Download QR
+                        </Text>
+                      </Pressable>
+                    </View>
+                  </Pressable>
+                </Modal>
+              </View>
+
+              <View
+                style={{
+                  width: '80%',
+                  height: '65%',
+                  alignItems: 'center',
+                  justifyContent: 'space-evenly',
+                  alignSelf: 'center'
+                }}
+              >
                 <View
                   style={{
                     width: '100%',
-                    height: '25%',
-                    justifyContent: 'center',
-                    padding: 15,
+                    height: 54,
+                    backgroundColor: COLORS.PRIMARY,
+                    borderRadius: 10,
                     flexDirection: 'row',
-                    marginTop: 40
+                    alignItems: 'center'
                   }}
                 >
-                  <View
+                  <Image
+                    source={dashboard_icon}
+                    resizeMode='contain'
                     style={{
-                      width: '20%',
-                      height: '100%',
-                      borderColor: 'white',
-                      borderWidth: 3,
-                      borderRadius: 100,
-                      shadowColor: 'black',
-                      elevation: 20,
-                      marginStart: 40
+                      width: 15,
+                      height: 15,
+                      marginStart: 20,
+                      marginEnd: 20
                     }}
-                  >
-                    <Image
-                      source={dp_uri}
-                      resizeMode='cover'
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: 100
-                      }}
-                    />
-                  </View>
-                  <View style={{ width: '75%', padding: 10 }}>
-                    <Text style={{ fontSize: 22, fontWeight: 'bold' }}>John Doe Dimitry</Text>
-
-                    <TouchableOpacity
-                      style={{
-                        width: 120,
-                        height: 'auto',
-                        borderWidth: 2,
-                        borderColor: COLORS.PRIMARY,
-                        borderRadius: 50,
-                        padding: 5,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 5
-                      }}
-                      onPress={() => setModalVisible(true)}
-                    >
-                      <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}>
-                        {' '}
-                        View QR Code
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <Modal
-                    animationType='fade'
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                      setModalVisible(!modalVisible)
-                    }}
-                  >
-                    {/* POP-UP MODAL VIEW */}
-                    <Pressable
-                      style={styles.centeredViews}
-                      onPress={() => setModalVisible(!modalVisible)}
-                    >
-                      <View style={styles.modalView}>
-                        <Text
-                          style={{
-                            fontSize: 28,
-                            color: COLORS.PRIMARY,
-                            fontWeight: 'bold'
-                          }}
-                        >
-                          UnivTraze
-                        </Text>
-
-                        {/* QR Container */}
-                        <View
-                          style={{
-                            width: 210,
-                            height: 210,
-                            borderWidth: 2,
-                            borderColor: COLORS.PRIMARY,
-                            borderRadius: 20,
-                            marginTop: 5
-                          }}
-                        ></View>
-
-                        {/* QR Code */}
-                        <Text style={{ color: 'rgba(54, 77, 57, 0.6)' }}>42121329410</Text>
-                        {/* User Name */}
-
-                        <Text style={{ fontSize: 28, marginTop: 10 }}>John Doe Dimitry</Text>
-
-                        {/* User Type */}
-
-                        <Text
-                          style={{
-                            fontSize: 16,
-                            color: 'rgba(54, 77, 57, 0.6)'
-                          }}
-                        >
-                          STUDENT
-                        </Text>
-
-                        {/* Download QR */}
-                        <Pressable
-                          style={[styles.buttons]}
-                          // onPress={() => setModalVisible(!modalVisible)}
-                        >
-                          <Text
-                            style={{
-                              color: 'white',
-                              fontSize: 16,
-                              fontWeight: '700'
-                            }}
-                          >
-                            Download QR
-                          </Text>
-                        </Pressable>
-                      </View>
-                    </Pressable>
-                  </Modal>
+                  />
+                  <Text style={{ color: 'white' }}>Dashboard</Text>
                 </View>
-
                 <View
                   style={{
-                    width: '80%',
-                    height: '65%',
-                    alignItems: 'center',
-                    justifyContent: 'space-evenly',
-                    alignSelf: 'center'
+                    width: '100%',
+                    height: 54,
+                    borderRadius: 10,
+                    flexDirection: 'row',
+                    alignItems: 'center'
                   }}
                 >
-                  <View
+                  <Image
+                    source={accountsettings_icon}
+                    resizeMode='contain'
                     style={{
-                      width: '100%',
-                      height: 54,
-                      backgroundColor: COLORS.PRIMARY,
-                      borderRadius: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center'
+                      width: 15,
+                      height: 15,
+                      marginStart: 20,
+                      marginEnd: 20
                     }}
-                  >
-                    <Image
-                      source={dashboard_icon}
-                      resizeMode='contain'
-                      style={{
-                        width: 15,
-                        height: 15,
-                        marginStart: 20,
-                        marginEnd: 20
-                      }}
-                    />
-                    <Text style={{ color: 'white' }}>Dashboard</Text>
-                  </View>
-                  <View
+                  />
+                  <Text>Update profile information</Text>
+                </View>
+                <View
+                  style={{
+                    width: '100%',
+                    height: 54,
+                    borderRadius: 10,
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Image
+                    source={updateProfile_icon}
+                    resizeMode='contain'
                     style={{
-                      width: '100%',
-                      height: 54,
-                      borderRadius: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center'
+                      width: 15,
+                      height: 15,
+                      marginStart: 20,
+                      marginEnd: 20
                     }}
-                  >
-                    <Image
-                      source={accountsettings_icon}
-                      resizeMode='contain'
-                      style={{
-                        width: 15,
-                        height: 15,
-                        marginStart: 20,
-                        marginEnd: 20
-                      }}
-                    />
-                    <Text>Update profile information</Text>
-                  </View>
-                  <View
+                  />
+                  <Text>Account settings</Text>
+                </View>
+                <View
+                  style={{
+                    width: '100%',
+                    height: 54,
+                    borderRadius: 10,
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Image
+                    source={roomVisited_icon}
+                    resizeMode='contain'
                     style={{
-                      width: '100%',
-                      height: 54,
-                      borderRadius: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center'
+                      width: 15,
+                      height: 15,
+                      marginStart: 20,
+                      marginEnd: 20
                     }}
-                  >
-                    <Image
-                      source={updateProfile_icon}
-                      resizeMode='contain'
-                      style={{
-                        width: 15,
-                        height: 15,
-                        marginStart: 20,
-                        marginEnd: 20
-                      }}
-                    />
-                    <Text>Account settings</Text>
-                  </View>
-                  <View
+                  />
+                  <Text>Room visited</Text>
+                </View>
+                <View
+                  style={{
+                    width: '100%',
+                    height: 54,
+                    borderRadius: 10,
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Image
+                    source={logOut_icon}
+                    resizeMode='contain'
                     style={{
-                      width: '100%',
-                      height: 54,
-                      borderRadius: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center'
+                      width: 15,
+                      height: 15,
+                      marginStart: 20,
+                      marginEnd: 20
                     }}
-                  >
-                    <Image
-                      source={roomVisited_icon}
-                      resizeMode='contain'
-                      style={{
-                        width: 15,
-                        height: 15,
-                        marginStart: 20,
-                        marginEnd: 20
-                      }}
-                    />
-                    <Text>Room visited</Text>
-                  </View>
-                  <View
-                    style={{
-                      width: '100%',
-                      height: 54,
-                      borderRadius: 10,
-                      flexDirection: 'row',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <Image
-                      source={logOut_icon}
-                      resizeMode='contain'
-                      style={{
-                        width: 15,
-                        height: 15,
-                        marginStart: 20,
-                        marginEnd: 20
-                      }}
-                    />
-                    <Text>Logout</Text>
-                  </View>
+                  />
+                  <Text>Logout</Text>
                 </View>
               </View>
             </View>
-          </BottomSheet>
-          {/*end of bottom navigation for user settings  */}
+          </View>
+        </BottomSheet>
+        {/*end of bottom navigation for user settings  */}
 
-          {/* start of botton sheet for notification */}
+        {/* start of botton sheet for notification */}
 
-          <BottomSheet
-            visible={notifVisible}
-            onBackButtonPress={toggleNotifNavigationView}
-            onBackdropPress={toggleNotifNavigationView}
-          >
-            {/*Bottom Sheet inner View*/}
-            <View style={styles.bottomNavigationView}>
-              <View style={{ width: '100%', height: '100%' }}>
+        <BottomSheet
+          visible={notifVisible}
+          onBackButtonPress={toggleNotifNavigationView}
+          onBackdropPress={toggleNotifNavigationView}
+        >
+          {/*Bottom Sheet inner View*/}
+          <View style={styles.bottomNavigationView}>
+            <View style={{ width: '100%', height: '100%' }}>
+              <View
+                style={{
+                  width: '100%',
+                  height: '15%',
+                  padding: 15,
+                  marginTop: 40,
+                  paddingLeft: 40
+                }}
+              >
+                <Text style={{ fontSize: 28 }}>Notifiations</Text>
+              </View>
+
+              <View
+                style={{
+                  width: '80%',
+                  height: '65%',
+                  alignItems: 'center',
+                  alignSelf: 'center'
+                }}
+              >
+                {/* Daily self assessment   notification */}
                 <View
                   style={{
                     width: '100%',
-                    height: '15%',
-                    padding: 15,
-                    marginTop: 40,
-                    paddingLeft: 40
+                    height: 54,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginBottom: 5,
+                    alignContent: 'center'
                   }}
                 >
-                  <Text style={{ fontSize: 28 }}>Notifiations</Text>
+                  <Image
+                    source={require('../assets/dailyAssess_icon.png')}
+                    resizeMode='contain'
+                    style={{
+                      width: 32,
+                      height: 32
+                    }}
+                  />
+                  <View style={{ paddingLeft: 15 }}>
+                    <Text
+                      style={{
+                        color: 'black',
+                        fontSize: 16,
+                        fontWeight: '700'
+                      }}
+                    >
+                      Daily self assessment
+                    </Text>
+                    <Text
+                      style={{
+                        color: COLORS.TEXT_BLACK,
+                        fontSize: 14,
+                        fontWeight: '900'
+                      }}
+                    >
+                      Just now
+                    </Text>
+                  </View>
                 </View>
 
+                {/* Profile updated notification */}
                 <View
                   style={{
-                    width: '80%',
-                    height: '65%',
+                    width: '100%',
+                    height: 54,
+                    flexDirection: 'row',
                     alignItems: 'center',
-                    alignSelf: 'center'
+                    marginBottom: 5
                   }}
                 >
-                  {/* Daily self assessment   notification */}
                   <View
                     style={{
                       width: '100%',
@@ -443,7 +490,7 @@ const DailyAssessmentScreen = () => {
                     }}
                   >
                     <Image
-                      source={require('../assets/dailyAssess_icon.png')}
+                      source={require('../assets/userInfoUpdate_icon.png')}
                       resizeMode='contain'
                       style={{
                         width: 32,
@@ -458,7 +505,7 @@ const DailyAssessmentScreen = () => {
                           fontWeight: '700'
                         }}
                       >
-                        Daily self assessment
+                        Profile updated successfully
                       </Text>
                       <Text
                         style={{
@@ -471,305 +518,255 @@ const DailyAssessmentScreen = () => {
                       </Text>
                     </View>
                   </View>
-
-                  {/* Profile updated notification */}
+                </View>
+                {/*Active cases  notification */}
+                <View
+                  style={{
+                    width: '100%',
+                    height: 54,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginBottom: 5
+                  }}
+                >
                   <View
                     style={{
                       width: '100%',
                       height: 54,
                       flexDirection: 'row',
                       alignItems: 'center',
-                      marginBottom: 5
+                      marginBottom: 5,
+                      alignContent: 'center'
                     }}
                   >
-                    <View
+                    <Image
+                      source={require('../assets/cases_icon.png')}
+                      resizeMode='contain'
                       style={{
-                        width: '100%',
-                        height: 54,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginBottom: 5,
-                        alignContent: 'center'
+                        width: 32,
+                        height: 32
                       }}
-                    >
-                      <Image
-                        source={require('../assets/userInfoUpdate_icon.png')}
-                        resizeMode='contain'
+                    />
+                    <View style={{ paddingLeft: 15 }}>
+                      <Text
                         style={{
-                          width: 32,
-                          height: 32
+                          color: 'black',
+                          fontSize: 16,
+                          fontWeight: '700'
                         }}
-                      />
-                      <View style={{ paddingLeft: 15 }}>
-                        <Text
-                          style={{
-                            color: 'black',
-                            fontSize: 16,
-                            fontWeight: '700'
-                          }}
-                        >
-                          Profile updated successfully
-                        </Text>
-                        <Text
-                          style={{
-                            color: COLORS.TEXT_BLACK,
-                            fontSize: 14,
-                            fontWeight: '900'
-                          }}
-                        >
-                          Just now
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                  {/*Active cases  notification */}
-                  <View
-                    style={{
-                      width: '100%',
-                      height: 54,
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginBottom: 5
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: '100%',
-                        height: 54,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginBottom: 5,
-                        alignContent: 'center'
-                      }}
-                    >
-                      <Image
-                        source={require('../assets/cases_icon.png')}
-                        resizeMode='contain'
+                      >
+                        Active cases are now 20,890
+                      </Text>
+                      <Text
                         style={{
-                          width: 32,
-                          height: 32
+                          color: COLORS.TEXT_BLACK,
+                          fontSize: 14,
+                          fontWeight: '900'
                         }}
-                      />
-                      <View style={{ paddingLeft: 15 }}>
-                        <Text
-                          style={{
-                            color: 'black',
-                            fontSize: 16,
-                            fontWeight: '700'
-                          }}
-                        >
-                          Active cases are now 20,890
-                        </Text>
-                        <Text
-                          style={{
-                            color: COLORS.TEXT_BLACK,
-                            fontSize: 14,
-                            fontWeight: '900'
-                          }}
-                        >
-                          Just now
-                        </Text>
-                      </View>
+                      >
+                        Just now
+                      </Text>
                     </View>
                   </View>
                 </View>
               </View>
             </View>
-          </BottomSheet>
-          {/*end of botton sheet for notification */}
-        </View>
-        {/*End  Notification View */}
-
-        {/* Start of Body Container */}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.bodyContainer}>
-            <View style={{ width: '100%', height: '25%' }}>
-              <Text style={{ fontSize: 28, fontWeight: '700' }}> Daily self {'\n'} assessment</Text>
-              <Text
-                style={{
-                  marginTop: 42,
-                  marginLeft: 6,
-                  fontSize: 16,
-                  fontWeight: '400'
-                }}
-              >
-                Do you have any of the following {'\n'}symptom/s ?
-              </Text>
-            </View>
-
-            <View style={{ width: '100%', height: '75%' }}>
-              <CheckBox
-                title='Fever'
-                checked={fever}
-                onPress={() => setFever(!fever)}
-                checkedIcon={
-                  <Image
-                    source={require('../assets/checkedbox.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                uncheckedIcon={
-                  <Image
-                    source={require('../assets/uncheck.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderColor: 'transparent',
-                  margin: 0
-                }}
-              />
-              <CheckBox
-                title='Cough or Colds'
-                checked={cough}
-                onPress={() => setCough(!cough)}
-                checkedIcon={
-                  <Image
-                    source={require('../assets/checkedbox.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                uncheckedIcon={
-                  <Image
-                    source={require('../assets/uncheck.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderColor: 'transparent',
-                  margin: 0
-                }}
-              />
-              <CheckBox
-                title='Sore Throat'
-                checked={soreThroat}
-                onPress={() => setSoreThroat(!soreThroat)}
-                checkedIcon={
-                  <Image
-                    source={require('../assets/checkedbox.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                uncheckedIcon={
-                  <Image
-                    source={require('../assets/uncheck.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderColor: 'transparent',
-                  margin: 0
-                }}
-              />
-              <CheckBox
-                title='Loss of smell or taste'
-                checked={lossOfSmell}
-                onPress={() => setLossOfSmell(!lossOfSmell)}
-                checkedIcon={
-                  <Image
-                    source={require('../assets/checkedbox.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                uncheckedIcon={
-                  <Image
-                    source={require('../assets/uncheck.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderColor: 'transparent',
-                  margin: 0
-                }}
-              />
-              <CheckBox
-                title='Body pains or fatigues'
-                checked={bodyPains}
-                onPress={() => setBodyPains(!bodyPains)}
-                checkedIcon={
-                  <Image
-                    source={require('../assets/checkedbox.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                uncheckedIcon={
-                  <Image
-                    source={require('../assets/uncheck.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderColor: 'transparent',
-                  margin: 0
-                }}
-              />
-              <CheckBox
-                title='Diarrhea'
-                checked={diarrhea}
-                onPress={() => setDiarrhea(!diarrhea)}
-                checkedIcon={
-                  <Image
-                    source={require('../assets/checkedbox.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                uncheckedIcon={
-                  <Image
-                    source={require('../assets/uncheck.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderColor: 'transparent',
-                  margin: 0
-                }}
-              />
-              <CheckBox
-                title='Breathing difficulties'
-                checked={breathingDiff}
-                onPress={() => setbreathingDiff(!breathingDiff)}
-                checkedIcon={
-                  <Image
-                    source={require('../assets/checkedbox.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                uncheckedIcon={
-                  <Image
-                    source={require('../assets/uncheck.png')}
-                    style={{ width: 30, height: 30 }}
-                  />
-                }
-                containerStyle={{
-                  backgroundColor: 'transparent',
-                  borderColor: 'transparent',
-                  margin: 0
-                }}
-              />
-              <TouchableOpacity
-                style={{
-                  width: '100%',
-                  height: 60,
-                  backgroundColor: COLORS.PRIMARY,
-                  borderRadius: 15,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 30
-                }}
-                onPress={sumbitSymp}
-              >
-                <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '700' }}>Submit</Text>
-              </TouchableOpacity>
-            </View>
           </View>
-        </ScrollView>
+        </BottomSheet>
+        {/*end of botton sheet for notification */}
       </View>
+      {/*End  Notification View */}
+
+      {/* Start of Body Container */}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.bodyContainer}>
+          <View style={{ width: '100%', height: '25%' }}>
+            <Text style={{ fontSize: 28, fontWeight: '700' }}> Daily self {'\n'} assessment</Text>
+            <Text
+              style={{
+                marginTop: 42,
+                marginLeft: 6,
+                fontSize: 16,
+                fontWeight: '400'
+              }}
+            >
+              Do you have any of the following {'\n'}symptom/s ?
+            </Text>
+          </View>
+
+          <View style={{ width: '100%', height: '75%' }}>
+            <CheckBox
+              title='Fever'
+              checked={fever}
+              onPress={() => setFever(!fever)}
+              checkedIcon={
+                <Image
+                  source={require('../assets/checkedbox.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              uncheckedIcon={
+                <Image
+                  source={require('../assets/uncheck.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              containerStyle={{
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                margin: 0
+              }}
+            />
+            <CheckBox
+              title='Cough or Colds'
+              checked={cough}
+              onPress={() => setCough(!cough)}
+              checkedIcon={
+                <Image
+                  source={require('../assets/checkedbox.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              uncheckedIcon={
+                <Image
+                  source={require('../assets/uncheck.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              containerStyle={{
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                margin: 0
+              }}
+            />
+            <CheckBox
+              title='Sore Throat'
+              checked={soreThroat}
+              onPress={() => setSoreThroat(!soreThroat)}
+              checkedIcon={
+                <Image
+                  source={require('../assets/checkedbox.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              uncheckedIcon={
+                <Image
+                  source={require('../assets/uncheck.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              containerStyle={{
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                margin: 0
+              }}
+            />
+            <CheckBox
+              title='Loss of smell or taste'
+              checked={lossOfSmell}
+              onPress={() => setLossOfSmell(!lossOfSmell)}
+              checkedIcon={
+                <Image
+                  source={require('../assets/checkedbox.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              uncheckedIcon={
+                <Image
+                  source={require('../assets/uncheck.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              containerStyle={{
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                margin: 0
+              }}
+            />
+            <CheckBox
+              title='Body pains or fatigues'
+              checked={bodyPains}
+              onPress={() => setBodyPains(!bodyPains)}
+              checkedIcon={
+                <Image
+                  source={require('../assets/checkedbox.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              uncheckedIcon={
+                <Image
+                  source={require('../assets/uncheck.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              containerStyle={{
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                margin: 0
+              }}
+            />
+            <CheckBox
+              title='Diarrhea'
+              checked={diarrhea}
+              onPress={() => setDiarrhea(!diarrhea)}
+              checkedIcon={
+                <Image
+                  source={require('../assets/checkedbox.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              uncheckedIcon={
+                <Image
+                  source={require('../assets/uncheck.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              containerStyle={{
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                margin: 0
+              }}
+            />
+            <CheckBox
+              title='Breathing difficulties'
+              checked={breathingDiff}
+              onPress={() => setbreathingDiff(!breathingDiff)}
+              checkedIcon={
+                <Image
+                  source={require('../assets/checkedbox.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              uncheckedIcon={
+                <Image
+                  source={require('../assets/uncheck.png')}
+                  style={{ width: 30, height: 30 }}
+                />
+              }
+              containerStyle={{
+                backgroundColor: 'transparent',
+                borderColor: 'transparent',
+                margin: 0
+              }}
+            />
+            <TouchableOpacity
+              style={{
+                width: '100%',
+                height: 60,
+                backgroundColor: COLORS.PRIMARY,
+                borderRadius: 15,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 30
+              }}
+              onPress={sumbitSymp}
+            >
+              <Text style={{ color: '#FFFFFF', fontSize: 16, fontWeight: '700' }}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 

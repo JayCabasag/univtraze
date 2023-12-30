@@ -264,259 +264,259 @@ const IndexScreen = ({ navigation, route }) => {
 
   // Return
   return (
-      <View style={styles.container}>
-        {/* Notification View */}
-        <View style={styles.topContainer}>
-          <View style={styles.menuLogo}>
-            <TouchableWithoutFeedback onPress={toggleBottomNavigationView}>
-              <ImageBackground
-                source={require('../assets/notifmenu_icon.png')}
-                resizeMode='contain'
-                style={styles.image}
-              ></ImageBackground>
-            </TouchableWithoutFeedback>
-          </View>
-
-          <View style={styles.notifLogo}>
-            <TouchableWithoutFeedback onPress={toggleNotifNavigationView}>
-              <ImageBackground
-                source={require('../assets/notification_icon.png')}
-                resizeMode='contain'
-                style={{ width: '70%', height: '70%' }}
-              >
-                {notificationCounts === 0 ? null : (
-                  <Text
-                    style={{
-                      backgroundColor: 'red',
-                      width: 20,
-                      borderRadius: 100,
-                      textAlign: 'center',
-                      color: 'white',
-                      shadowColor: '#3F3D3D',
-                      borderWidth: 1,
-                      borderColor: 'white',
-                      elevation: 20
-                    }}
-                    onPress={toggleNotifNavigationView}
-                  >
-                    {notificationCounts}
-                  </Text>
-                )}
-              </ImageBackground>
-            </TouchableWithoutFeedback>
-          </View>
-          {/*bottom navigation for user settings  */}
-
-          <Menu
-            visible={visible}
-            toggleBottomNavigationView={toggleBottomNavigationView}
-            props={{ userId, fullname, type, profileUrl }}
-            navigation={navigation}
-          />
-
-          {/*end of bottom navigation for user settings  */}
-
-          {/* start of botton sheet for notification */}
-
-          <Notifications
-            notifVisible={notifVisible}
-            toggleNotifNavigationView={toggleNotifNavigationView}
-            props={{ userId, token, notificationLists }}
-            navigation={navigation}
-          />
+    <View style={styles.container}>
+      {/* Notification View */}
+      <View style={styles.topContainer}>
+        <View style={styles.menuLogo}>
+          <TouchableWithoutFeedback onPress={toggleBottomNavigationView}>
+            <ImageBackground
+              source={require('../assets/notifmenu_icon.png')}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
+          </TouchableWithoutFeedback>
         </View>
-        {/*End  Notification View */}
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.bodyContainer}>
-            <View style={styles.topTextContainer}>
-              <Text style={styles.wlcmTextName} numberOfLines={1}>
-                Welcome back, {fullname}
-              </Text>
-              <Text style={styles.wlcmTextAsking}>What do you want {'\n'}to do?</Text>
-            </View>
 
-            <View style={styles.scrllBtnsContainer}>
-              <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                style={styles.scrllViewContainer}
-              >
-                <TouchableOpacity
-                  style={styles.btnScnQr}
-                  onPress={() => {
-                    navigation.navigate('QrScanner', { type: type, id: userId, token: token })
+        <View style={styles.notifLogo}>
+          <TouchableWithoutFeedback onPress={toggleNotifNavigationView}>
+            <ImageBackground
+              source={require('../assets/notification_icon.png')}
+              resizeMode='contain'
+              style={{ width: '70%', height: '70%' }}
+            >
+              {notificationCounts === 0 ? null : (
+                <Text
+                  style={{
+                    backgroundColor: 'red',
+                    width: 20,
+                    borderRadius: 100,
+                    textAlign: 'center',
+                    color: 'white',
+                    shadowColor: '#3F3D3D',
+                    borderWidth: 1,
+                    borderColor: 'white',
+                    elevation: 20
                   }}
+                  onPress={toggleNotifNavigationView}
                 >
-                  <ImageBackground
-                    source={require('../assets/scan_qr_icon.png')}
-                    resizeMode='contain'
-                    style={styles.btnimage}
-                  ></ImageBackground>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.btnRepCovidTest}
-                  onPress={() => {
-                    navigation.navigate('ReportCovidCase', { id: userId, type: type })
-                  }}
-                >
-                  <ImageBackground
-                    source={require('../assets/report_communicable_disease_icon.png')}
-                    resizeMode='contain'
-                    style={styles.btnimage}
-                  ></ImageBackground>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.btnRepEmergency}
-                  onPress={() => {
-                    navigation.navigate('ReportEmergency', { id: userId, type: type })
-                  }}
-                >
-                  <ImageBackground
-                    source={require('../assets/report_emergency_icon.png')}
-                    resizeMode='contain'
-                    style={styles.btnimage}
-                  ></ImageBackground>
-                </TouchableOpacity>
-              </ScrollView>
-            </View>
-
-            <View>
-              <Text numberOfLines={1} style={{ fontSize: 22, fontWeight: 'bold', marginStart: 35 }}>
-                Disease Reports
-              </Text>
-              <Text style={{ fontSize: 16, marginStart: 40, marginTop: 20 }}>University</Text>
-            </View>
-            <View style={styles.casesContainer}>
-              <ImageBackground
-                source={require('../assets/confirmed_case_icon.png')}
-                resizeMode='stretch'
-                style={styles.confirmCasesCard}
-              >
-                <Text style={{ fontSize: 10 }}>Confirmed</Text>
-                <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
-                  {reportedCommunicableDiseaseOnGoing && reportedCommunicableDiseaseOnGoing
-                    ? reportedCommunicableDiseaseOnGoing.length
-                    : 0}
+                  {notificationCounts}
                 </Text>
-              </ImageBackground>
+              )}
+            </ImageBackground>
+          </TouchableWithoutFeedback>
+        </View>
+        {/*bottom navigation for user settings  */}
 
-              <ImageBackground
-                source={require('../assets/confirmed_case_icon.png')}
-                resizeMode='stretch'
-                style={styles.confirmCasesCard}
-              >
-                <Text style={{ fontSize: 10 }}>Recovered</Text>
-                <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
-                  {reportedCommunicableDiseaseResolved && reportedCommunicableDiseaseResolved
-                    ? reportedCommunicableDiseaseResolved.length
-                    : 0}
-                </Text>
-              </ImageBackground>
-            </View>
+        <Menu
+          visible={visible}
+          toggleBottomNavigationView={toggleBottomNavigationView}
+          props={{ userId, fullname, type, profileUrl }}
+          navigation={navigation}
+        />
 
-            <View style={styles.localCasesContainer}>
-              <View
-                style={{
-                  width: '90%',
-                  padding: 10,
-                  backgroundColor: 'white',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  borderRadius: 15,
-                  shadowColor: 'black',
-                  elevation: 20,
-                  marginTop: 20
+        {/*end of bottom navigation for user settings  */}
+
+        {/* start of botton sheet for notification */}
+
+        <Notifications
+          notifVisible={notifVisible}
+          toggleNotifNavigationView={toggleNotifNavigationView}
+          props={{ userId, token, notificationLists }}
+          navigation={navigation}
+        />
+      </View>
+      {/*End  Notification View */}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.bodyContainer}>
+          <View style={styles.topTextContainer}>
+            <Text style={styles.wlcmTextName} numberOfLines={1}>
+              Welcome back, {fullname}
+            </Text>
+            <Text style={styles.wlcmTextAsking}>What do you want {'\n'}to do?</Text>
+          </View>
+
+          <View style={styles.scrllBtnsContainer}>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              style={styles.scrllViewContainer}
+            >
+              <TouchableOpacity
+                style={styles.btnScnQr}
+                onPress={() => {
+                  navigation.navigate('QrScanner', { type: type, id: userId, token: token })
                 }}
               >
-                <View style={{ flexDirection: 'row', width: '100%' }}>
-                  <Text
-                    style={{
-                      marginLeft: 25,
-                      marginRight: 'auto',
-                      paddingVertical: 10,
-                      fontWeight: 'bold',
-                      fontSize: 18
-                    }}
-                  >
-                    Philippines Update
-                  </Text>
-                  <Text
-                    style={{
-                      marginRight: 25,
-                      marginLeft: 'auto',
-                      paddingVertical: 10,
-                      fontSize: 14
-                    }}
-                  >
-                    As of {moment().format('MMM Do')}
-                  </Text>
-                </View>
-                <PieChart
-                  data={[
-                    {
-                      name: 'Population',
-                      population: population,
-                      color: COLORS.PRIMARY,
-                      legendFontColor: '#7F7F7F',
-                      legendFontSize: 10
-                    },
-                    {
-                      name: 'Cases',
-                      population: cases,
-                      color: '#F00',
-                      legendFontColor: '#7F7F7F',
-                      legendFontSize: 10
-                    },
-                    {
-                      name: 'Active cases',
-                      population: activeCases,
-                      color: 'rgb(255, 165, 0)',
-                      legendFontColor: '#7F7F7F',
-                      legendFontSize: 10
-                    },
-                    {
-                      name: 'Recovered',
-                      population: recovered,
-                      color: '#FFFF00',
-                      legendFontColor: '#7F7F7F',
-                      legendFontSize: 10
-                    },
+                <ImageBackground
+                  source={require('../assets/scan_qr_icon.png')}
+                  resizeMode='contain'
+                  style={styles.btnimage}
+                ></ImageBackground>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.btnRepCovidTest}
+                onPress={() => {
+                  navigation.navigate('ReportCovidCase', { id: userId, type: type })
+                }}
+              >
+                <ImageBackground
+                  source={require('../assets/report_communicable_disease_icon.png')}
+                  resizeMode='contain'
+                  style={styles.btnimage}
+                ></ImageBackground>
+              </TouchableOpacity>
 
-                    {
-                      name: 'Deaths',
-                      population: deaths,
-                      color: 'rgb(0, 0, 255)',
-                      legendFontColor: '#7F7F7F',
-                      legendFontSize: 10
-                    }
-                  ]}
-                  width={Dimensions.get('screen').width - 100}
-                  height={150}
-                  chartConfig={{
-                    backgroundColor: '#1cc910',
-                    backgroundGradientFrom: '#eff3ff',
-                    backgroundGradientTo: '#efefef',
-                    decimalPlaces: 2,
-                    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                    style: {
-                      borderRadius: 16
-                    }
-                  }}
+              <TouchableOpacity
+                style={styles.btnRepEmergency}
+                onPress={() => {
+                  navigation.navigate('ReportEmergency', { id: userId, type: type })
+                }}
+              >
+                <ImageBackground
+                  source={require('../assets/report_emergency_icon.png')}
+                  resizeMode='contain'
+                  style={styles.btnimage}
+                ></ImageBackground>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
+
+          <View>
+            <Text numberOfLines={1} style={{ fontSize: 22, fontWeight: 'bold', marginStart: 35 }}>
+              Disease Reports
+            </Text>
+            <Text style={{ fontSize: 16, marginStart: 40, marginTop: 20 }}>University</Text>
+          </View>
+          <View style={styles.casesContainer}>
+            <ImageBackground
+              source={require('../assets/confirmed_case_icon.png')}
+              resizeMode='stretch'
+              style={styles.confirmCasesCard}
+            >
+              <Text style={{ fontSize: 10 }}>Confirmed</Text>
+              <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
+                {reportedCommunicableDiseaseOnGoing && reportedCommunicableDiseaseOnGoing
+                  ? reportedCommunicableDiseaseOnGoing.length
+                  : 0}
+              </Text>
+            </ImageBackground>
+
+            <ImageBackground
+              source={require('../assets/confirmed_case_icon.png')}
+              resizeMode='stretch'
+              style={styles.confirmCasesCard}
+            >
+              <Text style={{ fontSize: 10 }}>Recovered</Text>
+              <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
+                {reportedCommunicableDiseaseResolved && reportedCommunicableDiseaseResolved
+                  ? reportedCommunicableDiseaseResolved.length
+                  : 0}
+              </Text>
+            </ImageBackground>
+          </View>
+
+          <View style={styles.localCasesContainer}>
+            <View
+              style={{
+                width: '90%',
+                padding: 10,
+                backgroundColor: 'white',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 15,
+                shadowColor: 'black',
+                elevation: 20,
+                marginTop: 20
+              }}
+            >
+              <View style={{ flexDirection: 'row', width: '100%' }}>
+                <Text
                   style={{
-                    marginVertical: 8,
-                    borderRadius: 16
+                    marginLeft: 25,
+                    marginRight: 'auto',
+                    paddingVertical: 10,
+                    fontWeight: 'bold',
+                    fontSize: 18
                   }}
-                  accessor='population'
-                  backgroundColor='transparent'
-                  paddingLeft='2'
-                  absolute //for the absolute number remove if you want percentage
-                />
+                >
+                  Philippines Update
+                </Text>
+                <Text
+                  style={{
+                    marginRight: 25,
+                    marginLeft: 'auto',
+                    paddingVertical: 10,
+                    fontSize: 14
+                  }}
+                >
+                  As of {moment().format('MMM Do')}
+                </Text>
               </View>
+              <PieChart
+                data={[
+                  {
+                    name: 'Population',
+                    population: population,
+                    color: COLORS.PRIMARY,
+                    legendFontColor: '#7F7F7F',
+                    legendFontSize: 10
+                  },
+                  {
+                    name: 'Cases',
+                    population: cases,
+                    color: '#F00',
+                    legendFontColor: '#7F7F7F',
+                    legendFontSize: 10
+                  },
+                  {
+                    name: 'Active cases',
+                    population: activeCases,
+                    color: 'rgb(255, 165, 0)',
+                    legendFontColor: '#7F7F7F',
+                    legendFontSize: 10
+                  },
+                  {
+                    name: 'Recovered',
+                    population: recovered,
+                    color: '#FFFF00',
+                    legendFontColor: '#7F7F7F',
+                    legendFontSize: 10
+                  },
+
+                  {
+                    name: 'Deaths',
+                    population: deaths,
+                    color: 'rgb(0, 0, 255)',
+                    legendFontColor: '#7F7F7F',
+                    legendFontSize: 10
+                  }
+                ]}
+                width={Dimensions.get('screen').width - 100}
+                height={150}
+                chartConfig={{
+                  backgroundColor: '#1cc910',
+                  backgroundGradientFrom: '#eff3ff',
+                  backgroundGradientTo: '#efefef',
+                  decimalPlaces: 2,
+                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                  style: {
+                    borderRadius: 16
+                  }
+                }}
+                style={{
+                  marginVertical: 8,
+                  borderRadius: 16
+                }}
+                accessor='population'
+                backgroundColor='transparent'
+                paddingLeft='2'
+                absolute //for the absolute number remove if you want percentage
+              />
             </View>
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 export default IndexScreen

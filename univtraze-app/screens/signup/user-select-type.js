@@ -14,59 +14,59 @@ import { COLORS, FONT_FAMILY, USER_TYPE } from '../../utils/app_constants'
 import SelectTypeImage from '../../assets/select-type-image.png'
 
 const UserSelectTypeScreen = ({ navigation }) => {
-  const [userType, setUserType] = useState(null)
+  const [userType, setUserType] = useState(USER_TYPE.STUDENT)
   const onNext = () => {
     navigation.navigate('user-information', { userType })
   }
   return (
-      <KeyboardAvoidingView style={styles.mainView}>
-        <ScrollView
-          contentContainerStyle={styles.scrollViewContent}
-          style={styles.scrollViewContainer}
-        >
-          <View style={styles.topContainer}>
-            <Image source={SelectTypeImage} style={styles.signUpUserTypeImage} />
-          </View>
-          <Text style={styles.botContainTxt1}>Welcome to {'\n'}UnivTraze</Text>
-          <Text style={styles.botContainSubtxt}>
-            Before we continue, we are happy {'\n'}to know you more
-          </Text>
-          <Text style={styles.radioTtl}>Please select below</Text>
-          <View style={styles.radioButtonOption}>
-            <RadioButton
-              color={COLORS.PRIMARY}
-              value='Student'
-              status={userType == USER_TYPE.STUDENT ? 'checked' : 'unchecked'}
-              onPress={() => setUserType(USER_TYPE.STUDENT)}
-            />
-            <Text style={styles.radioLabel}>Student</Text>
-          </View>
-          <View style={styles.radioButtonOption}>
-            <RadioButton
-              value='Employee'
-              status={userType == USER_TYPE.EMPLOYEE ? 'checked' : 'unchecked'}
-              onPress={() => setUserType(USER_TYPE.EMPLOYEE)}
-              color={COLORS.PRIMARY}
-            />
-            <Text style={styles.radioLabel}>Employee</Text>
-          </View>
-
-          <View style={styles.radioButtonOption}>
-            <RadioButton
-              color={COLORS.PRIMARY}
-              value='Visitor'
-              status={userType == USER_TYPE.VISITOR ? 'checked' : 'unchecked'}
-              onPress={() => setUserType(USER_TYPE.VISITOR)}
-            />
-            <Text style={styles.radioLabel}>Visitor</Text>
-          </View>
-        </ScrollView>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={onNext} style={styles.signUpBtn}>
-            <Text style={styles.buttonText}>Next</Text>
-          </TouchableOpacity>
+    <KeyboardAvoidingView style={styles.mainView}>
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+        style={styles.scrollViewContainer}
+      >
+        <View style={styles.topContainer}>
+          <Image source={SelectTypeImage} style={styles.signUpUserTypeImage} />
         </View>
-      </KeyboardAvoidingView>
+        <Text style={styles.botContainTxt1}>Welcome to {'\n'}UnivTraze</Text>
+        <Text style={styles.botContainSubtxt}>
+          Before we continue, we are happy {'\n'}to know you more
+        </Text>
+        <Text style={styles.radioTtl}>Please select below</Text>
+        <View style={styles.radioButtonOption}>
+          <RadioButton
+            color={COLORS.PRIMARY}
+            value='Student'
+            status={userType == USER_TYPE.STUDENT ? 'checked' : 'unchecked'}
+            onPress={() => setUserType(USER_TYPE.STUDENT)}
+          />
+          <Text style={styles.radioLabel}>Student</Text>
+        </View>
+        <View style={styles.radioButtonOption}>
+          <RadioButton
+            value='Employee'
+            status={userType == USER_TYPE.EMPLOYEE ? 'checked' : 'unchecked'}
+            onPress={() => setUserType(USER_TYPE.EMPLOYEE)}
+            color={COLORS.PRIMARY}
+          />
+          <Text style={styles.radioLabel}>Employee</Text>
+        </View>
+
+        <View style={styles.radioButtonOption}>
+          <RadioButton
+            color={COLORS.PRIMARY}
+            value='Visitor'
+            status={userType == USER_TYPE.VISITOR ? 'checked' : 'unchecked'}
+            onPress={() => setUserType(USER_TYPE.VISITOR)}
+          />
+          <Text style={styles.radioLabel}>Visitor</Text>
+        </View>
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={onNext} style={styles.signUpBtn}>
+          <Text style={styles.buttonText}>Next</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 

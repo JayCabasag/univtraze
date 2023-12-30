@@ -118,208 +118,208 @@ const SignUpEmployeeScreen = ({ navigation, route }) => {
   }
 
   return (
-      <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
-        <View style={styles.header}>
-          <Image src={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+    <KeyboardAvoidingView style={{ backgroundColor: '#E1F5E4', height: '100%' }}>
+      <View style={styles.header}>
+        <Image src={StepperIcon1} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+      </View>
+
+      <ScrollView style={styles.inputContainer}>
+        <View
+          style={{
+            width: '100%',
+            alignItems: 'center',
+            backgroundColor: '#E1F5E4'
+          }}
+        >
+          <Text style={styles.label}>Employee no.</Text>
+          <TextInput
+            placeholder='Employee no.'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setEmployeeNumber(text)
+            }}
+            style={styles.input}
+          />
         </View>
 
-        <ScrollView style={styles.inputContainer}>
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>First name</Text>
+          <TextInput
+            placeholder='First name'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setFirstName(text)
+            }}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>Middle name </Text>
+          <TextInput
+            placeholder='Middle name'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setMiddleName(text)
+            }}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>Last name</Text>
+          <TextInput
+            placeholder='Last name'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setLastName(text)
+            }}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
+          <View style={{ width: '80%', flexDirection: 'row' }}>
+            <View style={{ width: '50%' }}>
+              <Text style={styles.label}>Suffix </Text>
+              <TextInput
+                placeholder='Suffix'
+                defaultValue={''}
+                onChangeText={(text) => {
+                  setSuffix(text)
+                }}
+                style={styles.suffixInput}
+              />
+            </View>
+
+            <View style={{ width: '50%' }}>
+              <Text style={styles.label}>Gender </Text>
+              <Picker
+                style={{ width: '100%', height: 50, color: '#4d7861' }}
+                selectedValue={gender}
+                onValueChange={(value) => setGender(value)}
+                mode='dialog'
+              >
+                <Picker.Item label='Rather not say' value='Rather not say' />
+                <Picker.Item label='Male' value='Male' />
+                <Picker.Item label='Female' value='Female' />
+              </Picker>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>Address</Text>
+          <TextInput
+            placeholder='Address'
+            defaultValue={''}
+            onChangeText={(text) => {
+              setAddress(text)
+            }}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
+          <Text style={styles.label}>Date of birth</Text>
+
           <View
             style={{
               width: '100%',
               alignItems: 'center',
-              backgroundColor: '#E1F5E4'
-            }}
-          >
-            <Text style={styles.label}>Employee no.</Text>
-            <TextInput
-              placeholder='Employee no.'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setEmployeeNumber(text)
-              }}
-              style={styles.input}
-            />
-          </View>
-
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>First name</Text>
-            <TextInput
-              placeholder='First name'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setFirstName(text)
-              }}
-              style={styles.input}
-            />
-          </View>
-
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>Middle name </Text>
-            <TextInput
-              placeholder='Middle name'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setMiddleName(text)
-              }}
-              style={styles.input}
-            />
-          </View>
-
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>Last name</Text>
-            <TextInput
-              placeholder='Last name'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setLastName(text)
-              }}
-              style={styles.input}
-            />
-          </View>
-
-          <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
-            <View style={{ width: '80%', flexDirection: 'row' }}>
-              <View style={{ width: '50%' }}>
-                <Text style={styles.label}>Suffix </Text>
-                <TextInput
-                  placeholder='Suffix'
-                  defaultValue={''}
-                  onChangeText={(text) => {
-                    setSuffix(text)
-                  }}
-                  style={styles.suffixInput}
-                />
-              </View>
-
-              <View style={{ width: '50%' }}>
-                <Text style={styles.label}>Gender </Text>
-                <Picker
-                  style={{ width: '100%', height: 50, color: '#4d7861' }}
-                  selectedValue={gender}
-                  onValueChange={(value) => setGender(value)}
-                  mode='dialog'
-                >
-                  <Picker.Item label='Rather not say' value='Rather not say' />
-                  <Picker.Item label='Male' value='Male' />
-                  <Picker.Item label='Female' value='Female' />
-                </Picker>
-              </View>
-            </View>
-          </View>
-
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>Address</Text>
-            <TextInput
-              placeholder='Address'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setAddress(text)
-              }}
-              style={styles.input}
-            />
-          </View>
-
-          <View style={{ width: '100%', alignItems: 'center', borderRadius: 15 }}>
-            <Text style={styles.label}>Date of birth</Text>
-
-            <View
-              style={{
-                width: '100%',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexDirection: 'row'
-              }}
-            >
-              <TextInput
-                placeholder='Date of birth'
-                defaultValue={moment(dateOfBirth).format('yyyy-MM-DD')}
-                style={styles.dobInput}
-                editable={false}
-              />
-              <AntDesign
-                name='calendar'
-                size={37}
-                color={COLORS.PRIMARY}
-                style={{ marginRight: 5 }}
-                onPress={() => setShowDatePicker(true)}
-              />
-            </View>
-          </View>
-
-          {showDatePicker === true ? (
-            <DateTimePicker
-              value={dateOfBirth}
-              mode={'date'}
-              is24Hour={true}
-              onChange={(event, date) => {
-                setShowDatePicker(false)
-                setDateOfBirth(new Date(date))
-              }}
-            />
-          ) : null}
-
-          <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
-            <View style={{ width: '80%', flexDirection: 'row' }}>
-              <View style={{ width: '50%' }}>
-                <Text style={styles.label}>Department</Text>
-                <TextInput
-                  placeholder='Department'
-                  defaultValue={''}
-                  onChangeText={(text) => {
-                    setDepartment(text)
-                  }}
-                  style={styles.courseInput}
-                />
-              </View>
-
-              <View style={{ width: '50%' }}>
-                <Text style={styles.label}>Position </Text>
-                <TextInput
-                  placeholder='Position'
-                  defaultValue={''}
-                  onChangeText={(text) => {
-                    setPosition(text)
-                  }}
-                  style={styles.yearAndSectionInput}
-                />
-              </View>
-            </View>
-          </View>
-
-          {error ? (
-            <Text style={styles.errorMessage}>*{errorMessage}</Text>
-          ) : (
-            <Text style={styles.errorMessage}></Text>
-          )}
-
-          <View
-            style={{
-              flexDirection: 'row',
               justifyContent: 'center',
-              marginBottom: 20
+              flexDirection: 'row'
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                navigation.goBack()
-              }}
-              style={styles.backbutton}
-            >
-              <Image src={BackIcon} style={{ width: 60, height: 60 }} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => {
-                nextScreen()
-              }}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity>
+            <TextInput
+              placeholder='Date of birth'
+              defaultValue={moment(dateOfBirth).format('yyyy-MM-DD')}
+              style={styles.dobInput}
+              editable={false}
+            />
+            <AntDesign
+              name='calendar'
+              size={37}
+              color={COLORS.PRIMARY}
+              style={{ marginRight: 5 }}
+              onPress={() => setShowDatePicker(true)}
+            />
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+
+        {showDatePicker === true ? (
+          <DateTimePicker
+            value={dateOfBirth}
+            mode={'date'}
+            is24Hour={true}
+            onChange={(event, date) => {
+              setShowDatePicker(false)
+              setDateOfBirth(new Date(date))
+            }}
+          />
+        ) : null}
+
+        <View style={{ width: '100%', borderRadius: 15, alignItems: 'center' }}>
+          <View style={{ width: '80%', flexDirection: 'row' }}>
+            <View style={{ width: '50%' }}>
+              <Text style={styles.label}>Department</Text>
+              <TextInput
+                placeholder='Department'
+                defaultValue={''}
+                onChangeText={(text) => {
+                  setDepartment(text)
+                }}
+                style={styles.courseInput}
+              />
+            </View>
+
+            <View style={{ width: '50%' }}>
+              <Text style={styles.label}>Position </Text>
+              <TextInput
+                placeholder='Position'
+                defaultValue={''}
+                onChangeText={(text) => {
+                  setPosition(text)
+                }}
+                style={styles.yearAndSectionInput}
+              />
+            </View>
+          </View>
+        </View>
+
+        {error ? (
+          <Text style={styles.errorMessage}>*{errorMessage}</Text>
+        ) : (
+          <Text style={styles.errorMessage}></Text>
+        )}
+
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginBottom: 20
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              navigation.goBack()
+            }}
+            style={styles.backbutton}
+          >
+            <Image src={BackIcon} style={{ width: 60, height: 60 }} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              nextScreen()
+            }}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

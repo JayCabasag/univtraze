@@ -99,62 +99,62 @@ const ResetPasswordScreen = ({
   }
 
   return (
-      <KeyboardAvoidingView style={styles.container} behavior='height'>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={showLoadingModal}
-          onRequestClose={() => {
-            setShowLoadingModal(!showLoadingModal)
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size={'large'} />
-              <Text style={styles.modalText}>{loadingMessage}</Text>
-            </View>
-          </View>
-        </Modal>
-        <View style={styles.inputContainer}>
-          <Text style={styles.loginText}>Reset password</Text>
-          <Text style={styles.label}>New password</Text>
-          <TextInput
-            placeholder='New password'
-            defaultValue={newPassword}
-            onChangeText={(text) => setNewPassword(text)}
-            style={styles.input}
-            secureTextEntry
-          />
-          <Text style={styles.label}>Confirm new password</Text>
-          <TextInput
-            placeholder='Re-type password'
-            defaultValue={confirmNewPassword}
-            onChangeText={(text) => setConfirmNewPassword(text)}
-            style={styles.input}
-            secureTextEntry
-          />
-
-          {error ? (
-            <Text style={styles.errorMessage}>*{errorMessage}</Text>
-          ) : success ? (
-            <Text style={styles.successMessage}>Password updated successfully</Text>
-          ) : null}
-
-          <TouchableOpacity onPress={() => handleResetPassword()} style={styles.button}>
-            <Text style={styles.buttonText}>Reset password</Text>
-          </TouchableOpacity>
-          <View style={styles.buttonContainer}>
-            <Text
-              style={styles.returnHomeText}
-              onPress={() => {
-                navigation.navigate('signin')
-              }}
-            >
-              Return to login
-            </Text>
+    <KeyboardAvoidingView style={styles.container} behavior='height'>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={showLoadingModal}
+        onRequestClose={() => {
+          setShowLoadingModal(!showLoadingModal)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator size={'large'} />
+            <Text style={styles.modalText}>{loadingMessage}</Text>
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </Modal>
+      <View style={styles.inputContainer}>
+        <Text style={styles.loginText}>Reset password</Text>
+        <Text style={styles.label}>New password</Text>
+        <TextInput
+          placeholder='New password'
+          defaultValue={newPassword}
+          onChangeText={(text) => setNewPassword(text)}
+          style={styles.input}
+          secureTextEntry
+        />
+        <Text style={styles.label}>Confirm new password</Text>
+        <TextInput
+          placeholder='Re-type password'
+          defaultValue={confirmNewPassword}
+          onChangeText={(text) => setConfirmNewPassword(text)}
+          style={styles.input}
+          secureTextEntry
+        />
+
+        {error ? (
+          <Text style={styles.errorMessage}>*{errorMessage}</Text>
+        ) : success ? (
+          <Text style={styles.successMessage}>Password updated successfully</Text>
+        ) : null}
+
+        <TouchableOpacity onPress={() => handleResetPassword()} style={styles.button}>
+          <Text style={styles.buttonText}>Reset password</Text>
+        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <Text
+            style={styles.returnHomeText}
+            onPress={() => {
+              navigation.navigate('signin')
+            }}
+          >
+            Return to login
+          </Text>
+        </View>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 

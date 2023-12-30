@@ -412,264 +412,258 @@ const SignUpDocsScreen = ({ navigation, route }) => {
   }
 
   return (
-      <View style={{ height: '100%' }}>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={showLoadingModal}
-          onRequestClose={() => {
-            setShowLoadingModal(!showLoadingModal)
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <ActivityIndicator size={'large'} />
-              <Text style={styles.modalText}>{loadingMessage}</Text>
-            </View>
+    <View style={{ height: '100%' }}>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={showLoadingModal}
+        onRequestClose={() => {
+          setShowLoadingModal(!showLoadingModal)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator size={'large'} />
+            <Text style={styles.modalText}>{loadingMessage}</Text>
           </View>
-        </Modal>
-
-        <View style={styles.header}>
-          <Image
-            source={StepperIcon2}
-            resizeMode='contain'
-            style={{ width: '80%', height: '80%' }}
-          />
         </View>
-        <ScrollView
-          style={{
-            flexDirection: 'column'
-          }}
-        >
-          <KeyboardAvoidingView style={{ height: '100%' }}>
-            <View
-              style={{
-                alignItems: 'center',
-                backgroundColor: '#E1F5E4'
-              }}
-            >
-              <Text style={styles.label}>Phone no.</Text>
-              <TextInput
-                placeholder='Phone'
-                defaultValue={''}
-                onChangeText={(text) => {
-                  setPhoneNumber(text)
-                }}
-                style={styles.input}
-              />
-            </View>
+      </Modal>
 
-            <View
-              style={{
-                alignItems: 'center',
-                backgroundColor: '#E1F5E4'
+      <View style={styles.header}>
+        <Image source={StepperIcon2} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+      </View>
+      <ScrollView
+        style={{
+          flexDirection: 'column'
+        }}
+      >
+        <KeyboardAvoidingView style={{ height: '100%' }}>
+          <View
+            style={{
+              alignItems: 'center',
+              backgroundColor: '#E1F5E4'
+            }}
+          >
+            <Text style={styles.label}>Phone no.</Text>
+            <TextInput
+              placeholder='Phone'
+              defaultValue={''}
+              onChangeText={(text) => {
+                setPhoneNumber(text)
               }}
-            >
-              <Text style={styles.label}>Email</Text>
-              <TextInput
-                placeholder='Email'
-                defaultValue={email}
-                onChangeText={(text) => {
-                  setEmail(text)
-                }}
-                editable={false}
-                style={styles.input}
-              />
-            </View>
+              style={styles.input}
+            />
+          </View>
 
+          <View
+            style={{
+              alignItems: 'center',
+              backgroundColor: '#E1F5E4'
+            }}
+          >
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              placeholder='Email'
+              defaultValue={email}
+              onChangeText={(text) => {
+                setEmail(text)
+              }}
+              editable={false}
+              style={styles.input}
+            />
+          </View>
+
+          <View
+            style={{
+              paddingHorizontal: 40,
+              marginVertical: 15,
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Text style={{ marginVertical: 15, textAlign: 'left', width: '100%' }}>Profile</Text>
             <View
               style={{
-                paddingHorizontal: 40,
-                marginVertical: 15,
-                justifyContent: 'center',
-                alignItems: 'center'
+                width: '100%',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              <Text style={{ marginVertical: 15, textAlign: 'left', width: '100%' }}>Profile</Text>
-              <View
+              <Image
+                source={{
+                  uri:
+                    profilePhoto === null
+                      ? 'https://media.istockphoto.com/vectors/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-vector-id1130884625?k=20&m=1130884625&s=612x612&w=0&h=OITK5Otm_lRj7Cx8mBhm7NtLTEHvp6v3XnZFLZmuB9o='
+                      : profilePhoto.uri
+                }}
+                resizeMode='cover'
                 style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center'
+                  width: 120,
+                  height: 120,
+                  borderRadius: 100,
+                  borderColor: COLORS.PRIMARY,
+                  borderWidth: 2,
+                  shadowColor: 'black'
                 }}
-              >
-                <Image
-                  source={{
-                    uri:
-                      profilePhoto === null
-                        ? 'https://media.istockphoto.com/vectors/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-vector-id1130884625?k=20&m=1130884625&s=612x612&w=0&h=OITK5Otm_lRj7Cx8mBhm7NtLTEHvp6v3XnZFLZmuB9o='
-                        : profilePhoto.uri
-                  }}
-                  resizeMode='cover'
-                  style={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: 100,
-                    borderColor: COLORS.PRIMARY,
-                    borderWidth: 2,
-                    shadowColor: 'black'
-                  }}
-                />
-              </View>
+              />
+            </View>
 
+            <TouchableOpacity
+              style={styles.editProfileButton}
+              onPress={pickDocumentForProfilePhoto}
+            >
+              <Ionicons name='md-cloud-upload-outline' size={18} color='black' />
+              <Text> UPLOAD PHOTO </Text>
+            </TouchableOpacity>
+          </View>
+          <View
+            style={{
+              paddingHorizontal: 40,
+              marginBottom: 5
+            }}
+          >
+            <Text style={{ marginVertical: 15 }}>I.D photo</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
               <TouchableOpacity
-                style={styles.editProfileButton}
-                onPress={pickDocumentForProfilePhoto}
-              >
-                <Ionicons name='md-cloud-upload-outline' size={18} color='black' />
-                <Text> UPLOAD PHOTO </Text>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                paddingHorizontal: 40,
-                marginBottom: 5
-              }}
-            >
-              <Text style={{ marginVertical: 15 }}>I.D photo</Text>
-              <View
                 style={{
-                  flexDirection: 'row',
+                  width: 150,
+                  height: 44,
+                  backgroundColor: '#C7C7C7',
+                  justifyContent: 'center',
                   alignItems: 'center',
-                  justifyContent: 'space-between'
+                  borderRadius: 10
                 }}
+                onPress={pickFrontIdPhoto}
               >
-                <TouchableOpacity
-                  style={{
-                    width: 150,
-                    height: 44,
-                    backgroundColor: '#C7C7C7',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 10
-                  }}
-                  onPress={pickFrontIdPhoto}
-                >
-                  <Text> Upload ID Photo(Front) </Text>
-                </TouchableOpacity>
-                <Text style={{ width: 145 }}>
-                  {frontIdPhoto === null ? null : frontIdPhoto.name}
-                </Text>
-              </View>
+                <Text> Upload ID Photo(Front) </Text>
+              </TouchableOpacity>
+              <Text style={{ width: 145 }}>{frontIdPhoto === null ? null : frontIdPhoto.name}</Text>
+            </View>
 
-              {/* Previewer Image front */}
+            {/* Previewer Image front */}
 
-              {frontIdPhoto === null ? null : (
-                <View
-                  style={{
-                    marginTop: 10,
-                    width: '100%',
-                    height: 150,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                  }}
-                >
-                  <Image
-                    source={{ uri: frontIdPhoto.uri }}
-                    resizeMode='cover'
-                    style={{
-                      width: '100%',
-                      height: 150,
-                      shadowColor: 'black',
-                      borderWidth: 1,
-                      borderColor: COLORS.PRIMARY,
-                      borderRadius: 5
-                    }}
-                  />
-                </View>
-              )}
-
+            {frontIdPhoto === null ? null : (
               <View
                 style={{
                   marginTop: 10,
+                  width: '100%',
+                  height: 150,
                   flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between'
                 }}
               >
-                <TouchableOpacity
+                <Image
+                  source={{ uri: frontIdPhoto.uri }}
+                  resizeMode='cover'
                   style={{
-                    width: 150,
-                    height: 44,
-                    backgroundColor: '#C7C7C7',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRadius: 10
-                  }}
-                  onPress={pickBackIdPhoto}
-                >
-                  <Text>Upload ID Photo(Back)</Text>
-                </TouchableOpacity>
-                <Text style={{ width: 145 }}>{backIdPhoto === null ? null : backIdPhoto.name}</Text>
-              </View>
-
-              {/* Previewer Image Back */}
-
-              {backIdPhoto === null ? null : (
-                <View
-                  style={{
-                    marginTop: 10,
                     width: '100%',
                     height: 150,
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
+                    shadowColor: 'black',
+                    borderWidth: 1,
+                    borderColor: COLORS.PRIMARY,
+                    borderRadius: 5
                   }}
-                >
-                  <Image
-                    source={{ uri: backIdPhoto.uri }}
-                    resizeMode='cover'
-                    style={{
-                      width: '100%',
-                      height: 150,
-                      shadowColor: 'black',
-                      borderWidth: 1,
-                      borderColor: COLORS.PRIMARY,
-                      borderRadius: 5
-                    }}
-                  />
-                </View>
-              )}
+                />
+              </View>
+            )}
+
+            <View
+              style={{
+                marginTop: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  width: 150,
+                  height: 44,
+                  backgroundColor: '#C7C7C7',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 10
+                }}
+                onPress={pickBackIdPhoto}
+              >
+                <Text>Upload ID Photo(Back)</Text>
+              </TouchableOpacity>
+              <Text style={{ width: 145 }}>{backIdPhoto === null ? null : backIdPhoto.name}</Text>
             </View>
 
-            {/* {
+            {/* Previewer Image Back */}
+
+            {backIdPhoto === null ? null : (
+              <View
+                style={{
+                  marginTop: 10,
+                  width: '100%',
+                  height: 150,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <Image
+                  source={{ uri: backIdPhoto.uri }}
+                  resizeMode='cover'
+                  style={{
+                    width: '100%',
+                    height: 150,
+                    shadowColor: 'black',
+                    borderWidth: 1,
+                    borderColor: COLORS.PRIMARY,
+                    borderRadius: 5
+                  }}
+                />
+              </View>
+            )}
+          </View>
+
+          {/* {
 							error? 
 							<Text style={styles.errorMessage}>*{errorMessage}</Text>
 							:
 							<Text style={styles.errorMessage}></Text>
 						} */}
-          </KeyboardAvoidingView>
-        </ScrollView>
+        </KeyboardAvoidingView>
+      </ScrollView>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingHorizontal: 40,
-            marginBottom: 40
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingHorizontal: 40,
+          marginBottom: 40
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('SignUpUserCredentialsStudent')
           }}
+          style={styles.backbutton}
         >
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('SignUpUserCredentialsStudent')
-            }}
-            style={styles.backbutton}
-          >
-            <Image src={BackIcon} style={{ width: 60, height: 60 }} />
-          </TouchableOpacity>
+          <Image src={BackIcon} style={{ width: 60, height: 60 }} />
+        </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => {
-              handleSaveUserDetails()
-            }}
-            style={styles.saveButton}
-          >
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            handleSaveUserDetails()
+          }}
+          style={styles.saveButton}
+        >
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
       </View>
+    </View>
   )
 }
 

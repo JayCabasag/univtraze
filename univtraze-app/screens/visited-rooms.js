@@ -82,88 +82,88 @@ const VisitedRoomsScreen = ({
   }
 
   return (
-      <View style={styles.mainContainer}>
-        <View style={styles.topContainer}>
-          <View style={styles.backIcon}>
-            <TouchableWithoutFeedback
-              onPress={() => {
-                navigation.goBack()
-              }}
-            >
-              <ImageBackground
-                src={BackIcon}
-                resizeMode='contain'
-                style={styles.image}
-              ></ImageBackground>
-            </TouchableWithoutFeedback>
-          </View>
-        </View>
-        <View style={{ width: 340, height: 'auto' }}>
-          <Text style={styles.roomVisitedText}>Room Visited</Text>
-        </View>
-        <ScrollView style={styles.tableContainer}>
-          <DataTable
-            style={{
-              borderWidth: 1,
-              borderRadius: 10,
-              borderColor: COLORS.PRIMARY
+    <View style={styles.mainContainer}>
+      <View style={styles.topContainer}>
+        <View style={styles.backIcon}>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.goBack()
             }}
           >
-            <DataTable.Header
-              style={{
-                backgroundColor: COLORS.PRIMARY,
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                elevation: 5
-              }}
-            >
-              <DataTable.Title>
-                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Room Id</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Bldg name</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Room no.</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Date</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Time</Text>
-              </DataTable.Title>
-            </DataTable.Header>
-            {roomVisited ? (
-              <View>
-                <Text style={styles.rowBody}>No rooms visited</Text>
-              </View>
-            ) : (
-              roomVisited.map((room) => {
-                return (
-                  <DataTable.Row
-                    key={room.id}
-                    onPress={() => {
-                      viewHistoryData(
-                        room.room_id,
-                        room.building_name,
-                        room.room_number,
-                        moment(room.createdAt).format('MM-DD-YY'),
-                        moment(room.createdAt).format('HH:mm A')
-                      )
-                    }}
-                  >
-                    <DataTable.Cell>{room.room_id}</DataTable.Cell>
-                    <DataTable.Cell>{room.building_name}</DataTable.Cell>
-                    <DataTable.Cell>{room.room_number}</DataTable.Cell>
-                    <DataTable.Cell>{moment(room.createdAt).format('MM-DD-YY')}</DataTable.Cell>
-                    <DataTable.Cell>{moment(room.createdAt).format('HH:mm A')}</DataTable.Cell>
-                  </DataTable.Row>
-                )
-              })
-            )}
-          </DataTable>
-        </ScrollView>
+            <ImageBackground
+              src={BackIcon}
+              resizeMode='contain'
+              style={styles.image}
+            ></ImageBackground>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
+      <View style={{ width: 340, height: 'auto' }}>
+        <Text style={styles.roomVisitedText}>Room Visited</Text>
+      </View>
+      <ScrollView style={styles.tableContainer}>
+        <DataTable
+          style={{
+            borderWidth: 1,
+            borderRadius: 10,
+            borderColor: COLORS.PRIMARY
+          }}
+        >
+          <DataTable.Header
+            style={{
+              backgroundColor: COLORS.PRIMARY,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+              elevation: 5
+            }}
+          >
+            <DataTable.Title>
+              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Room Id</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Bldg name</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Room no.</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Date</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Time</Text>
+            </DataTable.Title>
+          </DataTable.Header>
+          {roomVisited ? (
+            <View>
+              <Text style={styles.rowBody}>No rooms visited</Text>
+            </View>
+          ) : (
+            roomVisited.map((room) => {
+              return (
+                <DataTable.Row
+                  key={room.id}
+                  onPress={() => {
+                    viewHistoryData(
+                      room.room_id,
+                      room.building_name,
+                      room.room_number,
+                      moment(room.createdAt).format('MM-DD-YY'),
+                      moment(room.createdAt).format('HH:mm A')
+                    )
+                  }}
+                >
+                  <DataTable.Cell>{room.room_id}</DataTable.Cell>
+                  <DataTable.Cell>{room.building_name}</DataTable.Cell>
+                  <DataTable.Cell>{room.room_number}</DataTable.Cell>
+                  <DataTable.Cell>{moment(room.createdAt).format('MM-DD-YY')}</DataTable.Cell>
+                  <DataTable.Cell>{moment(room.createdAt).format('HH:mm A')}</DataTable.Cell>
+                </DataTable.Row>
+              )
+            })
+          )}
+        </DataTable>
+      </ScrollView>
+    </View>
   )
 }
 

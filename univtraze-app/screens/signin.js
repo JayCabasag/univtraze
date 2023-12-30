@@ -6,7 +6,9 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Dimensions
+  Dimensions,
+  ScrollView,
+  StatusBar
 } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -87,7 +89,8 @@ const SignInScreen = ({ navigation }) => {
   }
 
   return (
-      <KeyboardAvoidingView style={styles.container} behavior='height'>
+    <KeyboardAvoidingView behavior='height' style={styles.container}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={LoginImage} />
         </View>
@@ -126,42 +129,48 @@ const SignInScreen = ({ navigation }) => {
             Forgot Password?
           </Text>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={onPressLogin} style={styles.signInBtn}>
-            <Text style={styles.buttonText}>Log in</Text>
-          </TouchableOpacity>
-        </View>
-        <LoadingModal
+      </ScrollView>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={onPressLogin} style={styles.signInBtn}>
+          <Text style={styles.buttonText}>Log in</Text>
+        </TouchableOpacity>
+      </View>
+      <LoadingModal
         onRequestClose={() => setShowLoadingModal(false)}
         open={showLoadingModal}
         loadingMessage={loadingMessage}
       />
-      </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   )
 }
 
 export default SignInScreen
 
 const styles = StyleSheet.create({
+  scrollView: {
+    flex: 1,
+    width: '100%'
+  },
+  scrollViewContent: {
+    paddingVertical: 30
+  },
   image: {
     justifyContent: 'center',
     width: 200,
     height: 200,
-    resizeMode: 'center',
-    marginTop: 30
+    resizeMode: 'center'
   },
 
   imageContainer: {
-    width: windowWidth,
+    width: '100%',
     height: 200,
     alignItems: 'center',
     justifyContent: 'center'
   },
 
   container: {
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1,
+    width: '100%'
   },
   inputContainer: {
     marginTop: 10,
@@ -190,7 +199,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: COLORS.PRIMARY,
     borderRadius: 10,
-    width: 340,
+    width: '100%',
     marginTop: 5,
     paddingVertical: 15,
     shadowColor: '#000',
@@ -295,6 +304,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
-    paddingHorizontal: 30
+    paddingHorizontal: 30,
+    paddingBottom: 10
   }
 })
