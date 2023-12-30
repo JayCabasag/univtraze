@@ -20,8 +20,6 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 
-const windowWidth = Dimensions.get('screen').width
-
 const SignInScreen = ({ navigation }) => {
   const { signIn } = useAuth()
   const { setUser } = useUser()
@@ -90,7 +88,12 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView behavior='height' style={styles.container}>
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.imageContainer}>
           <Image style={styles.image} source={LoginImage} />
         </View>
@@ -129,12 +132,12 @@ const SignInScreen = ({ navigation }) => {
             Forgot Password?
           </Text>
         </View>
-      </ScrollView>
-      <View style={styles.buttonContainer}>
+        <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={onPressLogin} style={styles.signInBtn}>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
       <LoadingModal
         onRequestClose={() => setShowLoadingModal(false)}
         open={showLoadingModal}
@@ -147,12 +150,18 @@ const SignInScreen = ({ navigation }) => {
 export default SignInScreen
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    backgroundColor: '#E1F5E4',
+  },
   scrollView: {
     flex: 1,
-    width: '100%'
+    width: '100%',
+    marginTop: 20
   },
   scrollViewContent: {
-    paddingVertical: 30
+    
   },
   image: {
     justifyContent: 'center',
@@ -162,15 +171,11 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
+    marginTop: 50,
     width: '100%',
     height: 200,
     alignItems: 'center',
     justifyContent: 'center'
-  },
-
-  container: {
-    flex: 1,
-    width: '100%'
   },
   inputContainer: {
     marginTop: 10,
@@ -304,6 +309,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: '100%',
+    height: 'auto',
     paddingHorizontal: 30,
     paddingBottom: 10
   }

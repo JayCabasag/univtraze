@@ -12,7 +12,6 @@ const SelectItem = (props) => {
 }
 
 const Select = (props) => {
-
   const [isOpen, setIsOpen] = useState(false)
   const handleSelectItem = (label) => {
     props.onSelectItem(label)
@@ -25,7 +24,7 @@ const Select = (props) => {
         <Text style={[styles.labelStyle, props.labelStyle]}>{props.value}</Text>
       </View>
       <TouchableOpacity
-        onPress={()=> setIsOpen(!isOpen)}
+        onPress={() => setIsOpen(!isOpen)}
         style={[styles.carretDownButtonStyle, props.carretDownButtonStyle]}
       >
         <Image source={CarretDown} style={[styles.carretDown, styles.icon]} />

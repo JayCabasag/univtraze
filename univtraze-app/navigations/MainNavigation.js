@@ -27,6 +27,7 @@ import { useUser } from '../services/store/user/UserContext'
 import UserInformationScreen from '../screens/signup/user-information'
 import UserSelectTypeScreen from '../screens/signup/user-select-type'
 import UserDocumentsScreen from '../screens/signup/user-documents'
+import { StatusBar } from 'expo-status-bar';
 
 const MainStack = createNativeStackNavigator()
 
@@ -83,6 +84,7 @@ export default function MainNavigation({ onLayoutView }) {
         )}
         <MainStack.Screen name='terms-and-conditions' component={TermsAndConditionsScreen} />
       </MainStack.Navigator>
+      <StatusBar style='auto'/>
     </NavigationContainer>
   )
 }
