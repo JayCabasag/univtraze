@@ -7,7 +7,7 @@ import {
   KeyboardAvoidingView,
   Image
 } from 'react-native'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useReducer, useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
 import { Ionicons } from '@expo/vector-icons'
@@ -25,6 +25,7 @@ import { useUser } from '../../services/store/user/UserContext'
 const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
   const { state: user } = useUser()
+  const scrollViewRef = useRef()
   const { setFormErrors, resetFormErrors, formErrors } = useFormErrors([
     'frontIdPhoto',
     'backIdPhoto'
@@ -90,9 +91,11 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   const onNext = () => {
     resetFormErrors()
     if (frontIdPhoto == null) {
+      scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('frontIdPhoto', 'Back ID photo is required')
     }
     if (backIdPhoto == null) {
+      scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('backIdPhoto', 'Front ID photo is required')
     }
     console.log('NExt')
@@ -145,7 +148,11 @@ const UserDocumentsScreen = ({ navigation, route }) => {
           style={{ width: '100%', marginTop: 30 }}
         />
       </View>
-      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        ref={scrollViewRef}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.profileContainer}>
           <Text style={styles.sectionHeaderText}>Profile photo</Text>
           {profilePhoto == null ? (
@@ -162,7 +169,12 @@ const UserDocumentsScreen = ({ navigation, route }) => {
           <Text style={styles.sectionHeaderText}>Identification Documents</Text>
 
           <Text style={styles.labelText}>Front ID Photo</Text>
-          <View style={[styles.uploadIdContainer, formErrors.frontIdPhoto?.hasError && { borderColor: COLORS.RED}]}>
+          <View
+            style={[
+              styles.uploadIdContainer,
+              formErrors.frontIdPhoto?.hasError && { borderColor: COLORS.RED }
+            ]}
+          >
             {frontIdPhoto == null ? (
               <TouchableOpacity style={styles.uploadIdBtn} onPress={pickFrontIdImage}>
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
@@ -189,7 +201,12 @@ const UserDocumentsScreen = ({ navigation, route }) => {
           )}
 
           <Text style={styles.labelText}>Back ID Photo</Text>
-          <View style={[styles.uploadIdContainer, formErrors.backIdPhoto?.hasError && { borderColor: COLORS.RED}]}>
+          <View
+            style={[
+              styles.uploadIdContainer,
+              formErrors.backIdPhoto?.hasError && { borderColor: COLORS.RED }
+            ]}
+          >
             {backIdPhoto == null ? (
               <TouchableOpacity style={styles.uploadIdBtn} onPress={pickBackIdImage}>
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
