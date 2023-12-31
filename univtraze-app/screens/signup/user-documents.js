@@ -5,24 +5,30 @@ import {
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
-  Image,
-  Modal,
-  ActivityIndicator
+  Image
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
 import { Ionicons } from '@expo/vector-icons'
-import BackIcon from '../../assets/back-icon.png'
-import StepperIcon2 from '../../assets/reg2_identifier.png'
-import { COLORS } from '../../utils/app_constants'
+import { FontAwesome5 } from '@expo/vector-icons'
+import StepperIcon2 from '../../assets/step-2-credentials.png'
+import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
 import LoadingModal from '../../components/LoadingModal'
 import UserInformationFooter from '../../components/UserInformationFooter'
+import GeneratedAvatar from '../../components/GeneratedAvatar'
+import { AntDesign } from '@expo/vector-icons'
+import useFormErrors from '../../hooks/useFormErrors'
+import { useAuth } from '../../services/store/auth/AuthContext'
+import { useUser } from '../../services/store/user/UserContext'
 
 const UserDocumentsScreen = ({ navigation, route }) => {
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [email, setEmail] = useState('')
-
+  const { state: auth } = useAuth()
+  const { state: user } = useUser()
+  const { setFormErrors, resetFormErrors, formErrors } = useFormErrors([
+    'frontIdPhoto',
+    'backIdPhoto'
+  ])
   const [profilePhoto, setProfilePhoto] = useState(null)
   const [base64ProfilePhoto, setBase64ProfilePhoto] = useState('')
 
@@ -35,78 +41,65 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
 
-  const [selectedProfilePhotoUrl, setSelectedProfilePhotoUrl] = useState('')
-  const [selectedFrontIdUrl, setSelectedFrontIdUrl] = useState('')
-  const [selectedBackIdUrl, setSelectedBackIdUrl] = useState('')
+  const initials =
+    (route.params.firstName ?? '').charAt(0) + (route.params.lastName ?? '').charAt(0)
 
   //Getting current user token
   const [token, setToken] = useState('')
   const [userId, setUserId] = useState(null)
 
-  const pickDocumentForProfilePhoto = async () => {
+  const pickProfileImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      base64: true,
+      aspect: [4, 4],
       quality: 1
     })
 
-    if (!result.cancelled) {
-      setProfilePhoto(result)
+    if (!result.canceled) {
+      setProfilePhoto(result.assets[0].uri)
     }
-
-    const convertedBase64Img = 'data:image/jpeg;base64,' + result.base64
-    setBase64ProfilePhoto(convertedBase64Img)
   }
 
-  const pickFrontIdPhoto = async () => {
+  const pickFrontIdImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      base64: true,
+      aspect: [6, 4],
       quality: 1
     })
 
-    if (!result.cancelled) {
-      setFrontIdPhoto(result)
+    if (!result.canceled) {
+      setFrontIdPhoto(result.assets[0].uri)
     }
-
-    const convertedBase64Img = 'data:image/jpeg;base64,' + result.base64
-    setBase64FrontIdPhoto(convertedBase64Img)
   }
 
-  const pickBackIdPhoto = async () => {
+  const pickBackIdImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      base64: true,
+      aspect: [6, 4],
       quality: 1
     })
 
-    if (!result.cancelled) {
-      setBackIdPhoto(result)
+    if (!result.canceled) {
+      setBackIdPhoto(result.assets[0].uri)
     }
-
-    const convertedBase64Img = 'data:image/jpeg;base64,' + result.base64
-    setBase64BackIdPhoto(convertedBase64Img)
   }
 
-  // Function for uploading user details to the database including the uploading of documents uwu
-  const handleSaveUserDetails = async () => {
-    if (profilePhoto === null) {
-      return alert('Please select your profile photo!')
+  const onNext = () => {
+    resetFormErrors()
+    if (frontIdPhoto == null) {
+      return setFormErrors('frontIdPhoto', 'Back ID photo is required')
     }
-
-    if (frontIdPhoto === null) {
-      return alert('You need to provide front image of your ID')
+    if (backIdPhoto == null) {
+      return setFormErrors('backIdPhoto', 'Front ID photo is required')
     }
-
-    if (backIdPhoto === null) {
-      return alert('You need to provide back image of your ID')
-    }
-
-    updateUserType(route.params.type)
+    console.log('NExt')
   }
+
+  console.log(formErrors)
+
   const updateUserType = async () => {
     setShowLoadingModal(true)
     //THis will handle uploading of profile photo
@@ -138,463 +131,144 @@ const UserDocumentsScreen = ({ navigation, route }) => {
       })
   }
 
-  const handleImageUploads = async (profilePhoto, frontIdPhoto, backIdPhoto) => {
-    let imageProfile = ''
-    let imageBackPhoto = ''
-    let imageFrontPhoto = ''
-
-    setShowLoadingModal(true)
-    //THis will handle uploading of profile photo
-    setLoadingMessage('Uploading profile photo...')
-    await axios
-      .post('https://univtraze.herokuapp.com/api/files/uploadUserBase64Image', {
-        image: profilePhoto
-      })
-      .then(function (response) {
-        setSelectedProfilePhotoUrl(response.data.results.url)
-        imageProfile = response.data.results.url
-        setLoadingMessage('Uploading profile photo completed...')
-      })
-      .catch(function (error) {
-        alert('Error occured while uploading your profile photo')
-      })
-
-    setLoadingMessage('Uploading front ID photo...')
-    //This will handle the uploading of front if photo
-    await axios
-      .post('https://univtraze.herokuapp.com/api/files/uploadUserBase64Image', {
-        image: frontIdPhoto
-      })
-      .then(function (response) {
-        setSelectedFrontIdUrl(response.data.results.url)
-        imageFrontPhoto = response.data.results.url
-        setLoadingMessage('Uploading front ID photo completed...')
-      })
-      .catch(function (error) {
-        alert('Error occured while uploading your profile photo')
-      })
-
-    setLoadingMessage('Uploading back ID photo...')
-    //This will handle the uploading of back id photo
-    await axios
-      .post('https://univtraze.herokuapp.com/api/files/uploadUserBase64Image', {
-        image: backIdPhoto
-      })
-      .then(function (response) {
-        setSelectedBackIdUrl(response.data.results.url)
-        imageBackPhoto = response.data.results.url
-        setLoadingMessage('Uploading back ID photo completed...')
-      })
-      .catch(function (error) {
-        alert('Error occured while uploading your profile photo')
-      })
-
-    setLoadingMessage('Please wait...')
-    setShowLoadingModal(false)
-
-    if (route.params.type === 'Student') {
-      return handleAddStudentDetails(
-        userId,
-        route.params.type,
-        route.params.studentNumber,
-        route.params.firstName,
-        route.params.lastName,
-        route.params.middleName,
-        route.params.suffix,
-        route.params.gender,
-        route.params.address,
-        route.params.dob,
-        route.params.course,
-        route.params.yearAndSection,
-        phoneNumber,
-        imageProfile,
-        imageFrontPhoto,
-        imageBackPhoto
-      )
-    }
-
-    if (route.params.type === 'Employee') {
-      return handleAddEmployeeDetails(
-        userId,
-        route.params.type,
-        route.params.employeeNumber,
-        route.params.firstName,
-        route.params.lastName,
-        route.params.middleName,
-        route.params.suffix,
-        route.params.gender,
-        route.params.address,
-        route.params.dob,
-        route.params.department,
-        route.params.position,
-        phoneNumber,
-        imageProfile,
-        imageFrontPhoto,
-        imageBackPhoto
-      )
-    }
-
-    if (route.params.type === 'Visitor') {
-      return handleAddEVisitorDetails(
-        userId,
-        route.params.type,
-        route.params.firstName,
-        route.params.lastName,
-        route.params.middleName,
-        route.params.suffix,
-        route.params.gender,
-        route.params.address,
-        route.params.dob,
-        phoneNumber,
-        imageProfile,
-        imageFrontPhoto,
-        imageBackPhoto
-      )
-    }
-  }
-
-  const handleAddStudentDetails = async (
-    uid,
-    type,
-    studentNumber,
-    firstName,
-    lastName,
-    middleName,
-    suffix,
-    gender,
-    address,
-    dob,
-    course,
-    yearAndSection,
-    phoneNumber,
-    imageProfile,
-    imageFrontPhoto,
-    imageBackPhoto
-  ) => {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-
-    const data = {
-      user_id: uid,
-      firstname: firstName,
-      lastname: lastName,
-      middlename: middleName,
-      suffix: suffix,
-      gender: gender,
-      address: address,
-      course: course,
-      year_section: yearAndSection,
-      birthday: dob,
-      student_id: studentNumber,
-      mobile_number: phoneNumber,
-      email: email,
-      profile_url: imageProfile,
-      back_id_photo: imageBackPhoto,
-      front_id_photo: imageFrontPhoto
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/user/addStudentDetails`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return alert('Please try again now' + response.data.message)
-        }
-        navigation.navigate('SignUpVaccination', { type: type })
-      })
-  }
-
-  const handleAddEmployeeDetails = async (
-    uid,
-    type,
-    employeeNumber,
-    firstName,
-    lastName,
-    middleName,
-    suffix,
-    gender,
-    address,
-    dob,
-    department,
-    position,
-    phoneNumber,
-    imageProfile,
-    imageFrontPhoto,
-    imageBackPhoto
-  ) => {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-
-    const data = {
-      user_id: uid,
-      firstname: firstName,
-      lastname: lastName,
-      middlename: middleName,
-      suffix: suffix,
-      gender: gender,
-      address: address,
-      department: department,
-      position: position,
-      birthday: dob,
-      employee_id: employeeNumber,
-      mobile_number: phoneNumber,
-      email: email,
-      profile_url: imageProfile,
-      back_id_photo: imageBackPhoto,
-      front_id_photo: imageFrontPhoto
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/user/addEmployeeDetails`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return alert('Please try again now' + response.data.message)
-        }
-        navigation.navigate('SignUpVaccination', { type: type })
-      })
-  }
-
-  const handleAddEVisitorDetails = async (
-    uid,
-    type,
-    firstName,
-    lastName,
-    middleName,
-    suffix,
-    gender,
-    address,
-    dob,
-    phoneNumber,
-    imageProfile,
-    imageFrontPhoto,
-    imageBackPhoto
-  ) => {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-
-    const data = {
-      user_id: uid,
-      firstname: firstName,
-      lastname: lastName,
-      middlename: middleName,
-      suffix: suffix,
-      gender: gender,
-      address: address,
-      birthday: dob,
-      mobile_number: phoneNumber,
-      email: email,
-      profile_url: imageProfile,
-      back_id_photo: imageBackPhoto,
-      front_id_photo: imageFrontPhoto
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/user/addVisitorDetails`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return alert('Please try again now' + response.data.message)
-        }
-
-        navigation.navigate('SignUpVaccination', { type: type })
-      })
-  }
-
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
       <LoadingModal
         onRequestClose={() => setShowLoadingModal(false)}
         open={showLoadingModal}
         loadingMessage={loadingMessage}
       />
       <View style={styles.header}>
-        <Image source={StepperIcon2} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+        <Image
+          source={StepperIcon2}
+          resizeMode='contain'
+          style={{ width: '100%', marginTop: 30 }}
+        />
       </View>
-      <ScrollView
-        style={{
-          flexDirection: 'column'
-        }}
-      >
-        <View
-          style={{
-            paddingHorizontal: 40,
-            marginVertical: 15,
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <Text style={{ marginVertical: 15, textAlign: 'left', width: '100%' }}>Profile</Text>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <Image
-              source={{
-                uri:
-                  profilePhoto === null
-                    ? 'https://media.istockphoto.com/vectors/user-member-vector-icon-for-ui-user-interface-or-profile-face-avatar-vector-id1130884625?k=20&m=1130884625&s=612x612&w=0&h=OITK5Otm_lRj7Cx8mBhm7NtLTEHvp6v3XnZFLZmuB9o='
-                    : profilePhoto.uri
-              }}
-              resizeMode='cover'
-              style={{
-                width: 120,
-                height: 120,
-                borderRadius: 100,
-                borderColor: COLORS.PRIMARY,
-                borderWidth: 2,
-                shadowColor: 'black'
-              }}
-            />
-          </View>
-
-          <TouchableOpacity style={styles.editProfileButton} onPress={pickDocumentForProfilePhoto}>
-            <Ionicons name='md-cloud-upload-outline' size={18} color='black' />
-            <Text> UPLOAD PHOTO </Text>
+      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+        <View style={styles.profileContainer}>
+          <Text style={styles.sectionHeaderText}>Profile photo</Text>
+          {profilePhoto == null ? (
+            <GeneratedAvatar initials={initials} />
+          ) : (
+            <Image source={{ uri: profilePhoto }} resizeMode='cover' style={styles.profilePhoto} />
+          )}
+          <TouchableOpacity style={styles.editProfileButton} onPress={pickProfileImage}>
+            <Ionicons name='md-cloud-upload-outline' size={18} color={COLORS.WHITE} />
+            <Text style={styles.uploadPhotoText}> Change Profile </Text>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            paddingHorizontal: 40,
-            marginBottom: 5
-          }}
-        >
-          <Text style={{ marginVertical: 15 }}>I.D photo</Text>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                width: 150,
-                height: 44,
-                backgroundColor: '#C7C7C7',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 10
-              }}
-              onPress={pickFrontIdPhoto}
-            >
-              <Text> Upload ID Photo(Front) </Text>
-            </TouchableOpacity>
-            <Text style={{ width: 145 }}>{frontIdPhoto === null ? null : frontIdPhoto.name}</Text>
+        <View style={styles.idDocsContainer}>
+          <Text style={styles.sectionHeaderText}>Identification Documents</Text>
+
+          <Text style={styles.labelText}>Front ID Photo</Text>
+          <View style={[styles.uploadIdContainer, formErrors.frontIdPhoto?.hasError && { borderColor: COLORS.RED}]}>
+            {frontIdPhoto == null ? (
+              <TouchableOpacity style={styles.uploadIdBtn} onPress={pickFrontIdImage}>
+                <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
+              </TouchableOpacity>
+            ) : (
+              <Fragment>
+                <AntDesign
+                  name='closecircle'
+                  size={24}
+                  color={COLORS.PRIMARY}
+                  style={styles.removePhotoBtn}
+                  onPress={() => setFrontIdPhoto(null)}
+                />
+                <Image
+                  source={{ uri: frontIdPhoto }}
+                  resizeMode='contain'
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </Fragment>
+            )}
           </View>
-
-          {/* Previewer Image front */}
-
-          {frontIdPhoto === null ? null : (
-            <View
-              style={{
-                marginTop: 10,
-                width: '100%',
-                height: 150,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Image
-                source={{ uri: frontIdPhoto.uri }}
-                resizeMode='cover'
-                style={{
-                  width: '100%',
-                  height: 150,
-                  shadowColor: 'black',
-                  borderWidth: 1,
-                  borderColor: COLORS.PRIMARY,
-                  borderRadius: 5
-                }}
-              />
-            </View>
+          {formErrors.frontIdPhoto?.hasError && (
+            <Text style={styles.errorText}>{formErrors.frontIdPhoto.message}</Text>
           )}
 
-          <View
-            style={{
-              marginTop: 10,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                width: 150,
-                height: 44,
-                backgroundColor: '#C7C7C7',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 10
-              }}
-              onPress={pickBackIdPhoto}
-            >
-              <Text>Upload ID Photo(Back)</Text>
-            </TouchableOpacity>
-            <Text style={{ width: 145 }}>{backIdPhoto === null ? null : backIdPhoto.name}</Text>
+          <Text style={styles.labelText}>Back ID Photo</Text>
+          <View style={[styles.uploadIdContainer, formErrors.backIdPhoto?.hasError && { borderColor: COLORS.RED}]}>
+            {backIdPhoto == null ? (
+              <TouchableOpacity style={styles.uploadIdBtn} onPress={pickBackIdImage}>
+                <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
+              </TouchableOpacity>
+            ) : (
+              <Fragment>
+                <AntDesign
+                  name='closecircle'
+                  size={24}
+                  color={COLORS.PRIMARY}
+                  style={styles.removePhotoBtn}
+                  onPress={() => setBackIdPhoto(null)}
+                />
+                <Image
+                  source={{ uri: backIdPhoto }}
+                  resizeMode='contain'
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </Fragment>
+            )}
           </View>
-
-          {/* Previewer Image Back */}
-
-          {backIdPhoto === null ? null : (
-            <View
-              style={{
-                marginTop: 10,
-                width: '100%',
-                height: 150,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Image
-                source={{ uri: backIdPhoto.uri }}
-                resizeMode='cover'
-                style={{
-                  width: '100%',
-                  height: 150,
-                  shadowColor: 'black',
-                  borderWidth: 1,
-                  borderColor: COLORS.PRIMARY,
-                  borderRadius: 5
-                }}
-              />
-            </View>
+          {formErrors.backIdPhoto?.hasError && (
+            <Text style={styles.errorText}>{formErrors.backIdPhoto.message}</Text>
           )}
         </View>
       </ScrollView>
-
-      <UserInformationFooter onGoBack={navigation.goBack} onNext={() => console.log('Next')} />
-    </View>
+      <UserInformationFooter onGoBack={navigation.goBack} onNext={onNext} />
+    </KeyboardAvoidingView>
   )
 }
 
 export default UserDocumentsScreen
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    backgroundColor: '#E1F5E4',
+    flex: 1
+  },
   header: {
     width: '100%',
-    height: '20%',
-
+    height: 130,
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    alignContent: 'center'
+    paddingHorizontal: 40
   },
-
+  sectionHeaderText: {
+    fontSize: 24,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    textAlign: 'left',
+    width: '100%'
+  },
+  idPhotoContainer: {
+    marginTop: 10,
+    width: '100%',
+    height: 200,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  profileContainer: {
+    paddingHorizontal: 40,
+    marginVertical: 15,
+    display: 'flex',
+    gap: 15,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   label: {
     width: '80%',
     textAlign: 'left'
+  },
+  errorText: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
   },
   backbutton: {
     paddingTop: 10
@@ -673,21 +347,82 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center'
   },
+  fullNameText: {
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+    fontSize: 16,
+    marginBottom: 5
+  },
+  profilePhoto: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    borderColor: COLORS.PRIMARY,
+    borderWidth: 2,
+    shadowColor: 'black',
+    borderWidth: 5,
+    borderColor: COLORS.WHITE
+  },
   editProfileButton: {
-    width: 'auto',
-    height: 'auto',
-    padding: 4,
-    marginTop: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    borderRadius: 10,
+    marginBottom: 40,
+    backgroundColor: COLORS.PRIMARY,
+    padding: 10,
+    paddingHorizontal: 30,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4
+  },
+  uploadPhotoText: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    color: COLORS.WHITE,
+    marginLeft: 10
+  },
+  idDocsContainer: {
+    paddingHorizontal: 40,
+    marginBottom: 5,
+    paddingBottom: 30
+  },
+  labelText: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    paddingVertical: 5,
+    marginTop: 15
+  },
+  removePhotoBtn: {
+    top: -5,
+    position: 'absolute',
+    right: -5,
+    zIndex: 99
+  },
+  uploadIdContainer: {
+    flexDirection: 'column',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    width: '100%',
+    height: 220,
+    borderWidth: 2,
+    padding: 5,
+    borderStyle: 'dashed',
+    borderRadius: 10,
+    borderColor: COLORS.GRAY,
+    position: 'relative',
+    backgroundColor: COLORS.LIGHT_GRAY,
+    padding: 10
+  },
+  uploadIdBtn: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: COLORS.SECONDARY,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: 'transparent',
-    paddingHorizontal: 7,
-    flexDirection: 'row',
-    alignSelf: 'center',
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row'
+    position: 'relative'
   }
 })

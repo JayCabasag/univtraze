@@ -24,7 +24,7 @@ import useFormErrors from '../../hooks/useFormErrors'
 const SignUpVisitorScreen = ({ navigation }) => {
   const scrollViewContainerRef = useRef()
   const [type, setType] = useState('visitor')
-  const [forErrors, setFormErrors, resetFormErrors] = useFormErrors([
+  const [formErrors, setFormErrors, resetFormErrors] = useFormErrors([
     'firstName',
     'lastName',
     'suffix',

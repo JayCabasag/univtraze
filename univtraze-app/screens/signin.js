@@ -133,10 +133,10 @@ const SignInScreen = ({ navigation }) => {
           </Text>
         </View>
         <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={onPressLogin} style={styles.signInBtn}>
-          <Text style={styles.buttonText}>Log in</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity onPress={onPressLogin} style={styles.signInBtn}>
+            <Text style={styles.buttonText}>Log in</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
       <LoadingModal
         onRequestClose={() => setShowLoadingModal(false)}
@@ -153,16 +153,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#E1F5E4',
+    backgroundColor: '#E1F5E4'
   },
   scrollView: {
     flex: 1,
     width: '100%',
     marginTop: 20
   },
-  scrollViewContent: {
-    
-  },
+  scrollViewContent: {},
   image: {
     justifyContent: 'center',
     width: 200,

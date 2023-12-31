@@ -164,7 +164,17 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
       return setFormErrors('street', 'Street address is required')
     }
 
-    navigation.navigate('user-documents')
+    navigation.navigate('user-documents', {
+      userType,
+      firstName,
+      middleName,
+      lastName,
+      suffix,
+      gender,
+      dob: moment(dateOfBirth).format('MM-DD-yyyy'),
+      phoneNumber: `${countryDialCode}${phoneNumber}`,
+      address: `${addressStreet}, ${addressBrgy}, ${addressCity}, ${addressProvince}, ${addressRegion}`
+    })
   }
 
   const countryDialCodes = useMemo(() => {
@@ -286,7 +296,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
           <View style={[styles.dobInputWrapper, formErrors.dob?.hasError && styles.inputError]}>
             <TextInput
               placeholder='Date of birth'
-              value={moment(dateOfBirth).format('yyyy-MM-DD')}
+              value={moment(dateOfBirth).format('MM-DD-yyyy')}
               style={styles.dobInput}
               editable={false}
             />

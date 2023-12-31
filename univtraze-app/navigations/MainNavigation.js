@@ -27,7 +27,7 @@ import { useUser } from '../services/store/user/UserContext'
 import UserInformationScreen from '../screens/signup/user-information'
 import UserSelectTypeScreen from '../screens/signup/user-select-type'
 import UserDocumentsScreen from '../screens/signup/user-documents'
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'expo-status-bar'
 
 const MainStack = createNativeStackNavigator()
 
@@ -54,8 +54,16 @@ export default function MainNavigation({ onLayoutView }) {
             {userState.user?.type == null ? (
               <MainStack.Group>
                 <MainStack.Screen name='user-select-type' component={UserSelectTypeScreen} />
-                <MainStack.Screen name='user-information' component={UserInformationScreen} />
-                <MainStack.Screen name='user-documents' component={UserDocumentsScreen} />
+                <MainStack.Screen
+                  name='user-information'
+                  options={{ animation: 'none' }}
+                  component={UserInformationScreen}
+                />
+                <MainStack.Screen
+                  name='user-documents'
+                  options={{ animation: 'none' }}
+                  component={UserDocumentsScreen}
+                />
                 <MainStack.Screen name='signup-student' component={SignUpStudentScreen} />
                 <MainStack.Screen name='signup-employee' component={SignUpEmployeeScreen} />
                 <MainStack.Screen name='signup-visitor' component={SignUpVisitorScreen} />
@@ -84,7 +92,7 @@ export default function MainNavigation({ onLayoutView }) {
         )}
         <MainStack.Screen name='terms-and-conditions' component={TermsAndConditionsScreen} />
       </MainStack.Navigator>
-      <StatusBar style='auto'/>
+      <StatusBar style='auto' />
     </NavigationContainer>
   )
 }
