@@ -5,7 +5,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Image,
-  View
+  View,
+  Platform
 } from 'react-native'
 import React, { useState, useRef, useMemo } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -19,6 +20,7 @@ import { PhoneNumbers } from '../../services/phone-numbers/phone-numbers'
 import useFormErrors from '../../hooks/useFormErrors'
 import { nameRegex, optionalNameRegex, phoneNumberRegex } from '../../utils/regex'
 import UserInformationFooter from '../../components/UserInformationFooter'
+import { Select, SelectItem } from '../../components/ui/Select'
 
 const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const scrollViewContainerRef = useRef()
@@ -125,17 +127,14 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
     }
 
     if (countryDialCode == null || countryDialCode == '') {
-      scrollToContactInfo()
       return setFormErrors('countryDialCode', 'Country dial code is required')
     }
 
     if (phoneNumber == null || phoneNumber == '') {
-      scrollToContactInfo()
       return setFormErrors('phoneNumber', 'Phone number is required')
     }
 
     if (!phoneNumberRegex.test(phoneNumber)) {
-      scrollToContactInfo()
       return setFormErrors('phoneNumber', 'Phone number is invalid')
     }
 
@@ -269,9 +268,9 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
 
             <View style={{ width: '50%' }}>
               <Text style={styles.label}>Gender </Text>
-              <View style={styles.genderPickerWrapper}>
+              {/* <View style={[styles.genderPickerWrapper]}>
                 <Picker
-                  style={styles.genderPickerStyle}
+                  style={[styles.genderPickerStyle]}
                   selectedValue={gender}
                   onValueChange={(itemValue, itemIndex) => onChangeGender(itemValue)}
                 >
@@ -286,7 +285,12 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
                     )
                   })}
                 </Picker>
-              </View>
+              </View> */}
+              <Select value={gender} onSelectItem={onChangeGender}>
+                {Object.values(GENDER).map((gender) => {
+                  return <SelectItem key={gender} label={gender} />
+                })}
+              </Select>
             </View>
           </View>
         </View>
@@ -335,11 +339,15 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
             <View
               style={[
                 styles.countryDialCodePickerWrapper,
+                Platform.OS == 'ios' && { borderColor: 'transparent' },
                 formErrors.countryDialCode?.hasError && styles.inputError
               ]}
             >
               <Picker
-                style={styles.countryDialCodePickerStyle}
+                style={[
+                  styles.countryDialCodePickerStyle,
+                  Platform.OS == 'ios' && { backgroundColor: 'transparent' }
+                ]}
                 selectedValue={countryDialCode}
                 onValueChange={(itemValue, itemIndex) => setCountryDialCode(itemValue)}
               >
@@ -379,10 +387,17 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Region</Text>
           <View
-            style={[styles.addressPicketWrapper, formErrors.region?.hasError && styles.inputError]}
+            style={[
+              styles.addressPicketWrapper,
+              Platform.OS == 'ios' && { borderColor: 'transparent' },
+              formErrors.region?.hasError && styles.inputError
+            ]}
           >
             <Picker
-              style={styles.addressPickerStyle}
+              style={[
+                styles.addressPickerStyle,
+                Platform.OS == 'ios' && { backgroundColor: 'transparent' }
+              ]}
               selectedValue={addressRegion}
               onValueChange={(itemValue, itemIndex) => setAddressRegion(itemValue)}
             >
@@ -407,11 +422,15 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
           <View
             style={[
               styles.addressPicketWrapper,
-              formErrors.province?.hasError && styles.inputError
+              formErrors.province?.hasError && styles.inputError,
+              Platform.OS == 'ios' && { borderColor: 'transparent' }
             ]}
           >
             <Picker
-              style={styles.addressPickerStyle}
+              style={[
+                styles.addressPickerStyle,
+                Platform.OS == 'ios' && { backgroundColor: 'transparent' }
+              ]}
               selectedValue={addressProvince}
               onValueChange={(itemValue, itemIndex) => setAddressProvince(itemValue)}
               enabled={addressRegion != null}
@@ -435,10 +454,17 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>City</Text>
           <View
-            style={[styles.addressPicketWrapper, formErrors.city?.hasError && styles.inputError]}
+            style={[
+              styles.addressPicketWrapper,
+              Platform.OS == 'ios' && { borderColor: 'transparent' },
+              formErrors.city?.hasError && styles.inputError
+            ]}
           >
             <Picker
-              style={styles.addressPickerStyle}
+              style={[
+                styles.addressPickerStyle,
+                Platform.OS == 'ios' && { backgroundColor: 'transparent' }
+              ]}
               selectedValue={addressCity}
               onValueChange={(itemValue, itemIndex) => setAddressCity(itemValue)}
               enabled={addressProvince != null}
@@ -458,10 +484,17 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Barangay</Text>
           <View
-            style={[styles.addressPicketWrapper, formErrors.brgy?.hasError && styles.inputError]}
+            style={[
+              styles.addressPicketWrapper,
+              Platform.OS == 'ios' && { borderColor: 'transparent' },
+              formErrors.brgy?.hasError && styles.inputError
+            ]}
           >
             <Picker
-              style={styles.addressPickerStyle}
+              style={[
+                styles.addressPickerStyle,
+                Platform.OS == 'ios' && { backgroundColor: 'transparent' }
+              ]}
               selectedValue={addressBrgy}
               onValueChange={(itemValue, itemIndex) => setAddressBrgy(itemValue)}
               enabled={addressCity != null}
@@ -644,7 +677,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginRight: 0,
     width: '95%',
-    height: 54,
+    height: 50,
     borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,

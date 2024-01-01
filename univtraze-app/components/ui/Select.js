@@ -1,7 +1,15 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Modal
+} from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
-import CarretDown from '../../assets/carret-down.png'
+import { AntDesign } from '@expo/vector-icons';
 
 const SelectItem = (props) => {
   return (
@@ -15,27 +23,43 @@ const Select = (props) => {
   const [isOpen, setIsOpen] = useState(false)
   const handleSelectItem = (label) => {
     props.onSelectItem(label)
-    props.onToggleDropdown()
+    setIsOpen(!isOpen)
   }
 
   return (
     <View style={[styles.select, props.style]}>
-      <View style={[styles.labelContainerStyle, props.labelContainerStyle]}>
-        <Text style={[styles.labelStyle, props.labelStyle]}>{props.value}</Text>
-      </View>
       <TouchableOpacity
         onPress={() => setIsOpen(!isOpen)}
         style={[styles.carretDownButtonStyle, props.carretDownButtonStyle]}
       >
-        <Image source={CarretDown} style={[styles.carretDown, styles.icon]} />
-      </TouchableOpacity>
-      {isOpen && (
-        <View style={[styles.dropdownContainerStyle, props.dropdownContainerStyle]}>
-          {React.Children.map(props.children, (child) =>
-            React.cloneElement(child, { onSelectItem: handleSelectItem })
-          )}
+        <View style={[styles.labelContainerStyle, props.labelContainerStyle]}>
+          <Text
+            numberOfLines={1}
+            ellipsizeMode='tail'
+            style={[styles.labelStyle, props.labelStyle]}
+          >
+            {props.value}
+          </Text>
         </View>
-      )}
+        <AntDesign name="caretdown" size={11} color={COLORS.TEXT_BLACK} />
+      </TouchableOpacity>
+      <Modal
+        animationType='fade'
+        transparent
+        visible={isOpen}
+        onRequestClose={() => setIsOpen(false)}
+        statusBarTranslucent
+      >
+        <TouchableWithoutFeedback onPress={() => setIsOpen(false)}>
+          <View style={styles.overlay}>
+            <View style={[styles.dropdownContainerStyle, props.dropdownContainerStyle]}>
+              {React.Children.map(props.children, (child) =>
+                React.cloneElement(child, { onSelectItem: handleSelectItem })
+              )}
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   )
 }
@@ -73,10 +97,12 @@ const styles = StyleSheet.create({
   },
   carretDownButtonStyle: {
     height: '100%',
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingLeft: 15,
+    justifyContent: 'space-between',
+    gap: 10,
+    flexDirection: 'row',
     paddingRight: 15
   },
   itemStyle: {
@@ -85,15 +111,28 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     zIndex: 2
   },
-  dropdownContainerStyle: {
+  overlay: {
     flex: 1,
-    position: 'absolute',
+    backgroundColor: 'rgba(0, 0, 0, .7)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 30
+  },
+  dropdownContainerStyle: {
     height: 'auto',
     width: '100%',
-    borderRadius: 10,
+    borderRadius: 2,
     top: 50,
     elevation: 5,
-    backgroundColor: COLORS.WHITE
+    backgroundColor: COLORS.WHITE,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22
   },
   itemLabelStyle: {
     fontFamily: FONT_FAMILY.POPPINS_REGULAR

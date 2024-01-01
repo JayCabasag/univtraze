@@ -90,13 +90,13 @@ module.exports = {
           );
         });
 
-        const tokenPayload = { id: results.insertId, email: body.email}
+        const tokenPayload = { id: results.insertId, email: body.email };
         const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
           expiresIn: '7d',
         });
-  
+
         return res.status(200).json({
-          user: { type: null, ...tokenPayload},
+          user: { type: null, ...tokenPayload },
           token: jsonToken,
         });
       });
@@ -133,10 +133,10 @@ module.exports = {
         });
       }
 
-      const tokenPayload = { id: results.id, email: body.email}
-        const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
-          expiresIn: '7d',
-        });
+      const tokenPayload = { id: results.id, email: body.email };
+      const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
+        expiresIn: '7d',
+      });
 
       return res.status(200).json({
         user: { type: results.type, ...tokenPayload },
@@ -291,16 +291,13 @@ module.exports = {
     const body = req.body;
     updateUserType(body, (err, results) => {
       if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
+        return res.status(500).json({
+          message: 'Internal server error',
         });
       }
 
       return res.status(200).json({
-        success: 1,
-        data: results,
+        results,
       });
     });
   },

@@ -7,9 +7,8 @@ import {
   KeyboardAvoidingView,
   Image
 } from 'react-native'
-import React, { Fragment, useReducer, useRef, useState } from 'react'
+import React, { Fragment, useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
-import axios from 'axios'
 import { Ionicons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
 import StepperIcon2 from '../../assets/step-2-credentials.png'
@@ -21,6 +20,7 @@ import { AntDesign } from '@expo/vector-icons'
 import useFormErrors from '../../hooks/useFormErrors'
 import { useAuth } from '../../services/store/auth/AuthContext'
 import { useUser } from '../../services/store/user/UserContext'
+import { genericPostRequest } from '../../services/api/genericPostRequest'
 
 const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
@@ -88,50 +88,27 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     }
   }
 
-  const onNext = () => {
+  const onNext = async () => {
     resetFormErrors()
     if (frontIdPhoto == null) {
       scrollViewRef.current.scrollToEnd({ animated: true })
-      return setFormErrors('frontIdPhoto', 'Back ID photo is required')
+      return setFormErrors('frontIdPhoto', 'Front ID photo is required')
     }
     if (backIdPhoto == null) {
       scrollViewRef.current.scrollToEnd({ animated: true })
-      return setFormErrors('backIdPhoto', 'Front ID photo is required')
+      return setFormErrors('backIdPhoto', 'Back ID photo is required')
     }
-    console.log('NExt')
-  }
-
-  console.log(formErrors)
-
-  const updateUserType = async () => {
-    setShowLoadingModal(true)
-    //THis will handle uploading of profile photo
-    setLoadingMessage(`Updating user type as ${route.params.type}...`)
-
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
+    // Update user type
+    try {
+      const data = {
+        id: user.user.id,
+        type: route.params.type
+      }
+      const res = await genericPostRequest('users/updateUserType', data, auth.userToken)
+      console.log(res)
+    } catch (error) {
+      console.log(error)
     }
-
-    const data = {
-      id: userId,
-      type: route.params.type
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/user/updateUserType`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          setShowLoadingModal(false)
-          return alert('Please try again')
-        }
-
-        setShowLoadingModal(false)
-        setLoadingMessage('Updated successfully...')
-
-        handleImageUploads(base64ProfilePhoto, base64FrontIdPhoto, base64BackIdPhoto)
-      })
   }
 
   return (

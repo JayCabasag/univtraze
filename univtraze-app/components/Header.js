@@ -14,7 +14,7 @@ export default function Header({ navigation }) {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    marginTop: 80,
+    marginTop: 50,
     width: '100%'
   },
   backIcon: {
