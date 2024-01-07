@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons'
 
 const SelectItem = (props) => {
   return (
@@ -41,7 +41,7 @@ const Select = (props) => {
             {props.value}
           </Text>
         </View>
-        <AntDesign name="caretdown" size={11} color={COLORS.TEXT_BLACK} />
+        <AntDesign name='caretdown' size={11} color={COLORS.TEXT_BLACK} />
       </TouchableOpacity>
       <Modal
         animationType='fade'

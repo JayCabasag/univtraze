@@ -19,26 +19,18 @@ import GeneratedAvatar from '../../components/GeneratedAvatar'
 import { AntDesign } from '@expo/vector-icons'
 import useFormErrors from '../../hooks/useFormErrors'
 import { useAuth } from '../../services/store/auth/AuthContext'
-import { useUser } from '../../services/store/user/UserContext'
 import { genericPostRequest } from '../../services/api/genericPostRequest'
 
 const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
-  const { state: user } = useUser()
   const scrollViewRef = useRef()
   const { setFormErrors, resetFormErrors, formErrors } = useFormErrors([
     'frontIdPhoto',
     'backIdPhoto'
   ])
   const [profilePhoto, setProfilePhoto] = useState(null)
-  const [base64ProfilePhoto, setBase64ProfilePhoto] = useState('')
-
   const [frontIdPhoto, setFrontIdPhoto] = useState(null)
-  const [base64FrontIdPhoto, setBase64FrontIdPhoto] = useState('')
-
   const [backIdPhoto, setBackIdPhoto] = useState(null)
-  const [base64BackIdPhoto, setBase64BackIdPhoto] = useState('')
-
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
 
@@ -100,11 +92,10 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     }
     // Update user type
     try {
-      const data = {
-        id: user.user.id,
+      const payload = {
         type: route.params.type
       }
-      const res = await genericPostRequest('users/updateUserType', data, auth.userToken)
+      const res = await genericPostRequest('users/updateUserType', payload, auth.userToken)
       console.log(res)
     } catch (error) {
       console.log(error)

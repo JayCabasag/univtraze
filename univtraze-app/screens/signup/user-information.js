@@ -8,19 +8,18 @@ import {
   View,
   Platform
 } from 'react-native'
+import uuid from 'react-native-uuid';
 import React, { useState, useRef, useMemo } from 'react'
-import DateTimePicker from '@react-native-community/datetimepicker'
-import { AntDesign } from '@expo/vector-icons'
 import moment from 'moment'
 import StepperIcon1 from '../../assets/step-1-credentials.png'
 import { COLORS, FONT_FAMILY, GENDER } from '../../utils/app_constants'
 import { PhAddress } from '../../services/address/ph-address'
-import { Picker } from '@react-native-picker/picker'
 import { PhoneNumbers } from '../../services/phone-numbers/phone-numbers'
 import useFormErrors from '../../hooks/useFormErrors'
 import { nameRegex, optionalNameRegex, phoneNumberRegex } from '../../utils/regex'
 import UserInformationFooter from '../../components/UserInformationFooter'
-import { Select, SelectItem } from '../../components/ui/Select'
+import CustomPicker from '../../components/ui/CustomPicker'
+import CustomCalendar from '../../components/ui/CustomCalendar'
 
 const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const scrollViewContainerRef = useRef()
@@ -176,24 +175,62 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
     })
   }
 
+  const genders = Object.values(GENDER).map(gender => ({
+    id: gender,
+    label: gender,
+    value: gender
+  }))
   const countryDialCodes = useMemo(() => {
-    return PhoneNumbers.getPhoneNumberPrefixes()
+    const countryCodes = PhoneNumbers.getPhoneNumberPrefixes()
+    return countryCodes.map((countryCode) => ({
+      id: countryCode.code,
+      label: `${countryCode.flag} (${countryCode.dial_code}) ${countryCode.name}`,
+      value: countryCode.dial_code
+    }))
   }, [])
 
   const regions = useMemo(() => {
-    return PhAddress.getRegions()
+    const phRegions = PhAddress.getRegions()
+    const withNullPhRegions = [
+      {
+        id: uuid.v4(),
+        value: null,
+        label: ''
+      },
+      ...phRegions
+    ]
+    return withNullPhRegions.map((phRegion) => ({
+      id: phRegion.id,
+      label: phRegion.region_name,
+      value: phRegion.region_code
+    }))
   }, [])
 
   const provinces = useMemo(() => {
-    return PhAddress.getProvincesByRegion(addressRegion)
+    const phProvinces = PhAddress.getProvincesByRegion(addressRegion)
+    return phProvinces.map((phProvince) => ({
+      id: phProvince.province_code,
+      label: phProvince.province_name,
+      value: phProvince.province_code
+    }))
   }, [addressRegion])
 
   const cities = useMemo(() => {
-    return PhAddress.getCitiesByProvince(addressProvince)
+    const provinceCities = PhAddress.getCitiesByProvince(addressProvince)
+    return provinceCities.map((provinceCity) => ({
+      id: provinceCity.city_code,
+      label: provinceCity.city_name,
+      value: provinceCity.city_code
+    }))
   }, [addressProvince])
 
   const barangays = useMemo(() => {
-    return PhAddress.getBarangaysByCity(addressCity)
+    const cityBrgs = PhAddress.getBarangaysByCity(addressCity)
+    return cityBrgs.map((cityBrgy) => ({
+      id: cityBrgy.brgy_code,
+      label: cityBrgy.brgy_name,
+      value: cityBrgy.brgy_code
+    }))
   }, [addressCity])
 
   return (
@@ -268,65 +305,39 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
 
             <View style={{ width: '50%' }}>
               <Text style={styles.label}>Gender </Text>
-              {/* <View style={[styles.genderPickerWrapper]}>
-                <Picker
-                  style={[styles.genderPickerStyle]}
-                  selectedValue={gender}
-                  onValueChange={(itemValue, itemIndex) => onChangeGender(itemValue)}
-                >
-                  {Object.values(GENDER).map((gender) => {
-                    return (
-                      <Picker.Item
-                        style={styles.genderPickerItemStyle}
-                        key={gender}
-                        label={gender}
-                        value={gender}
-                      />
-                    )
-                  })}
-                </Picker>
-              </View> */}
-              <Select value={gender} onSelectItem={onChangeGender}>
-                {Object.values(GENDER).map((gender) => {
-                  return <SelectItem key={gender} label={gender} />
-                })}
-              </Select>
+              <CustomPicker
+                prompt='Gender'
+                containerStyle={styles.genderContainerStyle}
+                selectedValue={gender}
+                onValueChange={(itemValue, itemIndex) => {
+                  onChangeGender(itemValue)
+                }}
+                options={genders}
+              />
             </View>
           </View>
         </View>
 
         <View style={styles.dobContainer}>
           <Text style={styles.label}>Date of birth</Text>
-          <View style={[styles.dobInputWrapper, formErrors.dob?.hasError && styles.inputError]}>
-            <TextInput
-              placeholder='Date of birth'
-              value={moment(dateOfBirth).format('MM-DD-yyyy')}
-              style={styles.dobInput}
-              editable={false}
-            />
-            <AntDesign
-              name='calendar'
-              size={24}
-              color={COLORS.PRIMARY}
-              style={{ marginRight: 5, paddingHorizontal: 15 }}
-              onPress={() => setShowDatePicker(true)}
-            />
-          </View>
+          <CustomCalendar
+            value={dateOfBirth}
+            showDatePicker={showDatePicker}
+            placeholder={'Date of birth'}
+            onChange={(_event, date) => {
+              // This is required to cancel close when selecting date in spinner
+              if (!(Platform.OS == 'ios')) {
+                setShowDatePicker(false)
+              }
+              setDateOfBirth(date)
+            }}
+            setShowDatePicker={(value) => {
+              setShowDatePicker(value)
+            }}
+            hasError={formErrors.dob?.hasError}
+          />
           {formErrors.dob?.hasError && (
             <Text style={styles.errorText}>{formErrors.dob.message}</Text>
-          )}
-
-          {showDatePicker && (
-            <DateTimePicker
-              value={dateOfBirth}
-              mode={'date'}
-              accentColor={COLORS.PRIMARY}
-              is24Hour={true}
-              onChange={(event, date) => {
-                setShowDatePicker(false)
-                setDateOfBirth(new Date(date))
-              }}
-            />
           )}
         </View>
 
@@ -336,33 +347,15 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
         <View style={styles.phoneNumberContainer}>
           <View style={styles.countryCodeWrapper}>
             <Text style={styles.label}>Country Dial Code</Text>
-            <View
-              style={[
-                styles.countryDialCodePickerWrapper,
-                Platform.OS == 'ios' && { borderColor: 'transparent' },
-                formErrors.countryDialCode?.hasError && styles.inputError
-              ]}
-            >
-              <Picker
-                style={[
-                  styles.countryDialCodePickerStyle,
-                  Platform.OS == 'ios' && { backgroundColor: 'transparent' }
-                ]}
-                selectedValue={countryDialCode}
-                onValueChange={(itemValue, itemIndex) => setCountryDialCode(itemValue)}
-              >
-                {countryDialCodes.map((country) => {
-                  return (
-                    <Picker.Item
-                      style={styles.genderPickerItemStyle}
-                      key={country.code}
-                      label={`${country.flag} (${country.dial_code}) ${country.name}`}
-                      value={country.dial_code}
-                    />
-                  )
-                })}
-              </Picker>
-            </View>
+            <CustomPicker
+              prompt='Country code'
+              selectedValue={countryDialCode}
+              onValueChange={(itemValue, itemIndex) => {
+                setCountryDialCode(itemValue)
+              }}
+              hasError={formErrors.countryDialCode?.hasError ?? false}
+              options={countryDialCodes}
+            />
             {formErrors.countryDialCode?.hasError && (
               <Text style={styles.errorText}>{formErrors.countryDialCode.message}</Text>
             )}
@@ -386,66 +379,30 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
         </Text>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Region</Text>
-          <View
-            style={[
-              styles.addressPicketWrapper,
-              Platform.OS == 'ios' && { borderColor: 'transparent' },
-              formErrors.region?.hasError && styles.inputError
-            ]}
-          >
-            <Picker
-              style={[
-                styles.addressPickerStyle,
-                Platform.OS == 'ios' && { backgroundColor: 'transparent' }
-              ]}
-              selectedValue={addressRegion}
-              onValueChange={(itemValue, itemIndex) => setAddressRegion(itemValue)}
-            >
-              <Picker.Item label='Please select region...' value={null} />
-              {regions.map((region) => {
-                return (
-                  <Picker.Item
-                    key={region.id}
-                    label={region.region_name}
-                    value={region.region_code}
-                  />
-                )
-              })}
-            </Picker>
-          </View>
+          <CustomPicker
+            prompt='Regions'
+            selectedValue={addressRegion}
+            onValueChange={(itemValue, itemIndex) => {
+              setAddressRegion(itemValue)
+            }}
+            options={regions}
+            hasError={formErrors.region?.hasError ?? false}
+          />
           {formErrors.region?.hasError && (
             <Text style={styles.errorText}>{formErrors.region.message}</Text>
           )}
         </View>
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Province</Text>
-          <View
-            style={[
-              styles.addressPicketWrapper,
-              formErrors.province?.hasError && styles.inputError,
-              Platform.OS == 'ios' && { borderColor: 'transparent' }
-            ]}
-          >
-            <Picker
-              style={[
-                styles.addressPickerStyle,
-                Platform.OS == 'ios' && { backgroundColor: 'transparent' }
-              ]}
-              selectedValue={addressProvince}
-              onValueChange={(itemValue, itemIndex) => setAddressProvince(itemValue)}
-              enabled={addressRegion != null}
-            >
-              {provinces.map((province) => {
-                return (
-                  <Picker.Item
-                    key={province.province_code}
-                    label={province.province_name}
-                    value={province.province_code}
-                  />
-                )
-              })}
-            </Picker>
-          </View>
+          <CustomPicker
+            prompt='Province'
+            selectedValue={addressProvince}
+            onValueChange={(itemValue, itemIndex) => {
+              setAddressProvince(itemValue)
+            }}
+            options={provinces}
+            hasError={formErrors.province?.hasError ?? false}
+          />
           {formErrors.province?.hasError && (
             <Text style={styles.errorText}>{formErrors.province.message}</Text>
           )}
@@ -453,59 +410,31 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
 
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>City</Text>
-          <View
-            style={[
-              styles.addressPicketWrapper,
-              Platform.OS == 'ios' && { borderColor: 'transparent' },
-              formErrors.city?.hasError && styles.inputError
-            ]}
-          >
-            <Picker
-              style={[
-                styles.addressPickerStyle,
-                Platform.OS == 'ios' && { backgroundColor: 'transparent' }
-              ]}
-              selectedValue={addressCity}
-              onValueChange={(itemValue, itemIndex) => setAddressCity(itemValue)}
-              enabled={addressProvince != null}
-            >
-              {cities.map((city) => {
-                return (
-                  <Picker.Item key={city.city_code} label={city.city_name} value={city.city_code} />
-                )
-              })}
-            </Picker>
-          </View>
-          {formErrors.province?.hasError && (
-            <Text style={styles.errorText}>{formErrors.province.message}</Text>
+          <CustomPicker
+            prompt='City'
+            selectedValue={addressCity}
+            onValueChange={(itemValue, itemIndex) => {
+              setAddressCity(itemValue)
+            }}
+            hasError={formErrors.city?.hasError ?? false}
+            options={cities}
+          />
+          {formErrors.city?.hasError && (
+            <Text style={styles.errorText}>{formErrors.city.message}</Text>
           )}
         </View>
 
         <View style={styles.inputWrapper}>
           <Text style={styles.label}>Barangay</Text>
-          <View
-            style={[
-              styles.addressPicketWrapper,
-              Platform.OS == 'ios' && { borderColor: 'transparent' },
-              formErrors.brgy?.hasError && styles.inputError
-            ]}
-          >
-            <Picker
-              style={[
-                styles.addressPickerStyle,
-                Platform.OS == 'ios' && { backgroundColor: 'transparent' }
-              ]}
-              selectedValue={addressBrgy}
-              onValueChange={(itemValue, itemIndex) => setAddressBrgy(itemValue)}
-              enabled={addressCity != null}
-            >
-              {barangays.map((brgy) => {
-                return (
-                  <Picker.Item key={brgy.brgy_code} label={brgy.brgy_name} value={brgy.brgy_code} />
-                )
-              })}
-            </Picker>
-          </View>
+          <CustomPicker
+            prompt='Barangay'
+            selectedValue={addressBrgy}
+            onValueChange={(itemValue, itemIndex) => {
+              setAddressBrgy(itemValue)
+            }}
+            hasError={formErrors.brgy?.hasError ?? false}
+            options={barangays}
+          />
           {formErrors.brgy?.hasError && (
             <Text style={styles.errorText}>{formErrors.brgy.message}</Text>
           )}
@@ -575,26 +504,7 @@ const styles = StyleSheet.create({
     color: COLORS.RED,
     marginTop: 5
   },
-  genderPickerWrapper: {
-    width: '100%',
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: COLORS.PRIMARY,
-    borderRadius: 5,
-    marginTop: 5,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  genderPickerStyle: {
-    width: '100%',
-    backgroundColor: COLORS.WHITE,
-    color: '#4d7861'
-  },
-  genderPickerItemStyle: {
-    textTransform: 'uppercase',
-    fontFamily: FONT_FAMILY.POPPINS_LIGHT
-  },
+  genderContainerStyle: { height: 50 },
   dobContainer: {
     width: '100%',
     alignItems: 'center',
@@ -603,34 +513,6 @@ const styles = StyleSheet.create({
   },
   phoneNumberContainer: {
     marginBottom: 30
-  },
-  countryDialCodePickerWrapper: {
-    width: '100%',
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: COLORS.PRIMARY,
-    borderRadius: 5,
-    marginTop: 5,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  countryDialCodePickerStyle: {
-    width: '100%',
-    backgroundColor: COLORS.WHITE,
-    color: '#4d7861'
-  },
-  addressPicketWrapper: {
-    width: '100%',
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: COLORS.PRIMARY,
-    borderRadius: 5
-  },
-  addressPickerStyle: {
-    width: '100%',
-    backgroundColor: COLORS.WHITE,
-    color: '#4d7861'
   },
   errorMessage: {
     marginTop: 10,
@@ -734,29 +616,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderWidth: 1,
     borderRadius: 10,
-    overflow: 'hidden',
-    paddingVertical: 1,
-    fontSize: 16,
-    color: '#4d7861',
-    backgroundColor: '#ffff'
-  },
-  dobInputWrapper: {
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    backgroundColor: COLORS.WHITE,
-    borderWidth: 1,
-    borderRadius: 5,
-    overflow: 'hidden',
-    borderColor: COLORS.PRIMARY
-  },
-  dobInput: {
-    flex: 1,
-    height: 50,
-    borderColor: COLORS.PRIMARY,
-    paddingHorizontal: 15,
-    borderRadius: 5,
     overflow: 'hidden',
     paddingVertical: 1,
     fontSize: 16,
