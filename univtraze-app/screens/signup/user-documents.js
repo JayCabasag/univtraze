@@ -30,6 +30,20 @@ const UserDocumentsScreen = ({ navigation, route }) => {
 
   const userType = USER_TYPE.EMPLOYEE
 
+  // For Student Only
+  const [studentId, setStudentId] = useState('')
+  const [studentYear, setStudentYear] = useState('')
+  const [studentSection, setStudentSection] = useState('')
+
+  // For Employee Only
+  const [employeeId, setEmployeeId] = useState('')
+  const [employeeDepartment, setEmployeeDepartment] = useState('')
+  const [employeePosition, setEmployeePosition] = useState('')
+
+  // For Visitor Only
+  // start here...
+
+  // This for all users
   const [profilePhoto, setProfilePhoto] = useState(null)
   const [frontIdPhoto, setFrontIdPhoto] = useState(null)
   const [backIdPhoto, setBackIdPhoto] = useState(null)
@@ -88,8 +102,36 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     }
   }
 
-  const onNext = async () => {
-    resetFormErrors()
+  const validateStudentInfo = () => {
+    if (studentId == null || studentId == '') {
+      return setFormErrors('studentId', 'Student year is required')
+    }
+    if (studentYear == null || studentYear == '') {
+      return setFormErrors('studentYear', 'Student year is required')
+    }
+    if (studentId == null || studentId == '') {
+      return setFormErrors('studentSection', 'Student section is required')
+    }
+  }
+
+  const validateEmployeeInfo = () => {
+    if (employeeId == null || employeeId == '') {
+      return setFormErrors('employeeId', 'Employee Id is required')
+    }
+    if (employeeDepartment == null || employeeDepartment == '') {
+      return setFormErrors('employeeDepartment', 'Employee Department is required')
+    }
+    if (employeePosition == null || employeePosition == '') {
+      return setFormErrors('employeePosition', 'Employee position is required')
+    }
+  }
+
+  const validateVisitorInfo = () => {
+    // Add Visitor validator
+    // Start here...
+  }
+
+  const validateIdInputs = () => {
     if (frontIdPhoto == null) {
       scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('frontIdPhoto', 'Front ID photo is required')
@@ -98,6 +140,23 @@ const UserDocumentsScreen = ({ navigation, route }) => {
       scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('backIdPhoto', 'Back ID photo is required')
     }
+  }
+
+  const onNext = async () => {
+    resetFormErrors()
+    if (userType === USER_TYPE.STUDENT) {
+      validateStudentInfo()
+    }
+
+    if (userType === USER_TYPE.EMPLOYEE) {
+      validateEmployeeInfo()
+    }
+
+    if (userType === USER_TYPE.VISITOR) {
+      validateVisitorInfo()
+    }
+
+    validateIdInputs()
     // Update user type
     try {
       const payload = {
@@ -143,9 +202,30 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.idDocsContainer}>
           <Text style={styles.sectionHeaderText}>Identification Documents</Text>
-          {userType == USER_TYPE.STUDENT && <UserStudentInformation formErrors={formErrors} />}
-          {userType == USER_TYPE.EMPLOYEE && <UserEmployeeInformation formErrors={formErrors} />}
+          {/* This is for Student User only */}
+          {userType == USER_TYPE.STUDENT && (
+            <UserStudentInformation
+              studentId={studentId}
+              setStudentId={setStudentId}
+              studentYear={studentYear}
+              setStudentYear={setStudentYear}
+              studentSection={studentSection}
+              setStudentSection={setStudentSection}
+              formErrors={formErrors}
+            />
+          )}
+          {/* This is for Employee Only */}
+          {userType == USER_TYPE.EMPLOYEE && (
+            <UserEmployeeInformation
+              employeeId={employeeId}
+              employeeDepartment={employeeDepartment}
+              employeePosition={employeePosition}
+              formErrors={formErrors}
+            />
+          )}
+          {/* This is for Visitor Only */}
           {userType == USER_TYPE.VISITOR && <UserVisitorInformation formErrors={formErrors} />}
+
           <Text style={styles.labelText}>Front ID Photo</Text>
           <View
             style={[

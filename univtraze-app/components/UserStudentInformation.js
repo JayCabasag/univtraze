@@ -3,18 +3,14 @@ import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 
 export default function UserStudentInformation(props) {
-  const [studentId, setStudentId] = useState('')
-  const [studentYear, setStudentYear] = useState('')
-  const [studentSection, setStudentSection] = useState('')
-
   return (
     <View style={styles.container}>
       <View style={styles.inputWrapper}>
         <Text style={styles.label}>Student Id</Text>
         <TextInput
           placeholder='Student Id'
-          value={studentId}
-          onChangeText={setStudentId}
+          value={props.studentId}
+          onChangeText={props.setStudentId}
           style={[styles.input, props.formErrors?.studentId?.hasError && styles.inputError]}
         />
         {props?.formErrors?.studentId?.hasError && (
@@ -25,8 +21,8 @@ export default function UserStudentInformation(props) {
         <Text style={styles.label}>Year</Text>
         <TextInput
           placeholder='Year'
-          value={studentYear}
-          onChangeText={setStudentYear}
+          value={props.studentYear}
+          onChangeText={props.setStudentYear}
           style={[styles.input, props.formErrors?.studentYear?.hasError && styles.inputError]}
         />
         {props?.formErrors?.studentYear?.hasError && (
@@ -37,8 +33,8 @@ export default function UserStudentInformation(props) {
         <Text style={styles.label}>Section</Text>
         <TextInput
           placeholder='Section'
-          value={studentSection}
-          onChangeText={setStudentSection}
+          value={props.studentSection}
+          onChangeText={props.setStudentSection}
           style={[styles.input, props.formErrors?.studentSection?.hasError && styles.inputError]}
         />
         {props?.formErrors?.studentSection?.hasError && (
