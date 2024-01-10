@@ -12,7 +12,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
 import StepperIcon2 from '../../assets/step-2-credentials.png'
-import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
+import { COLORS, FONT_FAMILY, USER_TYPE } from '../../utils/app_constants'
 import LoadingModal from '../../components/LoadingModal'
 import UserInformationFooter from '../../components/UserInformationFooter'
 import GeneratedAvatar from '../../components/GeneratedAvatar'
@@ -20,26 +20,34 @@ import { AntDesign } from '@expo/vector-icons'
 import useFormErrors from '../../hooks/useFormErrors'
 import { useAuth } from '../../services/store/auth/AuthContext'
 import { genericPostRequest } from '../../services/api/genericPostRequest'
+import UserStudentInformation from '../../components/UserStudentInformation'
+import UserEmployeeInformation from '../../components/UserEmployeeInformation'
+import UserVisitorInformation from '../../components/UserVisitorInformation'
 
 const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
   const scrollViewRef = useRef()
-  const { setFormErrors, resetFormErrors, formErrors } = useFormErrors([
-    'frontIdPhoto',
-    'backIdPhoto'
-  ])
+
+  const userType = USER_TYPE.EMPLOYEE
+
   const [profilePhoto, setProfilePhoto] = useState(null)
   const [frontIdPhoto, setFrontIdPhoto] = useState(null)
   const [backIdPhoto, setBackIdPhoto] = useState(null)
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
+  const { setFormErrors, resetFormErrors, formErrors } = useFormErrors([
+    'studentId',
+    'studentYear',
+    'studentSection',
+    'employeeId',
+    'employeeDepartment',
+    'employeePosition',
+    'frontIdPhoto',
+    'backIdPhoto'
+  ])
 
   const initials =
-    (route.params.firstName ?? '').charAt(0) + (route.params.lastName ?? '').charAt(0)
-
-  //Getting current user token
-  const [token, setToken] = useState('')
-  const [userId, setUserId] = useState(null)
+    (route.params?.firstName ?? '').charAt(0) + (route.params?.lastName ?? '').charAt(0)
 
   const pickProfileImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -135,7 +143,9 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         </View>
         <View style={styles.idDocsContainer}>
           <Text style={styles.sectionHeaderText}>Identification Documents</Text>
-
+          {userType == USER_TYPE.STUDENT && <UserStudentInformation formErrors={formErrors} />}
+          {userType == USER_TYPE.EMPLOYEE && <UserEmployeeInformation formErrors={formErrors} />}
+          {userType == USER_TYPE.VISITOR && <UserVisitorInformation formErrors={formErrors} />}
           <Text style={styles.labelText}>Front ID Photo</Text>
           <View
             style={[
@@ -227,6 +237,56 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     width: '100%'
   },
+  errorMessage: {
+    marginTop: 10,
+    alignSelf: 'center',
+    width: '100%',
+    textAlign: 'left',
+    color: 'red'
+  },
+  inputWrapper: {
+    width: '100%',
+    alignItems: 'center',
+    borderRadius: 15
+  },
+  label: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK,
+    marginTop: 10
+  },
+  errorText: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
+  },
+  input: {
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
+    height: 50,
+    borderColor: COLORS.PRIMARY,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    overflow: 'hidden',
+    paddingVertical: 1,
+    fontSize: 14,
+    color: '#4d7861',
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
+  },
+  inputError: {
+    borderColor: COLORS.RED
+  },
+
   idPhotoContainer: {
     marginTop: 10,
     width: '100%',

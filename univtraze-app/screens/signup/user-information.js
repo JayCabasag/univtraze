@@ -8,7 +8,7 @@ import {
   View,
   Platform
 } from 'react-native'
-import uuid from 'react-native-uuid';
+import uuid from 'react-native-uuid'
 import React, { useState, useRef, useMemo } from 'react'
 import moment from 'moment'
 import StepperIcon1 from '../../assets/step-1-credentials.png'
@@ -41,7 +41,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const [phoneNumber, onChangePhoneNumber] = useState('')
 
   //Address information
-  const [addressRegion, setAddressRegion] = useState(null)
+  const [addressRegion, setAddressRegion] = useState('13')
   const [addressProvince, setAddressProvince] = useState(null)
   const [addressCity, setAddressCity] = useState(null)
   const [addressBrgy, setAddressBrgy] = useState(null)
@@ -175,7 +175,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
     })
   }
 
-  const genders = Object.values(GENDER).map(gender => ({
+  const genders = Object.values(GENDER).map((gender) => ({
     id: gender,
     label: gender,
     value: gender
@@ -194,8 +194,8 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
     const withNullPhRegions = [
       {
         id: uuid.v4(),
-        value: null,
-        label: ''
+        label: 'Select region...',
+        value: null
       },
       ...phRegions
     ]
