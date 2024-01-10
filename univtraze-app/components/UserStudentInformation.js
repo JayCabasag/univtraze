@@ -1,8 +1,15 @@
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import React, { useState } from 'react'
-import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY, STUDENT_YEARS } from '../utils/app_constants'
+import CustomPicker from './ui/CustomPicker'
 
 export default function UserStudentInformation(props) {
+  const studentYears = Object.values(STUDENT_YEARS).map((year, index) => ({
+    id: index,
+    label: year,
+    value: year
+  }))
+
   return (
     <View style={styles.container}>
       <View style={styles.inputWrapper}>
@@ -19,11 +26,14 @@ export default function UserStudentInformation(props) {
       </View>
       <View style={styles.inputWrapper}>
         <Text style={styles.label}>Year</Text>
-        <TextInput
-          placeholder='Year'
-          value={props.studentYear}
-          onChangeText={props.setStudentYear}
-          style={[styles.input, props.formErrors?.studentYear?.hasError && styles.inputError]}
+        <CustomPicker
+          prompt='Year'
+          selectedValue={props.studentYear}
+          onValueChange={(itemValue, itemIndex) => {
+            props.setStudentYear(itemValue)
+          }}
+          options={studentYears}
+          hasError={props.formErrors.studentYear?.hasError ?? false}
         />
         {props?.formErrors?.studentYear?.hasError && (
           <Text style={styles.errorText}>{formErrors.studentYear.message}</Text>

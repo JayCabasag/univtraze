@@ -96,7 +96,7 @@ export default function CustomPicker(props) {
 
 const styles = StyleSheet.create({
   containerStyle: {
-    height: 55,
+    height: 50,
     width: '100%',
     overflow: 'hidden',
     borderWidth: 1,

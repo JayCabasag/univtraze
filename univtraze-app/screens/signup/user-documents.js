@@ -28,7 +28,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
   const scrollViewRef = useRef()
 
-  const userType = USER_TYPE.EMPLOYEE
+  const userType = USER_TYPE.STUDENT
 
   // For Student Only
   const [studentId, setStudentId] = useState('')
