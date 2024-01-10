@@ -1,39 +1,34 @@
-import React, { useState } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 
 export default function UserEmployeeInformation(props) {
-  const [employeeId, setEmployeeId] = useState('')
-  const [employeeDepartment, setEmployeeDepartment] = useState('')
-  const [employeePosition, setEmployeePosition] = useState('')
-
   return (
     <View style={styles.container}>
       <View style={styles.inputWrapper}>
         <Text style={styles.label}>Employee Id</Text>
         <TextInput
           placeholder='Employee Id'
-          value={employeeId}
-          onChangeText={setEmployeeId}
+          value={props.employeeId}
+          onChangeText={props.setEmployeeId}
           style={[styles.input, props.formErrors?.employeeId?.hasError && styles.inputError]}
         />
         {props?.formErrors?.employeeId?.hasError && (
-          <Text style={styles.errorText}>{formErrors.employeeId.message}</Text>
+          <Text style={styles.errorText}>{props.formErrors.employeeId.message}</Text>
         )}
       </View>
       <View style={styles.inputWrapper}>
         <Text style={styles.label}>Employee Department</Text>
         <TextInput
           placeholder='Employee Dpt.'
-          value={employeeDepartment}
-          onChangeText={setEmployeeDepartment}
+          value={props.employeeDepartment}
+          onChangeText={props.setEmployeeDepartment}
           style={[
             styles.input,
             props.formErrors?.employeeDepartment?.hasError && styles.inputError
           ]}
         />
         {props?.formErrors?.employeeDepartment?.hasError && (
-          <Text style={styles.errorText}>{formErrors.employeeDepartment.message}</Text>
+          <Text style={styles.errorText}>{props.formErrors.employeeDepartment.message}</Text>
         )}
       </View>
 
@@ -41,12 +36,12 @@ export default function UserEmployeeInformation(props) {
         <Text style={styles.label}>Employee Position</Text>
         <TextInput
           placeholder='Employee Position'
-          value={employeePosition}
-          onChangeText={setEmployeePosition}
+          value={props.employeePosition}
+          onChangeText={props.setEmployeePosition}
           style={[styles.input, props.formErrors?.employeePosition?.hasError && styles.inputError]}
         />
         {props?.formErrors?.employeePosition?.hasError && (
-          <Text style={styles.errorText}>{formErrors.employeePosition.message}</Text>
+          <Text style={styles.errorText}>{props.formErrors.employeePosition.message}</Text>
         )}
       </View>
     </View>

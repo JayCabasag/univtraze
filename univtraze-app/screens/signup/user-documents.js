@@ -12,7 +12,7 @@ import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
 import StepperIcon2 from '../../assets/step-2-credentials.png'
-import { COLORS, FONT_FAMILY, USER_TYPE } from '../../utils/app_constants'
+import { COLORS, FONT_FAMILY, STUDENT_YEARS, USER_TYPE } from '../../utils/app_constants'
 import LoadingModal from '../../components/LoadingModal'
 import UserInformationFooter from '../../components/UserInformationFooter'
 import GeneratedAvatar from '../../components/GeneratedAvatar'
@@ -32,7 +32,8 @@ const UserDocumentsScreen = ({ navigation, route }) => {
 
   // For Student Only
   const [studentId, setStudentId] = useState('')
-  const [studentYear, setStudentYear] = useState('')
+  const [studentCourse, setStudentCourse] = useState('')
+  const [studentYear, setStudentYear] = useState(STUDENT_YEARS.FIRST_YEAR)
   const [studentSection, setStudentSection] = useState('')
 
   // For Employee Only
@@ -53,6 +54,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     'studentId',
     'studentYear',
     'studentSection',
+    'studentCourse',
     'employeeId',
     'employeeDepartment',
     'employeePosition',
@@ -106,10 +108,13 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     if (studentId == null || studentId == '') {
       return setFormErrors('studentId', 'Student year is required')
     }
+    if (studentCourse == null || studentCourse == '') {
+      return setFormErrors('studentCourse', 'Student course is required')
+    }
     if (studentYear == null || studentYear == '') {
       return setFormErrors('studentYear', 'Student year is required')
     }
-    if (studentId == null || studentId == '') {
+    if (studentSection == null || studentSection == '') {
       return setFormErrors('studentSection', 'Student section is required')
     }
   }
@@ -133,11 +138,10 @@ const UserDocumentsScreen = ({ navigation, route }) => {
 
   const validateIdInputs = () => {
     if (frontIdPhoto == null) {
-      scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('frontIdPhoto', 'Front ID photo is required')
     }
     if (backIdPhoto == null) {
-      scrollViewRef.current.scrollToEnd({ animated: true })
+      // scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('backIdPhoto', 'Back ID photo is required')
     }
   }
@@ -207,6 +211,8 @@ const UserDocumentsScreen = ({ navigation, route }) => {
             <UserStudentInformation
               studentId={studentId}
               setStudentId={setStudentId}
+              studentCourse={studentCourse}
+              setStudentCourse={setStudentCourse}
               studentYear={studentYear}
               setStudentYear={setStudentYear}
               studentSection={studentSection}
@@ -218,8 +224,11 @@ const UserDocumentsScreen = ({ navigation, route }) => {
           {userType == USER_TYPE.EMPLOYEE && (
             <UserEmployeeInformation
               employeeId={employeeId}
+              setEmployeeId={setEmployeeId}
               employeeDepartment={employeeDepartment}
+              setEmployeeDepartment={setEmployeeDepartment}
               employeePosition={employeePosition}
+              setEmployeePosition={setEmployeePosition}
               formErrors={formErrors}
             />
           )}

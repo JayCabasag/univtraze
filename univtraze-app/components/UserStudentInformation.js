@@ -21,7 +21,19 @@ export default function UserStudentInformation(props) {
           style={[styles.input, props.formErrors?.studentId?.hasError && styles.inputError]}
         />
         {props?.formErrors?.studentId?.hasError && (
-          <Text style={styles.errorText}>{formErrors.studentId.message}</Text>
+          <Text style={styles.errorText}>{props.formErrors.studentId.message}</Text>
+        )}
+      </View>
+      <View style={styles.inputWrapper}>
+        <Text style={styles.label}>Course</Text>
+        <TextInput
+          placeholder='Student Course'
+          value={props.studentCourse}
+          onChangeText={props.setStudentCourse}
+          style={[styles.input, props.formErrors?.studentCourse?.hasError && styles.inputError]}
+        />
+        {props?.formErrors?.studentCourse?.hasError && (
+          <Text style={styles.errorText}>{props.formErrors.studentCourse.message}</Text>
         )}
       </View>
       <View style={styles.inputWrapper}>
@@ -36,7 +48,7 @@ export default function UserStudentInformation(props) {
           hasError={props.formErrors.studentYear?.hasError ?? false}
         />
         {props?.formErrors?.studentYear?.hasError && (
-          <Text style={styles.errorText}>{formErrors.studentYear.message}</Text>
+          <Text style={styles.errorText}>{props.formErrors.studentYear.message}</Text>
         )}
       </View>
       <View style={styles.inputWrapper}>
@@ -48,7 +60,7 @@ export default function UserStudentInformation(props) {
           style={[styles.input, props.formErrors?.studentSection?.hasError && styles.inputError]}
         />
         {props?.formErrors?.studentSection?.hasError && (
-          <Text style={styles.errorText}>{formErrors.studentSection.message}</Text>
+          <Text style={styles.errorText}>{props.formErrors.studentSection.message}</Text>
         )}
       </View>
     </View>

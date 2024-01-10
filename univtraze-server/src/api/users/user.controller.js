@@ -175,7 +175,7 @@ module.exports = {
 
       const queryResults = await Promise.all(
         results.map(async (user) => {
-          if (user.type === 'Student') {
+          if (user.type === 'student') {
             return new Promise((resolve, reject) =>
               getStudentDetailsById(user.id, (err, results) => {
                 if (err) return reject(err);
@@ -184,7 +184,7 @@ module.exports = {
             );
           }
 
-          if (user.type === 'Employee') {
+          if (user.type === 'employee') {
             return new Promise((resolve, reject) =>
               getEmployeeDetailsById(user.id, (err, results) => {
                 if (err) return reject(err);
@@ -193,7 +193,7 @@ module.exports = {
             );
           }
 
-          if (user.type === 'Visitor') {
+          if (user.type === 'visitor') {
             return new Promise((resolve, reject) =>
               getVisitorDetailsById(user.id, (err, results) => {
                 if (err) return reject(err);
@@ -205,7 +205,6 @@ module.exports = {
       );
 
       return res.status(200).json({
-        success: 1,
         data: queryResults,
       });
     });
@@ -481,6 +480,7 @@ module.exports = {
       }
     });
   },
+  
   addVisitorDetails: (req, res) => {
     const body = req.body;
 
