@@ -3,12 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SplashScreen from '../screens/splash'
 import WelcomeScreen from '../screens/welcome'
 import SignInScreen from '../screens/signin'
-import SignUpStudentScreen from '../screens/signup/signup-student'
 import SignUpScreen from '../screens/signup/signup'
-import SignUpEmployeeScreen from '../screens/signup/signup-employee'
-import SignUpVisitorScreen from '../screens/signup/signup-visitor'
-import SignUpVaccinationScreen from '../screens/signup/signup-vaccination'
-import SignUpDocsScreen from '../screens/signup/signup-docs'
+import UserVaccine from '../screens/user-vaccine'
 import ForgotPasswordScreen from '../screens/forgot-password'
 import IndexScreen from '../screens'
 import VisitedRoomsScreen from '../screens/visited-rooms'
@@ -24,9 +20,9 @@ import UpdatePersonalInformationScreen from '../screens/update-information'
 import TermsAndConditionsScreen from '../screens/terms-and-conditions'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
-import UserInformationScreen from '../screens/signup/user-information'
-import UserSelectTypeScreen from '../screens/signup/user-select-type'
-import UserDocumentsScreen from '../screens/signup/user-documents'
+import UserInformationScreen from '../screens/user-information'
+import UserSelectTypeScreen from '../screens/user-select-type'
+import UserDocumentsScreen from '../screens/user-documents'
 import { StatusBar } from 'expo-status-bar'
 
 const MainStack = createNativeStackNavigator()
@@ -51,27 +47,18 @@ export default function MainNavigation({ onLayoutView }) {
             {!isAppUserReady && <MainStack.Screen name='loading' component={SplashScreen} />}
             {userState.user?.type == null ? (
               <MainStack.Group>
-                <MainStack.Screen
-                  name='user-documents'
-                  options={{ animation: 'none' }}
-                  component={UserDocumentsScreen}
-                />
+                <MainStack.Screen name='user-vaccine' component={UserVaccine} />
                 <MainStack.Screen name='user-select-type' component={UserSelectTypeScreen} />
                 <MainStack.Screen
                   name='user-information'
                   options={{ animation: 'none' }}
                   component={UserInformationScreen}
                 />
-                {/* <MainStack.Screen
+                <MainStack.Screen
                   name='user-documents'
                   options={{ animation: 'none' }}
                   component={UserDocumentsScreen}
-                /> */}
-                <MainStack.Screen name='signup-student' component={SignUpStudentScreen} />
-                <MainStack.Screen name='signup-employee' component={SignUpEmployeeScreen} />
-                <MainStack.Screen name='signup-visitor' component={SignUpVisitorScreen} />
-                <MainStack.Screen name='signup-vaccination' component={SignUpVaccinationScreen} />
-                <MainStack.Screen name='signup-docs' component={SignUpDocsScreen} />
+                />
               </MainStack.Group>
             ) : (
               <MainStack.Group>

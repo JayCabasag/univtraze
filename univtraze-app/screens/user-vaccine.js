@@ -4,31 +4,21 @@ import {
   View,
   TouchableOpacity,
   TextInput,
-  FlatList,
   ScrollView,
   KeyboardAvoidingView,
-  Image,
-  ImageBackground,
-  Button,
-  Dimensions,
-  Modal,
-  ActivityIndicator
+  Image
 } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
-import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React, { useState } from 'react'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import moment from 'moment'
-import { AntDesign } from '@expo/vector-icons'
-import jwtDecode from 'jwt-decode'
 import axios from 'axios'
-import StepperIcon3 from '../../assets/reg3_identifier.png'
-import { COLORS } from '../../utils/app_constants'
+import StepperIcon3 from '../assets/step-3-credentials.png'
+import { COLORS } from '../utils/app_constants'
+import LoadingModal from '../components/LoadingModal'
+import { AntDesign } from '@expo/vector-icons'
 
-const windowWidth = Dimensions.get('screen').width
-const windowHeight = Dimensions.get('screen').height
-
-const SignUpVaccinationScreen = ({ navigation, route }) => {
+const UserVaccine = ({ navigation, route }) => {
   const [token, setToken] = useState(null)
 
   const [firstDoseDate, setFirstDoseDate] = useState(new Date())
@@ -98,25 +88,18 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
   }
 
   return (
-    <View style={styles.mainContainer}>
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={showLoadingModal}
-        onRequestClose={() => {
-          setShowLoadingModal(!showLoadingModal)
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ActivityIndicator size={'large'} />
-            <Text style={styles.modalText}>Please wait...</Text>
-          </View>
-        </View>
-      </Modal>
-
+    <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+       <LoadingModal
+        onRequestClose={() => setShowLoadingModal(false)}
+        open={showLoadingModal}
+        loadingMessage={'Please wait'}
+      />
       <View style={styles.header}>
-        <Image src={StepperIcon3} resizeMode='contain' style={{ width: '80%', height: '80%' }} />
+        <Image
+          source={StepperIcon3}
+          resizeMode='contain'
+          style={{ width: '100%', marginTop: 30 }}
+        />
       </View>
 
       <ScrollView style={styles.bodyContainer}>
@@ -347,13 +330,17 @@ const SignUpVaccinationScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 
-export default SignUpVaccinationScreen
+export default UserVaccine
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    backgroundColor: '#E1F5E4',
+    flex: 1
+  },
   mainContainer: {
     flex: 1,
     height: '100%',
@@ -376,10 +363,11 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: '20%',
+    height: 130,
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    alignContent: 'center'
+    paddingHorizontal: 40
   },
   bodyContainer: {
     height: 'auto'

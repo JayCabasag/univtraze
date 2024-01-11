@@ -5,13 +5,12 @@ import {
   TouchableOpacity,
   Image,
   KeyboardAvoidingView,
-  ScrollView,
-  SafeAreaView
+  ScrollView
 } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import React, { useState } from 'react'
-import { COLORS, FONT_FAMILY, USER_TYPE } from '../../utils/app_constants'
-import SelectTypeImage from '../../assets/select-type-image.png'
+import { COLORS, FONT_FAMILY, USER_TYPE } from '../utils/app_constants'
+import SelectTypeImage from '../assets/select-type-image.png'
 
 const UserSelectTypeScreen = ({ navigation }) => {
   const [userType, setUserType] = useState(USER_TYPE.STUDENT)

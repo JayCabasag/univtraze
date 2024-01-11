@@ -11,18 +11,18 @@ import React, { Fragment, useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
-import StepperIcon2 from '../../assets/step-2-credentials.png'
-import { COLORS, FONT_FAMILY, STUDENT_YEARS, USER_TYPE } from '../../utils/app_constants'
-import LoadingModal from '../../components/LoadingModal'
-import UserInformationFooter from '../../components/UserInformationFooter'
-import GeneratedAvatar from '../../components/GeneratedAvatar'
+import StepperIcon2 from '../assets/step-2-credentials.png'
+import { COLORS, FONT_FAMILY, STUDENT_YEARS, USER_TYPE } from '../utils/app_constants'
+import LoadingModal from '../components/LoadingModal'
+import UserInformationFooter from '../components/UserInformationFooter'
+import GeneratedAvatar from '../components/GeneratedAvatar'
 import { AntDesign } from '@expo/vector-icons'
-import useFormErrors from '../../hooks/useFormErrors'
-import { useAuth } from '../../services/store/auth/AuthContext'
-import { genericPostRequest } from '../../services/api/genericPostRequest'
-import UserStudentInformation from '../../components/UserStudentInformation'
-import UserEmployeeInformation from '../../components/UserEmployeeInformation'
-import UserVisitorInformation from '../../components/UserVisitorInformation'
+import useFormErrors from '../hooks/useFormErrors'
+import { useAuth } from '../services/store/auth/AuthContext'
+import { genericPostRequest } from '../services/api/genericPostRequest'
+import UserStudentInformation from '../components/UserStudentInformation'
+import UserEmployeeInformation from '../components/UserEmployeeInformation'
+import UserVisitorInformation from '../components/UserVisitorInformation'
 
 const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
@@ -117,6 +117,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     if (studentSection == null || studentSection == '') {
       return setFormErrors('studentSection', 'Student section is required')
     }
+    validateIdInputs()
   }
 
   const validateEmployeeInfo = () => {
@@ -129,11 +130,13 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     if (employeePosition == null || employeePosition == '') {
       return setFormErrors('employeePosition', 'Employee position is required')
     }
+    validateIdInputs()
   }
 
   const validateVisitorInfo = () => {
     // Add Visitor validator
     // Start here...
+    validateIdInputs()
   }
 
   const validateIdInputs = () => {
@@ -149,19 +152,17 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   const onNext = async () => {
     resetFormErrors()
     if (userType === USER_TYPE.STUDENT) {
-      validateStudentInfo()
+      return validateStudentInfo()
     }
 
     if (userType === USER_TYPE.EMPLOYEE) {
-      validateEmployeeInfo()
+      return validateEmployeeInfo()
     }
 
     if (userType === USER_TYPE.VISITOR) {
-      validateVisitorInfo()
+      return validateVisitorInfo()
     }
-
-    validateIdInputs()
-    // Update user type
+    
     try {
       const payload = {
         type: route.params.type

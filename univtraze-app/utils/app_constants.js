@@ -37,3 +37,12 @@ export const FONT_FAMILY = {
     THIRD_YEAR : '3rd year',
     FOURTH_YEAR : '4th year'
   }
+
+  export const VACCINES = {
+    NONE: 'none',
+    MODERNA: 'moderna',
+    PFIZER_BIONTECH: 'pfizer-biontech',
+    OXFORD_ASTRAZENECA: 'oxford/astrazeneca',
+    OTHERS: 'others',
+  };
+  
