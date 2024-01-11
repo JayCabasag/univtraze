@@ -14,7 +14,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 import StepperIcon2 from '../assets/step-2-credentials.png'
 import { COLORS, FONT_FAMILY, STUDENT_YEARS, USER_TYPE } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
-import UserInformationFooter from '../components/UserInformationFooter'
+import UserInformationFooter from '../components/UserInfoFooter'
 import GeneratedAvatar from '../components/GeneratedAvatar'
 import { AntDesign } from '@expo/vector-icons'
 import useFormErrors from '../hooks/useFormErrors'
@@ -162,7 +162,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     if (userType === USER_TYPE.VISITOR) {
       return validateVisitorInfo()
     }
-    
+
     try {
       const payload = {
         type: route.params.type
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: 130,
+    height: Platform.OS == 'ios' ? 170 : 150,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

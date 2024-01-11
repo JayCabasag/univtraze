@@ -88,7 +88,7 @@ export const UserContextProvider = ({ children }) => {
       value={{
         state,
         isAppUserReady,
-        updateUserType: userContext.updateUser,
+        updateUser: userContext.updateUser,
         setUser: userContext.setUser,
         clearUser: userContext.clearUser
       }}

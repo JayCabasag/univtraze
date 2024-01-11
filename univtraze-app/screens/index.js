@@ -18,7 +18,6 @@ import { PieChart } from 'react-native-chart-kit'
 import moment from 'moment'
 import jwtDecode from 'jwt-decode'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-
 import Notifications from '../components/Notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Menu from '../components/Menu'

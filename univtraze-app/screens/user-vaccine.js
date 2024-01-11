@@ -2,46 +2,50 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
-  Image
+  Image,
+  Platform
 } from 'react-native'
-import { Picker } from '@react-native-picker/picker'
-import React, { useState } from 'react'
-import DateTimePicker from '@react-native-community/datetimepicker'
+import React, { Fragment, useState } from 'react'
 import moment from 'moment'
 import axios from 'axios'
 import StepperIcon3 from '../assets/step-3-credentials.png'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, VACCINES } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
-import { AntDesign } from '@expo/vector-icons'
+import useFormErrors from '../hooks/useFormErrors'
+import CustomPicker from '../components/ui/CustomPicker'
+import { useAuth } from '../services/store/auth/AuthContext'
+import UserInfoWithSkipFooter from '../components/UserInfoWithSkipFooter'
+import CustomCalendar from '../components/ui/CustomCalendar'
+import { useUser } from '../services/store/user/UserContext'
 
 const UserVaccine = ({ navigation, route }) => {
-  const [token, setToken] = useState(null)
+  const { state: auth } = useAuth()
+  const { state: userState, updateUser } = useUser()
 
+  const [firstDoseName, setFirstDoseName] = useState('none')
   const [firstDoseDate, setFirstDoseDate] = useState(new Date())
   const [showFirstDoseDatePicker, setShowFirstDoseDatePicker] = useState(false)
-  const [firstDoseName, setFirstDoseName] = useState('None')
-  const [openFirstDoseOptions, setOpenFirstDoseOptions] = useState(false)
 
+  const [secondDoseName, setSecondDoseName] = useState('none')
   const [secondDoseDate, setSecondDoseDate] = useState(new Date())
-  const [secondDoseName, setSecondDoseName] = useState('None')
   const [showSecondDoseDatePicker, setShowSecondDoseDatePicker] = useState(false)
-  const [openSecondDoseOptions, setOpenSecondDoseOptions] = useState(false)
 
+  const [boosterDoseName, setBoosterDoseName] = useState('none')
   const [boosterDoseDate, setBoosterDoseDate] = useState(new Date())
-  const [boosterDoseName, setBoosterDoseName] = useState('None')
   const [showBoosterDoseDatePicker, setShowBoosterDoseDatePicker] = useState(false)
-  const [openBoosterDoseOptions, setOpenBoosterDoseOptions] = useState(false)
 
-  // Error handlers
+  const { formErrors } = useFormErrors([
+    'firstDose',
+    'firstDoseDate',
+    'secondDose',
+    'secondDoseDate',
+    'boosterDose',
+    'boosterDoseDate'
+  ])
 
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
   const [showLoadingModal, setShowLoadingModal] = useState(false)
-
   const [userId, setUserId] = useState(null)
 
   const handleUpdateVaccineData = async () => {
@@ -57,7 +61,7 @@ const UserVaccine = ({ navigation, route }) => {
       }
 
       const config = {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${auth.userToken}` }
       }
 
       setShowLoadingModal(true)
@@ -84,12 +88,18 @@ const UserVaccine = ({ navigation, route }) => {
   }
 
   const skipVaccinationtion = async () => {
-    navigation.navigate('Dashboard', { type: route.params.type })
+    updateUser({ user: { type: 'student' } })
   }
+
+  const vaccineOptions = Object.values(VACCINES).map((data, index) => ({
+    id: index,
+    value: data,
+    label: data.toUpperCase()
+  }))
 
   return (
     <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
-       <LoadingModal
+      <LoadingModal
         onRequestClose={() => setShowLoadingModal(false)}
         open={showLoadingModal}
         loadingMessage={'Please wait'}
@@ -102,234 +112,122 @@ const UserVaccine = ({ navigation, route }) => {
         />
       </View>
 
-      <ScrollView style={styles.bodyContainer}>
-        <View
-          style={{
-            width: '100%',
-            flex: 1,
-            alignItems: 'center'
+      <ScrollView style={styles.bodyContainer} contentContainerStyle={styles.scrollViewContent}>
+        <Text style={styles.label}>1st Dose</Text>
+        <CustomPicker
+          prompt='1st Dose'
+          containerStyle={{ marginBottom: 10 }}
+          selectedValue={firstDoseName}
+          onValueChange={(itemValue, itemIndex) => {
+            setFirstDoseName(itemValue)
           }}
-        >
-          <Text style={styles.label}>1st Dose</Text>
-
-          <View style={styles.pickerContainer}>
-            <Picker
-              style={{ width: '100%', height: 45, color: '#4d7861' }}
-              selectedValue={firstDoseName}
-              onValueChange={(value) => setFirstDoseName(value)}
-              mode='dialog'
-            >
-              <Picker.Item label='None' value='None' />
-              <Picker.Item label='Moderna' value='Moderna' />
-              <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
-              <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
-              <Picker.Item label='Others' value='Others' />
-            </Picker>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row'
-            }}
-          >
-            <Text style={{ marginLeft: 5 }}>Date : </Text>
-            <TextInput
-              placeholder='Date of birth'
-              defaultValue={moment(firstDoseDate).format('yyyy-MM-DD')}
-              style={styles.dateInput}
-              editable={false}
-            />
-            <AntDesign
-              name='calendar'
-              size={37}
-              color={COLORS.PRIMARY}
-              style={{ marginRight: 5 }}
-              onPress={() => setShowFirstDoseDatePicker(true)}
-            />
-          </View>
-          {showFirstDoseDatePicker === true ? (
-            <DateTimePicker
+          hasError={formErrors.firstDoseName?.hasError ?? false}
+          options={vaccineOptions}
+        />
+        {formErrors.firstDoseName?.hasError && (
+          <Text style={styles.errorText}>{formErrors.firstDoseName.message}</Text>
+        )}
+        {firstDoseName != VACCINES.NONE && (
+          <Fragment>
+            <CustomCalendar
               value={firstDoseDate}
-              mode={'date'}
-              is24Hour={true}
-              onChange={(event, date) => {
-                setShowFirstDoseDatePicker(false)
-                if (date === undefined) {
-                  setFirstDoseDate(new Date())
-                  return
+              showDatePicker={showFirstDoseDatePicker}
+              placeholder={'Date of birth'}
+              onChange={(_event, date) => {
+                // This is required to cancel close when selecting date in spinner
+                if (!(Platform.OS == 'ios')) {
+                  setShowFirstDoseDatePicker(false)
                 }
-                setFirstDoseDate(new Date(date))
+                setFirstDoseDate(date)
               }}
+              setShowDatePicker={(value) => {
+                setShowFirstDoseDatePicker(value)
+              }}
+              hasError={formErrors.firstDoseDate?.hasError}
             />
-          ) : null}
-        </View>
+            {formErrors.firstDoseDate?.hasError && (
+              <Text style={styles.errorText}>{formErrors.firstDoseDate.message}</Text>
+            )}
+          </Fragment>
+        )}
 
-        <View
-          style={{
-            width: '100%',
-            flex: 1,
-            alignItems: 'center'
+        <Text style={styles.label}>2nd Dose</Text>
+        <CustomPicker
+          prompt='2st Dose'
+          containerStyle={{ marginBottom: 10 }}
+          selectedValue={secondDoseName}
+          onValueChange={(itemValue, itemIndex) => {
+            setSecondDoseName(itemValue)
           }}
-        >
-          <Text style={styles.label}>2nd Dose</Text>
-          <View style={styles.pickerContainer}>
-            <Picker
-              style={{ width: '100%', height: 45, color: '#4d7861' }}
-              selectedValue={secondDoseName}
-              onValueChange={(value) => setSecondDoseName(value)}
-              mode='dialog'
-            >
-              <Picker.Item label='None' value='None' />
-              <Picker.Item label='Moderna' value='Moderna' />
-              <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
-              <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
-              <Picker.Item label='Others' value='Others' />
-            </Picker>
-          </View>
-
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row'
-            }}
-          >
-            <Text style={{ marginLeft: 5 }}>Date : </Text>
-            <TextInput
-              placeholder='Date of birth'
-              defaultValue={moment(secondDoseDate).format('yyyy-MM-DD')}
-              style={styles.dateInput}
-              editable={false}
-            />
-            <AntDesign
-              name='calendar'
-              size={37}
-              color={COLORS.PRIMARY}
-              style={{ marginRight: 5 }}
-              onPress={() => setShowSecondDoseDatePicker(true)}
-            />
-          </View>
-          {showSecondDoseDatePicker === true ? (
-            <DateTimePicker
+          hasError={formErrors.secondDoseName?.hasError ?? false}
+          options={vaccineOptions}
+        />
+        {formErrors.secondDoseName?.hasError && (
+          <Text style={styles.errorText}>{formErrors.secondDoseName.message}</Text>
+        )}
+        {secondDoseName != VACCINES.NONE && (
+          <Fragment>
+            <CustomCalendar
               value={secondDoseDate}
-              mode={'date'}
-              is24Hour={true}
-              onChange={(event, date) => {
-                setShowSecondDoseDatePicker(false)
-                if (date === undefined) {
-                  setSecondDoseDate(new Date())
-                  return
+              showDatePicker={showSecondDoseDatePicker}
+              placeholder={'Date'}
+              onChange={(_event, date) => {
+                // This is required to cancel close when selecting date in spinner
+                if (!(Platform.OS == 'ios')) {
+                  setShowSecondDoseDatePicker(false)
                 }
-                setSecondDoseDate(new Date(date))
+                setSecondDoseDate(date)
               }}
+              setShowDatePicker={(value) => {
+                setShowSecondDoseDatePicker(value)
+              }}
+              hasError={formErrors.secondDoseDate?.hasError}
             />
-          ) : null}
-        </View>
+            {formErrors.secondDoseDate?.hasError && (
+              <Text style={styles.errorText}>{formErrors.secondDoseDate.message}</Text>
+            )}
+          </Fragment>
+        )}
 
-        <View
-          style={{
-            width: '100%',
-            flex: 1,
-            alignItems: 'center'
+        <Text style={styles.label}>3rd Dose</Text>
+        <CustomPicker
+          prompt='Booster Dose'
+          containerStyle={{ marginBottom: 10 }}
+          selectedValue={boosterDoseName}
+          onValueChange={(itemValue, itemIndex) => {
+            setBoosterDoseName(itemValue)
           }}
-        >
-          <Text style={styles.label}>Booster Dose</Text>
-          <View style={styles.pickerContainer}>
-            <Picker
-              style={{ width: '100%', height: 45, color: '#4d7861' }}
-              selectedValue={boosterDoseName}
-              onValueChange={(value) => setBoosterDoseName(value)}
-              mode='dialog'
-            >
-              <Picker.Item label='None' value='None' />
-              <Picker.Item label='Moderna' value='Moderna' />
-              <Picker.Item label='Pfizer-BioNTech' value='Pfizer-BioNTech' />
-              <Picker.Item label='Oxford/AstraZeneca' value='Oxford/AstraZeneca' />
-              <Picker.Item label='Others' value='Others' />
-            </Picker>
-          </View>
-
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row'
-            }}
-          >
-            <Text style={{ marginLeft: 5 }}>Date : </Text>
-            <TextInput
-              placeholder='Date of birth'
-              defaultValue={moment().format('yyyy-MM-DD')}
-              style={styles.dateInput}
-              editable={false}
-            />
-            <AntDesign
-              name='calendar'
-              size={37}
-              color={COLORS.PRIMARY}
-              style={{ marginRight: 5 }}
-              onPress={() => setShowBoosterDoseDatePicker(true)}
-            />
-          </View>
-          {showBoosterDoseDatePicker === true ? (
-            <DateTimePicker
+          hasError={formErrors.boosterDoseName?.hasError ?? false}
+          options={vaccineOptions}
+        />
+        {formErrors.boosterDoseName?.hasError && (
+          <Text style={styles.errorText}>{formErrors.boosterDoseName.message}</Text>
+        )}
+        {boosterDoseName != VACCINES.NONE && (
+          <Fragment>
+            <CustomCalendar
               value={boosterDoseDate}
-              mode={'date'}
-              is24Hour={true}
-              onChange={(event, date) => {
-                setShowBoosterDoseDatePicker(false)
-                if (date === undefined) {
-                  setBoosterDoseDate(new Date())
-                  return
+              showDatePicker={showBoosterDoseDatePicker}
+              placeholder={'Date'}
+              onChange={(_event, date) => {
+                // This is required to cancel close when selecting date in spinner
+                if (!(Platform.OS == 'ios')) {
+                  setShowBoosterDoseDatePicker(false)
                 }
-                setBoosterDoseDate(new Date(date))
+                setBoosterDoseDate(date)
               }}
+              setShowDatePicker={(value) => {
+                setShowBoosterDoseDatePicker(value)
+              }}
+              hasError={formErrors.boosterDoseDate?.hasError}
             />
-          ) : null}
-        </View>
-        <View
-          style={{
-            width: '100%',
-            flex: 1,
-            alignItems: 'center'
-          }}
-        >
-          <TouchableOpacity></TouchableOpacity>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: 25,
-            paddingBottom: 35,
-            marginTop: 15
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => {
-              skipVaccinationtion()
-            }}
-            style={styles.backbutton}
-          >
-            <Text style={{ fontWeight: 'bold' }}>Later</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              handleUpdateVaccineData()
-            }}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
-        </View>
+            {formErrors.boosterDoseDate?.hasError && (
+              <Text style={styles.errorText}>{formErrors.boosterDoseDate.message}</Text>
+            )}
+          </Fragment>
+        )}
       </ScrollView>
+      <UserInfoWithSkipFooter onSkip={skipVaccinationtion} onNext={() => {}} />
     </KeyboardAvoidingView>
   )
 }
@@ -363,18 +261,21 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: 130,
+    height: Platform.OS == 'ios' ? 170 : 150,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 40
   },
   bodyContainer: {
-    height: 'auto'
+    flex: 1
+  },
+  scrollViewContent: {
+    paddingHorizontal: 30,
+    paddingVertical: 20
   },
   label: {
     width: '100%',
-    textAlign: 'center',
     marginVertical: 15,
     fontWeight: 'bold',
     fontSize: 16

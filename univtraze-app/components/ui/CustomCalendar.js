@@ -53,6 +53,7 @@ export default function CustomCalendar(props) {
                     <Text style={[styles.iosPromptStyle]}>Calendar</Text>
                   </View>
                   <DateTimePicker
+                    maximumDate={new Date()}
                     value={props?.value ?? new Date()}
                     mode={'date'}
                     display='spinner'

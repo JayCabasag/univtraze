@@ -17,7 +17,7 @@ import { PhAddress } from '../services/address/ph-address'
 import { PhoneNumbers } from '../services/phone-numbers/phone-numbers'
 import useFormErrors from '../hooks/useFormErrors'
 import { nameRegex, optionalNameRegex, phoneNumberRegex } from '../utils/regex'
-import UserInformationFooter from '../components/UserInformationFooter'
+import UserInformationFooter from '../components/UserInfoFooter'
 import CustomPicker from '../components/ui/CustomPicker'
 import CustomCalendar from '../components/ui/CustomCalendar'
 
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: 130,
+    height: Platform.OS == 'ios' ? 170 : 150,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

@@ -4,7 +4,8 @@ import React, { useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
 import base64 from 'base-64'
 import { useToast } from 'react-native-toast-notifications'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const Menu = ({
   visible,
@@ -113,7 +114,6 @@ const Menu = ({
                     UnivTraze
                   </Text>
 
-                  {/* QR Container */}
                   <View
                     style={{
                       width: 210,
@@ -171,55 +171,21 @@ const Menu = ({
 
           <View style={styles.menuListContainer}>
             <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Dashboard')
-              }}
-              style={{
-                width: '100%',
-                height: 54,
-                backgroundColor: COLORS.PRIMARY,
-                borderRadius: 10,
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
+              onPress={() => navigation.navigate('Dashboard')}
+              style={[styles.menuItemBtn, styles.menuItemBtnPrimary]}
             >
-              <Image
-                source={require('../assets/menuhome_icon.png')}
-                resizeMode='contain'
-                style={{
-                  width: 15,
-                  height: 15,
-                  marginStart: 20,
-                  marginEnd: 20
-                }}
-              />
-              <Text style={{ color: 'white' }}>Dashboard</Text>
+              <Ionicons name='grid-outline' size={25} color={COLORS.WHITE} />
+              <Text style={styles.menuItemLabel}>Dashboard</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
                 toggleBottomNavigationView()
-
                 navigation.navigate('SignUpVaccination', { type: type })
               }}
-              style={{
-                width: '100%',
-                height: 54,
-                borderRadius: 10,
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
+              style={[styles.menuItemBtn]}
             >
-              <Image
-                source={require('../assets/updateinfo_icon.png')}
-                resizeMode='contain'
-                style={{
-                  width: 15,
-                  height: 15,
-                  marginStart: 20,
-                  marginEnd: 20
-                }}
-              />
-              <Text>Update Vaccine information</Text>
+              <Ionicons name='shield-outline' size={25} color={COLORS.BLACK} />
+              <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>Update vaccine information</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -227,25 +193,10 @@ const Menu = ({
                 toggleBottomNavigationView()
                 navigation.navigate('TemperatureHistory', { id: userId, type: type })
               }}
-              style={{
-                width: '100%',
-                height: 54,
-                borderRadius: 10,
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
+              style={[styles.menuItemBtn]}
             >
-              <Image
-                source={require('../assets/temp_history.png')}
-                resizeMode='contain'
-                style={{
-                  width: 17,
-                  height: 20,
-                  marginStart: 20,
-                  marginEnd: 20
-                }}
-              />
-              <Text>Temperature History</Text>
+              <Ionicons name='thermometer-outline' size={25} color={COLORS.BLACK} />
+              <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>Temperature History</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -253,79 +204,30 @@ const Menu = ({
                 toggleBottomNavigationView()
                 navigation.navigate('AccountSettings', { id: userId, type: type })
               }}
-              style={{
-                width: '100%',
-                height: 54,
-                borderRadius: 10,
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
-            >
-              <Image
-                source={require('../assets/accountsetting_icon.png')}
-                resizeMode='contain'
-                style={{
-                  width: 15,
-                  height: 15,
-                  marginStart: 20,
-                  marginEnd: 20
-                }}
-              />
-              <Text>Account settings</Text>
-            </TouchableOpacity>
+              style={[styles.menuItemBtn]}
+              >
+                <Ionicons name='settings-outline' size={25} color={COLORS.BLACK} />
+                <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>Account Settings</Text>
+              </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {
                 toggleBottomNavigationView()
                 navigation.navigate('RoomVisited', { id: userId, type: type })
               }}
-              style={{
-                width: '100%',
-                height: 54,
-                borderRadius: 10,
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
+              style={[styles.menuItemBtn]}
             >
-              <Image
-                source={require('../assets/room_enter.png')}
-                resizeMode='contain'
-                style={{
-                  width: 17,
-                  height: 20,
-                  marginStart: 20,
-                  marginEnd: 20
-                }}
-              />
-              <Text>Room Visited</Text>
+              <Ionicons name='walk-outline' size={25} color={COLORS.BLACK} />
+              <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>Room Visited</Text>
             </TouchableOpacity>
 
-            <View
-              style={{
-                width: '100%',
-                height: 54,
-                borderRadius: 10,
-                flexDirection: 'row',
-                alignItems: 'center'
-              }}
-            >
               <TouchableOpacity
                 onPress={() => logout()}
-                style={{ flexDirection: 'row', width: '100%' }}
-              >
-                <Image
-                  source={require('../assets/logout_icon.png')}
-                  resizeMode='contain'
-                  style={{
-                    width: 15,
-                    height: 15,
-                    marginStart: 20,
-                    marginEnd: 20
-                  }}
-                />
-                <Text>Logout</Text>
-              </TouchableOpacity>
-            </View>
+                style={[styles.menuItemBtn]}
+                >
+                  <Ionicons name='exit-outline' size={25} color={COLORS.RED} />
+                  <Text style={[styles.menuItemLabel, styles.menuItemLabelRed]}>Logout</Text>
+                </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -358,11 +260,36 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   menuListContainer: {
-    width: '80%',
+    width: '100%',
     height: '65%',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    alignSelf: 'center'
+    alignSelf: 'center',
+    paddingHorizontal: 30
+  },
+  menuItemBtn: {
+    width: '100%',
+    height: 54,
+    backgroundColor: COLORS.WHITE,
+    borderRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    display: 'flex',
+    gap: 15
+  },
+  menuItemBtnPrimary: {
+    backgroundColor: COLORS.PRIMARY
+  },
+  menuItemLabel: {
+    color: 'white',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM
+  },
+  menuItemLabelBlack: {
+    color: COLORS.BLACK
+  },
+  menuItemLabelRed: {
+    color: COLORS.RED
   },
   menuLogo: {
     height: '50%',
