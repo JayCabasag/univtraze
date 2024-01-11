@@ -87,6 +87,7 @@ export default function CustomCalendar(props) {
             <DateTimePicker
               value={props?.value ?? new Date()}
               mode={'date'}
+              maximumDate={new Date()}
               accentColor={COLORS.PRIMARY}
               is24Hour={true}
               onChange={(event, date) => {

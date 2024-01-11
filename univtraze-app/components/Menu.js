@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableOpacity, ScrollView } from 'react-native'
 import { BottomSheet } from 'react-native-btr'
 import React, { useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
@@ -6,6 +6,7 @@ import base64 from 'base-64'
 import { useToast } from 'react-native-toast-notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import GeneratedAvatar from './GeneratedAvatar'
 
 const Menu = ({
   visible,
@@ -41,50 +42,28 @@ const Menu = ({
   return (
     <BottomSheet
       visible={visible}
+      statusBarTranslucent
       onBackButtonPress={toggleBottomNavigationView}
       onBackdropPress={toggleBottomNavigationView}
     >
       {/*Bottom Sheet inner View*/}
       <View style={styles.bottomNavigationView}>
-        <View style={{ width: '100%', height: '100%' }}>
+        <View style={{ flex: 1 }}>
           <View style={styles.profileContainer}>
             <View
               style={{
                 shadowColor: 'black',
-                marginStart: 40,
                 justifyContent: 'center'
               }}
             >
-              <Image
-                source={{ uri: profileUrl }}
-                resizeMode='cover'
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 100,
-                  borderColor: '#EEEEEE',
-                  borderWidth: 2,
-                  shadowColor: 'black'
-                }}
-              />
+             <GeneratedAvatar initials={'JC'} textStyle={{ fontSize: 30 }} containerStyle={{ height: 80, width: 80 }}/>
             </View>
-            <View style={{ width: '75%', padding: 10 }}>
-              <Text numberOfLines={1} style={{ fontSize: 22, fontWeight: 'bold' }}>
-                {fullname}
+            <View style={{ width: '75%', padding: 10, display: 'flex', justifyContent: 'center' }}>
+              <Text numberOfLines={1} style={styles.fullNameText}>
+                {'Jay Cabasag'}
               </Text>
-
               <TouchableOpacity
-                style={{
-                  width: 120,
-                  height: 'auto',
-                  borderWidth: 2,
-                  borderColor: COLORS.PRIMARY,
-                  borderRadius: 50,
-                  padding: 5,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginTop: 5
-                }}
+                style={styles.viewQrBtn}
                 onPress={() => viewQrCode(userId, type)}
               >
                 <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}> View QR Code</Text>
@@ -97,6 +76,7 @@ const Menu = ({
               onRequestClose={() => {
                 setModalVisible(!modalVisible)
               }}
+              statusBarTranslucent
             >
               {/* POP-UP MODAL VIEW */}
               <Pressable
@@ -113,7 +93,6 @@ const Menu = ({
                   >
                     UnivTraze
                   </Text>
-
                   <View
                     style={{
                       width: 210,
@@ -169,7 +148,7 @@ const Menu = ({
             </Modal>
           </View>
 
-          <View style={styles.menuListContainer}>
+          <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={styles.menuItemScrollView} contentContainerStyle={styles.menuItemContentView}>
             <TouchableOpacity
               onPress={() => navigation.navigate('Dashboard')}
               style={[styles.menuItemBtn, styles.menuItemBtnPrimary]}
@@ -228,7 +207,7 @@ const Menu = ({
                   <Ionicons name='exit-outline' size={25} color={COLORS.RED} />
                   <Text style={[styles.menuItemLabel, styles.menuItemLabelRed]}>Logout</Text>
                 </TouchableOpacity>
-          </View>
+          </ScrollView>
         </View>
       </View>
     </BottomSheet>
@@ -253,11 +232,25 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     width: '100%',
-    height: '25%',
     justifyContent: 'center',
     padding: 15,
+    paddingVertical: 30,
     flexDirection: 'row',
     marginTop: 10
+  },
+  fullNameText: {
+    fontSize: 22,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
+  },
+  viewQrBtn: {
+    width: 120,
+    borderWidth: 2,
+    borderColor: COLORS.PRIMARY,
+    borderRadius: 50,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5
   },
   menuListContainer: {
     width: '100%',
@@ -266,6 +259,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignSelf: 'center',
     paddingHorizontal: 30
+  },
+  menuItemScrollView: {
+    flex: 1
+  },
+  menuItemContentView: {
+    paddingHorizontal: 30,
+    display: 'flex',
+    gap: 10
   },
   menuItemBtn: {
     width: '100%',

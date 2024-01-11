@@ -464,7 +464,7 @@ const IndexScreen = ({ navigation, route }) => {
                     legendFontSize: 10
                   }
                 ]}
-                width={Dimensions.get('screen').width - 100}
+                width={Dimensions.get('window').width - 100}
                 height={150}
                 chartConfig={{
                   backgroundColor: '#1cc910',

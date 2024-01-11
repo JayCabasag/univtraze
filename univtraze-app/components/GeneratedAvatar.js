@@ -4,14 +4,14 @@ import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 
 export default function GeneratedAvatar(props) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.initialsText}>{props.initials}</Text>
+    <View style={[styles.containerStyle, props.containerStyle]}>
+      <Text style={[styles.initialsText, props.textStyle]}>{props.initials}</Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  containerStyle: {
     backgroundColor: COLORS.PRIMARY,
     height: 150,
     width: 150,
