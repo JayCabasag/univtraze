@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback,
   Alert
 } from 'react-native'
-import { BottomSheet } from 'react-native-btr'
+import BottomSheet from '../components/ui/BottomSheet'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import React, { useState, useEffect } from 'react'
 import CheckBox from 'expo-checkbox'

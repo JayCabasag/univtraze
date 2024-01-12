@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
-import { BottomSheet } from 'react-native-btr'
 import moment from 'moment'
 import { COLORS } from '../utils/app_constants'
+import BottomSheet from './ui/BottomSheet'
 
 const Notifications = ({
   notifVisible,

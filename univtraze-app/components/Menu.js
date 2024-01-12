@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableOpacity, ScrollView } from 'react-native'
-import { BottomSheet } from 'react-native-btr'
 import React, { useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
 import base64 from 'base-64'
@@ -7,6 +6,7 @@ import { useToast } from 'react-native-toast-notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import GeneratedAvatar from './GeneratedAvatar'
+import BottomSheet from './ui/BottomSheet'
 
 const Menu = ({
   visible,
