@@ -15,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import GeneratedAvatar from './GeneratedAvatar'
 import BottomSheet from './ui/BottomSheet'
 import { useAuth } from '../services/store/auth/AuthContext'
+import { useUser } from '../services/store/user/UserContext'
 
 const Menu = ({
   visible,
@@ -24,6 +25,7 @@ const Menu = ({
   active
 }) => {
   const { signOut } = useAuth()
+  const { clearUser } = useUser()
   const [modalVisible, setModalVisible] = useState(false)
   const [dataToConvertToQr, setdataToConvertToQr] = useState('Invalid')
 
@@ -33,8 +35,9 @@ const Menu = ({
     setModalVisible(true)
   }
 
-  const logout = async () => {
+  const logout = () => {
     signOut()
+    clearUser()
   }
 
   return (

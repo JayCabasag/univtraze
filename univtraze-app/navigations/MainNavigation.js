@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import SplashScreen from '../screens/splash'
 import WelcomeScreen from '../screens/welcome'
 import SignInScreen from '../screens/signin'
 import SignUpScreen from '../screens/signup/signup'
@@ -28,23 +27,16 @@ import { StatusBar } from 'expo-status-bar'
 const MainStack = createNativeStackNavigator()
 
 export default function MainNavigation({ onLayoutView }) {
-  const { state: authState, isAppAuthReady } = useAuth()
-  const { state: userState, isAppUserReady } = useUser()
+  const { state: authState } = useAuth()
+  const { state: userState } = useUser()
+
+  const isAuthenticated = authState.userToken != null
 
   return (
     <NavigationContainer onReady={onLayoutView}>
       <MainStack.Navigator screenOptions={{ headerShown: false }}>
-        {!isAppAuthReady && <MainStack.Screen name='loading' component={SplashScreen} />}
-        {authState.userToken == null ? (
+        {isAuthenticated ? (
           <MainStack.Group>
-            <MainStack.Screen name='welcome' component={WelcomeScreen} />
-            <MainStack.Screen name='signin' component={SignInScreen} />
-            <MainStack.Screen name='signup' component={SignUpScreen} />
-            <MainStack.Screen name='forgot-password' component={ForgotPasswordScreen} />
-          </MainStack.Group>
-        ) : (
-          <MainStack.Group>
-            {!isAppUserReady && <MainStack.Screen name='loading' component={SplashScreen} />}
             {userState.user?.type == null ? (
               <MainStack.Group>
                 <MainStack.Screen name='user-vaccine' component={UserVaccine} />
@@ -78,6 +70,13 @@ export default function MainNavigation({ onLayoutView }) {
                 />
               </MainStack.Group>
             )}
+          </MainStack.Group>
+        ) : (
+          <MainStack.Group>
+            <MainStack.Screen name='welcome' component={WelcomeScreen} />
+            <MainStack.Screen name='signin' component={SignInScreen} />
+            <MainStack.Screen name='signup' component={SignUpScreen} />
+            <MainStack.Screen name='forgot-password' component={ForgotPasswordScreen} />
           </MainStack.Group>
         )}
         <MainStack.Screen name='terms-and-conditions' component={TermsAndConditionsScreen} />
