@@ -1,12 +1,12 @@
-import React from "react";
-import Modal from "react-native-modal";
+import React from 'react'
+import Modal from 'react-native-modal'
 
 const BottomSheet = ({
   children,
   visible = false,
   onBackButtonPress = () => {},
   onBackdropPress = () => {},
-  statusBarTranslucent = true,
+  statusBarTranslucent = true
 }) => {
   return (
     <Modal
@@ -14,13 +14,13 @@ const BottomSheet = ({
       isVisible={visible}
       onBackButtonPress={onBackButtonPress}
       onBackdropPress={onBackdropPress}
-      style={{ justifyContent: "flex-end", margin: 0 }}
+      style={{ justifyContent: 'flex-end', margin: 0 }}
       animationIn={'bounceInUp'}
       animationOut={'bounceOutDown'}
     >
       {children}
     </Modal>
-  );
-};
+  )
+}
 
-export default BottomSheet;
+export default BottomSheet

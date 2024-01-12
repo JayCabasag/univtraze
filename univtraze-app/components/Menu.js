@@ -1,12 +1,20 @@
-import { StyleSheet, Text, View, Pressable, Image, Modal, TouchableOpacity, ScrollView } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Modal,
+  TouchableOpacity,
+  ScrollView
+} from 'react-native'
 import React, { useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
 import base64 from 'base-64'
-import { useToast } from 'react-native-toast-notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import GeneratedAvatar from './GeneratedAvatar'
 import BottomSheet from './ui/BottomSheet'
+import { useAuth } from '../services/store/auth/AuthContext'
 
 const Menu = ({
   visible,
@@ -15,28 +23,18 @@ const Menu = ({
   navigation,
   active
 }) => {
+  const { signOut } = useAuth()
   const [modalVisible, setModalVisible] = useState(false)
   const [dataToConvertToQr, setdataToConvertToQr] = useState('Invalid')
-
-  const toast = useToast()
 
   const viewQrCode = (currentUserId, currentUserType) => {
     var rawData = { id: currentUserId, type: currentUserType, name: fullname }
     setdataToConvertToQr(base64.encode(JSON.stringify(rawData)))
-
     setModalVisible(true)
   }
 
   const logout = async () => {
-    await clear('x-token')
-    toast.show('Logged out successfully...', {
-      type: 'normal',
-      placement: 'bottom',
-      duration: 2000,
-      offset: 30,
-      animationType: 'slide-in'
-    })
-    navigation.navigate('signin')
+    signOut()
   }
 
   return (
@@ -56,16 +54,17 @@ const Menu = ({
                 justifyContent: 'center'
               }}
             >
-             <GeneratedAvatar initials={'JC'} textStyle={{ fontSize: 30 }} containerStyle={{ height: 80, width: 80 }}/>
+              <GeneratedAvatar
+                initials={'JC'}
+                textStyle={{ fontSize: 30 }}
+                containerStyle={{ height: 80, width: 80 }}
+              />
             </View>
             <View style={{ width: '75%', padding: 10, display: 'flex', justifyContent: 'center' }}>
               <Text numberOfLines={1} style={styles.fullNameText}>
                 {'Jay Cabasag'}
               </Text>
-              <TouchableOpacity
-                style={styles.viewQrBtn}
-                onPress={() => viewQrCode(userId, type)}
-              >
+              <TouchableOpacity style={styles.viewQrBtn} onPress={() => viewQrCode(userId, type)}>
                 <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}> View QR Code</Text>
               </TouchableOpacity>
             </View>
@@ -148,7 +147,12 @@ const Menu = ({
             </Modal>
           </View>
 
-          <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false} style={styles.menuItemScrollView} contentContainerStyle={styles.menuItemContentView}>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            style={styles.menuItemScrollView}
+            contentContainerStyle={styles.menuItemContentView}
+          >
             <TouchableOpacity
               onPress={() => navigation.navigate('Dashboard')}
               style={[styles.menuItemBtn, styles.menuItemBtnPrimary]}
@@ -164,7 +168,9 @@ const Menu = ({
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='shield-outline' size={25} color={COLORS.BLACK} />
-              <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>Update vaccine information</Text>
+              <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>
+                Update vaccine information
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -175,7 +181,9 @@ const Menu = ({
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='thermometer-outline' size={25} color={COLORS.BLACK} />
-              <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>Temperature History</Text>
+              <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>
+                Temperature History
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -184,10 +192,12 @@ const Menu = ({
                 navigation.navigate('AccountSettings', { id: userId, type: type })
               }}
               style={[styles.menuItemBtn]}
-              >
-                <Ionicons name='settings-outline' size={25} color={COLORS.BLACK} />
-                <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>Account Settings</Text>
-              </TouchableOpacity>
+            >
+              <Ionicons name='settings-outline' size={25} color={COLORS.BLACK} />
+              <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>
+                Account Settings
+              </Text>
+            </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => {
@@ -200,13 +210,10 @@ const Menu = ({
               <Text style={[styles.menuItemLabel, styles.menuItemLabelBlack]}>Room Visited</Text>
             </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => logout()}
-                style={[styles.menuItemBtn]}
-                >
-                  <Ionicons name='exit-outline' size={25} color={COLORS.RED} />
-                  <Text style={[styles.menuItemLabel, styles.menuItemLabelRed]}>Logout</Text>
-                </TouchableOpacity>
+            <TouchableOpacity onPress={() => logout()} style={[styles.menuItemBtn]}>
+              <Ionicons name='exit-outline' size={25} color={COLORS.RED} />
+              <Text style={[styles.menuItemLabel, styles.menuItemLabelRed]}>Logout</Text>
+            </TouchableOpacity>
           </ScrollView>
         </View>
       </View>
