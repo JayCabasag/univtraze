@@ -15,7 +15,8 @@ const BottomSheet = ({
       onBackButtonPress={onBackButtonPress}
       onBackdropPress={onBackdropPress}
       style={{ justifyContent: "flex-end", margin: 0 }}
-      animationOut={'fadeOut'}
+      animationIn={'bounceInUp'}
+      animationOut={'bounceOutDown'}
     >
       {children}
     </Modal>

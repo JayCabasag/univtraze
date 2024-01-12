@@ -271,7 +271,7 @@ const IndexScreen = ({ navigation, route }) => {
   // Return
   return (
     <ScrollView
-      contentContainerStyle={styles.container}
+      style={styles.container}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
     >
@@ -496,7 +496,8 @@ export default IndexScreen
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#E1F5E4'
+    backgroundColor: '#E1F5E4',
+    flex: 1
   },
   topContainer: {
     paddingHorizontal: 25,
