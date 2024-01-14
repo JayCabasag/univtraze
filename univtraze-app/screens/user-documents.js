@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   ScrollView,
   KeyboardAvoidingView,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native'
 import React, { Fragment, useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
@@ -23,6 +24,13 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import UserStudentInformation from '../components/UserStudentInformation'
 import UserEmployeeInformation from '../components/UserEmployeeInformation'
 import UserVisitorInformation from '../components/UserVisitorInformation'
+import { getApps, initializeApp } from 'firebase/app'
+import { firebaseConfig } from '../configs/firebaseConfig'
+import { uploadImageAsync } from '../utils/helpers'
+
+if (!getApps().length) {
+  initializeApp(firebaseConfig)
+}
 
 const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
@@ -46,8 +54,11 @@ const UserDocumentsScreen = ({ navigation, route }) => {
 
   // This for all users
   const [profilePhoto, setProfilePhoto] = useState(null)
+  const [isUploadingProfilePhoto, setIsUploadingProfilePhoto] = useState(false)
   const [frontIdPhoto, setFrontIdPhoto] = useState(null)
+  const [isUploadingFrontIdPhoto, setIsUploadingFrontIdPhoto] = useState(false)
   const [backIdPhoto, setBackIdPhoto] = useState(null)
+  const [isUploadingBackIdPhoto, setIsUploadingBackIdPhoto] = useState(false)
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
   const { setFormErrors, resetFormErrors, formErrors } = useFormErrors([
@@ -74,7 +85,17 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     })
 
     if (!result.canceled) {
-      setProfilePhoto(result.assets[0].uri)
+      try {
+        setIsUploadingProfilePhoto(true)
+        const uploadUrl = await uploadImageAsync(result.assets[0].uri)
+        setProfilePhoto(uploadUrl)
+      } catch (e) {
+        console.log(e)
+        alert('Upload failed, sorry :(')
+        setProfilePhoto(null)
+      } finally {
+        setIsUploadingProfilePhoto(false)
+      }
     }
   }
 
@@ -87,7 +108,16 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     })
 
     if (!result.canceled) {
-      setFrontIdPhoto(result.assets[0].uri)
+      try {
+        setIsUploadingFrontIdPhoto(true)
+        const uploadUrl = await uploadImageAsync(result.assets[0].uri)
+        setFrontIdPhoto(uploadUrl)
+      } catch (e) {
+        console.log(e)
+        alert('Upload failed, sorry :(')
+      } finally {
+        setIsUploadingFrontIdPhoto(false)
+      }
     }
   }
 
@@ -100,7 +130,16 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     })
 
     if (!result.canceled) {
-      setBackIdPhoto(result.assets[0].uri)
+      try {
+        setIsUploadingBackIdPhoto(true)
+        const uploadUrl = await uploadImageAsync(result.assets[0].uri)
+        setBackIdPhoto(uploadUrl)
+      } catch (e) {
+        console.log(e)
+        alert('Upload failed, sorry :(')
+      } finally {
+        setIsUploadingBackIdPhoto(false)
+      }
     }
   }
 
@@ -139,7 +178,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     validateIdInputs()
   }
 
-  const validateIdInputs = () => {
+  const validateIdInputs = async () => {
     if (frontIdPhoto == null) {
       return setFormErrors('frontIdPhoto', 'Front ID photo is required')
     }
@@ -147,30 +186,32 @@ const UserDocumentsScreen = ({ navigation, route }) => {
       // scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('backIdPhoto', 'Back ID photo is required')
     }
+
+    console.log({ ...route.params, frontIdPhoto, backIdPhoto, profilePhoto })
+
+    // try {
+    //   const payload = {
+    //     type: route.params.type
+    //   }
+    //   const res = await genericPostRequest('users/updateUserType', payload, auth.userToken)
+    //   console.log(res)
+    // } catch (error) {
+    //   console.log(error)
+    // }
   }
 
   const onNext = async () => {
     resetFormErrors()
-    if (userType === USER_TYPE.STUDENT) {
-      return validateStudentInfo()
-    }
 
-    if (userType === USER_TYPE.EMPLOYEE) {
-      return validateEmployeeInfo()
-    }
-
-    if (userType === USER_TYPE.VISITOR) {
-      return validateVisitorInfo()
-    }
-
-    try {
-      const payload = {
-        type: route.params.type
-      }
-      const res = await genericPostRequest('users/updateUserType', payload, auth.userToken)
-      console.log(res)
-    } catch (error) {
-      console.log(error)
+    switch (userType) {
+      case USER_TYPE.STUDENT:
+        return validateStudentInfo()
+      case USER_TYPE.EMPLOYEE:
+        return validateEmployeeInfo()
+      case USER_TYPE.VISITOR:
+        return validateVisitorInfo()
+      default:
+        alert('Invalid user type')
     }
   }
 
@@ -243,7 +284,12 @@ const UserDocumentsScreen = ({ navigation, route }) => {
               formErrors.frontIdPhoto?.hasError && { borderColor: COLORS.RED }
             ]}
           >
-            {frontIdPhoto == null ? (
+            {isUploadingFrontIdPhoto && (
+              <View style={styles.uploadIdBtn}>
+                <ActivityIndicator size='large' color={COLORS.PRIMARY} />
+              </View>
+            )}
+            {!isUploadingFrontIdPhoto && frontIdPhoto == null ? (
               <TouchableOpacity style={styles.uploadIdBtn} onPress={pickFrontIdImage}>
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
               </TouchableOpacity>
@@ -275,7 +321,12 @@ const UserDocumentsScreen = ({ navigation, route }) => {
               formErrors.backIdPhoto?.hasError && { borderColor: COLORS.RED }
             ]}
           >
-            {backIdPhoto == null ? (
+            {isUploadingBackIdPhoto && (
+              <View style={styles.uploadIdBtn}>
+                <ActivityIndicator size='large' color={COLORS.PRIMARY} />
+              </View>
+            )}
+            {!isUploadingBackIdPhoto && backIdPhoto == null ? (
               <TouchableOpacity style={styles.uploadIdBtn} onPress={pickBackIdImage}>
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
               </TouchableOpacity>
@@ -495,7 +546,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     shadowColor: 'black',
     borderWidth: 5,
-    borderColor: COLORS.WHITE
+    borderColor: COLORS.WHITE,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.WHITE
   },
   editProfileButton: {
     display: 'flex',

@@ -39,7 +39,6 @@ export default function MainNavigation({ onLayoutView }) {
           <MainStack.Group>
             {userState.user?.type == null ? (
               <MainStack.Group>
-                <MainStack.Screen name='user-vaccine' component={UserVaccine} />
                 <MainStack.Screen name='user-select-type' component={UserSelectTypeScreen} />
                 <MainStack.Screen
                   name='user-information'
@@ -68,8 +67,10 @@ export default function MainNavigation({ onLayoutView }) {
                   name='update-personal-information'
                   component={UpdatePersonalInformationScreen}
                 />
+                <MainStack.Screen name='user-vaccine' component={UserVaccine} />
               </MainStack.Group>
             )}
+            <MainStack.Screen name='user-vaccine' component={UserVaccine} />
           </MainStack.Group>
         ) : (
           <MainStack.Group>

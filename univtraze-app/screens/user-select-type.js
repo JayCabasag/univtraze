@@ -15,7 +15,7 @@ import SelectTypeImage from '../assets/select-type-image.png'
 const UserSelectTypeScreen = ({ navigation }) => {
   const [userType, setUserType] = useState(USER_TYPE.STUDENT)
   const onNext = () => {
-    navigation.navigate('user-information', { userType })
+    navigation.navigate('user-information', userType)
   }
   return (
     <KeyboardAvoidingView style={styles.mainView}>

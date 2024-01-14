@@ -41,7 +41,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const [phoneNumber, onChangePhoneNumber] = useState('')
 
   //Address information
-  const [addressRegion, setAddressRegion] = useState('13')
+  const [addressRegion, setAddressRegion] = useState(null)
   const [addressProvince, setAddressProvince] = useState(null)
   const [addressCity, setAddressCity] = useState(null)
   const [addressBrgy, setAddressBrgy] = useState(null)
@@ -162,6 +162,11 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
       return setFormErrors('street', 'Street address is required')
     }
 
+    const brgy = barangays.find((brgy) => brgy.value == addressBrgy)
+    const city = cities.find((city) => city.value == addressCity)
+    const province = provinces.find((province) => province.value == addressProvince)
+    const region = regions.find((region) => region.value == addressRegion)
+
     navigation.navigate('user-documents', {
       userType,
       firstName,
@@ -171,7 +176,9 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
       gender,
       dob: moment(dateOfBirth).format('MM-DD-yyyy'),
       phoneNumber: `${countryDialCode}${phoneNumber}`,
-      address: `${addressStreet}, ${addressBrgy}, ${addressCity}, ${addressProvince}, ${addressRegion}`
+      address: `${addressStreet}, ${brgy?.label ?? ''}, ${city.label ?? ''}, ${
+        province?.label ?? ''
+      }, ${region?.label ?? ''}`
     })
   }
 
@@ -194,8 +201,8 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
     const withNullPhRegions = [
       {
         id: uuid.v4(),
-        label: 'Select region...',
-        value: null
+        region_name: 'Select region...',
+        region_code: null
       },
       ...phRegions
     ]
@@ -208,7 +215,15 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
 
   const provinces = useMemo(() => {
     const phProvinces = PhAddress.getProvincesByRegion(addressRegion)
-    return phProvinces.map((phProvince) => ({
+    const withNullProvinces = [
+      {
+        id: uuid.v4(),
+        province_name: 'Select province...',
+        province_code: null
+      },
+      ...phProvinces
+    ]
+    return withNullProvinces.map((phProvince) => ({
       id: phProvince.province_code,
       label: phProvince.province_name,
       value: phProvince.province_code
@@ -217,7 +232,17 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
 
   const cities = useMemo(() => {
     const provinceCities = PhAddress.getCitiesByProvince(addressProvince)
-    return provinceCities.map((provinceCity) => ({
+
+    const withNullCities = [
+      {
+        city_code: uuid.v4(),
+        city_name: 'Select cities...',
+        city_code: null
+      },
+      ...provinceCities
+    ]
+
+    return withNullCities.map((provinceCity) => ({
       id: provinceCity.city_code,
       label: provinceCity.city_name,
       value: provinceCity.city_code
@@ -226,7 +251,16 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
 
   const barangays = useMemo(() => {
     const cityBrgs = PhAddress.getBarangaysByCity(addressCity)
-    return cityBrgs.map((cityBrgy) => ({
+    const withNullBrgys = [
+      {
+        brgy_code: uuid.v4(),
+        brgy_name: 'Select barangays...',
+        brgy_code: null
+      },
+      ...cityBrgs
+    ]
+
+    return withNullBrgys.map((cityBrgy) => ({
       id: cityBrgy.brgy_code,
       label: cityBrgy.brgy_name,
       value: cityBrgy.brgy_code
