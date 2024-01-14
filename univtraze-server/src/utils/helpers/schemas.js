@@ -40,7 +40,7 @@ class Schemas {
       lastname: Joi.string().required(),
       middlename: Joi.string(),
       suffix: Joi.string(),
-      ender: Joi.string().valid('rather-not-say','male', 'female', 'other').required(),
+      ender: Joi.string().valid('rather-not-say', 'male', 'female', 'other').required(),
       address: Joi.string().required(),
       course: Joi.string().required(),
       year_section: Joi.string().required(),
@@ -69,7 +69,7 @@ class Schemas {
       lastname: Joi.string().required(),
       middlename: Joi.string(),
       suffix: Joi.string(),
-      gender: Joi.string().valid('rather-not-say','male', 'female', 'other').required(),
+      gender: Joi.string().valid('rather-not-say', 'male', 'female', 'other').required(),
       address: Joi.string().required(),
       department: Joi.string().required(),
       position: Joi.string().required(),
@@ -87,7 +87,7 @@ class Schemas {
       'string.pattern.base': '{{#label}} must be alphanumeric with no special characters',
       'string.pattern.base': '{{#label}} must be a valid URL',
       'date.iso': 'Please enter a valid ISO date format for {{#label}}',
-    })
+    });
   }
 
   get addVisitorDetails() {
@@ -97,7 +97,7 @@ class Schemas {
       lastname: Joi.string().required(),
       middlename: Joi.string(),
       suffix: Joi.string(),
-      gender: Joi.string().valid('rather-not-say','male', 'female', 'other').required(),
+      gender: Joi.string().valid('rather-not-say', 'male', 'female', 'other').required(),
       address: Joi.string().required(),
       birthday: Joi.date().iso().required(),
       email: Joi.string().email().required(),

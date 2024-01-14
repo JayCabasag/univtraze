@@ -14,7 +14,7 @@ module.exports = {
             message: 'Invalid token',
           });
         } else {
-          req.user = decoded
+          req.user = decoded;
           next();
         }
       });

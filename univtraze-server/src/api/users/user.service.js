@@ -131,39 +131,6 @@ module.exports = {
       },
     );
   },
-
-  addStudentDetails: (data, callBack) => {
-    pool.query(
-      `UPDATE USERS SET type = ? WHERE id = ?; INSERT INTO student_details(user_id, firstname, lastname, middlename, suffix, gender, address, course, year_section, birthday, student_id, mobile_number, email, profile_url, back_id_photo, front_id_photo) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [
-        data.type,
-        data.user_id,
-        data.user_id,
-        data.firstname,
-        data.lastname,
-        data.middlename,
-        data.suffix,
-        data.gender,
-        data.address,
-        data.course,
-        data.year_section,
-        data.birthday,
-        data.student_id,
-        data.mobile_number,
-        data.email,
-        data.profile_url,
-        data.back_id_photo,
-        data.front_id_photo,
-      ],
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results);
-      },
-    );
-  },
-
   checkEmployeeDetailsExist: (data, callBack) => {
     pool.query(`SELECT * FROM employee_details WHERE user_id = ?`, [data.user_id], (error, results, fields) => {
       if (error) {
@@ -172,7 +139,6 @@ module.exports = {
       return callBack(null, results);
     });
   },
-
   updateEmployeeDetails: (data, callBack) => {
     pool.query(
       `UPDATE employee_details SET firstname=?,lastname=?,middlename=?,suffix=?,gender=?,address=?,department=?,position=?,birthday=?,employee_id=?,mobile_number=?, email=?, profile_url=?, front_id_photo=?, back_id_photo=? WHERE user_id=?`,
@@ -202,7 +168,6 @@ module.exports = {
       },
     );
   },
-
   updateEmployeeDocs: (data, callBack) => {
     pool.query(
       `UPDATE employee_details SET employee_id_img=?,mobile_number=?,profile_url=? WHERE user_id=?`,
@@ -215,7 +180,6 @@ module.exports = {
       },
     );
   },
-
   addEmployeeDetails: (data, callBack) => {
     pool.query(
       `UPDATE USERS SET type = ? WHERE id = ?; INSERT INTO employee_details(user_id, firstname, lastname, middlename, suffix, gender, address, department, position, birthday, employee_id,mobile_number, email, profile_url, front_id_photo, back_id_photo) 
@@ -234,6 +198,66 @@ module.exports = {
         data.position,
         data.birthday,
         data.employee_id,
+        data.mobile_number,
+        data.email,
+        data.profile_url,
+        data.back_id_photo,
+        data.front_id_photo,
+      ],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      },
+    );
+  },
+  addVisitorDetails: (data, callBack) => {
+    pool.query(
+      `UPDATE USERS SET type = ? WHERE id = ?; INSERT INTO visitor_details (user_id, firstname, lastname, middlename, suffix, gender, address, birthday, mobile_number, email, profile_url, back_id_photo, front_id_photo) 
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [
+        data.type,
+        data.user_id,
+        data.user_id,
+        data.firstname,
+        data.lastname,
+        data.middlename,
+        data.suffix,
+        data.gender,
+        data.address,
+        data.birthday,
+        data.email,
+        data.mobile_number,
+        data.profile_url,
+        data.back_id_photo,
+        data.front_id_photo,
+      ],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      },
+    );
+  },
+  addStudentDetails: (data, callBack) => {
+    pool.query(
+      `UPDATE USERS SET type = ? WHERE id = ?;INSERT INTO student_details(user_id, firstname, lastname, middlename, suffix, gender, address, course, year_section, birthday, student_id, mobile_number, email, profile_url, back_id_photo, front_id_photo) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [
+        data.type,
+        data.user_id,
+        data.user_id,
+        data.firstname,
+        data.lastname,
+        data.middlename,
+        data.suffix,
+        data.gender,
+        data.address,
+        data.course,
+        data.year_section,
+        data.birthday,
+        data.student_id,
         data.mobile_number,
         data.email,
         data.profile_url,
@@ -289,36 +313,6 @@ module.exports = {
     pool.query(
       `UPDATE visitor_details SET valid_id_img=?,mobile_number=?,profile_url=? WHERE user_id = ?`,
       [data.valid_id_img, data.mobile_number, data.profile_url, data.user_id],
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results);
-      },
-    );
-  },
-
-  addVisitorDetails: (data, callBack) => {
-    pool.query(
-      `UPDATE USERS SET type = ? WHERE id = ?; INSERT INTO visitor_details (user_id, firstname, lastname, middlename, suffix, gender, address, birthday, mobile_number, email, profile_url, back_id_photo, front_id_photo) 
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-      [
-        data.type,
-        data.user_id,
-        data.user_id,
-        data.firstname,
-        data.lastname,
-        data.middlename,
-        data.suffix,
-        data.gender,
-        data.address,
-        data.birthday,
-        data.email,
-        data.mobile_number,
-        data.profile_url,
-        data.back_id_photo,
-        data.front_id_photo,
-      ],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
@@ -492,6 +486,7 @@ module.exports = {
       },
     );
   },
+
   updateProfileInfoVisitor: (data, callBack) => {
     pool.query(
       `UPDATE visitor_details SET mobile_number=?,profile_url=? WHERE user_id = ?`,

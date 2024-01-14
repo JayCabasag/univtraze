@@ -288,7 +288,7 @@ module.exports = {
 
   updateUserType: (req, res) => {
     const body = req.body;
-    req.body.id = req.user.result.id
+    req.body.id = req.user.result.id;
 
     updateUserType(body, (err, results) => {
       if (err) {
@@ -480,7 +480,7 @@ module.exports = {
       }
     });
   },
-  
+
   addVisitorDetails: (req, res) => {
     const body = req.body;
 
