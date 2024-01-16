@@ -49,7 +49,7 @@ class Schemas {
       student_id: Joi.string().required(),
       mobile_number: Joi.string().required(),
       email: Joi.string().email().required(),
-      profile_url: Joi.string().uri(),
+      profile_url: Joi.string().uri().allow(null),
       back_id_photo: Joi.string().uri(),
       front_id_photo: Joi.string().uri(),
     }).messages({
@@ -77,7 +77,7 @@ class Schemas {
       employee_id: Joi.string().required(),
       mobile_number: Joi.string().required(),
       email: Joi.string().email().required(),
-      profile_url: Joi.string().uri(),
+      profile_url: Joi.string().uri().allow(null),
       back_id_photo: Joi.string().uri(),
       front_id_photo: Joi.string().uri(),
     }).messages({
@@ -102,7 +102,7 @@ class Schemas {
       birthday: Joi.date().iso().required(),
       email: Joi.string().email().required(),
       mobile_number: Joi.string().required(),
-      profile_url: Joi.string().allow(null),
+      profile_url: Joi.string().uri().allow(null),
       back_id_photo: Joi.string().uri(),
       front_id_photo: Joi.string().uri(),
     }).messages({
