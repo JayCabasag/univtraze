@@ -51,7 +51,7 @@ class Schemas {
       email: Joi.string().email().required(),
       profile_url: Joi.string().uri(),
       back_id_photo: Joi.string().uri(),
-      front_id_photo: Joi.string().uri()
+      front_id_photo: Joi.string().uri(),
     }).messages({
       'any.required': '{{#label}} is required',
       'string.empty': '{{#label}} cannot be empty',
