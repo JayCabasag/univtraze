@@ -80,7 +80,7 @@ module.exports = {
     });
   },
 
-  checkStudentDetailsExist: (data, callBack) => {
+  isStudentDetailsExists: (data, callBack) => {
     pool.query(`SELECT * FROM student_details WHERE user_id = ?`, [data.user_id], (error, results, fields) => {
       if (error) {
         return callBack(error);
@@ -118,20 +118,7 @@ module.exports = {
       },
     );
   },
-
-  updateStudentDocs: (data, callBack) => {
-    pool.query(
-      `UPDATE student_details SET school_id_img=?,mobile_number=?,profile_url=? WHERE user_id=?`,
-      [data.school_id_img, data.mobile_number, data.profile_url, data.user_id],
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results);
-      },
-    );
-  },
-  checkEmployeeDetailsExist: (data, callBack) => {
+  isEmployeeDetailsExists: (data, callBack) => {
     pool.query(`SELECT * FROM employee_details WHERE user_id = ?`, [data.user_id], (error, results, fields) => {
       if (error) {
         return callBack(error);
@@ -160,18 +147,6 @@ module.exports = {
         data.front_id_photo,
         data.user_id,
       ],
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results);
-      },
-    );
-  },
-  updateEmployeeDocs: (data, callBack) => {
-    pool.query(
-      `UPDATE employee_details SET employee_id_img=?,mobile_number=?,profile_url=? WHERE user_id=?`,
-      [data.employee_id_img, data.mobile_number, data.profile_url, data.user_id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
@@ -273,7 +248,7 @@ module.exports = {
     );
   },
 
-  checkVisitorDetailsExist: (data, callBack) => {
+  isVisitorDetailsExists: (data, callBack) => {
     pool.query(`SELECT * FROM visitor_details WHERE user_id = ?`, [data.user_id], (error, results, fields) => {
       if (error) {
         return callBack(error);
@@ -309,19 +284,6 @@ module.exports = {
       },
     );
   },
-  updateVisitorDocs: (data, callBack) => {
-    pool.query(
-      `UPDATE visitor_details SET valid_id_img=?,mobile_number=?,profile_url=? WHERE user_id = ?`,
-      [data.valid_id_img, data.mobile_number, data.profile_url, data.user_id],
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results);
-      },
-    );
-  },
-
   getStudentDetailsById: (id, callBack) => {
     pool.query(`SELECT * FROM student_details WHERE user_id = ?`, [id], (error, results, fields) => {
       if (error) {

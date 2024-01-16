@@ -30,6 +30,10 @@ const {
   updateProfileInfoStudent,
   updateProfileInfoEmployee,
   updateProfileInfoVisitor,
+  isStudentDetailsExists,
+  isEmployeeDetailsExists,
+  isVisitorDetailsExist,
+  isVisitorDetailsExists,
 } = require('./user.service');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
@@ -304,87 +308,41 @@ module.exports = {
   },
 
   addStudentDetails: (req, res) => {
-    const body = req.body;
-
-    if (body.user_id === '') {
-      return res.json({
-        success: 0,
-        message: 'user id not found',
+    const { error } = schemas.addStudentDetailsSchema.validate(req.body);
+    if (error) {
+      return res.status(401).json({
+        message: 'Some field were empty',
       });
     }
-
-    checkStudentDetailsExist(body, (err, results) => {
+    isStudentDetailsExists(body, (err, results) => {
       if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
+        return res.status(500).json({
+          message: 'Internal server error',
         });
       }
 
-      if (results.length === 0) {
-        if (
-          body.firstname === '' ||
-          body.lastname === '' ||
-          body.gender === '' ||
-          body.address === '' ||
-          body.course === '' ||
-          body.year_section === '' ||
-          body.birthday === '' ||
-          body.student_id === '' ||
-          body.email === ''
-        ) {
-          return res.json({
-            success: 0,
-            message: 'Some fields were empty!',
-          });
-        }
-
+      if (results.length == 0) {
         addStudentDetails(body, (err, results) => {
           if (err) {
-            console.log(err);
-            return res.json({
-              success: 0,
-              message: 'Database connection Error',
+            return res.status(500).json({
+              message: 'Internal server error',
             });
           }
 
           return res.status(200).json({
-            success: 1,
             data: results,
           });
         });
       }
 
       if (results.length > 0) {
-        if (
-          body.firstname === '' ||
-          body.lastname === '' ||
-          body.gender === '' ||
-          body.address === '' ||
-          body.course === '' ||
-          body.year_section === '' ||
-          body.birthday === '' ||
-          body.student_id === '' ||
-          body.email === ''
-        ) {
-          return res.json({
-            success: 0,
-            message: 'Some fields were empty!',
-          });
-        }
-
         updateStudentDetails(body, (err, results) => {
           if (err) {
-            console.log(err);
-            return res.json({
-              success: 0,
-              message: 'Database connection Error',
+            return res.status(500).json({
+              message: 'Internal server error',
             });
           }
-
           return res.status(200).json({
-            success: 1,
             data: results,
           });
         });
@@ -393,87 +351,43 @@ module.exports = {
   },
 
   addEmployeeDetails: (req, res) => {
-    const body = req.body;
+    const { error } = schemas.addEmployeeDetails.validate(req.body);
 
-    if (body.user_id === '') {
-      return res.json({
-        success: 0,
-        message: 'user id not found',
+    if (error) {
+      return res.status(500).json({
+        message: 'Internal server error',
       });
     }
 
-    checkEmployeeDetailsExist(body, (err, results) => {
+    isEmployeeDetailsExists(body, (err, results) => {
       if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Erro around here',
+        return res.status(500).json({
+          message: 'Internal server error',
         });
       }
 
       if (results.length === 0) {
-        if (
-          body.firstname === '' ||
-          body.lastname === '' ||
-          body.gender === '' ||
-          body.address === '' ||
-          body.department === '' ||
-          body.position === '' ||
-          body.birthday === '' ||
-          body.student_id === '' ||
-          body.email === ''
-        ) {
-          return res.json({
-            success: 0,
-            message: 'Some fields were empty!',
-          });
-        }
-
         addEmployeeDetails(body, (err, results) => {
           if (err) {
-            console.log(err);
-            return res.json({
-              success: 0,
-              message: 'Database connection Error',
+            return res.status(500).json({
+              message: 'Internal server error',
             });
           }
-
           return res.status(200).json({
-            success: 1,
             data: results,
           });
         });
       }
 
       if (results.length > 0) {
-        if (
-          body.firstname === '' ||
-          body.lastname === '' ||
-          body.gender === '' ||
-          body.address === '' ||
-          body.course === '' ||
-          body.year_section === '' ||
-          body.birthday === '' ||
-          body.student_id === '' ||
-          body.email === ''
-        ) {
-          return res.json({
-            success: 0,
-            message: 'Some fields were empty!',
-          });
-        }
-
         updateEmployeeDetails(body, (err, results) => {
           if (err) {
-            console.log(err);
-            return res.json({
-              success: 0,
-              message: 'Database connection Error',
+            return res.status(200).json({
+              message: 'Internal server error',
             });
           }
 
           return res.status(200).json({
-            success: 1,
             data: results,
           });
         });
@@ -482,141 +396,48 @@ module.exports = {
   },
 
   addVisitorDetails: (req, res) => {
-    const body = req.body;
+    const { error } = schemas.addVisitorDetails.validate(req.body);
 
-    if (body.user_id === '') {
-      return res.json({
-        success: 0,
-        message: 'user id not found',
+    if (error) {
+      return res.status(500).json({
+        message: 'Internal server error',
       });
     }
 
-    checkVisitorDetailsExist(body, (err, results) => {
+    isVisitorDetailsExists(body, (err, results) => {
       if (err) {
-        console.log(err);
         return res.json({
-          success: 0,
-          message: 'Database connection Erro around here',
+          message: 'Internal server errors',
         });
       }
 
-      if (results.length === 0) {
-        if (
-          body.firstname === '' ||
-          body.lastname === '' ||
-          body.gender === '' ||
-          body.position === '' ||
-          body.birthday === '' ||
-          body.student_id === '' ||
-          body.email === ''
-        ) {
-          return res.json({
-            success: 0,
-            message: 'Some fields were empty!',
-          });
-        }
-
+      if (results.length == 0) {
         addVisitorDetails(body, (err, results) => {
           if (err) {
-            console.log(err);
             return res.json({
-              success: 0,
-              message: 'Database connection Error',
+              message: 'Internal server error',
             });
           }
 
           return res.status(200).json({
-            success: 1,
             data: results,
           });
         });
       }
 
       if (results.length > 0) {
-        if (
-          body.firstname === '' ||
-          body.lastname === '' ||
-          body.gender === '' ||
-          body.address === '' ||
-          body.birthday === '' ||
-          body.student_id === '' ||
-          body.email === ''
-        ) {
-          return res.json({
-            success: 0,
-            message: 'Some fields were empty!',
-          });
-        }
-
         updateVisitorDetails(body, (err, results) => {
           if (err) {
-            console.log(err);
-            return res.json({
-              success: 0,
-              message: 'Database connection Error',
+            return res.status(500).json({
+              message: 'Internal server error',
             });
           }
 
           return res.status(200).json({
-            success: 1,
             data: results,
           });
         });
       }
-    });
-  },
-
-  updateStudentDocs: (req, res) => {
-    const body = req.body;
-    updateStudentDocs(body, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
-        });
-      }
-
-      return res.status(200).json({
-        success: 1,
-        data: results,
-      });
-    });
-  },
-  updateEmployeeDocs: (req, res) => {
-    const body = req.body;
-    updateEmployeeDocs(body, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
-        });
-      }
-
-      return res.status(200).json({
-        success: 1,
-        data: results,
-      });
-    });
-  },
-
-  updateVisitorDocs: (req, res) => {
-    const body = req.body;
-
-    updateVisitorDocs(body, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
-        });
-      }
-
-      return res.status(200).json({
-        success: 1,
-        data: results,
-      });
     });
   },
 

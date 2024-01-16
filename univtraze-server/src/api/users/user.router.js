@@ -6,9 +6,6 @@ const {
   addStudentDetails,
   addEmployeeDetails,
   addVisitorDetails,
-  updateStudentDocs,
-  updateEmployeeDocs,
-  updateVisitorDocs,
   getStudentDetailsById,
   getEmployeeDetailsById,
   getVisitorDetailsById,
@@ -16,7 +13,6 @@ const {
   getUserDetailsById,
   getUserDetailsByIds,
   sendRecoveryPasswordViaEmail,
-  updateUserPassword,
   updateUserPasswordFromRecovery,
   checkRecoveryPasswordAndEmailMatched,
   changePassword,
@@ -37,9 +33,6 @@ router.post('/updateUserType', checkToken, updateUserType);
 router.post('/student-details', checkToken, addStudentDetails);
 router.post('/employee-details', checkToken, addEmployeeDetails);
 router.post('/visitor-details', checkToken, addVisitorDetails);
-router.post('/updateStudentDocs', checkToken, updateStudentDocs);
-router.post('/updateEmployeeDocs', checkToken, updateEmployeeDocs);
-router.post('/updateVisitorDocs', checkToken, updateVisitorDocs);
 router.get('/student', checkToken, getStudentDetailsById);
 router.get('/employee', checkToken, getEmployeeDetailsById);
 router.get('/visitor', checkToken, getVisitorDetailsById);
