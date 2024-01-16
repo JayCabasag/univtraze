@@ -254,7 +254,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
     const withNullBrgys = [
       {
         brgy_code: uuid.v4(),
-        brgy_name: 'Select barangays...',
+        brgy_name: 'Select barangay...',
         brgy_code: null
       },
       ...cityBrgs

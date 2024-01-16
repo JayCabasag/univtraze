@@ -8,7 +8,7 @@ import {
   Image,
   ActivityIndicator
 } from 'react-native'
-import React, { Fragment, useRef, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import { Ionicons } from '@expo/vector-icons'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -27,6 +27,7 @@ import UserVisitorInformation from '../components/UserVisitorInformation'
 import { getApps, initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../configs/firebaseConfig'
 import { uploadImageAsync } from '../utils/helpers'
+import { useUser } from '../services/store/user/UserContext'
 
 if (!getApps().length) {
   initializeApp(firebaseConfig)
@@ -34,10 +35,18 @@ if (!getApps().length) {
 
 const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
+  const { state: userState } = useUser()
+
   const scrollViewRef = useRef()
 
-  const userType = USER_TYPE.STUDENT
+  const userType = route.params?.userType
 
+  useEffect(() => {
+    if(!userType){
+      return navigation.navigate("select-user-type")
+    }
+  }, [])
+  
   // For Student Only
   const [studentId, setStudentId] = useState('')
   const [studentCourse, setStudentCourse] = useState('')
@@ -59,6 +68,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   const [isUploadingFrontIdPhoto, setIsUploadingFrontIdPhoto] = useState(false)
   const [backIdPhoto, setBackIdPhoto] = useState(null)
   const [isUploadingBackIdPhoto, setIsUploadingBackIdPhoto] = useState(false)
+
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
   const { setFormErrors, resetFormErrors, formErrors } = useFormErrors([
@@ -179,7 +189,6 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   }
 
   const validateIdInputs = async () => {
-    console.log("Hello")
     if (frontIdPhoto == null) {
       return setFormErrors('frontIdPhoto', 'Front ID photo is required')
     }
@@ -189,50 +198,84 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     }
 
     try {
-      const sUserDetailsPayload = {
+      setShowLoadingModal(true)
+      const studentUserDetailsPayload = {
         firstname: route.params.firstName,
         lastname: route.params.lastName,
         middlename: route.params.middleName,
         suffix: route.params.suffix,
-        gender: Joi.string().valid('rather-not-say', 'male', 'female', 'other').required(),
-        address: Joi.string().required(),
-        course: Joi.string().required(),
-        year_section: Joi.string().required(),
-        birthday: Joi.date().iso().required(),
-        student_id: Joi.string().required(),
-        mobile_number: Joi.string().pattern(new RegExp('^[0-9]{10}$')).required(),
-        email: Joi.string().email().required(),
-        profile_url: Joi.string().uri(),
-        back_id_photo: Joi.string().uri(),
-        front_id_photo: Joi.string().uri(),
-        user_id: Joi.string().required(),
-      }
-      const eUserDetailsPayload = {
-        type: route.params.type,
-        first_name: route.params.firstName,
-        middle_name: route.params.middleName,
-        last_name: route.params.lastName,
-        birthday: route.params.birthday,
-        front_id_photo: frontIdPhoto,
+        gender: route.params.gender,
+        address: route.params.address,
+        course: route.params.studentCourse,
+        year_section: `${studentYear} - ${studentSection}`,
+        birthday: route.params.dob,
+        student_id: studentId,
+        mobile_number: route.params.phoneNumber,
+        email: userState.user.email,
+        profile_url: profilePhoto,
         back_id_photo: backIdPhoto,
-        profile_photo: profilePhoto,
-        ...route.params,
-      }
-      const vUserDetailsPayload = {
-        type: route.params.type,
-        first_name: route.params.firstName,
-        middle_name: route.params.middleName,
-        last_name: route.params.lastName,
-        birthday: route.params.birthday,
         front_id_photo: frontIdPhoto,
-        back_id_photo: backIdPhoto,
-        profile_photo: profilePhoto,
-        ...route.params,
+        user_id: userState.user.id,
       }
-      const res = await genericPostRequest('users/updateUserType', payload, auth.userToken)
+      const employeeUserDetailsPayload = {
+        firstname: route.params.firstName,
+        lastname: route.params.lastName,
+        middlename: route.params.middleName,
+        suffix: route.params.suffix,
+        gender: route.params.gender,
+        address: route.params.address,
+        mobile_number: route.params.phoneNumber,
+        email: userState.user.email,
+        department: route.params.department,
+        position: route.params.position,
+        birthday: route.params.dob,
+        employee_id: route.params.employeeId,
+        profile_url: profilePhoto,
+        back_id_photo: backIdPhoto,
+        front_id_photo: frontIdPhoto,
+        user_id: userState.user.id,
+      }
+      const visitorUserDetailsPayload = {
+        firstname: route.params.firstName,
+        lastname: route.params.lastName,
+        middlename: route.params.middleName,
+        suffix: route.params.suffix,
+        gender: route.params.gender,
+        address: route.params.address,
+        mobile_number: route.params.phoneNumber,
+        email: userState.user.email,
+        birthday: route.params.dob,
+        profile_url: profilePhoto,
+        back_id_photo: backIdPhoto,
+        front_id_photo: frontIdPhoto,
+        user_id: userState.user.id
+      }
+
+      let url = null
+      let payload = null
+      switch (userType) {
+        case USER_TYPE.STUDENT:
+          payload = studentUserDetailsPayload
+          url = 'users/student-details'
+          break;
+        case USER_TYPE.EMPLOYEE:
+          payload = employeeUserDetailsPayload
+          url = 'users/employee-details'
+          break;
+        case USER_TYPE.VISITOR:
+          payload = visitorUserDetailsPayload
+          url = 'users/visitor-details'
+          break;
+        default:
+          break;
+      }
+      console.log(payload, url)
+      const res = await genericPostRequest(url, payload, auth.userToken)
       console.log(res)
     } catch (error) {
       console.log(error)
+    } finally {
+      setShowLoadingModal(false)
     }
   }
 

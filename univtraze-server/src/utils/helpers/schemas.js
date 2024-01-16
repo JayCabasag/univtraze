@@ -102,7 +102,7 @@ class Schemas {
       birthday: Joi.date().iso().required(),
       email: Joi.string().email().required(),
       mobile_number: Joi.string().pattern(new RegExp('^[0-9]{10}$')).required(),
-      profile_url: Joi.string().uri(),
+      profile_url: Joi.string().allow(null),
       back_id_photo: Joi.string().uri(),
       front_id_photo: Joi.string().uri(),
     }).messages({

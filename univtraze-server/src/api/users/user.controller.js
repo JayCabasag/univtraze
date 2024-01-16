@@ -310,12 +310,14 @@ module.exports = {
   addStudentDetails: (req, res) => {
     const { error } = schemas.addStudentDetailsSchema.validate(req.body);
     if (error) {
+      console.log(error)
       return res.status(401).json({
         message: 'Some field were empty',
       });
     }
     isStudentDetailsExists(body, (err, results) => {
       if (err) {
+        console.log(err)
         return res.status(500).json({
           message: 'Internal server error',
         });
@@ -324,6 +326,7 @@ module.exports = {
       if (results.length == 0) {
         addStudentDetails(body, (err, results) => {
           if (err) {
+            console.log(err)
             return res.status(500).json({
               message: 'Internal server error',
             });
@@ -338,6 +341,7 @@ module.exports = {
       if (results.length > 0) {
         updateStudentDetails(body, (err, results) => {
           if (err) {
+            console.log(err)
             return res.status(500).json({
               message: 'Internal server error',
             });
@@ -354,6 +358,7 @@ module.exports = {
     const { error } = schemas.addEmployeeDetails.validate(req.body);
 
     if (error) {
+      console.log(error)
       return res.status(500).json({
         message: 'Internal server error',
       });
@@ -361,6 +366,7 @@ module.exports = {
 
     isEmployeeDetailsExists(body, (err, results) => {
       if (err) {
+        console.log(err)
         return res.status(500).json({
           message: 'Internal server error',
         });
@@ -369,6 +375,7 @@ module.exports = {
       if (results.length === 0) {
         addEmployeeDetails(body, (err, results) => {
           if (err) {
+            console.log(err)
             return res.status(500).json({
               message: 'Internal server error',
             });
@@ -382,6 +389,7 @@ module.exports = {
       if (results.length > 0) {
         updateEmployeeDetails(body, (err, results) => {
           if (err) {
+            console.log(err)
             return res.status(200).json({
               message: 'Internal server error',
             });
@@ -399,6 +407,7 @@ module.exports = {
     const { error } = schemas.addVisitorDetails.validate(req.body);
 
     if (error) {
+      console.log(error)
       return res.status(500).json({
         message: 'Internal server error',
       });
@@ -406,6 +415,7 @@ module.exports = {
 
     isVisitorDetailsExists(body, (err, results) => {
       if (err) {
+        console.log(err)
         return res.json({
           message: 'Internal server errors',
         });
@@ -414,6 +424,7 @@ module.exports = {
       if (results.length == 0) {
         addVisitorDetails(body, (err, results) => {
           if (err) {
+            console.log(err)
             return res.json({
               message: 'Internal server error',
             });
@@ -428,6 +439,7 @@ module.exports = {
       if (results.length > 0) {
         updateVisitorDetails(body, (err, results) => {
           if (err) {
+            console.log(err)
             return res.status(500).json({
               message: 'Internal server error',
             });
