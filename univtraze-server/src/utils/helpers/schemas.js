@@ -36,6 +36,7 @@ class Schemas {
 
   get addStudentDetailsSchema() {
     return Joi.object({
+      user_id: Joi.number().required(),
       firstname: Joi.string().required(),
       lastname: Joi.string().required(),
       middlename: Joi.string().allow(''),
@@ -50,8 +51,7 @@ class Schemas {
       email: Joi.string().email().required(),
       profile_url: Joi.string().uri(),
       back_id_photo: Joi.string().uri(),
-      front_id_photo: Joi.string().uri(),
-      user_id: Joi.string().required(),
+      front_id_photo: Joi.string().uri()
     }).messages({
       'any.required': '{{#label}} is required',
       'string.empty': '{{#label}} cannot be empty',
@@ -64,7 +64,7 @@ class Schemas {
 
   get addEmployeeDetails() {
     return Joi.object({
-      user_id: Joi.string().required(),
+      user_id: Joi.number().required(),
       firstname: Joi.string().required(),
       lastname: Joi.string().required(),
       middlename: Joi.string().allow(''),
@@ -92,7 +92,7 @@ class Schemas {
 
   get addVisitorDetails() {
     return Joi.object({
-      user_id: Joi.string().required(),
+      user_id: Joi.number().required(),
       firstname: Joi.string().required(),
       lastname: Joi.string().required(),
       middlename: Joi.string().allow(''),
