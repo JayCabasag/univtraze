@@ -36,6 +36,7 @@ class Schemas {
 
   get addStudentDetailsSchema() {
     return Joi.object({
+      type: Joi.string().required(),
       user_id: Joi.number().required(),
       firstname: Joi.string().required(),
       lastname: Joi.string().required(),
@@ -64,6 +65,7 @@ class Schemas {
 
   get addEmployeeDetails() {
     return Joi.object({
+      type: Joi.string().required(),
       user_id: Joi.number().required(),
       firstname: Joi.string().required(),
       lastname: Joi.string().required(),
@@ -92,6 +94,7 @@ class Schemas {
 
   get addVisitorDetails() {
     return Joi.object({
+      type: Joi.string().required(),
       user_id: Joi.number().required(),
       firstname: Joi.string().required(),
       lastname: Joi.string().required(),
