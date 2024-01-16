@@ -41,7 +41,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   // For Student Only
   const [studentId, setStudentId] = useState('')
   const [studentCourse, setStudentCourse] = useState('')
-  const [studentYear, setStudentYear] = useState(STUDENT_YEARS.FIRST_YEAR)
+  const [studentYear, setStudentYear] = useState(null)
   const [studentSection, setStudentSection] = useState('')
 
   // For Employee Only
@@ -179,6 +179,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   }
 
   const validateIdInputs = async () => {
+    console.log("Hello")
     if (frontIdPhoto == null) {
       return setFormErrors('frontIdPhoto', 'Front ID photo is required')
     }
@@ -187,17 +188,52 @@ const UserDocumentsScreen = ({ navigation, route }) => {
       return setFormErrors('backIdPhoto', 'Back ID photo is required')
     }
 
-    console.log({ ...route.params, frontIdPhoto, backIdPhoto, profilePhoto })
-
-    // try {
-    //   const payload = {
-    //     type: route.params.type
-    //   }
-    //   const res = await genericPostRequest('users/updateUserType', payload, auth.userToken)
-    //   console.log(res)
-    // } catch (error) {
-    //   console.log(error)
-    // }
+    try {
+      const sUserDetailsPayload = {
+        firstname: route.params.firstName,
+        lastname: route.params.lastName,
+        middlename: route.params.middleName,
+        suffix: route.params.suffix,
+        gender: Joi.string().valid('rather-not-say', 'male', 'female', 'other').required(),
+        address: Joi.string().required(),
+        course: Joi.string().required(),
+        year_section: Joi.string().required(),
+        birthday: Joi.date().iso().required(),
+        student_id: Joi.string().required(),
+        mobile_number: Joi.string().pattern(new RegExp('^[0-9]{10}$')).required(),
+        email: Joi.string().email().required(),
+        profile_url: Joi.string().uri(),
+        back_id_photo: Joi.string().uri(),
+        front_id_photo: Joi.string().uri(),
+        user_id: Joi.string().required(),
+      }
+      const eUserDetailsPayload = {
+        type: route.params.type,
+        first_name: route.params.firstName,
+        middle_name: route.params.middleName,
+        last_name: route.params.lastName,
+        birthday: route.params.birthday,
+        front_id_photo: frontIdPhoto,
+        back_id_photo: backIdPhoto,
+        profile_photo: profilePhoto,
+        ...route.params,
+      }
+      const vUserDetailsPayload = {
+        type: route.params.type,
+        first_name: route.params.firstName,
+        middle_name: route.params.middleName,
+        last_name: route.params.lastName,
+        birthday: route.params.birthday,
+        front_id_photo: frontIdPhoto,
+        back_id_photo: backIdPhoto,
+        profile_photo: profilePhoto,
+        ...route.params,
+      }
+      const res = await genericPostRequest('users/updateUserType', payload, auth.userToken)
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const onNext = async () => {

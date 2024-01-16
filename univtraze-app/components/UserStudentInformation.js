@@ -2,13 +2,21 @@ import { View, Text, StyleSheet, TextInput } from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY, STUDENT_YEARS } from '../utils/app_constants'
 import CustomPicker from './ui/CustomPicker'
+import uuid from 'react-native-uuid'
 
 export default function UserStudentInformation(props) {
-  const studentYears = Object.values(STUDENT_YEARS).map((year, index) => ({
-    id: index,
-    label: year,
-    value: year
-  }))
+  const studentYears = [
+    {
+      id: uuid.v4(),
+      label: "Select...",
+      value: null
+    },
+    ...Object.values(STUDENT_YEARS).map((year, index) => ({
+      id: index,
+      label: year,
+      value: year
+    }))
+  ]
 
   return (
     <View style={styles.container}>

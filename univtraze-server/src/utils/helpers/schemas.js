@@ -40,7 +40,7 @@ class Schemas {
       lastname: Joi.string().required(),
       middlename: Joi.string(),
       suffix: Joi.string(),
-      ender: Joi.string().valid('rather-not-say', 'male', 'female', 'other').required(),
+      gender: Joi.string().valid('rather-not-say', 'male', 'female', 'other').required(),
       address: Joi.string().required(),
       course: Joi.string().required(),
       year_section: Joi.string().required(),
