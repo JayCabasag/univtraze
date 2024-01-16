@@ -157,7 +157,7 @@ module.exports = {
   },
   addEmployeeDetails: (data, callBack) => {
     pool.query(
-      `UPDATE USERS SET type = ? WHERE id = ?; INSERT INTO employee_details(user_id, firstname, lastname, middlename, suffix, gender, address, department, position, birthday, employee_id,mobile_number, email, profile_url, front_id_photo, back_id_photo) 
+      `UPDATE users SET type = ? WHERE id = ?; INSERT INTO employee_details(user_id, firstname, lastname, middlename, suffix, gender, address, department, position, birthday, employee_id,mobile_number, email, profile_url, front_id_photo, back_id_photo) 
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.type,
@@ -189,7 +189,7 @@ module.exports = {
   },
   addVisitorDetails: (data, callBack) => {
     pool.query(
-      `UPDATE USERS SET type = ? WHERE id = ?; INSERT INTO visitor_details (user_id, firstname, lastname, middlename, suffix, gender, address, birthday, mobile_number, email, profile_url, back_id_photo, front_id_photo) 
+      `UPDATE users SET type = ? WHERE id = ?; INSERT INTO visitor_details (user_id, firstname, lastname, middlename, suffix, gender, address, birthday, mobile_number, email, profile_url, back_id_photo, front_id_photo) 
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.type,
@@ -218,7 +218,7 @@ module.exports = {
   },
   addStudentDetails: (data, callBack) => {
     pool.query(
-      `UPDATE USERS SET type = ? WHERE id = ?;INSERT INTO student_details(user_id, firstname, lastname, middlename, suffix, gender, address, course, year_section, birthday, student_id, mobile_number, email, profile_url, back_id_photo, front_id_photo) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `UPDATE users SET type = ? WHERE id = ?;INSERT INTO student_details(user_id, firstname, lastname, middlename, suffix, gender, address, course, year_section, birthday, student_id, mobile_number, email, profile_url, back_id_photo, front_id_photo) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.type,
         data.user_id,

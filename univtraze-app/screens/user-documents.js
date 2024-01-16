@@ -200,6 +200,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     try {
       setShowLoadingModal(true)
       const studentUserDetailsPayload = {
+        type: USER_TYPE.STUDENT,
         firstname: route.params.firstName,
         lastname: route.params.lastName,
         middlename: route.params.middleName,
@@ -218,6 +219,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         user_id: userState.user.id,
       }
       const employeeUserDetailsPayload = {
+        type: USER_TYPE.EMPLOYEE,
         firstname: route.params.firstName,
         lastname: route.params.lastName,
         middlename: route.params.middleName,
@@ -236,6 +238,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         user_id: userState.user.id,
       }
       const visitorUserDetailsPayload = {
+        type: USER_TYPE.VISITOR,
         firstname: route.params.firstName,
         lastname: route.params.lastName,
         middlename: route.params.middleName,
