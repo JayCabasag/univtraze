@@ -26,3 +26,21 @@ export async function uploadImageAsync(uri) {
   
     return await getDownloadURL(fileRef);
 }
+
+export const convertStringDateToISO = () => {
+  // Input date string: 01-17-2007
+const inputDateString = '01-17-2007';
+
+// Parse the input date string
+const parts = inputDateString.split('-');
+const month = parseInt(parts[0], 10);
+const day = parseInt(parts[1], 10);
+const year = parseInt(parts[2], 10);
+
+// Create a Date object
+const dateObject = new Date(year, month - 1, day); // Note: months are 0-based in JavaScript
+
+// Get the ISO string
+const isoString = dateObject.toISOString().split('T')[0];
+return isoString
+}
