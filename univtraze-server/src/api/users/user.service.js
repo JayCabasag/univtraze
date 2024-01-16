@@ -31,7 +31,7 @@ module.exports = {
   },
   create: (data, callBack) => {
     pool.query(
-      `INSERT INTO users(email, provider, password, type) 
+      `INSERT INTO users (email, provider, password, type) 
       VALUES (?, ?, ?, NULL);`,
       [data.email, data.provider, data.password],
       (error, results, fields) => {
@@ -157,7 +157,7 @@ module.exports = {
   },
   addEmployeeDetails: (data, callBack) => {
     pool.query(
-      `UPDATE users SET type = ? WHERE id = ?; INSERT INTO employee_details(user_id, firstname, lastname, middlename, suffix, gender, address, department, position, birthday, employee_id,mobile_number, email, profile_url, front_id_photo, back_id_photo) 
+      `UPDATE users SET type = ? WHERE id = ?; INSERT INTO employee_details (user_id, firstname, lastname, middlename, suffix, gender, address, department, position, birthday, employee_id,mobile_number, email, profile_url, front_id_photo, back_id_photo) 
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.type,
@@ -218,7 +218,7 @@ module.exports = {
   },
   addStudentDetails: (data, callBack) => {
     pool.query(
-      `UPDATE users SET type = ? WHERE id = ?;INSERT INTO student_details(user_id, firstname, lastname, middlename, suffix, gender, address, course, year_section, birthday, student_id, mobile_number, email, profile_url, back_id_photo, front_id_photo) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      `UPDATE users SET type = ? WHERE id = ?;INSERT INTO student_details (user_id, firstname, lastname, middlename, suffix, gender, address, course, year_section, birthday, student_id, mobile_number, email, profile_url, back_id_photo, front_id_photo) VALUES (?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         data.type,
         data.user_id,
@@ -241,6 +241,7 @@ module.exports = {
       ],
       (error, results, fields) => {
         if (error) {
+          console.log(error.sqlMessage)
           return callBack(error);
         }
         return callBack(null, results);
@@ -388,7 +389,7 @@ module.exports = {
   },
   addAccountCreatedNotificationToUser: (data, callBack) => {
     pool.query(
-      `INSERT INTO users_notifications(notification_title, notification_description, notification_source, notification_type, notification_is_viewed, notification_for) VALUES (?,?,?,?,?,?)`,
+      `INSERT INTO users_notifications (notification_title, notification_description, notification_source, notification_type, notification_is_viewed, notification_for) VALUES (?,?,?,?,?,?)`,
       [
         data.notification_title,
         data.notification_description,

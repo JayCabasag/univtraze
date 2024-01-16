@@ -26,7 +26,7 @@ import UserEmployeeInformation from '../components/UserEmployeeInformation'
 import UserVisitorInformation from '../components/UserVisitorInformation'
 import { getApps, initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../configs/firebaseConfig'
-import { convertStringDateToISO, uploadImageAsync } from '../utils/helpers'
+import { convertStringDateToISOString, uploadImageAsync } from '../utils/helpers'
 import { useUser } from '../services/store/user/UserContext'
 
 if (!getApps().length) {
@@ -209,7 +209,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         address: route.params.address,
         course: studentCourse,
         year_section: `${studentYear} - ${studentSection}`,
-        birthday: convertStringDateToISO(route.params.dob),
+        birthday: convertStringDateToISOString(route.params.dob),
         student_id: studentId,
         mobile_number: route.params.phoneNumber,
         email: userState.user.email,
@@ -230,7 +230,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         email: userState.user.email,
         department: employeeDepartment,
         position: employeePosition,
-        birthday: convertStringDateToISO(route.params.dob),
+        birthday: convertStringDateToISOString(route.params.dob),
         employee_id: employeeId,
         profile_url: profilePhoto,
         back_id_photo: backIdPhoto,
@@ -247,7 +247,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         address: route.params.address,
         mobile_number: route.params.phoneNumber,
         email: userState.user.email,
-        birthday: convertStringDateToISO(route.params.dob),
+        birthday: convertStringDateToISOString(route.params.dob),
         profile_url: profilePhoto,
         back_id_photo: backIdPhoto,
         front_id_photo: frontIdPhoto,
