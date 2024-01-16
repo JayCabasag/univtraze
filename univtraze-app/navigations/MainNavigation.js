@@ -27,10 +27,14 @@ import { StatusBar } from 'expo-status-bar'
 const MainStack = createNativeStackNavigator()
 
 export default function MainNavigation({ onLayoutView }) {
-  const { state: authState } = useAuth()
+  const { state: authState, isAppAuthReady } = useAuth()
   const { state: userState } = useUser()
 
   const isAuthenticated = authState.userToken != null
+
+  if (!isAppAuthReady) {
+    return null
+  }
 
   return (
     <NavigationContainer onReady={onLayoutView}>
