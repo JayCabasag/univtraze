@@ -309,12 +309,14 @@ module.exports = {
 
   addStudentDetails: (req, res) => {
     const { error } = schemas.addStudentDetailsSchema.validate(req.body);
+    
     if (error) {
       console.log(error)
       return res.status(401).json({
         message: 'Some field were empty',
       });
     }
+
     isStudentDetailsExists(body, (err, results) => {
       if (err) {
         console.log(err)
