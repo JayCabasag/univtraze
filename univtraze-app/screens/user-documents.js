@@ -197,6 +197,8 @@ const UserDocumentsScreen = ({ navigation, route }) => {
       return setFormErrors('backIdPhoto', 'Back ID photo is required')
     }
 
+    let isAddDetailsSuccess = false
+
     try {
       setShowLoadingModal(true)
       const studentUserDetailsPayload = {
@@ -273,12 +275,21 @@ const UserDocumentsScreen = ({ navigation, route }) => {
           break;
       }
       console.log(payload, url)
-      const res = await genericPostRequest(url, payload, auth.userToken)
-      console.log(res)
+      await genericPostRequest(url, payload, auth.userToken)
+      isAddDetailsSuccess = true
     } catch (error) {
       console.log(error)
+      isAddDetailsSuccess = false
     } finally {
       setShowLoadingModal(false)
+    }
+    // Update user Type / Role
+    if (isAddDetailsSuccess) {
+      try {
+        
+      } catch (error) {
+        
+      }
     }
   }
 

@@ -284,11 +284,11 @@ module.exports = {
   },
 
   updateUserType: (req, res) => {
-    const { body } = body
-    const { error } = schemas.updateUserTypeSchema.valid(body)
+    const { body } = req
+    const { error } = schemas.updateUserTypeSchema.validate(body)
 
     if (error) {
-      return res.json(401).json({
+      return res.status(401).json({
         message: "Some fields were empty"
       })
     }
@@ -303,7 +303,7 @@ module.exports = {
       }
 
       return res.status(200).json({
-        data: results,
+        ...results,
       });
     });
   },

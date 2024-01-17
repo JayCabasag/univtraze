@@ -29,7 +29,7 @@ router.get('/', checkToken, getUsers);
 router.get('/getAllUsers', checkToken, getAllUsers);
 router.post('/getUserDetailsById', checkToken, getUserDetailsById);
 router.post('/getUserDetailsByIds', checkToken, getUserDetailsByIds);
-router.post('/updateUserType', checkToken, updateUserType);
+router.put('/user-type', checkToken, updateUserType);
 router.post('/student-details', checkToken, addStudentDetails);
 router.post('/employee-details', checkToken, addEmployeeDetails);
 router.post('/visitor-details', checkToken, addVisitorDetails);
