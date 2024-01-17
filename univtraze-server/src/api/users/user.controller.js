@@ -6,17 +6,11 @@ const {
   getUserByEmail,
   updateUserType,
   addStudentDetails,
-  checkStudentDetailsExist,
   updateStudentDetails,
   addEmployeeDetails,
-  checkEmployeeDetailsExist,
   updateEmployeeDetails,
-  checkVisitorDetailsExist,
   updateVisitorDetails,
   addVisitorDetails,
-  updateEmployeeDocs,
-  updateStudentDocs,
-  updateVisitorDocs,
   addAccountCreatedNotificationToUser,
   deactivateAccount,
   getEmployeeDetailsById,
@@ -32,7 +26,6 @@ const {
   updateProfileInfoVisitor,
   isStudentDetailsExists,
   isEmployeeDetailsExists,
-  isVisitorDetailsExist,
   isVisitorDetailsExists,
 } = require('./user.service');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
@@ -291,7 +284,15 @@ module.exports = {
   },
 
   updateUserType: (req, res) => {
-    const body = req.body;
+    const { body } = body
+    const { error } = schemas.updateUserTypeSchema.valid(body)
+
+    if (error) {
+      return res.json(401).json({
+        message: "Some fields were empty"
+      })
+    }
+    // Token id value
     req.body.id = req.user.result.id;
 
     updateUserType(body, (err, results) => {

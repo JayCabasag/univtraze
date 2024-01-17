@@ -117,6 +117,14 @@ class Schemas {
       'date.iso': 'Please enter a valid ISO date format for {{#label}}',
     });
   }
+
+  get updateUserTypeSchema(){
+    return Joi.object({
+      type: Joi.string().required(),
+    }).messages({
+      'string.empty': '{{#label}} cannot be empty'
+    });
+  }
 }
 
 module.exports = new Schemas();
