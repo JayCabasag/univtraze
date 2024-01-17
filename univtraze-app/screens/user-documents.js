@@ -199,7 +199,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     }
     processUpdateUserDetails()
   }
-
+  
   const processUpdateUserDetails = async () => {
     let isAddDetailsSuccess = false
     try {
@@ -341,9 +341,18 @@ const UserDocumentsScreen = ({ navigation, route }) => {
           ) : (
             <Image source={{ uri: profilePhoto }} resizeMode='cover' style={styles.profilePhoto} />
           )}
-          <TouchableOpacity style={styles.editProfileButton} onPress={pickProfileImage}>
-            <Ionicons name='md-cloud-upload-outline' size={18} color={COLORS.WHITE} />
-            <Text style={styles.uploadPhotoText}> Change Profile </Text>
+          <TouchableOpacity disabled={isUploadingProfilePhoto} style={styles.editProfileButton} onPress={pickProfileImage}>
+            {isUploadingProfilePhoto ? (
+               <Fragment>
+                <ActivityIndicator color={COLORS.WHITE} size="small"/>
+                <Text style={styles.uploadPhotoText}> Uploading photo.. </Text>
+               </Fragment>
+            ) : (
+              <Fragment>
+              <Ionicons name='md-cloud-upload-outline' size={18} color={COLORS.WHITE} />
+              <Text style={styles.uploadPhotoText}> Change Profile </Text>
+              </Fragment>
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.idDocsContainer}>
@@ -394,7 +403,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
               </TouchableOpacity>
             ) : (
-              <Fragment>
+              <Fragment>  
                 <AntDesign
                   name='closecircle'
                   size={24}
@@ -653,6 +662,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.WHITE
   },
   editProfileButton: {
+    width: '70%',
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 10,
@@ -667,7 +677,11 @@ const styles = StyleSheet.create({
       height: 2
     },
     shadowOpacity: 0.25,
-    shadowRadius: 4
+    shadowRadius: 4,
+    height: 50,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   uploadPhotoText: {
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,

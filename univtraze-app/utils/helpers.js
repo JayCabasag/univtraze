@@ -42,3 +42,9 @@ export const convertStringDateToISOString = (inputDateString) => {
 
   return isoString;
 };
+
+export const PROVIDER = {
+  EMAIL_PASSWORD: 'email/password',
+  GOOGLE: 'google',
+  FACEBOOK: 'facebook'
+}

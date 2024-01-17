@@ -6,19 +6,24 @@ import {
   TouchableOpacity,
   Text,
   Modal,
-  ScrollView
+  ScrollView,
+  Alert,
+  ActivityIndicator
 } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
-import ConfettiCannon from 'react-native-confetti-cannon'
-import jwtDecode from 'jwt-decode'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Header from '../components/Header'
 import LoadingModal from '../components/LoadingModal'
 import { emailRegEx } from '../utils/regex'
 import useFormErrors from '../hooks/useFormErrors'
+import { PROVIDER } from '../utils/helpers'
+import { genericPostRequest } from '../services/api/genericPostRequest'
+import { useAuth } from '../services/store/auth/AuthContext'
+import { useUser } from '../services/store/user/UserContext'
 
 const SignUpScreen = ({ navigation }) => {
+  const { signIn } = useAuth()
+  const { setUser } = useUser()
   const [email, onChangeEmail] = useState('')
   const [password, onChangePassword] = useState('')
   const [confirmPassword, onChangeConfirmPassword] = useState('')
@@ -32,6 +37,7 @@ const SignUpScreen = ({ navigation }) => {
 
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
+  const [isLogginIn, setIsLogginIn] = useState(false)
 
   const validateUserInput = async () => {
     scrollViewContainerRef.current.scrollToEnd({ animated: true })
@@ -47,22 +53,70 @@ const SignUpScreen = ({ navigation }) => {
   }, [])
 
   const onSignUp = () => {
-    if (!emailRegEx.test(email)){
+    resetFormErrors()
+    if (email == null || email == '') {
+      return setFormErrors('email', 'Email is required')
+    }
+    if (!emailRegEx.test(email)) {
       return setFormErrors('email', 'Invalid email')
     }
-    if (password.length < 7){
+    if (password == '' || password == null) {
+      return setFormErrors('password', 'Password is required')
+    }
+    if (password.length < 7) {
       return setFormErrors('password', 'Password too short')
     }
-    if (confirmPassword.length < 7){
+    if (confirmPassword == '' || confirmPassword == null) {
+      return setFormErrors('confirmPassword', 'Confirm Password is required')
+    }
+    if (confirmPassword.length < 7) {
       return setFormErrors('confirmPassword', 'Confirm Password too short')
     }
     if (password != confirmPassword) {
-      return setFormErrors('confirmPassword', "Confirm password did not match")
+      return setFormErrors('confirmPassword', 'Confirm password did not match')
     }
     processSignUp()
   }
 
-  const processSignUp = () => {}
+  const processSignUp = async () => {
+    try {
+      setLoadingMessage('Please wait...')
+      setShowLoadingModal(true)
+      const payload = {
+        email,
+        password,
+        provider: PROVIDER.EMAIL_PASSWORD,
+        confirm_password: confirmPassword
+      }
+      const res = await genericPostRequest('users/signup', payload)
+      setModalVisible(true)
+    } catch (error) {
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
+      setShowLoadingModal(false)
+    }
+  }
+
+  const onLogin = async () => {
+    try {
+      setIsLogginIn(true)
+      const payload = {
+        email,
+        password
+      }
+      const res = await genericPostRequest('users/signin', payload)
+      signIn({ token: res?.token ?? '' })
+      setUser({ user: res?.user ?? '' })
+    } catch (error) {
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
+      setIsLogginIn(false)
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -120,52 +174,32 @@ const SignUpScreen = ({ navigation }) => {
           <Text style={styles.goToLoginText}>Login to an existing account</Text>
         </TouchableOpacity>
       </View>
-      <Modal visible={isModalVisible}>
-        <View
-          style={{
-            width: 348,
-            height: 227,
-            backgroundColor: 'white',
-            alignSelf: 'center',
-            alignItems: 'center',
-            paddingVertical: 20,
-            borderRadius: 15
-          }}
-        >
-          <Text
-            style={{
-              fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
-              fontSize: 28,
-              fontWeight: '700',
-              color: '#29CC42'
-            }}
-          >
-            {' '}
-            Sign Up {'\n'}Successful
-          </Text>
-          <Text
-            style={{
-              fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
-              fontSize: 14,
-              fontWeight: '400',
-              color: COLORS.TEXT_BLACK,
-              lineHeight: 19.5
-            }}
-          >
-            {' '}
-            Awesome, you will now being {'\n'} redirected to user profiling area
-          </Text>
-
-          <TouchableOpacity
-            style={styles.buttonContinue}
-            onPress={() => {
-              handleLoginUser(email, confirmPassword)
-            }}
-          >
-            <Text style={styles.buttonText}>Continue</Text>
-          </TouchableOpacity>
+      <Modal transparent statusBarTranslucent visible={isModalVisible}>
+        <View style={styles.congratsModalOverlay}>
+          <View style={styles.congratsModal}>
+            <Text
+              style={{
+                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+                fontSize: 28,
+                fontWeight: '700',
+                color: '#29CC42',
+                textAlign: 'center'
+              }}
+            >
+              Sign up successful!
+            </Text>
+            <Text style={styles.successModalSubtext}>
+              Awesome, press continue {'\n'} to proceed to next step
+            </Text>
+            <TouchableOpacity style={styles.buttonContinue} onPress={onLogin} disabled={isLogginIn}>
+              {isLogginIn ? (
+                <ActivityIndicator color={COLORS.WHITE} size='large' />
+              ) : (
+                <Text style={styles.buttonText}>Continue</Text>
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
-        {shoot ? <ConfettiCannon count={200} origin={{ x: 0, y: 0 }} fadeOut='true' /> : null}
       </Modal>
     </KeyboardAvoidingView>
   )
@@ -317,8 +351,16 @@ const styles = StyleSheet.create({
   },
   errorText: {
     textAlign: 'left',
-    color: 'red',
-    paddingVertical: 7.5
+    color: 'red'
+  },
+  successModalSubtext: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    fontWeight: '400',
+    color: COLORS.TEXT_BLACK,
+    lineHeight: 19.5,
+    textAlign: 'center',
+    paddingVertical: 15
   },
   buttonContinue: {
     backgroundColor: COLORS.PRIMARY,
@@ -326,7 +368,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 15,
     marginVertical: 15,
-    width: 308,
-    height: 60
+    width: '100%',
+    height: 55,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  congratsModalOverlay: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 30,
+    backgroundColor: 'rgba(250, 250, 250, .7)'
+  },
+  congratsModal: {
+    width: '100%',
+    height: 227,
+    backgroundColor: COLORS.WHITE,
+    alignSelf: 'center',
+    alignItems: 'center',
+    paddingVertical: 20,
+    borderRadius: 15,
+    paddingHorizontal: 15
   }
 })
