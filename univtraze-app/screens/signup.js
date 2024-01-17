@@ -12,87 +12,32 @@ import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import ConfettiCannon from 'react-native-confetti-cannon'
 import jwtDecode from 'jwt-decode'
-import { COLORS, FONT_FAMILY } from '../../utils/app_constants'
-import Header from '../../components/Header'
-import LoadingModal from '../../components/LoadingModal'
-import { emailRegEx } from '../../utils/regex'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import Header from '../components/Header'
+import LoadingModal from '../components/LoadingModal'
+import { emailRegEx } from '../utils/regex'
+import useFormErrors from '../hooks/useFormErrors'
 
 const SignUpScreen = ({ navigation }) => {
   const [email, onChangeEmail] = useState('')
   const [password, onChangePassword] = useState('')
   const [confirmPassword, onChangeConfirmPassword] = useState('')
-  const [provider, setProvider] = useState('email/password')
   const scrollViewContainerRef = useRef()
 
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const { setFormErrors, resetFormErrors, formErrors } = useFormErrors([
+    'email',
+    'password',
+    'confirmPassword'
+  ])
+
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
 
-  async function save(key, value) {
-    await SecureStore.setItemAsync(key, value)
-  }
-
   const validateUserInput = async () => {
     scrollViewContainerRef.current.scrollToEnd({ animated: true })
-    if (email === '') {
-      setError(true)
-      setErrorMessage('Please input your email address')
-    } else {
-      if (emailRegEx.test(email)) {
-        if (password === '') {
-          setError(true)
-          setErrorMessage('Please input password')
-        } else if (password.length < 7) {
-          setError(true)
-          setErrorMessage('Password field Minimum of 8 characters')
-        } else if (password !== confirmPassword) {
-          setError(true)
-          setErrorMessage('Confirm password did not match!')
-        } else {
-          setShowLoadingModal(true)
-
-          const data = {
-            provider: provider,
-            email: email,
-            password: password
-          }
-
-          setLoadingMessage('Please wait while creating your acccount...')
-
-          await axios
-            .post('https://univtraze.herokuapp.com/api/user/signup', data)
-            .then((response) => {
-              const success = response.data.success
-              if (success === 0) {
-                setLoadingMessage('Please wait...')
-                setShowLoadingModal(false)
-                setError(true)
-                setErrorMessage(response.data.message)
-              } else {
-                setLoadingMessage('Please wait...')
-                setShowLoadingModal(false)
-                setError(false)
-                setModalVisible(true)
-              }
-            })
-            .catch((error) => {
-              setError(true)
-              setErrorMessage('Failed creating account, please check your connection...')
-            })
-
-          setLoadingMessage('Please wait...')
-          setShowLoadingModal(false)
-        }
-      } else {
-        setError(true)
-        setErrorMessage('Invalid email address')
-      }
-    }
   }
 
   const [isModalVisible, setModalVisible] = useState(false)
-
   const [shoot, setShoot] = useState(false)
 
   useEffect(() => {
@@ -101,42 +46,23 @@ const SignUpScreen = ({ navigation }) => {
     }, 1000)
   }, [])
 
-  const handleLoginUser = async (email, password) => {
-    setModalVisible(false)
-    setShowLoadingModal(true)
-    setLoadingMessage('Logging in, please wait!...')
-
-    const data = {
-      email: email,
-      password: password
+  const onSignUp = () => {
+    if (!emailRegEx.test(email)){
+      return setFormErrors('email', 'Invalid email')
     }
-    await axios.post('https://univtraze.herokuapp.com/api/user/login', data).then((response) => {
-      const success = response.data.success
-
-      if (success === 0) {
-        setError(true)
-        setErrorMessage(response.data.data)
-        setLoadingMessage('Login failed')
-        setShowLoadingModal(false)
-      } else {
-        setError(false)
-        save('x-token', response.data.token)
-        setLoadingMessage('Login successful')
-        setShowLoadingModal(false)
-        evaluateToken(response.data.token)
-      }
-    })
+    if (password.length < 7){
+      return setFormErrors('password', 'Password too short')
+    }
+    if (confirmPassword.length < 7){
+      return setFormErrors('confirmPassword', 'Confirm Password too short')
+    }
+    if (password != confirmPassword) {
+      return setFormErrors('confirmPassword', "Confirm password did not match")
+    }
+    processSignUp()
   }
 
-  const evaluateToken = async (currentToken) => {
-    var decodedToken = jwtDecode(currentToken)
-
-    if (decodedToken.result.type === null || decodedToken.result.type === '') {
-      return navigation.navigate('SignUpUserType')
-    }
-
-    navigation.navigate('Dashboard')
-  }
+  const processSignUp = () => {}
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -155,32 +81,40 @@ const SignUpScreen = ({ navigation }) => {
       >
         <Text style={styles.label}>Email</Text>
         <TextInput
-          placeholder='Email Address'
-          defaultValue={email}
+          placeholder='Email'
+          value={email}
           onChangeText={onChangeEmail}
-          style={styles.input}
+          style={[styles.input, formErrors.email?.hasError && styles.inputError]}
         />
+        {formErrors.email?.hasError && (
+          <Text style={styles.errorText}>{formErrors.email.message}</Text>
+        )}
         <Text style={styles.label}>Password</Text>
         <TextInput
           placeholder='Password'
-          defaultValue={password}
+          value={password}
           onChangeText={onChangePassword}
-          style={styles.input}
+          style={[styles.input, formErrors.password?.hasError && styles.inputError]}
           secureTextEntry
         />
+        {formErrors.password?.hasError && (
+          <Text style={styles.errorText}>{formErrors.password.message}</Text>
+        )}
         <Text style={styles.label}>Confirm Password</Text>
         <TextInput
-          placeholder='Confirm Password'
-          defaultValue={confirmPassword}
+          placeholder='Confirm password'
+          value={confirmPassword}
           onChangeText={onChangeConfirmPassword}
-          style={styles.input}
+          style={[styles.input, formErrors.confirmPassword?.hasError && styles.inputError]}
           secureTextEntry
         />
-        {error && <Text style={styles.errorMessage}>*{errorMessage}</Text>}
+        {formErrors.confirmPassword?.hasError && (
+          <Text style={styles.errorText}>{formErrors.confirmPassword.message}</Text>
+        )}
       </ScrollView>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => validateUserInput()} style={styles.signUpBtn}>
-          <Text style={styles.buttonText}>Next</Text>
+        <TouchableOpacity onPress={onSignUp} style={styles.signUpBtn}>
+          <Text style={styles.buttonText}>Sign up</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate('signin')}>
           <Text style={styles.goToLoginText}>Login to an existing account</Text>
@@ -303,15 +237,25 @@ const styles = StyleSheet.create({
   },
 
   input: {
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 0,
+    marginRight: 0,
     width: '100%',
     height: 50,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    marginTop: 10,
-    backgroundColor: '#ffff',
-    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     borderColor: COLORS.PRIMARY,
-    borderWidth: 1
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    overflow: 'hidden',
+    paddingVertical: 1,
+    fontSize: 14,
+    color: '#4d7861',
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
+  },
+  inputError: {
+    borderColor: COLORS.RED
   },
   scrollViewContainer: {
     flex: 1,
@@ -371,7 +315,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginTop: 20
   },
-  errorMessage: {
+  errorText: {
     textAlign: 'left',
     color: 'red',
     paddingVertical: 7.5

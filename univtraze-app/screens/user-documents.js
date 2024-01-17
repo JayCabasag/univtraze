@@ -28,6 +28,7 @@ import { getApps, initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../configs/firebaseConfig'
 import { convertStringDateToISOString, uploadImageAsync } from '../utils/helpers'
 import { useUser } from '../services/store/user/UserContext'
+import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 
 if (!getApps().length) {
   initializeApp(firebaseConfig)
@@ -35,18 +36,18 @@ if (!getApps().length) {
 
 const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
-  const { state: userState } = useUser()
+  const { state: userState, updateUser } = useUser()
 
   const scrollViewRef = useRef()
 
   const userType = route.params?.userType
 
   useEffect(() => {
-    if(!userType){
-      return navigation.navigate("select-user-type")
+    if (!userType) {
+      return navigation.navigate('select-user-type')
     }
   }, [])
-  
+
   // For Student Only
   const [studentId, setStudentId] = useState('')
   const [studentCourse, setStudentCourse] = useState('')
@@ -196,9 +197,11 @@ const UserDocumentsScreen = ({ navigation, route }) => {
       // scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('backIdPhoto', 'Back ID photo is required')
     }
+    processUpdateUserDetails()
+  }
 
+  const processUpdateUserDetails = async () => {
     let isAddDetailsSuccess = false
-
     try {
       setShowLoadingModal(true)
       const studentUserDetailsPayload = {
@@ -218,7 +221,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         profile_url: profilePhoto,
         back_id_photo: backIdPhoto,
         front_id_photo: frontIdPhoto,
-        user_id: userState.user.id,
+        user_id: userState.user.id
       }
       const employeeUserDetailsPayload = {
         type: USER_TYPE.EMPLOYEE,
@@ -237,7 +240,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         profile_url: profilePhoto,
         back_id_photo: backIdPhoto,
         front_id_photo: frontIdPhoto,
-        user_id: userState.user.id,
+        user_id: userState.user.id
       }
       const visitorUserDetailsPayload = {
         type: USER_TYPE.VISITOR,
@@ -262,19 +265,18 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         case USER_TYPE.STUDENT:
           payload = studentUserDetailsPayload
           url = 'users/student-details'
-          break;
+          break
         case USER_TYPE.EMPLOYEE:
           payload = employeeUserDetailsPayload
           url = 'users/employee-details'
-          break;
+          break
         case USER_TYPE.VISITOR:
           payload = visitorUserDetailsPayload
           url = 'users/visitor-details'
-          break;
+          break
         default:
-          break;
+          break
       }
-      console.log(payload, url)
       await genericPostRequest(url, payload, auth.userToken)
       isAddDetailsSuccess = true
     } catch (error) {
@@ -286,9 +288,14 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     // Update user Type / Role
     if (isAddDetailsSuccess) {
       try {
-        
+        setShowLoadingModal(true)
+        const payload = { type: userType }
+        await genericUpdateRequest('users/user-type', payload, auth.userToken)
+        navigation.navigate('user-vaccine')
       } catch (error) {
-        
+        console.log(error)
+      } finally {
+        setShowLoadingModal(false)
       }
     }
   }

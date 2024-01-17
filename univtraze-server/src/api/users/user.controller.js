@@ -87,7 +87,7 @@ module.exports = {
           );
         });
 
-        const tokenPayload = { id: results.insertId, email: body.email };
+        const tokenPayload = { id: results.insertId };
         const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
           expiresIn: '7d',
         });
@@ -130,7 +130,7 @@ module.exports = {
         });
       }
 
-      const tokenPayload = { id: results.id, email: body.email };
+      const tokenPayload = { id: results.id };
       const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
         expiresIn: '7d',
       });

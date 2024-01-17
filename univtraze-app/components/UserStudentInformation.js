@@ -8,7 +8,7 @@ export default function UserStudentInformation(props) {
   const studentYears = [
     {
       id: uuid.v4(),
-      label: "Select...",
+      label: 'Select...',
       value: null
     },
     ...Object.values(STUDENT_YEARS).map((year, index) => ({
