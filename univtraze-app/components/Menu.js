@@ -262,19 +262,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 5
   },
-  menuListContainer: {
-    width: '100%',
-    height: '65%',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
-    alignSelf: 'center',
-    paddingHorizontal: 30
-  },
   menuItemScrollView: {
     flex: 1
   },
   menuItemContentView: {
     paddingHorizontal: 30,
+    paddingBottom: 30,
     display: 'flex',
     gap: 10
   },
@@ -319,11 +312,11 @@ const styles = StyleSheet.create({
     height: '90%'
   },
   bottomNavigationView: {
+    height: '100%',
     backgroundColor: '#fff',
     width: '100%',
-    height: '70%',
     borderTopLeftRadius: 30,
-    borderTopRightRadius: 30
+    borderTopRightRadius: 30,
   },
   centeredViews: {
     flex: 1,

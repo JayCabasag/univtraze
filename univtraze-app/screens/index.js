@@ -275,28 +275,6 @@ const IndexScreen = ({ navigation, route }) => {
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
     >
-      <View style={styles.topContainer}>
-        <TouchableWithoutFeedback onPress={toggleBottomNavigationView}>
-          <Image
-            source={require('../assets/notifmenu_icon.png')}
-            resizeMode='contain'
-            style={styles.menuIcon}
-          />
-        </TouchableWithoutFeedback>
-
-        <TouchableWithoutFeedback onPress={toggleNotifNavigationView}>
-          <View>
-            {notificationCounts != 0 && (
-              <View style={styles.notificationBadge}>
-                <Text style={styles.notificationBadgeText} onPress={toggleNotifNavigationView}>
-                  {notificationCounts}
-                </Text>
-              </View>
-            )}
-            <Ionicons name='notifications' size={40} color='#284CCD' />
-          </View>
-        </TouchableWithoutFeedback>
-
         <Menu
           visible={visible}
           toggleBottomNavigationView={toggleBottomNavigationView}
@@ -310,6 +288,27 @@ const IndexScreen = ({ navigation, route }) => {
           props={{ userId, token, notificationLists }}
           navigation={navigation}
         />
+      <View style={styles.topContainer}>
+        <TouchableOpacity onPress={toggleBottomNavigationView}>
+          <Image
+            source={require('../assets/notifmenu_icon.png')}
+            resizeMode='contain'
+            style={styles.menuIcon}
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={toggleNotifNavigationView}>
+          <View>
+            {notificationCounts != 0 && (
+              <View style={styles.notificationBadge}>
+                <Text style={styles.notificationBadgeText} onPress={toggleNotifNavigationView}>
+                  {notificationCounts}
+                </Text>
+              </View>
+            )}
+            <Ionicons name='notifications' size={40} color='#284CCD' />
+          </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.topTextContainer}>
