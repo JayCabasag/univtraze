@@ -309,7 +309,7 @@ module.exports = {
           })
         }
 
-        console.log("Resultss", results)
+        delete results.password // Password should not be send to the user
         return res.status(200).json({
           ...results
         })
