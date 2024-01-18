@@ -11,16 +11,6 @@ const BottomSheet = ({
   statusBarTranslucent = true
 }) => {
   return (
-    // <Modal
-    //   statusBarTranslucent={statusBarTranslucent}
-    //   isVisible={visible}
-    //   onBackButtonPress={onBackButtonPress}
-    //   onBackdropPress={onBackdropPress}
-    //   style={{ justifyContent: 'flex-end', margin: 0 }}
-    //   animationOut='fadeOut'
-    // >
-    //   {children}
-    // </Modal>
     <Modal
       statusBarTranslucent={statusBarTranslucent}
       visible={visible}
@@ -30,12 +20,10 @@ const BottomSheet = ({
       style={styles.modalStyles}
     >
       <View style={styles.modalOverlayStyle}>
-        <TouchableWithoutFeedback style={styles.backdropStyles} onPress={onBackButtonPress}>
-          <View />
+        <TouchableWithoutFeedback onPress={onBackButtonPress}>
+          <View style={styles.backdropStyles} />
         </TouchableWithoutFeedback>
-        <View style={styles.bottomSheetStyle}>
-            {children}
-        </View>
+        <View style={styles.bottomSheetStyle}>{children}</View>
       </View>
     </Modal>
   )
@@ -48,22 +36,19 @@ const styles = StyleSheet.create({
     flex: 1
   },
   backdropStyles: {
-    height: '100%',
-    backgroundColor: COLORS.GRAY
+    height: '30%',
+    backgroundColor: 'transparent'
   },
   modalOverlayStyle: {
     flex: 1,
     display: 'flex',
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
     backgroundColor: 'rgba(250, 250, 250, .7)',
     borderColor: COLORS.BLACK
   },
   bottomSheetStyle: {
-    height: '60%',
+    height: '70%',
     width: '100%',
     borderTopRightRadius: 30,
-    borderTopLeftRadius: 30,
-    backgroundColor: COLORS.RED,
+    borderTopLeftRadius: 30
   }
 })

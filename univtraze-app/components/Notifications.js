@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import moment from 'moment'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import BottomSheet from './ui/BottomSheet'
 
 const Notifications = ({
   notifVisible,
   toggleNotifNavigationView,
-  props: { userId, token, notificationLists }
+  props: { notificationLists }
 }) => {
   return (
     <BottomSheet
@@ -14,85 +14,41 @@ const Notifications = ({
       onBackButtonPress={toggleNotifNavigationView}
       onBackdropPress={toggleNotifNavigationView}
     >
-      {/*Bottom Sheet inner View*/}
       <View style={styles.bottomNavigationView}>
-        <View style={{ width: '100%', height: '100%' }}>
-          <View style={styles.notificationTextContainer}>
-            <Text style={{ fontSize: 28 }}>Notifications </Text>
-          </View>
-
-          {/* <View
-									style={{display: 'flex', flexDirection: 'row', justifyContent:'flex-end',width: '80%', alignSelf: 'center'}}
-								>
-									<AntDesign name="leftcircleo" size={24} color={offset === 0 ? "gray" : "black"} style={{marginRight: 10}} onPress={() => {handleGoBackPage()}}/>
-									<AntDesign name="rightcircleo" size={24} color="black" onPress={() => {handleNextPage()}}/>
-								</View> */}
-
-          <ScrollView
-            style={{
-              width: '80%',
-              height: '65%',
-              alignSelf: 'center',
-              marginBottom: 10,
-              marginTop: 5
-            }}
-          >
-            {/* Daily self assessment   notification */}
-
-            {notificationLists && notificationLists
-              ? notificationLists.map((notification) => {
-                  return (
-                    <View
-                      style={{
-                        width: '100%',
-                        height: 54,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginBottom: 5,
-                        alignContent: 'center'
-                      }}
-                      key={notification.id}
-                    >
-                      <Image
-                        source={require('../assets/dailyAssess_icon.png')}
-                        resizeMode='contain'
-                        style={{
-                          width: 32,
-                          height: 32
-                        }}
-                      />
-                      <View style={{ paddingLeft: 15 }}>
-                        <Text
-                          numberOfLines={1}
-                          style={{
-                            color: 'black',
-                            fontSize: 16,
-                            fontWeight: '700',
-                            width: 245
-                          }}
-                        >
-                          {notification.notification_title}
-                        </Text>
-                        <Text
-                          style={{
-                            color: COLORS.TEXT_BLACK,
-                            fontSize: 14,
-                            fontWeight: '900'
-                          }}
-                        >
-                          {moment(notification.createdAt).fromNow()}
-                        </Text>
-                      </View>
-                    </View>
-                  )
-                })
-              : null}
-
-            {/* Profile updated notification */}
-
-            {/*Active cases  notification */}
-          </ScrollView>
-        </View>
+        <Text style={styles.modalHeaderText}>Notifications </Text>
+        <ScrollView style={styles.scrolViewStyle}>
+          {notificationLists.map((notification) => {
+            return (
+              <View style={styles.notificationItem} key={notification.id}>
+                <Image
+                  source={require('../assets/dailyAssess_icon.png')}
+                  resizeMode='contain'
+                  style={{
+                    width: 32,
+                    height: 32
+                  }}
+                />
+                <View style={{ paddingLeft: 15 }}>
+                  <Text
+                    numberOfLines={1}
+                    style={styles.notificationItemTitle}
+                  >
+                    {notification.notification_title}
+                  </Text>
+                  <Text
+                    style={{
+                      color: COLORS.TEXT_BLACK,
+                      fontSize: 14,
+                      fontWeight: '900'
+                    }}
+                  >
+                    {moment(notification.createdAt).fromNow()}
+                  </Text>
+                </View>
+              </View>
+            )
+          })}
+        </ScrollView>
       </View>
     </BottomSheet>
   )
@@ -126,12 +82,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  notificationTextContainer: {
+  modalHeaderText: {
+    fontSize: 24,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    paddingHorizontal: 20,
+    paddingVertical: 20
+  },
+  notificationItem: {
     width: '100%',
-    height: 75,
-    padding: 15,
-    marginTop: 10,
-    paddingLeft: 40
+    height: 54,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+    alignContent: 'center'
   },
   image: {
     width: '90%',
@@ -140,9 +103,16 @@ const styles = StyleSheet.create({
   bottomNavigationView: {
     backgroundColor: '#fff',
     width: '100%',
-    height: '60%',
+    height: '100%',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30
+  },
+  scrollViewStyle: {
+    width: '100%',
+    height: '100%',
+    alignSelf: 'center',
+    marginBottom: 10,
+    marginTop: 5
   },
   centeredViews: {
     flex: 1,

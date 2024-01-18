@@ -177,17 +177,7 @@ const SignUpScreen = ({ navigation }) => {
       <Modal transparent statusBarTranslucent visible={isModalVisible}>
         <View style={styles.congratsModalOverlay}>
           <View style={styles.congratsModal}>
-            <Text
-              style={{
-                fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
-                fontSize: 28,
-                fontWeight: '700',
-                color: '#29CC42',
-                textAlign: 'center'
-              }}
-            >
-              Sign up successful!
-            </Text>
+            <Text style={styles.congratsHeaderText}>Sign up successful!</Text>
             <Text style={styles.successModalSubtext}>
               Awesome, press continue {'\n'} to proceed to next step
             </Text>
@@ -391,5 +381,12 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     borderRadius: 15,
     paddingHorizontal: 15
+  },
+  congratsHeaderText: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#29CC42',
+    textAlign: 'center'
   }
 })

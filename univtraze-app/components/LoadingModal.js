@@ -13,7 +13,7 @@ export default function LoadingModal(props) {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <ActivityIndicator size={'large'} color={COLORS.PRIMARY}/>
+          <ActivityIndicator size={'large'} color={COLORS.PRIMARY} />
           <Text style={styles.modalText}>{props.loadingMessage}</Text>
         </View>
       </View>

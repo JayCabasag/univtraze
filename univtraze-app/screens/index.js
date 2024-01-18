@@ -275,19 +275,19 @@ const IndexScreen = ({ navigation, route }) => {
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
     >
-        <Menu
-          visible={visible}
-          toggleBottomNavigationView={toggleBottomNavigationView}
-          props={{ userId, fullname, type, profileUrl }}
-          navigation={navigation}
-        />
+      <Menu
+        visible={visible}
+        toggleBottomNavigationView={toggleBottomNavigationView}
+        props={{ userId, fullname, type, profileUrl }}
+        navigation={navigation}
+      />
 
-        <Notifications
-          notifVisible={notifVisible}
-          toggleNotifNavigationView={toggleNotifNavigationView}
-          props={{ userId, token, notificationLists }}
-          navigation={navigation}
-        />
+      <Notifications
+        notifVisible={notifVisible}
+        toggleNotifNavigationView={toggleNotifNavigationView}
+        props={{ userId, token, notificationLists }}
+        navigation={navigation}
+      />
       <View style={styles.topContainer}>
         <TouchableOpacity onPress={toggleBottomNavigationView}>
           <Image

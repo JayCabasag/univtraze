@@ -199,7 +199,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     }
     processUpdateUserDetails()
   }
-  
+
   const processUpdateUserDetails = async () => {
     let isAddDetailsSuccess = false
     try {
@@ -343,16 +343,20 @@ const UserDocumentsScreen = ({ navigation, route }) => {
           ) : (
             <Image source={{ uri: profilePhoto }} resizeMode='cover' style={styles.profilePhoto} />
           )}
-          <TouchableOpacity disabled={isUploadingProfilePhoto} style={styles.editProfileButton} onPress={pickProfileImage}>
+          <TouchableOpacity
+            disabled={isUploadingProfilePhoto}
+            style={styles.editProfileButton}
+            onPress={pickProfileImage}
+          >
             {isUploadingProfilePhoto ? (
-               <Fragment>
-                <ActivityIndicator color={COLORS.WHITE} size="small"/>
+              <Fragment>
+                <ActivityIndicator color={COLORS.WHITE} size='small' />
                 <Text style={styles.uploadPhotoText}> Uploading photo.. </Text>
-               </Fragment>
+              </Fragment>
             ) : (
               <Fragment>
-              <Ionicons name='md-cloud-upload-outline' size={18} color={COLORS.WHITE} />
-              <Text style={styles.uploadPhotoText}> Change Profile </Text>
+                <Ionicons name='md-cloud-upload-outline' size={18} color={COLORS.WHITE} />
+                <Text style={styles.uploadPhotoText}> Change Profile </Text>
               </Fragment>
             )}
           </TouchableOpacity>
@@ -405,7 +409,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
               </TouchableOpacity>
             ) : (
-              <Fragment>  
+              <Fragment>
                 <AntDesign
                   name='closecircle'
                   size={24}

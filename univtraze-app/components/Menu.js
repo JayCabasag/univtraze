@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     width: '100%',
     borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopRightRadius: 30
   },
   centeredViews: {
     flex: 1,

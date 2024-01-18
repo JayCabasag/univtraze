@@ -19,6 +19,7 @@ import LoadingModal from '../components/LoadingModal'
 import { genericPostRequest } from '../services/api/genericPostRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
+import useFormErrors from '../hooks/useFormErrors'
 
 const SignInScreen = ({ navigation }) => {
   const { signIn } = useAuth()
@@ -26,45 +27,26 @@ const SignInScreen = ({ navigation }) => {
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [email, onChangeEmail] = useState('')
-  const [password, onChnagePassword] = useState('')
+  const [password, onChangePassword] = useState('')
+
+  const { setFormErrors, resetFormErrors, formErrors } = useFormErrors(['email', 'password'])
 
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
 
-  const validateEmail = () => {
-    if (email === '') {
-      setError(true)
-      setErrorMessage('Please input your email address')
-      return false
-    } else if (!emailRegEx.test(email)) {
-      setError(true)
-      setErrorMessage('Invalid email address')
-      return false
-    }
-    return true
-  }
-
-  const validatePassword = () => {
-    if (password === '') {
-      setError(true)
-      setErrorMessage('Please input password')
-      return false
-    } else if (password.length < 7) {
-      setError(true)
-      setErrorMessage('Password should be a minimum of 8 characters')
-      return false
-    }
-    return true
-  }
-
   const onPressLogin = async () => {
-    setError(false)
-    setErrorMessage('')
+    resetFormErrors()
+    if (email == '' || email == null) {
+      return setFormErrors('email', 'Email is required')
+    }
+    if (!emailRegEx.test(email)) {
+      return setFormErrors('email', 'Email is not valid.')
+    }
+    if (password == null || password == '') {
+      return setFormErrors('password', 'Password is not valid.')
+    }
 
     try {
-      if (!validateEmail()) return
-      if (!validatePassword()) return
-
       const payload = {
         email: email,
         password: password
@@ -102,25 +84,25 @@ const SignInScreen = ({ navigation }) => {
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Email</Text>
           <TextInput
-            placeholder='Email Address'
-            defaultValue={email}
+            placeholder='Email'
+            value={email}
             onChangeText={onChangeEmail}
-            style={styles.input}
+            style={[styles.input, formErrors.email?.hasError && styles.inputError]}
           />
+          {formErrors.email?.hasError && (
+            <Text style={styles.errorText}>{formErrors.email.message}</Text>
+          )}
 
           <Text style={styles.label}>Password</Text>
           <TextInput
             placeholder='Password'
-            defaultValue={password}
-            onChangeText={onChnagePassword}
-            style={styles.input}
+            value={password}
+            onChangeText={onChangePassword}
+            style={[styles.input, formErrors.password?.hasError && styles.inputError]}
             secureTextEntry
           />
-
-          {error ? (
-            <Text style={styles.errorMessage}>*{errorMessage}</Text>
-          ) : (
-            <Text style={styles.errorMessage}></Text>
+          {formErrors.password?.hasError && (
+            <Text style={styles.errorText}>{formErrors.password.message}</Text>
           )}
 
           <Text
@@ -186,17 +168,30 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
-
   input: {
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 0,
+    marginRight: 0,
     width: '100%',
     height: 50,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    marginTop: 10,
-    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
-    backgroundColor: '#ffff',
     borderColor: COLORS.PRIMARY,
-    borderWidth: 1
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    overflow: 'hidden',
+    paddingVertical: 1,
+    fontSize: 14,
+    color: '#4d7861',
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
+  },
+  inputError: {
+    borderColor: COLORS.RED
+  },
+  errorText: {
+    textAlign: 'left',
+    color: 'red'
   },
   signInBtn: {
     marginBottom: 10,
