@@ -73,7 +73,9 @@ export const UserContextProvider = ({ children }) => {
         await removeLocalStorageUser()
         dispatch({ type: 'CLEAR_USER', user: null })
       },
-      updateUser: ({ user }) => {
+      updateUser: async ({ user }) => {
+        const stringifiedUser = JSON.stringify(user)
+        await setLocalStorageUser(stringifiedUser)
         dispatch({ type: 'UPDATE_USER', user })
       },
       updatePartialUser: ({ partialUser }) => {

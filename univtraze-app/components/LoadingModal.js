@@ -1,10 +1,11 @@
 import { View, Text, Modal, ActivityIndicator, StyleSheet } from 'react-native'
 import React from 'react'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 
 export default function LoadingModal(props) {
   return (
     <Modal
-      animationType={props.animationType ?? 'slide'}
+      animationType={props.animationType ?? 'fade'}
       transparent={props.transparent ?? true}
       visible={props.open}
       statusBarTranslucent
@@ -12,7 +13,7 @@ export default function LoadingModal(props) {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <ActivityIndicator size={'large'} />
+          <ActivityIndicator size={'large'} color={COLORS.PRIMARY}/>
           <Text style={styles.modalText}>{props.loadingMessage}</Text>
         </View>
       </View>
@@ -44,9 +45,11 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   modalText: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
     marginBottom: 15,
     textAlign: 'center',
-    color: '#4d7861',
+    color: COLORS.PRIMARY,
     marginTop: 15
   }
 })
