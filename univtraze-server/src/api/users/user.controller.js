@@ -302,8 +302,17 @@ module.exports = {
         });
       }
 
-      return res.status(200).json({
-        ...results,
+      getUserById(body.id, (err, results) => {
+        if (err) {
+          return res.status(500).json({
+            message: "Internal server error"
+          })
+        }
+
+        console.log("Resultss", results)
+        return res.status(200).json({
+          ...results
+        })
       });
     });
   },

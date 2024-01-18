@@ -84,6 +84,8 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     'backIdPhoto'
   ])
 
+  console.log(auth, userState)
+
   const initials =
     (route.params?.firstName ?? '').charAt(0) + (route.params?.lastName ?? '').charAt(0)
 
@@ -291,6 +293,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         setShowLoadingModal(true)
         const payload = { type: userType }
         await genericUpdateRequest('users/user-type', payload, auth.userToken)
+        updateUser({ user: { type: 'student' } })
         navigation.navigate('user-vaccine')
       } catch (error) {
         console.log(error)

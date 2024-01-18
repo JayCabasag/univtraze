@@ -88,7 +88,7 @@ const UserVaccine = ({ navigation, route }) => {
   }
 
   const skipVaccinationtion = async () => {
-    updateUser({ user: { type: 'student' } })
+    navigation.navigate('index')
   }
 
   const vaccineOptions = Object.values(VACCINES).map((data, index) => ({

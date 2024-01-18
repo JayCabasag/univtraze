@@ -55,13 +55,14 @@ module.exports = {
     );
   },
   getUserById: (id, callBack) => {
-    pool.query(`SELECT id, type, email, password, provider FROM users WHERE id = ?`, [id], (error, results, fields) => {
+    pool.query("SELECT id, type, email, password, provider FROM users WHERE id = ?", [id], (error, results, fields) => {
       if (error) {
         return callBack(error);
       }
       return callBack(null, results[0]);
     });
   },
+
   getUserByEmail: (email, callBack) => {
     pool.query(`SELECT * FROM users WHERE email = ?`, [email], (error, results, fields) => {
       if (error) {

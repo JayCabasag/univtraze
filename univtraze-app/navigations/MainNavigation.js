@@ -71,7 +71,6 @@ export default function MainNavigation({ onLayoutView }) {
                   name='update-personal-information'
                   component={UpdatePersonalInformationScreen}
                 />
-                <MainStack.Screen name='user-vaccine' component={UserVaccine} />
               </MainStack.Group>
             )}
             <MainStack.Screen name='user-vaccine' component={UserVaccine} />
