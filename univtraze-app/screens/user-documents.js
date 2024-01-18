@@ -84,8 +84,6 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     'backIdPhoto'
   ])
 
-  console.log(auth, userState)
-
   const initials =
     (route.params?.firstName ?? '').charAt(0) + (route.params?.lastName ?? '').charAt(0)
 
@@ -279,6 +277,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         default:
           break
       }
+      console.log(url, payload)
       await genericPostRequest(url, payload, auth.userToken)
       isAddDetailsSuccess = true
     } catch (error) {
@@ -292,8 +291,8 @@ const UserDocumentsScreen = ({ navigation, route }) => {
       try {
         setShowLoadingModal(true)
         const payload = { type: userType }
-        await genericUpdateRequest('users/user-type', payload, auth.userToken)
-        updateUser({ user: { type: 'student' } })
+        const res = await genericUpdateRequest('users/user-type', payload, auth.userToken)
+        updateUser({ user: res })
         navigation.navigate('user-vaccine')
       } catch (error) {
         console.log(error)

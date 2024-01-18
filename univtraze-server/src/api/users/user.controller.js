@@ -309,6 +309,12 @@ module.exports = {
           })
         }
 
+        if (!results) {
+          return res.status(404).json({
+            message: "User does not exists"
+          })
+        }
+
         delete results.password // Password should not be send to the user
         return res.status(200).json({
           ...results
@@ -419,7 +425,7 @@ module.exports = {
 
   addVisitorDetails: (req, res) => {
     const { body } = req;
-    const { error } = schemas.addVisitorDetails.validate(rbody);
+    const { error } = schemas.addVisitorDetails.validate(body);
 
     if (error) {
       console.log(error)
