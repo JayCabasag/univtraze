@@ -30,6 +30,11 @@ export const UserContextProvider = ({ children }) => {
             ...prevState,
             user: action.partialUser
           }
+        case 'RESTORE_USER_DETAILS':
+          return {
+            ...prevState,
+            details: action.details
+          }
         case 'CLEAR_USER':
           return {
             ...prevState,
@@ -80,6 +85,9 @@ export const UserContextProvider = ({ children }) => {
       },
       updatePartialUser: ({ partialUser }) => {
         dispatch({ type: 'UPDATE_PARTIAL_USER', partialUser })
+      },
+      updateDetails: ({ details }) => {
+        dispatch({ type: "UPDATE_USER_DETAILS", details })
       }
     }),
     []
@@ -92,7 +100,8 @@ export const UserContextProvider = ({ children }) => {
         isAppUserReady,
         updateUser: userContext.updateUser,
         setUser: userContext.setUser,
-        clearUser: userContext.clearUser
+        clearUser: userContext.clearUser,
+        updateUserDetails: userContext.updateDetails
       }}
     >
       {children}

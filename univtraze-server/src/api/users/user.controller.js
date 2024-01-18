@@ -474,85 +474,51 @@ module.exports = {
     });
   },
 
-  getUserDetailsById: (req, res) => {
-    const id = req.body.id;
-
-    getUserById(id, async (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
+  getUserDetailsById: async (req, res) => {
+    const id = req.user.result.id;
+  
+    try {
+      const results = await getUserByIdAsync(id);
+  
+      if (!results) {
+        return res.status(404).json({
+          message: 'User does not exist',
         });
       }
-
-      if (results === undefined) {
-        return res.json({
-          success: 0,
-          message: 'User id not found',
-        });
+  
+      let finalResults;
+  
+      switch (results.type) {
+        case USER_TYPE.STUDENT:
+          finalResults = await getStudentDetailsByIdAsync(id);
+          break;
+        case USER_TYPE.EMPLOYEE:
+          finalResults = await getEmployeeDetailsByIdAsync(id);
+          break;
+        case USER_TYPE.VISITOR:
+          finalResults = await getVisitorDetailsByIdAsync(id);
+          break;
+        default:
+          finalResults = 'Not verified';
+          break;
       }
-
-      if (results.type === 'Student') {
-        return new Promise((resolve, reject) =>
-          getStudentDetailsById(id, (err, finalResults) => {
-            if (err) return reject(err);
-            else
-              res.status(200).json({
-                success: 1,
-                user_id: id,
-                type: results.type,
-                email: results.email,
-                data: finalResults,
-              });
-            return resolve();
-          }),
-        );
-      }
-
-      if (results.type === 'Employee') {
-        return new Promise((resolve, reject) =>
-          getEmployeeDetailsById(id, (err, finalResults) => {
-            if (err) return reject(err);
-            else
-              res.status(200).json({
-                success: 1,
-                user_id: id,
-                type: results.type,
-                email: results.email,
-                data: finalResults,
-              });
-            return resolve();
-          }),
-        );
-      }
-
-      if (results.type === 'Visitor') {
-        return new Promise((resolve, reject) =>
-          getVisitorDetailsById(id, (err, finalResults) => {
-            if (err) return reject(err);
-            else
-              res.status(200).json({
-                success: 1,
-                user_id: id,
-                type: results.type,
-                email: results.email,
-                data: finalResults,
-              });
-            return resolve();
-          }),
-        );
-      }
-
-      return res.status(200).json({
+  
+      const responseData = {
         success: 1,
         user_id: id,
         type: results.type,
         email: results.email,
-        data: 'Not verified',
+        data: finalResults,
+      };
+  
+      return res.status(200).json(responseData);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({
+        message: 'Internal server error',
       });
-    });
-  },
+    }
+  },  
 
   getUserDetailsByIds: async (req, res) => {
     const ids = req.body.id_lists;

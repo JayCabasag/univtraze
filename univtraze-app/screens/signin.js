@@ -8,7 +8,8 @@ import {
   Text,
   Dimensions,
   ScrollView,
-  StatusBar
+  StatusBar,
+  Alert
 } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -47,24 +48,22 @@ const SignInScreen = ({ navigation }) => {
     }
 
     try {
+      setShowLoadingModal(true)
+      setLoadingMessage('Checking your credentials...')
+
       const payload = {
         email: email,
         password: password
       }
-
-      setShowLoadingModal(true)
-      setLoadingMessage('Checking your credentials...')
-
       const res = await genericPostRequest('users/signin', payload)
       signIn({ token: res?.token ?? '' })
       setUser({ user: res?.user ?? '' })
     } catch (error) {
-      setError(true)
-      const errorMessage = error?.response?.data?.message ?? 'Unexpected error occurred'
-      setErrorMessage(errorMessage)
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
     } finally {
       setShowLoadingModal(false)
-      setLoadingMessage('')
     }
   }
 

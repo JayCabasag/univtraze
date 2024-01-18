@@ -27,7 +27,7 @@ router.post('/signup', createUser);
 router.post('/signin', signin);
 router.get('/', checkToken, getUsers);
 router.get('/getAllUsers', checkToken, getAllUsers);
-router.post('/getUserDetailsById', checkToken, getUserDetailsById);
+router.get('/user-details', checkToken, getUserDetailsById);
 router.post('/getUserDetailsByIds', checkToken, getUserDetailsByIds);
 router.put('/user-type', checkToken, updateUserType);
 router.post('/student-details', checkToken, addStudentDetails);

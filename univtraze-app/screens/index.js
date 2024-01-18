@@ -21,8 +21,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import Notifications from '../components/Notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Menu from '../components/Menu'
+import { useUser } from '../services/store/user/UserContext'
 
 const IndexScreen = ({ navigation, route }) => {
+  const { state } = useUser()
+  
+  useEffect(() => {
+    console.log("Hello", state?.user?.id)
+  }, [state?.user?.id])
+  
   //covid api variables
   const [population, setPopulation] = useState(0)
   const [cases, setCases] = useState(0)
@@ -91,16 +98,6 @@ const IndexScreen = ({ navigation, route }) => {
 
         alert('Something went wrong... Please try again')
       })
-  }
-
-  const decodeJwt = (currentToken) => {
-    var decodedToken = jwtDecode(currentToken)
-    getUserDetails(
-      decodedToken.result.id,
-      currentToken,
-      decodedToken.result.type || route.params.type
-    )
-    handleGetNotifications(decodedToken.result.id, 0, currentToken)
   }
 
   const getTotalActiveNotifications = async (currentToken) => {
@@ -281,7 +278,6 @@ const IndexScreen = ({ navigation, route }) => {
         props={{ userId, fullname, type, profileUrl }}
         navigation={navigation}
       />
-
       <Notifications
         notifVisible={notifVisible}
         toggleNotifNavigationView={toggleNotifNavigationView}

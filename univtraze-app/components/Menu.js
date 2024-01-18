@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useId, useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
 import base64 from 'base-64'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
@@ -25,12 +25,14 @@ const Menu = ({
   active
 }) => {
   const { signOut } = useAuth()
-  const { clearUser } = useUser()
+  const { clearUser, state } = useUser()
   const [modalVisible, setModalVisible] = useState(false)
   const [dataToConvertToQr, setdataToConvertToQr] = useState('Invalid')
 
-  const viewQrCode = (currentUserId, currentUserType) => {
-    var rawData = { id: currentUserId, type: currentUserType, name: fullname }
+  const viewQrCode = () => {
+    const userId = state?.user?.id ?? '';
+    const userType = state?.user?.type ?? '';
+    var rawData = { id: userId, type: userType }
     setdataToConvertToQr(base64.encode(JSON.stringify(rawData)))
     setModalVisible(true)
   }
@@ -67,7 +69,7 @@ const Menu = ({
               <Text numberOfLines={1} style={styles.fullNameText}>
                 {'Jay Cabasag'}
               </Text>
-              <TouchableOpacity style={styles.viewQrBtn} onPress={() => viewQrCode(userId, type)}>
+              <TouchableOpacity style={styles.viewQrBtn} onPress={viewQrCode}>
                 <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}> View QR Code</Text>
               </TouchableOpacity>
             </View>
@@ -80,7 +82,6 @@ const Menu = ({
               }}
               statusBarTranslucent
             >
-              {/* POP-UP MODAL VIEW */}
               <Pressable
                 style={styles.centeredViews}
                 onPress={() => setModalVisible(!modalVisible)}
@@ -112,7 +113,7 @@ const Menu = ({
 
                   {/* QR Code */}
                   <Text style={{ color: 'rgba(54, 77, 57, 0.6)', textTransform: 'uppercase' }}>
-                    univtraze-{userId}
+                    univtraze-{state?.user?.id ?? ''}
                   </Text>
                   {/* User Name */}
 
