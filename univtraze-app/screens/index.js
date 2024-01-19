@@ -16,7 +16,6 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { PieChart } from 'react-native-chart-kit'
 import moment from 'moment'
-import jwtDecode from 'jwt-decode'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Notifications from '../components/Notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
@@ -26,13 +25,18 @@ import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 
 const IndexScreen = ({ navigation }) => {
-  const { state, updateUserDetails } = useUser()
+  const { state: user, updateUserDetails } = useUser()
   const { state: auth } = useAuth()
-
+  
+  const fullname = `${user?.details?.firstname ?? ''} ${user?.details?.lastname ?? ''}`
+  const userId = user?.user?.id
+  const userToken =  auth?.userToken
+  
   useEffect(() => {
     const fetchUserDetails = async () => {
+      if (!userId || !userToken) return
       try {
-        const res = await genericGetRequest(`users/${state?.user?.id}`, auth?.userToken)
+        const res = await genericGetRequest(`users/${userId}`, userToken)
         updateUserDetails({ details: res })
       } catch (error) {
         Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
@@ -41,7 +45,7 @@ const IndexScreen = ({ navigation }) => {
       }
     }
     fetchUserDetails()
-  }, [state?.user?.id, auth?.userToken])
+  }, [userId, userToken])
 
   //covid api variables
   const [population, setPopulation] = useState(0)
@@ -50,14 +54,6 @@ const IndexScreen = ({ navigation }) => {
   const [recovered, setRecovered] = useState(0)
   const [deaths, setDeaths] = useState(0)
   const [isLoadingPhCovidCases, setIsLoadingPhCovidCases] = useState(true)
-
-  //userdata variables
-  const [fullname, setFullname] = useState('')
-  const [type, setType] = useState('')
-  const [userId, setUserId] = useState(null)
-  const [profileUrl, setProfileUrl] = useState('')
-
-  //
   const [notificationLists, setNotificationLists] = useState([])
 
   const [reportedCommunicableDiseaseOnGoing, setReportedCommunicableDiseaseOnGoing] = useState([])
@@ -143,94 +139,6 @@ const IndexScreen = ({ navigation }) => {
       })
   }
 
-  const getOnGoingCommunicableDiseaseCase = async (currentToken) => {
-    const config = {
-      headers: { Authorization: `Bearer ${currentToken}` }
-    }
-
-    const data = {
-      case_status: 'On-going'
-    }
-
-    await axios
-      .post(
-        `https://univtraze.herokuapp.com/api/communicable_disease/getCommunicableDiseaseByStatus`,
-        data,
-        config
-      )
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return alert('An error occured while getting on-going cases')
-        }
-
-        if (success === 1) {
-          return setReportedCommunicableDiseaseOnGoing(response.data.data)
-        }
-
-        alert('Something went wrong... Please try again')
-      })
-  }
-
-  const getResolvedCommunicableDiseaseCase = async (currentToken) => {
-    const config = {
-      headers: { Authorization: `Bearer ${currentToken}` }
-    }
-
-    const data = {
-      case_status: 'Resolved'
-    }
-
-    await axios
-      .post(
-        `https://univtraze.herokuapp.com/api/communicable_disease/getCommunicableDiseaseByStatus`,
-        data,
-        config
-      )
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return alert('An error occured while getting resolved cases')
-        }
-
-        if (success === 1) {
-          return setReportedCommunicableDiseaseResolved(response.data.data)
-        }
-
-        alert('Something went wrong... Please try again')
-      })
-  }
-
-  const getUserDetails = async (userId, currentToken, userType) => {
-    const config = {
-      headers: { Authorization: `Bearer ${currentToken}` }
-    }
-
-    const data = {
-      id: userId
-    }
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/user/${userType}`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0 && message === 'No data found for this user') {
-          return navigation.navigate('signup-user-type')
-        }
-
-        if (success === 0 && message === 'Invalid token') {
-          alert('Please re-login to continue')
-          return navigation.navigate('signin')
-        }
-
-        setFullname(response.data.data.firstname + ' ' + response.data.data.lastname)
-        setUserId(userId)
-        setType(userType)
-        setProfileUrl(response.data.data.profile_url)
-      })
-  }
 
   useEffect(() => {
     const GetCovidUpdate = async () => {
@@ -336,7 +244,7 @@ const IndexScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.actionBtn}
               onPress={() => {
-                navigation.navigate('QrScanner', { type: type, id: userId, token: token })
+                navigation.navigate('qr-scanner')
               }}
             >
               <ImageBackground
@@ -348,7 +256,7 @@ const IndexScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.actionBtn}
               onPress={() => {
-                navigation.navigate('ReportCovidCase', { id: userId, type: type })
+                navigation.navigate('report-disease')
               }}
             >
               <ImageBackground
@@ -361,7 +269,7 @@ const IndexScreen = ({ navigation }) => {
             <TouchableOpacity
               style={styles.actionBtn}
               onPress={() => {
-                navigation.navigate('ReportEmergency', { id: userId, type: type })
+                navigation.navigate('report-emergency')
               }}
             >
               <ImageBackground

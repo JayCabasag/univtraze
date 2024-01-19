@@ -15,10 +15,17 @@ import { BarCodeScanner } from 'expo-barcode-scanner'
 import base64 from 'base-64'
 import axios from 'axios'
 import moment from 'moment'
-import BackIcon from '../assets/back-icon.png'
 import { COLORS } from '../utils/app_constants'
+import BackIcon from '../assets/back-icon.png'
+import { useUser } from '../services/store/user/UserContext'
+import { useAuth } from '../services/store/auth/AuthContext'
 
 export default function QrScannerScreen({ navigation, route }) {
+  const { state: user } = useUser()
+  const { state: auth } = useAuth()
+  const userId = user?.user?.id
+  const userToken = auth?.userToken
+
   const [hasPermission, setHasPermission] = useState(null)
   const [scanned, setScanned] = useState(false)
   const [text, setText] = useState('Not yet scanned')
@@ -31,7 +38,7 @@ export default function QrScannerScreen({ navigation, route }) {
   const [modalVisible, setModalVisible] = useState(false)
 
   const askForCameraPermission = () => {
-    ;(async () => {
+    (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync()
       setHasPermission(status === 'granted')
     })()
@@ -44,8 +51,8 @@ export default function QrScannerScreen({ navigation, route }) {
   }, [])
 
   const handleGetUserTemperature = async () => {
-    const currentUserId = route.params.id
-    const token = route.params.token
+    const currentUserId = user?.user?.id
+    const token = auth?.userToken
 
     let initialDateToday = new Date()
     let finalDateToday = moment(initialDateToday).format('YYYY-MM-DD')
@@ -92,7 +99,7 @@ export default function QrScannerScreen({ navigation, route }) {
   }
 
   // What happens when we scan the bar code
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = ({ data }) => {
     setScanned(true)
     try {
       setText(base64.decode(data))
@@ -130,8 +137,6 @@ export default function QrScannerScreen({ navigation, route }) {
 
   const confirmScanning = async (currentRoomId) => {
     setModalVisible(!modalVisible)
-    const currentUserType = route.params.type
-    const currentUserId = route.params.id
     const token = route.params.token
 
     //Axios data starts here to add the room visited
@@ -140,7 +145,7 @@ export default function QrScannerScreen({ navigation, route }) {
     }
 
     const data = {
-      user_id: currentUserId,
+      user_id: userId,
       room_id: currentRoomId,
       temp: temp
     }
@@ -274,11 +279,13 @@ export default function QrScannerScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#E1F5E4',
-    paddingHorizontal: 40,
-    height: '100%'
+    paddingHorizontal: 30,
   },
-
   barCodeContainer: {
     flex: 1,
     backgroundColor: '#E1F5E4',

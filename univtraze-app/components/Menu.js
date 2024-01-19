@@ -42,6 +42,11 @@ const Menu = ({
     clearUser()
   }
 
+  const onNavigate = (route) => {
+    toggleBottomNavigationView()
+    navigation.navigate(route)
+  }
+
   return (
     <BottomSheet
       visible={visible}
@@ -158,17 +163,14 @@ const Menu = ({
             contentContainerStyle={styles.menuItemContentView}
           >
             <TouchableOpacity
-              onPress={() => navigation.navigate('Dashboard')}
+              onPress={() => onNavigate("index")}
               style={[styles.menuItemBtn, styles.menuItemBtnPrimary]}
             >
               <Ionicons name='grid-outline' size={25} color={COLORS.WHITE} />
-              <Text style={styles.menuItemLabel}>Dashboard</Text>
+              <Text style={styles.menuItemLabel}>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {
-                toggleBottomNavigationView()
-                navigation.navigate('SignUpVaccination', { type: type })
-              }}
+              onPress={() => onNavigate("user-vaccine")}
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='shield-outline' size={25} color={COLORS.BLACK} />
@@ -178,10 +180,7 @@ const Menu = ({
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => {
-                toggleBottomNavigationView()
-                navigation.navigate('TemperatureHistory', { id: userId, type: type })
-              }}
+              onPress={() => onNavigate("temperature-history")}
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='thermometer-outline' size={25} color={COLORS.BLACK} />
@@ -191,10 +190,7 @@ const Menu = ({
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => {
-                toggleBottomNavigationView()
-                navigation.navigate('AccountSettings', { id: userId, type: type })
-              }}
+              onPress={() => onNavigate("account-settings")}
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='settings-outline' size={25} color={COLORS.BLACK} />
@@ -204,10 +200,7 @@ const Menu = ({
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => {
-                toggleBottomNavigationView()
-                navigation.navigate('RoomVisited', { id: userId, type: type })
-              }}
+              onPress={() => onNavigate("visited-rooms")}
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='walk-outline' size={25} color={COLORS.BLACK} />
