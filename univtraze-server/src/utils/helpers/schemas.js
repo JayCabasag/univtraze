@@ -125,6 +125,14 @@ class Schemas {
       'string.empty': '{{#label}} cannot be empty'
     });
   }
+
+  get userIdSchema(){
+    return Joi.object({
+      userId: Joi.number().required(),
+    }).messages({
+      'string.empty': '{{#label}} cannot be empty'
+    });
+  }
 }
 
 module.exports = new Schemas();

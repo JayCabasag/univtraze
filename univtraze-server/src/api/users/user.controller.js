@@ -32,6 +32,7 @@ const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 var generator = require('generate-password');
 const schemas = require('../../utils/helpers/schemas');
+const { USER_TYPE } = require('../../utils/helpers/types');
 
 module.exports = {
   createUser: (req, res) => {
@@ -475,49 +476,95 @@ module.exports = {
   },
 
   getUserDetailsById: async (req, res) => {
-    const id = req.user.result.id;
-  
-    try {
-      const results = await getUserByIdAsync(id);
-  
+    const { error } = schemas.userIdSchema.validate(req.params)
+
+    if (error) {
+      return res.status(409).json({
+        message: "Invalid payload"
+      })
+    }
+
+    req.body.id = parseInt(req.params.userId)
+    const { body } = req
+
+    getUserById(body.id, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Internal server error"
+        })
+      }
+
       if (!results) {
         return res.status(404).json({
-          message: 'User does not exist',
+          message: "User not found."
+        })
+      }
+      
+      if (!results.type) {
+        return res.status(401).json({
+          message: "User not verified."
+        })
+      }
+
+      if (results.type == USER_TYPE.STUDENT) {
+        return getStudentDetailsById(body.id, (err, results) => {
+          if (err) {
+            return res.status(500).json({
+              message: "Internal server error"
+            })
+          }
+          if (!results) {
+            return res.status(404).json({
+              message: "User not verified"
+            })
+          }
+
+          return res.status(200).json({
+            ...results
+          })
         });
       }
-  
-      let finalResults;
-  
-      switch (results.type) {
-        case USER_TYPE.STUDENT:
-          finalResults = await getStudentDetailsByIdAsync(id);
-          break;
-        case USER_TYPE.EMPLOYEE:
-          finalResults = await getEmployeeDetailsByIdAsync(id);
-          break;
-        case USER_TYPE.VISITOR:
-          finalResults = await getVisitorDetailsByIdAsync(id);
-          break;
-        default:
-          finalResults = 'Not verified';
-          break;
+      
+      if (results.type == USER_TYPE.EMPLOYEE) {
+        return getEmployeeDetailsById(body.id, (err, results) => {
+          if (err) {
+            return res.status(500).json({
+              message: "Internal server error"
+            })
+          }
+          if (!results) {
+            return res.status(404).json({
+              message: "User not verified"
+            })
+          }
+
+          return res.status(200).json({
+            ...results
+          })
+        });
       }
-  
-      const responseData = {
-        success: 1,
-        user_id: id,
-        type: results.type,
-        email: results.email,
-        data: finalResults,
-      };
-  
-      return res.status(200).json(responseData);
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json({
-        message: 'Internal server error',
-      });
-    }
+      if (results.type == USER_TYPE.VISITOR) {
+       return getStudentDetailsById(body.id, (err, results) => {
+          if (err) {
+            return res.status(500).json({
+              message: "Internal server error"
+            })
+          }
+          if (!results) {
+            return res.status(404).json({
+              message: "User not verified"
+            })
+          }
+
+          return res.status(200).json({
+            ...results
+          })
+        })
+      }
+      return res.status(401).json({
+        message: "User not verified."
+      })
+    })
   },  
 
   getUserDetailsByIds: async (req, res) => {

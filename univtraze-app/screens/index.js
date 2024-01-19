@@ -27,7 +27,13 @@ const IndexScreen = ({ navigation, route }) => {
   const { state } = useUser()
   
   useEffect(() => {
-    console.log("Hello", state?.user?.id)
+    const fetchUserDetails = async () => {
+      try {
+        const res = await gener
+      } catch (error) {
+        
+      }
+    }
   }, [state?.user?.id])
   
   //covid api variables
