@@ -36,12 +36,14 @@ export default function MainNavigation({ onLayoutView }) {
     return null
   }
 
+  console.log(userState, authState)
+
   return (
     <NavigationContainer onReady={onLayoutView}>
       <MainStack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           <MainStack.Group>
-            {userState.user?.type == null ? (
+            {userState?.user?.type == null ? (
               <MainStack.Group>
                 <MainStack.Screen name='user-select-type' component={UserSelectTypeScreen} />
                 <MainStack.Screen

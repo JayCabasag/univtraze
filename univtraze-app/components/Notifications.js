@@ -29,10 +29,7 @@ const Notifications = ({
                   }}
                 />
                 <View style={{ paddingLeft: 15 }}>
-                  <Text
-                    numberOfLines={1}
-                    style={styles.notificationItemTitle}
-                  >
+                  <Text numberOfLines={1} style={styles.notificationItemTitle}>
                     {notification.notification_title}
                   </Text>
                   <Text

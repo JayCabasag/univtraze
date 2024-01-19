@@ -31,6 +31,10 @@ export const AuthContextProvider = ({ children }) => {
             isSignout: true,
             userToken: null
           }
+        default:
+          return {
+            ...prevState
+          }
       }
     },
     {

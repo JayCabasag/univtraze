@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  TouchableWithoutFeedback,
   Image,
   StatusBar,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -22,20 +22,27 @@ import Notifications from '../components/Notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Menu from '../components/Menu'
 import { useUser } from '../services/store/user/UserContext'
+import { genericGetRequest } from '../services/api/genericGetRequest'
+import { useAuth } from '../services/store/auth/AuthContext'
 
-const IndexScreen = ({ navigation, route }) => {
-  const { state } = useUser()
-  
+const IndexScreen = ({ navigation }) => {
+  const { state, updateUserDetails } = useUser()
+  const { state: auth } = useAuth()
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const res = await gener
+        const res = await genericGetRequest(`users/${state?.user?.id}`, auth?.userToken)
+        updateUserDetails({ details: res })
       } catch (error) {
-        
+        Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+          { text: 'OK', onPress: () => console.log('OK') }
+        ])
       }
     }
-  }, [state?.user?.id])
-  
+    fetchUserDetails()
+  }, [state?.user?.id, auth?.userToken])
+
   //covid api variables
   const [population, setPopulation] = useState(0)
   const [cases, setCases] = useState(0)
@@ -281,7 +288,6 @@ const IndexScreen = ({ navigation, route }) => {
       <Menu
         visible={visible}
         toggleBottomNavigationView={toggleBottomNavigationView}
-        props={{ userId, fullname, type, profileUrl }}
         navigation={navigation}
       />
       <Notifications

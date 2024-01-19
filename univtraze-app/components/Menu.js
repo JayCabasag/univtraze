@@ -20,19 +20,19 @@ import { useUser } from '../services/store/user/UserContext'
 const Menu = ({
   visible,
   toggleBottomNavigationView,
-  props: { userId, fullname, type, profileUrl },
   navigation,
-  active
 }) => {
-  const { signOut } = useAuth()
+  const { signOut, auth } = useAuth()
   const { clearUser, state } = useUser()
   const [modalVisible, setModalVisible] = useState(false)
   const [dataToConvertToQr, setdataToConvertToQr] = useState('Invalid')
+  const initials = (state?.details?.firstname ?? '').charAt(0)+ (state?.details?.lastname ?? '').charAt(0)
+  const fullname = `${state?.details?.firstname ?? ''} ${state?.details?.lastname ?? ''}`
+  const userId = state?.details?.id ?? ''
+  const type = auth?.type ?? ''
 
   const viewQrCode = () => {
-    const userId = state?.user?.id ?? '';
-    const userType = state?.user?.type ?? '';
-    var rawData = { id: userId, type: userType }
+    var rawData = { id: userId, type }
     setdataToConvertToQr(base64.encode(JSON.stringify(rawData)))
     setModalVisible(true)
   }
@@ -60,14 +60,14 @@ const Menu = ({
               }}
             >
               <GeneratedAvatar
-                initials={'JC'}
+                initials={initials}
                 textStyle={{ fontSize: 30 }}
                 containerStyle={{ height: 80, width: 80 }}
               />
             </View>
-            <View style={{ width: '75%', padding: 10, display: 'flex', justifyContent: 'center' }}>
+            <View style={styles.modalUserDetailsContainer}>
               <Text numberOfLines={1} style={styles.fullNameText}>
-                {'Jay Cabasag'}
+                {fullname}
               </Text>
               <TouchableOpacity style={styles.viewQrBtn} onPress={viewQrCode}>
                 <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}> View QR Code</Text>
@@ -249,6 +249,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10
   },
+  modalUserDetailsContainer: { width: '75%', padding: 10, display: 'flex', justifyContent: 'center' },
   fullNameText: {
     fontSize: 22,
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
