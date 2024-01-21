@@ -6,6 +6,7 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
 
+const tempHistoryRouter = require('./api/temperature_history/temp_history.router');
 const userRouter = require('./api/users/user.router');
 const adminRouter = require('./api/admins/admin.router');
 const vaccination_info = require('./api/vaccination_info/vaccination.router');
@@ -25,6 +26,7 @@ app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.json());
 
+app.use('/api/temperature-history', tempHistoryRouter);
 app.use('/api/users', userRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/vaccine_info', vaccination_info);

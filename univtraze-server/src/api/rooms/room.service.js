@@ -139,14 +139,6 @@ module.exports = {
     );
   },
 
-  getUserById: (id, callBack) => {
-    pool.query(`SELECT id, type, email, provider FROM users WHERE id = ?`, [id], (error, results, fields) => {
-      if (error) {
-        return callBack(error);
-      }
-      return callBack(null, results[0]);
-    });
-  },
   getStudentDetailsById: (id, callBack) => {
     pool.query(`SELECT * FROM student_details WHERE user_id = ?`, [id], (error, results, fields) => {
       if (error) {
@@ -199,4 +191,16 @@ module.exports = {
       },
     );
   },
+  getRoomById: (id, callBack) => {
+    pool.query(
+      'SELECT * from rooms WHERE id = ?',
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results[0])
+      }
+    )
+  }
 };

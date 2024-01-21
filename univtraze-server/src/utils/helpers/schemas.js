@@ -118,19 +118,30 @@ class Schemas {
     });
   }
 
-  get updateUserTypeSchema(){
+  get updateUserTypeSchema() {
     return Joi.object({
       type: Joi.string().required(),
     }).messages({
-      'string.empty': '{{#label}} cannot be empty'
+      'string.empty': '{{#label}} cannot be empty',
     });
   }
 
-  get userIdSchema(){
+  get userIdSchema() {
     return Joi.object({
       userId: Joi.number().required(),
     }).messages({
-      'string.empty': '{{#label}} cannot be empty'
+      'string.empty': '{{#label}} cannot be empty',
+    });
+  }
+
+  get addTempHistorySchema() {
+    return Joi.object({
+      user_id: Joi.number().integer().positive().required(),
+      temperature: Joi.number().required(),
+      unit_of_measurement: Joi.string().required(),
+      room_id: Joi.number().integer().positive().required(),
+      sensor_device: Joi.string().required(),
+      remarks: Joi.string().allow('').optional(),
     });
   }
 }

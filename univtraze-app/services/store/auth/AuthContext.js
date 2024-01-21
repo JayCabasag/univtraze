@@ -50,9 +50,10 @@ export const AuthContextProvider = ({ children }) => {
     const bootstrapAsync = async () => {
       let userToken
       try {
-        userToken = await getLocalStorageToken()
-        const res = await genericGetRequest('users/verify')
-        
+        const token = await getLocalStorageToken()
+        const res = await genericGetRequest('users/verify', token)
+        userToken = res.token
+
       } catch (e) {
         // Restoring token failed
       } finally {

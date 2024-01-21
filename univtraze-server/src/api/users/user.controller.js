@@ -149,15 +149,15 @@ module.exports = {
     getUserById(req.body.id, (err, results) => {
       if (err) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
-      if (!results){
+      if (!results) {
         return res.status(404).json({
-          message: "User not found"
-        })
+          message: 'User not found',
+        });
       }
-      
+
       const tokenPayload = { id: results.id, email: results.email };
       const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
         expiresIn: '7d',
@@ -165,9 +165,9 @@ module.exports = {
 
       return res.status(200).json({
         user: { type: results.type, ...tokenPayload },
-        token: jsonToken
-      })
-    })
+        token: jsonToken,
+      });
+    });
   },
   getUsers: (req, res) => {
     getUsers((err, results) => {
@@ -312,13 +312,13 @@ module.exports = {
   },
 
   updateUserType: (req, res) => {
-    const { body } = req
-    const { error } = schemas.updateUserTypeSchema.validate(body)
+    const { body } = req;
+    const { error } = schemas.updateUserTypeSchema.validate(body);
 
     if (error) {
       return res.status(401).json({
-        message: "Some fields were empty"
-      })
+        message: 'Some fields were empty',
+      });
     }
     // Token id value
     req.body.id = req.user.result.id;
@@ -333,20 +333,20 @@ module.exports = {
       getUserById(body.id, (err, results) => {
         if (err) {
           return res.status(500).json({
-            message: "Internal server error"
-          })
+            message: 'Internal server error',
+          });
         }
 
         if (!results) {
           return res.status(404).json({
-            message: "User does not exists"
-          })
+            message: 'User does not exists',
+          });
         }
 
-        delete results.password // Password should not be send to the user
+        delete results.password; // Password should not be send to the user
         return res.status(200).json({
-          ...results
-        })
+          ...results,
+        });
       });
     });
   },
@@ -354,9 +354,9 @@ module.exports = {
   addStudentDetails: (req, res) => {
     const { body } = req;
     const { error } = schemas.addStudentDetailsSchema.validate(body);
-    
+
     if (error) {
-      console.log(error)
+      console.log(error);
       return res.status(401).json({
         message: 'Some field were empty',
       });
@@ -364,7 +364,7 @@ module.exports = {
 
     isStudentDetailsExists(body, (err, results) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         return res.status(500).json({
           message: 'Internal server error',
         });
@@ -373,7 +373,7 @@ module.exports = {
       if (results.length == 0) {
         addStudentDetails(body, (err, results) => {
           if (err) {
-            console.log("Erro", err)
+            console.log('Erro', err);
             return res.status(500).json({
               message: 'Internal server error',
             });
@@ -388,7 +388,7 @@ module.exports = {
       if (results.length > 0) {
         updateStudentDetails(body, (err, results) => {
           if (err) {
-            console.log(err)
+            console.log(err);
             return res.status(500).json({
               message: 'Internal server error',
             });
@@ -406,7 +406,7 @@ module.exports = {
     const { error } = schemas.addEmployeeDetails.validate(body);
 
     if (error) {
-      console.log(error)
+      console.log(error);
       return res.status(500).json({
         message: 'Internal server error',
       });
@@ -414,7 +414,7 @@ module.exports = {
 
     isEmployeeDetailsExists(body, (err, results) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         return res.status(500).json({
           message: 'Internal server error',
         });
@@ -423,7 +423,7 @@ module.exports = {
       if (results.length === 0) {
         addEmployeeDetails(body, (err, results) => {
           if (err) {
-            console.log(err)
+            console.log(err);
             return res.status(500).json({
               message: 'Internal server error',
             });
@@ -437,7 +437,7 @@ module.exports = {
       if (results.length > 0) {
         updateEmployeeDetails(body, (err, results) => {
           if (err) {
-            console.log(err)
+            console.log(err);
             return res.status(200).json({
               message: 'Internal server error',
             });
@@ -456,7 +456,7 @@ module.exports = {
     const { error } = schemas.addVisitorDetails.validate(body);
 
     if (error) {
-      console.log(error)
+      console.log(error);
       return res.status(500).json({
         message: 'Internal server error',
       });
@@ -464,7 +464,7 @@ module.exports = {
 
     isVisitorDetailsExists(body, (err, results) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         return res.json({
           message: 'Internal server errors',
         });
@@ -473,7 +473,7 @@ module.exports = {
       if (results.length == 0) {
         addVisitorDetails(body, (err, results) => {
           if (err) {
-            console.log(err)
+            console.log(err);
             return res.json({
               message: 'Internal server error',
             });
@@ -488,7 +488,7 @@ module.exports = {
       if (results.length > 0) {
         updateVisitorDetails(body, (err, results) => {
           if (err) {
-            console.log(err)
+            console.log(err);
             return res.status(500).json({
               message: 'Internal server error',
             });
@@ -503,96 +503,96 @@ module.exports = {
   },
 
   getUserDetailsById: async (req, res) => {
-    const { error } = schemas.userIdSchema.validate(req.params)
+    const { error } = schemas.userIdSchema.validate(req.params);
 
     if (error) {
       return res.status(409).json({
-        message: "Invalid payload"
-      })
+        message: 'Invalid payload',
+      });
     }
 
-    req.body.id = parseInt(req.params.userId)
-    const { body } = req
+    req.body.id = parseInt(req.params.userId);
+    const { body } = req;
 
     getUserById(body.id, (err, results) => {
       if (err) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
 
       if (!results) {
         return res.status(404).json({
-          message: "User not found."
-        })
+          message: 'User not found.',
+        });
       }
-      
+
       if (!results.type) {
         return res.status(401).json({
-          message: "User not verified."
-        })
+          message: 'User not verified.',
+        });
       }
 
       if (results.type == USER_TYPE.STUDENT) {
         return getStudentDetailsById(body.id, (err, results) => {
           if (err) {
             return res.status(500).json({
-              message: "Internal server error"
-            })
+              message: 'Internal server error',
+            });
           }
           if (!results) {
             return res.status(404).json({
-              message: "User not verified"
-            })
+              message: 'User not verified',
+            });
           }
 
           return res.status(200).json({
-            ...results
-          })
+            ...results,
+          });
         });
       }
-      
+
       if (results.type == USER_TYPE.EMPLOYEE) {
         return getEmployeeDetailsById(body.id, (err, results) => {
           if (err) {
             return res.status(500).json({
-              message: "Internal server error"
-            })
+              message: 'Internal server error',
+            });
           }
           if (!results) {
             return res.status(404).json({
-              message: "User not verified"
-            })
+              message: 'User not verified',
+            });
           }
 
           return res.status(200).json({
-            ...results
-          })
+            ...results,
+          });
         });
       }
       if (results.type == USER_TYPE.VISITOR) {
-       return getStudentDetailsById(body.id, (err, results) => {
+        return getStudentDetailsById(body.id, (err, results) => {
           if (err) {
             return res.status(500).json({
-              message: "Internal server error"
-            })
+              message: 'Internal server error',
+            });
           }
           if (!results) {
             return res.status(404).json({
-              message: "User not verified"
-            })
+              message: 'User not verified',
+            });
           }
 
           return res.status(200).json({
-            ...results
-          })
-        })
+            ...results,
+          });
+        });
       }
       return res.status(401).json({
-        message: "User not verified."
-      })
-    })
-  },  
+        message: 'User not verified.',
+      });
+    });
+  },
 
   getUserDetailsByIds: async (req, res) => {
     const ids = req.body.id_lists;

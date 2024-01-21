@@ -1,3 +1,4 @@
+const { getUserById } = require('../users/user.service');
 const {
   addRoom,
   getAllRooms,
@@ -9,7 +10,6 @@ const {
   userTodaysTemperature,
   searchUsersByRoomId,
   searchRoomsViaDateAndId,
-  getUserById,
   getEmployeeDetailsById,
   getStudentDetailsById,
   getVisitorDetailsById,
