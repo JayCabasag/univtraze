@@ -36,8 +36,6 @@ export default function MainNavigation({ onLayoutView }) {
     return null
   }
 
-  console.log(userState, authState)
-
   return (
     <NavigationContainer onReady={onLayoutView}>
       <MainStack.Navigator screenOptions={{ headerShown: false }}>

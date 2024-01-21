@@ -22,12 +22,14 @@ import BackIcon from '../assets/back-icon.png'
 import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
+import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
 
 export default function QrScannerScreen({ navigation, route }) {
   const { state: user } = useUser()
-  const { state: auth } = useAuth()
+  const { temperatures } = useUserTemperatures()
   const userId = user?.user?.id
-  const userToken = auth?.userToken
+
+  console.log("Temperatures", temperatures)
 
   const [hasPermission, setHasPermission] = useState(null)
   const [scanned, setScanned] = useState(false)
@@ -51,19 +53,6 @@ export default function QrScannerScreen({ navigation, route }) {
   useEffect(() => {
     askForCameraPermission()
   }, [])
-
-  useEffect(() => {
-    if (!userToken || !userId) return
-    const getUserTempHistory = async () => {
-      try {
-        const res = await genericGetRequest(`temperature-history?user_id=${userId}`, auth.userToken)
-        console.log("Temperature ",res)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    getUserTempHistory()
-  }, [userToken, userId])
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ data }) => {
@@ -135,7 +124,7 @@ export default function QrScannerScreen({ navigation, route }) {
   return (
     <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.topContainer}>
-       <TouchableOpacity onPress={navigation.goBack}>
+        <TouchableOpacity onPress={navigation.goBack}>
           <Image source={BackIcon} style={{ marginLeft: -15, width: 60, height: 60 }} />
         </TouchableOpacity>
       </View>

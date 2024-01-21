@@ -4,6 +4,7 @@ import { AuthContextProvider } from './services/store/auth/AuthContext'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
 import { UserContextProvider } from './services/store/user/UserContext'
+import { UserTemperaturesContextProvider } from './services/store/user-temperature/UserTemperature'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -30,7 +31,9 @@ export default function App() {
   return (
     <AuthContextProvider>
       <UserContextProvider>
-        <MainNavigation onLayoutView={onLayoutRootView} />
+        <UserTemperaturesContextProvider>
+          <MainNavigation onLayoutView={onLayoutRootView} />
+        </UserTemperaturesContextProvider>
       </UserContextProvider>
     </AuthContextProvider>
   )
