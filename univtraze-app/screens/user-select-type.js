@@ -5,20 +5,42 @@ import {
   TouchableOpacity,
   Image,
   KeyboardAvoidingView,
-  ScrollView
+  ScrollView,
+  StatusBar,
+  Platform
 } from 'react-native'
 import { RadioButton } from 'react-native-paper'
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { COLORS, FONT_FAMILY, USER_TYPE } from '../utils/app_constants'
 import SelectTypeImage from '../assets/select-type-image.png'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { useUser } from '../services/store/user/UserContext'
+import { useAuth } from '../services/store/auth/AuthContext'
 
 const UserSelectTypeScreen = ({ navigation }) => {
+  const { signOut } = useAuth()
+  const { clearUser } = useUser()
+
   const [userType, setUserType] = useState(USER_TYPE.STUDENT)
   const onNext = () => {
     navigation.navigate('user-information', userType)
   }
+
+  const logout = () => {
+    signOut()
+    clearUser()
+  }
+
   return (
     <KeyboardAvoidingView style={styles.mainView}>
+      <View style={styles.customTopNav}>
+        <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+          <Fragment>
+            <Text style={styles.logoutText}>Logout</Text>
+            <Ionicons name='log-out-outline' size={30} color={COLORS.BLACK} />
+          </Fragment>
+        </TouchableOpacity>
+      </View>
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
         style={styles.scrollViewContainer}
@@ -72,6 +94,24 @@ const UserSelectTypeScreen = ({ navigation }) => {
 export default UserSelectTypeScreen
 
 const styles = StyleSheet.create({
+  customTopNav: {
+    marginTop: StatusBar.currentHeight + (Platform.OS == 'ios' ? 60 : 10),
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  logoutBtn: {
+    display: 'flex',
+    gap: 5,
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  logoutText: {
+    color: COLORS.BLACK,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM
+  },
   safeAreaView: {
     flex: 1
   },

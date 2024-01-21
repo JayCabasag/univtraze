@@ -345,7 +345,7 @@ module.exports = {
 
         delete results.password; // Password should not be send to the user
         return res.status(200).json({
-          ...results,
+          results,
         });
       });
     });
@@ -547,7 +547,8 @@ module.exports = {
           }
 
           return res.status(200).json({
-            ...results,
+            count: results.length,
+            results,
           });
         });
       }
@@ -566,7 +567,7 @@ module.exports = {
           }
 
           return res.status(200).json({
-            ...results,
+            results,
           });
         });
       }
@@ -584,7 +585,7 @@ module.exports = {
           }
 
           return res.status(200).json({
-            ...results,
+            results,
           });
         });
       }

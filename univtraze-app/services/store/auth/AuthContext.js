@@ -53,7 +53,6 @@ export const AuthContextProvider = ({ children }) => {
         const token = await getLocalStorageToken()
         const res = await genericGetRequest('users/verify', token)
         userToken = res.token
-
       } catch (e) {
         // Restoring token failed
       } finally {

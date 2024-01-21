@@ -27,11 +27,11 @@ import { useAuth } from '../services/store/auth/AuthContext'
 const IndexScreen = ({ navigation }) => {
   const { state: user, updateUserDetails } = useUser()
   const { state: auth } = useAuth()
-  
+
   const fullname = `${user?.details?.firstname ?? ''} ${user?.details?.lastname ?? ''}`
   const userId = user?.user?.id
-  const userToken =  auth?.userToken
-  
+  const userToken = auth?.userToken
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (!userId || !userToken) return
@@ -138,7 +138,6 @@ const IndexScreen = ({ navigation }) => {
         alert('Something went wrong... Please try again')
       })
   }
-
 
   useEffect(() => {
     const GetCovidUpdate = async () => {

@@ -9,7 +9,9 @@ import {
   Image,
   StatusBar,
   TouchableWithoutFeedback,
-  ImageBackground
+  ImageBackground,
+  TouchableOpacity,
+  ScrollView
 } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import base64 from 'base-64'
@@ -19,6 +21,7 @@ import { COLORS } from '../utils/app_constants'
 import BackIcon from '../assets/back-icon.png'
 import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'
+import { genericGetRequest } from '../services/api/genericGetRequest'
 
 export default function QrScannerScreen({ navigation, route }) {
   const { state: user } = useUser()
@@ -38,7 +41,7 @@ export default function QrScannerScreen({ navigation, route }) {
   const [modalVisible, setModalVisible] = useState(false)
 
   const askForCameraPermission = () => {
-    (async () => {
+    ;(async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync()
       setHasPermission(status === 'granted')
     })()
@@ -47,56 +50,20 @@ export default function QrScannerScreen({ navigation, route }) {
   // Request Camera Permission
   useEffect(() => {
     askForCameraPermission()
-    handleGetUserTemperature()
   }, [])
 
-  const handleGetUserTemperature = async () => {
-    const currentUserId = user?.user?.id
-    const token = auth?.userToken
-
-    let initialDateToday = new Date()
-    let finalDateToday = moment(initialDateToday).format('YYYY-MM-DD')
-
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
+  useEffect(() => {
+    if (!userToken || !userId) return
+    const getUserTempHistory = async () => {
+      try {
+        const res = await genericGetRequest(`temperature-history?user_id=${userId}`, auth.userToken)
+        console.log("Temperature ",res)
+      } catch (error) {
+        console.log(error)
+      }
     }
-
-    const data = {
-      user_id: currentUserId,
-      dateToday: finalDateToday
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/rooms/userTodaysTemperature`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0 && response.data.data === 'Not set') {
-          return setTemp('Not set')
-        }
-
-        if (success === 0) {
-          return setTemp('Not set')
-        }
-
-        if (success === 1) {
-          //setTemp(response.data.data.temperature)
-          if (response.data.data === undefined) {
-            return setTemp('Not set')
-          }
-
-          if (
-            response.data.data.temperature === undefined ||
-            response.data.data.temperature === null ||
-            response.data.data.temperature === ''
-          ) {
-            return setTemp('Not set')
-          }
-
-          setTemp(response.data.data.temperature)
-        }
-      })
-  }
+    getUserTempHistory()
+  }, [userToken, userId])
 
   // What happens when we scan the bar code
   const handleBarCodeScanned = ({ data }) => {
@@ -166,31 +133,12 @@ export default function QrScannerScreen({ navigation, route }) {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
       <View style={styles.topContainer}>
-        <View style={styles.backIcon}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.goBack()
-            }}
-          >
-            <ImageBackground
-              src={BackIcon}
-              resizeMode='contain'
-              style={styles.image}
-            ></ImageBackground>
-          </TouchableWithoutFeedback>
-        </View>
-
-        {/*bottom navigation for user settings  */}
-
-        {/*end of bottom navigation for user settings  */}
-
-        {/* start of botton sheet for notification */}
-
-        {/*end of botton sheet for notification */}
+       <TouchableOpacity onPress={navigation.goBack}>
+          <Image source={BackIcon} style={{ marginLeft: -15, width: 60, height: 60 }} />
+        </TouchableOpacity>
       </View>
-
       <Modal
         animationType='slide'
         transparent={true}
@@ -273,33 +221,36 @@ export default function QrScannerScreen({ navigation, route }) {
           </Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
     flex: 1,
+    backgroundColor: COLORS.SECONDARY
+  },
+  scrollViewContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#E1F5E4',
-    paddingHorizontal: 30,
+    backgroundColor: COLORS.SECONDARY
   },
   barCodeContainer: {
     flex: 1,
-    backgroundColor: '#E1F5E4',
+    backgroundColor: COLORS.SECONDARY,
     alignItems: 'center',
     marginTop: '30%'
   },
   topContainer: {
-    zIndex: 1,
+    paddingHorizontal: 25,
     width: '100%',
-    height: '15%',
+    height: 100,
+    justifyContent: 'space-between',
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0
+    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
   },
   backIcon: {
     height: 60,

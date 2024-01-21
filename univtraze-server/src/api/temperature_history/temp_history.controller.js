@@ -16,7 +16,8 @@ module.exports = {
         }
 
         return res.status(200).json({
-          ...results,
+          count: results.length,
+          results,
         });
       });
     }
@@ -29,7 +30,8 @@ module.exports = {
       }
 
       return res.status(200).json({
-        ...results,
+        count: results.length,
+        results,
       });
     });
   },
@@ -75,7 +77,7 @@ module.exports = {
                   });
                 }
                 return res.status(500).json({
-                  ...results,
+                  results,
                 });
             });
         })

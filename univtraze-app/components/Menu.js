@@ -17,16 +17,13 @@ import BottomSheet from './ui/BottomSheet'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 
-const Menu = ({
-  visible,
-  toggleBottomNavigationView,
-  navigation,
-}) => {
+const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
   const { signOut, auth } = useAuth()
   const { clearUser, state } = useUser()
   const [modalVisible, setModalVisible] = useState(false)
   const [dataToConvertToQr, setdataToConvertToQr] = useState('Invalid')
-  const initials = (state?.details?.firstname ?? '').charAt(0)+ (state?.details?.lastname ?? '').charAt(0)
+  const initials =
+    (state?.details?.firstname ?? '').charAt(0) + (state?.details?.lastname ?? '').charAt(0)
   const fullname = `${state?.details?.firstname ?? ''} ${state?.details?.lastname ?? ''}`
   const userId = state?.details?.id ?? ''
   const type = auth?.type ?? ''
@@ -163,14 +160,14 @@ const Menu = ({
             contentContainerStyle={styles.menuItemContentView}
           >
             <TouchableOpacity
-              onPress={() => onNavigate("index")}
+              onPress={() => onNavigate('index')}
               style={[styles.menuItemBtn, styles.menuItemBtnPrimary]}
             >
               <Ionicons name='grid-outline' size={25} color={COLORS.WHITE} />
               <Text style={styles.menuItemLabel}>Home</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => onNavigate("user-vaccine")}
+              onPress={() => onNavigate('user-vaccine')}
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='shield-outline' size={25} color={COLORS.BLACK} />
@@ -180,7 +177,7 @@ const Menu = ({
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => onNavigate("temperature-history")}
+              onPress={() => onNavigate('temperature-history')}
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='thermometer-outline' size={25} color={COLORS.BLACK} />
@@ -190,7 +187,7 @@ const Menu = ({
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => onNavigate("account-settings")}
+              onPress={() => onNavigate('account-settings')}
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='settings-outline' size={25} color={COLORS.BLACK} />
@@ -200,7 +197,7 @@ const Menu = ({
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => onNavigate("visited-rooms")}
+              onPress={() => onNavigate('visited-rooms')}
               style={[styles.menuItemBtn]}
             >
               <Ionicons name='walk-outline' size={25} color={COLORS.BLACK} />
@@ -242,7 +239,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 10
   },
-  modalUserDetailsContainer: { width: '75%', padding: 10, display: 'flex', justifyContent: 'center' },
+  modalUserDetailsContainer: {
+    width: '75%',
+    padding: 10,
+    display: 'flex',
+    justifyContent: 'center'
+  },
   fullNameText: {
     fontSize: 22,
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
