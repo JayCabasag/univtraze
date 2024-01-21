@@ -1,5 +1,6 @@
 import { useAsyncStorage } from '@react-native-async-storage/async-storage'
 import React, { createContext, useContext, useState } from 'react'
+import { genericGetRequest } from '../../api/genericGetRequest'
 
 const AuthContext = createContext()
 
@@ -50,6 +51,8 @@ export const AuthContextProvider = ({ children }) => {
       let userToken
       try {
         userToken = await getLocalStorageToken()
+        const res = await genericGetRequest('users/verify')
+        
       } catch (e) {
         // Restoring token failed
       } finally {

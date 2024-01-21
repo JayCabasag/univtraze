@@ -142,6 +142,33 @@ module.exports = {
       });
     });
   },
+  verifyUser: (req, res) => {
+    // Token id value
+    req.body.id = req.user.result.id;
+
+    getUserById(req.body.id, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Internal server error"
+        })
+      }
+      if (!results){
+        return res.status(404).json({
+          message: "User not found"
+        })
+      }
+      
+      const tokenPayload = { id: results.id, email: results.email };
+      const jsonToken = sign({ result: tokenPayload }, process.env.JSON_KEY, {
+        expiresIn: '7d',
+      });
+
+      return res.status(200).json({
+        user: { type: results.type, ...tokenPayload },
+        token: jsonToken
+      })
+    })
+  },
   getUsers: (req, res) => {
     getUsers((err, results) => {
       if (err) {

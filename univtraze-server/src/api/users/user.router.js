@@ -18,6 +18,7 @@ const {
   changePassword,
   deactivateAccount,
   updatePersonalInfo,
+  verifyUser,
 } = require('./user.controller');
 
 const router = require('express').Router();
@@ -25,6 +26,7 @@ const { checkToken } = require('../../auth/token_validator');
 
 router.post('/signup', createUser);
 router.post('/signin', signin);
+router.get('/verify', checkToken, verifyUser);
 router.get('/', checkToken, getUsers);
 router.get('/getAllUsers', checkToken, getAllUsers);
 router.get('/:userId', checkToken, getUserDetailsById);
