@@ -8,10 +8,12 @@ const {
   updateAdminPassword,
   checkIfPasswordMatched,
   updateAdminCredentials,
+  getAdminById,
 } = require('./admin.service');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
 var generator = require('generate-password');
+const schemas = require('../../utils/helpers/schemas');
 
 module.exports = {
   createAdmin: (req, res) => {
@@ -21,16 +23,13 @@ module.exports = {
 
     emailAdminCheck(body, (err, results) => {
       if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
+        return res.status(500).json({
+          message: 'Internal server error',
         });
       }
 
-      if (results.length !== 0) {
-        return res.json({
-          success: 0,
+      if (results.length > 0) {
+        return res.status(403).json({
           message: 'Email/Username already have an account',
         });
       }
@@ -38,54 +37,83 @@ module.exports = {
       createAdmin(body, (err, results) => {
         if (err) {
           console.log(err);
-          return res.json({
-            success: 0,
-            message: 'Database connection Error',
+          return res.status(500).json({
+            message: 'Internal server error',
           });
         }
 
-        return res.status(200).json({
-          success: 1,
-          data: results,
+        getAdminById(results.insertId, (error, results) => {
+          if (error) {
+            return res.status(500).json({
+              message: 'Internal server error',
+            });
+          }
+
+          if (!results) {
+            return res.status(403).json({
+              message: 'Admin does not exists',
+            });
+          }
+
+          delete results.password;
+          delete results.recovery_password;
+          delete results.recovery_timestamp;
+
+          const jsonToken = sign({ id: results.id, email: results.email }, process.env.JSON_KEY, {
+            expiresIn: '7d',
+          });
+
+          return res.status(200).json({
+            admin: { ...results },
+            token: jsonToken,
+          });
         });
       });
     });
   },
 
   loginAdmin: (req, res) => {
-    const body = req.body;
+    const { error } = schemas.loginAdminSchema.validate(req.body);
 
-    getAdminByEmail(body, (err, results) => {
+    if (error) {
+      return res.status(400).json({
+        message: 'Invalid payload',
+      });
+    }
+
+    getAdminByEmail(req.body, (err, results) => {
       if (err) {
-        console.log(err);
-        return;
+        return res.status(500).json({
+          message: 'Internal server error',
+        });
       }
+
       if (!results) {
-        return res.json({
-          success: 0,
+        return res.status(401).json({
           message: 'Incorrect Email or Password',
         });
       }
 
-      const result = compareSync(body.password, results.password);
+      const isPasswordMatch = compareSync(req.body.password, results.password);
 
-      if (result) {
-        result.password = undefined;
-        const jsonToken = sign({ result: results }, process.env.JSON_KEY, {
-          expiresIn: '7d',
-        });
-
-        return res.json({
-          success: 1,
-          message: 'Login successfully',
-          token: jsonToken,
-        });
-      } else {
-        return res.json({
-          success: 0,
+      if (!isPasswordMatch) {
+        return res.status(401).json({
           message: 'Incorrect Email or Password',
         });
       }
+
+      delete results.password;
+      delete results.recovery_password;
+      delete results.recovery_timestamp;
+
+      const jsonToken = sign({ id: results.id, email: results.email }, process.env.JSON_KEY, {
+        expiresIn: '7d',
+      });
+
+      return res.status(200).json({
+        admin: { ...results },
+        token: jsonToken,
+      });
     });
   },
   resetAdminPassword: (req, res) => {

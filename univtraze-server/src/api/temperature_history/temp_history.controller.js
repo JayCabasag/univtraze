@@ -44,43 +44,43 @@ module.exports = {
     }
 
     getUserById(req.body.user_id, (error, results) => {
+      if (error) {
+        return res.status(500).json({
+          message: 'Internal server error',
+        });
+      }
+
+      if (!results) {
+        return res.status(404).json({
+          message: 'User does not exists',
+        });
+      }
+
+      getRoomById(req.body.room_id, (error, results) => {
         if (error) {
-            return res.status(500).json({
-                message: "Internal server error"
-            })
+          return res.status(500).json({
+            message: 'Internal server error',
+          });
         }
 
         if (!results) {
-            return res.status(404).json({
-                message: "User does not exists"
-            })
+          return res.status(404).json({
+            message: 'Room not found',
+          });
         }
 
-        getRoomById(req.body.room_id, (error, results) => {
-            if (error) {
-                return res.status(500).json({
-                    message: "Internal server error"
-                })
-            }
-
-            if (!results) {
-                return res.status(404).json({
-                    message: "Room not found"
-                })
-            }
-
-            addTemperatureHistory(req.body, (error, results) => {
-                if (error) {
-                  console.log(error);
-                  return res.status(500).json({
-                    message: 'Internal server error',
-                  });
-                }
-                return res.status(500).json({
-                  results,
-                });
+        addTemperatureHistory(req.body, (error, results) => {
+          if (error) {
+            console.log(error);
+            return res.status(500).json({
+              message: 'Internal server error',
             });
-        })
-    })
+          }
+          return res.status(500).json({
+            results,
+          });
+        });
+      });
+    });
   },
 };

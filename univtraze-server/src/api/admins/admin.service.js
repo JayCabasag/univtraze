@@ -39,6 +39,15 @@ module.exports = {
     );
   },
 
+  getAdminById: (id, callBack) => {
+    pool.query(`SELECT * FROM admins WHERE id = ?`, [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results[0]);
+    });
+  },
+
   getAdminByEmail: (data, callBack) => {
     pool.query(
       `SELECT * FROM admins WHERE email = ? || username = ?`,

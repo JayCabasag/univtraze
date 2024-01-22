@@ -192,15 +192,11 @@ module.exports = {
     );
   },
   getRoomById: (id, callBack) => {
-    pool.query(
-      'SELECT * from rooms WHERE id = ?',
-      [id],
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results[0])
+    pool.query('SELECT * from rooms WHERE id = ?', [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
       }
-    )
-  }
+      return callBack(null, results[0]);
+    });
+  },
 };

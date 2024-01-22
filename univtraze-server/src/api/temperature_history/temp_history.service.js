@@ -11,12 +11,16 @@ module.exports = {
     });
   },
   getTempHistoryByUserId: (id, callBack) => {
-    pool.query(`SELECT * FROM temperature_history WHERE user_id = ? order by id desc`, [id], (error, results, fields) => {
-      if (error) {
-        return callBack(error);
-      }
-      return callBack(null, results);
-    });
+    pool.query(
+      `SELECT * FROM temperature_history WHERE user_id = ? order by id desc`,
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results);
+      },
+    );
   },
   addTemperatureHistory: (body, callBack) => {
     pool.query(
