@@ -17,6 +17,13 @@ const schemas = require('../../utils/helpers/schemas');
 
 module.exports = {
   createAdmin: (req, res) => {
+    const { error } = schemas.createAdminSchema.validate(req.body)
+
+    if (error) {
+      return res.status(400).json({
+        message: "Invalid payload"
+      })
+    }
     const body = req.body;
     const salt = genSaltSync(10);
     body.password = hashSync(body.password, salt);

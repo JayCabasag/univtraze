@@ -148,7 +148,15 @@ class Schemas {
   get loginAdminSchema() {
     return Joi.object({
       username: Joi.string().required(),
-      email: Joi.string().email().required(),
+      email: Joi.string().required(),
+      password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+    });
+  }
+
+  get createAdminSchema() {
+    return Joi.object({
+      username: Joi.string().required(),
+      email: Joi.string().required(),
       password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
     });
   }

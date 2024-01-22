@@ -13,7 +13,9 @@ function Breadcrumbs({ event, identifier, current }) {
         />
         <p className="breadcrumbs__identifier">
           {identifier}
-          <span className="breadcrumbs__active">{current.replace("/"," ").split("/").join(" / ")}</span>
+          <span className="breadcrumbs__active">
+            {current.replace('/', ' ').split('/').join(' / ')}
+          </span>
         </p>
       </div>
     </div>

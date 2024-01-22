@@ -182,7 +182,7 @@
   /* grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 17.3rem);
     grid-gap: 2rem;  */
-  grid-template-areas: "card-1 card-2 analytics" "card-3 card-4 analytics";
+  grid-template-areas: 'card-1 card-2 analytics' 'card-3 card-4 analytics';
   grid-gap: 2rem;
   grid-template-rows: repeat(2, 17.3rem);
   grid-template-columns: repeat(3, 1fr);
@@ -313,7 +313,8 @@
   font-weight: bold;
   color: #364d39;
 }
-.add-room__building-name, .add-room__room-name {
+.add-room__building-name,
+.add-room__room-name {
   font-size: 2.2rem;
   color: #364d39;
 }
@@ -1122,7 +1123,7 @@ th {
   /* grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 17.3rem);
     grid-gap: 2rem;  */
-  grid-template-areas: "card-1 card-2 analytics" "card-3 card-4 analytics";
+  grid-template-areas: 'card-1 card-2 analytics' 'card-3 card-4 analytics';
   grid-gap: 2rem;
   grid-template-rows: repeat(2, 17.3rem);
   grid-template-columns: repeat(3, 1fr);
@@ -1394,7 +1395,7 @@ th {
   /* grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 17.3rem);
     grid-gap: 2rem;  */
-  grid-template-areas: "card-1 card-2 analytics" "card-3 card-4 analytics";
+  grid-template-areas: 'card-1 card-2 analytics' 'card-3 card-4 analytics';
   grid-gap: 2rem;
   grid-template-rows: repeat(2, 17.3rem);
   grid-template-columns: repeat(3, 1fr);
@@ -2237,7 +2238,8 @@ th {
   font-weight: bold;
   color: #364d39;
 }
-.add-room__building-name, .add-room__room-name {
+.add-room__building-name,
+.add-room__room-name {
   font-size: 2.2rem;
   color: #364d39;
 }
@@ -2349,4 +2351,4 @@ th {
 .round {
   border-radius: 50%;
   font-size: 2rem;
-}/*# sourceMappingURL=main.css.map */
+} /*# sourceMappingURL=main.css.map */

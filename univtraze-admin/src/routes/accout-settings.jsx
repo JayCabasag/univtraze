@@ -24,7 +24,7 @@ export default function AccountSettingsPage() {
 
   // Clinic admin credentials previewer variables
   const [showPreviewer, setShowPreviewer] = useState(false);
-  
+
   const handleChangeAdminCredentials = async () => {
     if (validator.isEmpty(username)) {
       setSuccess(false);

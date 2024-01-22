@@ -136,67 +136,67 @@ export default function DiseaseReports() {
         <h2 className="covid-report">Disease Reports</h2>
         <div className="card-table">
           <div>
-          <table className="table-covid">
-            <thead>
-              <tr>
-                <th>Case No</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Mobile No</th>
-              </tr>
-            </thead>
+            <table className="table-covid">
+              <thead>
+                <tr>
+                  <th>Case No</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Mobile No</th>
+                </tr>
+              </thead>
 
-            <tbody>
-              {allCommunicableDisease.map(disease => {
-                return (
-                  <tr
-                    key={disease.id}
-                    onClick={() =>
-                      showData(
-                        disease.id,
-                        disease.user_id,
-                        disease.reportedDate,
-                        disease.information.email,
-                        disease.information.firstname +
-                          ' ' +
-                          disease.information.lastname,
-                        disease.userType,
-                      )
-                    }
-                  >
-                    <td> {disease.id} </td>
-                    <td>
-                      {disease.information === undefined
-                        ? null
-                        : disease.information.firstname}
-                      <span> </span>
-                      {disease.information === undefined
-                        ? null
-                        : disease.information.lastname}
-                    </td>
-                    <td>
-                      {disease.information === undefined
-                        ? null
-                        : disease.information.email}
-                    </td>
-                    <td>
-                      {disease.information === undefined
-                        ? null
-                        : disease.information.mobile_number}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <a href="#" class="pagination-btn previous round">
-              &#8249;
-            </a>
-            <a href="#" class="pagination-btn next round">
-              &#8250;
-            </a>
-          </div> 
+              <tbody>
+                {allCommunicableDisease.map(disease => {
+                  return (
+                    <tr
+                      key={disease.id}
+                      onClick={() =>
+                        showData(
+                          disease.id,
+                          disease.user_id,
+                          disease.reportedDate,
+                          disease.information.email,
+                          disease.information.firstname +
+                            ' ' +
+                            disease.information.lastname,
+                          disease.userType,
+                        )
+                      }
+                    >
+                      <td> {disease.id} </td>
+                      <td>
+                        {disease.information === undefined
+                          ? null
+                          : disease.information.firstname}
+                        <span> </span>
+                        {disease.information === undefined
+                          ? null
+                          : disease.information.lastname}
+                      </td>
+                      <td>
+                        {disease.information === undefined
+                          ? null
+                          : disease.information.email}
+                      </td>
+                      <td>
+                        {disease.information === undefined
+                          ? null
+                          : disease.information.mobile_number}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <a href="#" class="pagination-btn previous round">
+                &#8249;
+              </a>
+              <a href="#" class="pagination-btn next round">
+                &#8250;
+              </a>
+            </div>
           </div>
           <div className="card-details">
             <button

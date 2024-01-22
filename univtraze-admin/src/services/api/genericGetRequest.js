@@ -1,10 +1,10 @@
-import { API } from './api'
+import { API } from './api';
 
-export const genericGetRequest = async (url) => {
+export const genericGetRequest = async url => {
   try {
-    const response = await API.get(url)
-    return response.data
+    const response = await API.get(url);
+    return response.data;
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};

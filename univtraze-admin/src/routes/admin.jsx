@@ -11,16 +11,18 @@ export default function AdminPage() {
 
   const location = useLocation();
 
-  const isAdminRoute = location.pathname === "/admin"
+  const isAdminRoute = location.pathname === '/admin';
 
   return (
     <div className="dashboard">
       <Header />
-      {!isAdminRoute && <Breadcrumbs
-        event={handleGoBack}
-        identifier="Dashboard / "
-        current={location.pathname}
-      />}
+      {!isAdminRoute && (
+        <Breadcrumbs
+          event={handleGoBack}
+          identifier="Dashboard / "
+          current={location.pathname}
+        />
+      )}
       <Outlet />
     </div>
   );

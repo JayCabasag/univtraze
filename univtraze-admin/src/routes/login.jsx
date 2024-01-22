@@ -2,82 +2,68 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../App.css';
 import logoDark from '../assets/logo-full.png';
-import axios from 'axios';
 import { genericPostRequest } from '../services/api/genericPostRequest';
 
 function Login() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
-  const [pwd, setPwd] = useState('');
-  const [isPwd, setIsPwd] = useState(true);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(true);
 
-  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setsuccessMessage] = useState();
+  const [success, setSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const redir = () => {
-    navigate('/admin');
+  const handleInputChange = (e, setState) => {
+    setState(e.target.value);
   };
 
-  const login = async () => {
-    setIsLoading(true);
+  const togglePasswordVisibility = () => {
+    setShowPassword(prevShowPassword => !prevShowPassword);
+  };
+
+  const handleLogin = async () => {
+    setLoading(true);
     setError(false);
     setSuccess(false);
 
     try {
-    const payload = {
-      username: email,
-      email: email,
-      password: pwd,
-    };
-      const res = await genericPostRequest('admin/loginAdmin', payload)
-      console.log(res)
+      const payload = {
+        username: email,
+        email: email,
+        password: password,
+      };
+
+      const res = await genericPostRequest('admin/loginAdmin', payload);
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('admin', JSON.stringify(res.admin));
+
+      setError(false);
+      setErrorMessage('');
+      setSuccess(true);
+      setSuccessMessage('Login in Successfully');
+      setLoading(false);
+
+      navigate('/admin');
     } catch (error) {
-      console.log(error)
+      setError(true);
+      setErrorMessage(error.response.data?.message ?? 'Unknown error occured');
+      setSuccess(false);
+      setSuccessMessage('');
+    } finally {
+      setLoading(false);
     }
-
-    // await axios
-    //   .post('http://univtraze.herokuapp.com/api/admin/loginAdmin', data)
-    //   .then(res => {
-    //     if (res.data.success === 1) {
-    //       localStorage.setItem('token', res.data.token);
-
-    //       setError(false);
-    //       setErrorMessage('');
-    //       setSuccess(true);
-    //       setsuccessMessage('Login in Successfully');
-    //       setIsLoading(false);
-    //       redir();
-    //     } else {
-    //       setError(true);
-
-    //       setErrorMessage('Log in failed');
-    //       setSuccess(false);
-    //       setsuccessMessage('');
-    //       setIsLoading(false);
-    //     }
-    //   })
-    //   .catch(err => {
-    //     setError(true);
-    //     setErrorMessage('Network error');
-    //     setSuccess(false);
-    //     setsuccessMessage('');
-    //     setIsLoading(false);
-    //   });
-
-    // setIsLoading(false);
   };
 
   return (
     <div className="login-component">
       <div className="login-card__container">
-        {isLoading && <p className="loader">Logging you in...</p>}
+        {loading && <p className="loader">Logging you in...</p>}
         {error && <p className="loader--error">{errorMessage}</p>}
-        {success && <p className="loader--error">{successMessage}</p>}
+        {success && <p className="loader--success">{successMessage}</p>}
         <img src={logoDark} alt="" className="logo-dark" />
         <h3 className="login-card_title">Login</h3>
         <div className="login-card_form"></div>
@@ -87,31 +73,31 @@ function Login() {
             type="text"
             placeholder="Email or Username"
             className="form-input"
-            onChange={e => setEmail(e.target.value)}
+            onChange={e => handleInputChange(e, setEmail)}
           />
         </div>
         <div className="input-container">
           <p className="form-label">Password</p>
           <div className="password-container">
             <input
-              name="pwd"
+              name="password"
               placeholder="Password"
-              type={isPwd ? 'password' : 'text'}
-              value={pwd}
+              type={showPassword ? 'password' : 'text'}
+              value={password}
               className="form-input password-input"
-              onChange={e => setPwd(e.target.value)}
+              onChange={e => handleInputChange(e, setPassword)}
             />
 
             <button
               className="show-password"
-              onClick={() => setIsPwd(prevState => !prevState)}
+              onClick={togglePasswordVisibility}
             >
-              {isPwd ? 'Show' : 'Hide'}
+              {showPassword ? 'Show' : 'Hide'}
             </button>
           </div>
         </div>
 
-        <button className="btn-primary" onClick={login}>
+        <button className="btn-primary" onClick={handleLogin}>
           LOG IN
         </button>
 
