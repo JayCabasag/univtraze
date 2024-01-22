@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { Base64 } from 'js-base64';
 import axios from 'axios';
+import { genericPostRequest } from '../services/api/genericPostRequest';
 
 function AddRoom() {
   const navigate = useNavigate();
@@ -19,19 +20,16 @@ function AddRoom() {
 
   const [decodedBuildingData, setDecodedBuildingData] = useState([]);
 
-  // Error Handlers here
-
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const [generationError, setGenerationError] = useState('');
   const [generationErrorMessage, setGenerationErrorMessage] = useState('');
   const [generationLoading, setGenerationLoading] = useState(false);
-
   const [generationSuccess, setGenerationSuccess] = useState(false);
 
   const generateQr = () => {
-    if (roomNumber === '' || buildingName === '' || roomName === '') {
+    if (roomNumber == '' || buildingName == '' || roomName == '') {
       setError(true);
       setGenerationError(false);
       setErrorMessage('Some fields were empty');
@@ -47,7 +45,7 @@ function AddRoom() {
     const decodedBase64 = Base64.encode(JSON.stringify(data));
     setQrDataValue(decodedBase64);
 
-    var arrayData = JSON.parse(Base64.decode(decodedBase64));
+    const arrayData = JSON.parse(Base64.decode(decodedBase64));
     setDecodedBuildingData(arrayData);
 
     setShowGeneratedQr(true);
@@ -58,47 +56,31 @@ function AddRoom() {
     setGenerationErrorMessage('');
   };
 
-  const addRoom = () => {
+  const addRoom = async () => {
     setGenerationLoading(true);
     setGenerationError(false);
     setErrorMessage('');
     setGenerationSuccess(false);
 
-    const token = localStorage.getItem('token');
+    try {
+      const payload = {
+        room_number: roomNumber * 1,
+        building_name: buildingName,
+        room_name: roomName,
+      };
 
-    var data = {
-      room_number: Number(roomNumber),
-      building_name: buildingName,
-      room_name: roomName,
-    };
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    };
-
-    axios
-      .post('https://univtraze.herokuapp.com/api/rooms/addRoom', data, {
-        headers: headers,
-      })
-      .then(response => {
-        if (response.data.success === 0) {
-          setGenerationError(true);
-          setGenerationErrorMessage(response.data.message);
-          setGenerationSuccess(false);
-          setGenerationLoading(false);
-          return;
-        }
-
-        setGenerationError(false);
-        setGenerationLoading(false);
-        setError(false);
-        setGenerationSuccess(true);
-        setErrorMessage('');
-      })
-
-      .catch(error => {
-        console.log('Error ' + error);
-      });
+      const res = await genericPostRequest('rooms/addRoom', payload);
+      console.log(res);
+      setGenerationSuccess(true);
+      setError(false);
+      setErrorMessage('');
+    } catch (error) {
+      setError(false);
+      setGenerationError(true);
+      setErrorMessage(error.response.data.message ?? 'Unexpected error');
+    } finally {
+      setGenerationLoading(false);
+    }
   };
 
   return (
@@ -111,9 +93,7 @@ function AddRoom() {
             <input
               type="text"
               className="add-room__input"
-              onChange={e => {
-                setRoomNumber(e.target.value * 1);
-              }}
+              onChange={(e) => setRoomNumber(e.target.value * 1)}
             />
           </div>
           <div className="add-room__input-container">
@@ -121,9 +101,7 @@ function AddRoom() {
             <input
               type="text"
               className="add-room__input"
-              onChange={e => {
-                setBuildingName(e.target.value);
-              }}
+              onChange={(e) => setBuildingName(e.target.value)}
             />
           </div>
           <div className="add-room__input-container">
@@ -131,39 +109,33 @@ function AddRoom() {
             <input
               type="text"
               className="add-room__input"
-              onChange={e => {
-                setRoomName(e.target.value);
-              }}
+              onChange={(e) => setRoomName(e.target.value)}
             />
           </div>
-          '{error ? <p style={{ color: 'red' }}>{errorMessage}</p> : null}
-          <button
-            className="btn-primary"
-            onClick={() => {
-              generateQr();
-            }}
-          >
+          {error && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          <button className="btn-primary" onClick={generateQr}>
             Generate QR
           </button>
         </div>
         <div className="add-room__qr-container">
-          {generationError ? (
+          {generationError && (
             <h2 className="add-room__error">{generationErrorMessage}</h2>
-          ) : null}
+          )}
 
-          {generationLoading ? (
-            <h2 className="add-room__loading">Loading</h2>
-          ) : null}
+          {generationLoading && <h2 className="add-room__loading">Loading</h2>}
 
-          {generationSuccess ? (
-            <h2 className="add-room__loading">Room added succesfully</h2>
-          ) : null}
+          {generationSuccess && (
+            <h2 className="add-room__loading">Room added successfully</h2>
+          )}
 
           <div className="add-room__qr-info">
             <div className="add-room__qr">
-              {showGeneratedQr ? (
-                <QRCodeSVG className="add-room__qr-code" value={qrDataValue} />
-              ) : null}
+              {showGeneratedQr && (
+                <QRCodeSVG
+                  className="add-room__qr-code"
+                  value={qrDataValue}
+                />
+              )}
             </div>
             <div className="add-room__qr-details">
               <div className="add-room__text">
@@ -177,7 +149,7 @@ function AddRoom() {
                   {decodedBuildingData.roomName}
                 </h3>
               </div>
-              <button className="btn-primary" onClick={() => addRoom()}>
+              <button className="btn-primary" onClick={addRoom}>
                 Confirm
               </button>
             </div>

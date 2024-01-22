@@ -160,6 +160,14 @@ class Schemas {
       password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
     });
   }
+
+  get addRoomShema(){
+    return Joi.object({
+      room_number: Joi.number().required(),
+      building_name: Joi.string().required(),
+      room_name: Joi.string().required()
+    })
+  }
 }
 
 module.exports = new Schemas();

@@ -1,3 +1,4 @@
+const schemas = require('../../utils/helpers/schemas');
 const { getUserById } = require('../users/user.service');
 const {
   addRoom,
@@ -14,42 +15,55 @@ const {
   getStudentDetailsById,
   getVisitorDetailsById,
   addRoomVisitedNotificationToUser,
+  getRoomById,
 } = require('./room.service');
-
-const moment = require('moment');
 
 module.exports = {
   addRoom: (req, res) => {
+    const { error } = schemas.addRoomShema.validate(req.body)
+    if (error) {
+      return res.status(500).json({
+        message: "Invalid payload"
+      })
+    }
     body = req.body;
-
     checkIfRoomExists(body, (err, results) => {
       if (err) {
-        console.log(err);
-        return res.json({
-          success: 0,
-          message: 'Database connection Error',
+        return res.status(500).json({
+          message: "Internal server error",
         });
       }
+
       if (results.length > 0) {
-        return res.json({
-          success: 0,
+        return res.status(403).json({
           message: 'Room already Exist',
         });
       }
 
       addRoom(body, (err, results) => {
         if (err) {
-          console.log(err);
-          return res.json({
-            success: 0,
-            message: 'Database connection Error',
+          return res.status(500).json({
+            message: "Internal server error",
           });
         }
 
-        return res.status(200).json({
-          success: 1,
-          data: results,
-        });
+        getRoomById(results.insertId, (error, results) => {
+          if (error) {
+            return res.status(500).json({
+              message: "Internal server error"
+            })
+          }
+
+          if (!results) {
+            return res.status(404).json({
+              message: "Room not found"
+            })
+          }
+
+          return res.status(200).json({
+            room: results,
+          });
+        })
       });
     });
   },
@@ -59,7 +73,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: 'Database connection Error',
+          message: "Internal server error",
         });
       }
 
@@ -113,7 +127,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: 'Database connection Error',
+          message: "Internal server error",
         });
       }
 
@@ -155,7 +169,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: 'Database connection Error',
+          message: "Internal server error",
         });
       }
       return res.status(200).json({
@@ -172,7 +186,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: 'Database connection Error',
+          message: "Internal server error",
         });
       }
 
@@ -191,7 +205,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: 'Database connection Error',
+          message: "Internal server error",
         });
       }
 
@@ -223,7 +237,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: 'Database connection Error',
+          message: "Internal server error",
         });
       }
 

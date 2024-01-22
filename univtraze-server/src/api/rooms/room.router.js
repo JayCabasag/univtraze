@@ -4,7 +4,6 @@ const {
   addVisitedRoom,
   searchRoomNumber,
   userVisitedRooms,
-  addUserNotification,
   userTodaysTemperature,
   searchUsersByRoomId,
 } = require('./room.controller');
@@ -19,8 +18,5 @@ router.post('/searchUsersByRoomId', checkToken, searchUsersByRoomId);
 router.post('/userVisitedRooms', checkToken, userVisitedRooms);
 router.post('/userTemperatureHistory', checkToken, userVisitedRooms);
 router.post('/userTodaysTemperature', checkToken, userTodaysTemperature);
-
-searchUsersByRoomId;
-// router.post("/addUserNotification", checkToken, addUserNotification)
 
 module.exports = router;

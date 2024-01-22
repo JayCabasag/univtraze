@@ -44,7 +44,7 @@ const SignInScreen = ({ navigation }) => {
       return setFormErrors('email', 'Email is not valid.')
     }
     if (password == null || password == '') {
-      return setFormErrors('password', 'Password is not valid.')
+      return setFormErrors('password', 'Password is required.')
     }
 
     try {

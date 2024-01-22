@@ -3,7 +3,7 @@ const pool = require('../../config/database');
 module.exports = {
   checkIfRoomExists: (data, callBack) => {
     pool.query(
-      `SELECT id, room_number, building_name, room_name, createdAt, updatedAt FROM rooms WHERE room_number = ? AND building_name = ? AND room_name = ?`,
+      `SELECT * FROM rooms WHERE room_number = ? AND building_name = ? AND room_name = ?`,
       [data.room_number, data.building_name, data.room_name],
       (error, results, fields) => {
         if (error) {
