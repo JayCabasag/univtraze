@@ -277,7 +277,6 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         default:
           break
       }
-      console.log(url, payload)
       await genericPostRequest(url, payload, auth.userToken)
       isAddDetailsSuccess = true
     } catch (error) {

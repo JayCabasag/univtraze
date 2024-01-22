@@ -11,7 +11,6 @@ export const UserTemperaturesContextProvider = ({ children }) => {
     (prevState, action) => {
       switch (action.type) {
         case 'RESTORE_USER_TEMPERATURES':
-            console.log("HOWOWHOWOWHWOH", action.temperatures)
           return {
             ...prevState,
             temperatures: action.temperatures
@@ -51,9 +50,6 @@ export const UserTemperaturesContextProvider = ({ children }) => {
       }
       bootstrapAsync()
   }, [userId])
-  
-  console.log("THIS ISSSssssssasss", state)
-
   return (
     <UserTemperaturesContext.Provider value={{ temperatures: state.temperatures }}>
       {children}

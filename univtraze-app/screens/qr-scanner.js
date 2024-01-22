@@ -29,8 +29,6 @@ export default function QrScannerScreen({ navigation, route }) {
   const { temperatures } = useUserTemperatures()
   const userId = user?.user?.id
 
-  console.log("Temperatures", temperatures)
-
   const [hasPermission, setHasPermission] = useState(null)
   const [scanned, setScanned] = useState(false)
   const [text, setText] = useState('Not yet scanned')

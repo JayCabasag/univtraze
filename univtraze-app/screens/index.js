@@ -37,7 +37,7 @@ const IndexScreen = ({ navigation }) => {
       if (!userId || !userToken) return
       try {
         const res = await genericGetRequest(`users/${userId}`, userToken)
-        updateUserDetails({ details: res })
+        updateUserDetails({ details: res.results })
       } catch (error) {
         Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
           { text: 'OK', onPress: () => console.log('OK') }
