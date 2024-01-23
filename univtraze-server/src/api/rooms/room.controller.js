@@ -68,28 +68,50 @@ module.exports = {
       });
     });
   },
-  getRooms: (_req, res) => {
-    getRooms(async (err, results) => {
-      if (err) {
+  getRooms: (req, res) => {
+    const { search } = req.query
+    if (!search) {
+      return getRooms(async (err, results) => {
+        if (err) {
+          return res.status(500).json({
+            message: "Internal server error",
+          });
+        }
+  
+        getTotalRoomCount((error, countResult) => {
+          if (error) {
+            return res.status(500).json({
+              message: "Internal server error"
+            })
+          }
+  
+          return res.status(200).json({
+            total_rooms: countResult,
+            results,
+          });
+  
+        })
+      });
+    }
+
+    if (isNaN(search)) {
+      return res.status(400).json({
+        message: "Can only search Room Number"
+      })
+    }
+
+    searchRoomNumber(parseInt(search), (error, results) => {
+      if (error) {
         return res.status(500).json({
-          message: "Internal server error",
-        });
+          message: "Internal server error"
+        })
       }
 
-      getTotalRoomCount((error, countResult) => {
-        if (error) {
-          return res.status(500).json({
-            message: "Internal server error"
-          })
-        }
-
-        return res.status(200).json({
-          total_rooms: countResult,
-          results,
-        });
-
-      })
-    });
+      return res.status(200).json({
+        total_rooms: results.length,
+        results,
+      });
+    })
   },
 
   addVisitedRoom: (req, res) => {

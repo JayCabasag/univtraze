@@ -73,44 +73,51 @@ export default function Rooms() {
 
   const searchRoom = async roomNumber => {
     setNoResultsFound(false);
-    const room_number = Number(roomNumber);
     setSearchTerm(room_number);
-    if (room_number === 0) {
+    
+    if (isNaN(roomNumber )) {
       setNoResultsFound(false);
       return getAllRooms();
     }
 
-    const token = localStorage.getItem('token');
+    try {
+      const res = await genericGetRequest(`rooms?search=${roomNumber}`)
+      console.log(res)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      
+    }
 
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    };
+    // const token = localStorage.getItem('token');
 
-    const data = {
-      room_number: room_number,
-    };
+    // const headers = {
+    //   'Content-Type': 'application/json',
+    //   Authorization: `Bearer ${token}`,
+    // };
 
-    await axios
-      .post('https://univtraze.herokuapp.com/api/rooms/searchRoom', data, {
-        headers: headers,
-      })
-      .then(response => {
-        var returnArr = [];
-        returnArr.push(response.data.data);
-        setAllRooms(returnArr[0]);
+    // const data = {
+    //   room_number: room_number,
+    // };
 
-        if (returnArr[0].length === 0) {
-          setNoResultsFound(true);
-          return;
-        }
+    // await axios
+    //   .post('https://univtraze.herokuapp.com/api/rooms/searchRoom', data, {
+    //     headers: headers,
+    //   })
+    //   .then(response => {
+    //     var returnArr = [];
+    //     returnArr.push(response.data.data);
+    //     setAllRooms(returnArr[0]);
 
-        setNoResultsFound(false);
-      })
-
-      .catch(error => {
-        console.log('Error ' + error);
-      });
+    //     if (returnArr[0].length === 0) {
+    //       setNoResultsFound(true);
+    //       return;
+    //     }
+    //     setNoResultsFound(false);
+    //   })
+    //   .catch(error => {
+    //     console.log('Error ' + error);
+    //   });
   };
 
   const downloadQrCode = () => {

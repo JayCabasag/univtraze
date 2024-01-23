@@ -13,7 +13,6 @@ const { checkToken } = require('../../auth/token_validator');
 router.get('/', checkToken, getRooms);
 router.post('/addRoom', checkToken, addRoom);
 router.post('/addVisitedRoom', checkToken, addVisitedRoom);
-router.post('/searchRoom', checkToken, searchRoomNumber);
 router.post('/searchUsersByRoomId', checkToken, searchUsersByRoomId);
 router.post('/userVisitedRooms', checkToken, userVisitedRooms);
 router.post('/userTemperatureHistory', checkToken, userVisitedRooms);
