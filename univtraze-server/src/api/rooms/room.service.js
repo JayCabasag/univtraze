@@ -39,6 +39,19 @@ module.exports = {
     );
   },
 
+  getTotalRoomCount: (callBack) => {
+    pool.query(
+      `SELECT COUNT(id) as count FROM rooms;`,
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results[0].count);
+      },
+    );
+  },
+
+
   addVisitedRoom: (data, callBack) => {
     pool.query(
       `INSERT INTO room_visits(user_id, room_id, temperature) VALUES (?,?,?)`,
@@ -115,7 +128,7 @@ module.exports = {
 
   searchUsersByRoomId: (data, callBack) => {
     pool.query(
-      `SELECT * FROM room_visits WHERE room_id = ? and createdAt BETWEEN ? AND ?`,
+      `SELECT * FROM room_visits WHERE room_id = ? and created_at BETWEEN ? AND ?`,
       [data.id, data.start_date, data.end_date],
       (error, results, fields) => {
         if (error) {

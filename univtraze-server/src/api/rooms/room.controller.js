@@ -16,6 +16,7 @@ const {
   addRoomVisitedNotificationToUser,
   getRoomById,
   getRooms,
+  getTotalRoomCount,
 } = require('./room.service');
 
 module.exports = {
@@ -67,53 +68,27 @@ module.exports = {
       });
     });
   },
-  getRooms: (req, res) => {
+  getRooms: (_req, res) => {
     getRooms(async (err, results) => {
       if (err) {
-        console.log(err);
         return res.status(500).json({
           message: "Internal server error",
         });
       }
 
-      const queryResults = await Promise.all(
-        results.map(async (room) => {
-          var start_date = new Date();
-          start_date.setDate(start_date.getDate() - 1);
+      getTotalRoomCount((error, countResult) => {
+        if (error) {
+          return res.status(500).json({
+            message: "Internal server error"
+          })
+        }
 
-          room['start_date'] = start_date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
-          room['end_date'] = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+        return res.status(200).json({
+          total_rooms: countResult,
+          results,
+        });
 
-          return new Promise((resolve, reject) =>
-            searchUsersByRoomId(room, (err, results) => {
-              if (err) return reject(err);
-              else {
-                let returnIdArray = [];
-
-                results.map((user) => {
-                  return returnIdArray.push(user.user_id);
-                });
-
-                let finalReturnedId = [];
-                finalReturnedId.push(...new Set(returnIdArray));
-
-                return resolve({
-                  room_id: room.id,
-                  building_name: room.building_name,
-                  room_number: room.room_number,
-                  totalUserVisited: results.length,
-                  userVisited: results,
-                  userVisitedByIds: finalReturnedId,
-                });
-              }
-            }),
-          );
-        }),
-      );
-
-      return res.status(200).json({
-        results: queryResults,
-      });
+      })
     });
   },
 

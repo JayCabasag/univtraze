@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import validator from 'validator';
+import { genericPostRequest } from '../services/api/genericPostRequest';
 
 const AddClinicAdmin = () => {
   const navigate = useNavigate();
@@ -17,14 +18,11 @@ const AddClinicAdmin = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Clinic admin credentials previewer variables
-  const [showPreviewer, setShowPreviewer] = useState(false);
-
-  const admin = () => {
-    navigate('/admin');
-  };
-
   const handleRegisterClinicAdmin = async () => {
+    setSuccess(false);
+    setError(false);
+    setIsLoading(true);
+
     if (validator.isEmpty(username)) {
       setSuccess(false);
       setSuccessMessage('');
@@ -64,25 +62,9 @@ const AddClinicAdmin = () => {
       return;
     }
 
-    const token = localStorage.getItem('token');
-
-    var data = {
-      username: username,
-      email: username,
-      password: password,
-    };
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    };
-
-    setSuccess(false);
-    setError(false);
-    setIsLoading(true);
-
     await axios
       .post(
-        'https://univtraze.herokuapp.com/api/clinic/createClinicAdmin',
+        `${import.meta.env.VITE_BASE_URL}clinic/createClinicAdmin`,
         data,
         {
           headers: headers,
