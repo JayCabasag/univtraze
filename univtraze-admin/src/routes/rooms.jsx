@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import QRCode from 'qrcode.react';
 import { Base64 } from 'js-base64';
-import axios from 'axios';
 import { genericGetRequest } from '../services/api/genericGetRequest';
+import useDebounce from '../hooks/useDebounce';
+import { useCallback } from 'react';
 
 export default function Rooms() {
+  const [isSearching, setIsSearching] = useState(false)
   const [allRooms, setAllRooms] = useState([]);
   const [isLoadingRooms, setIsLoadingRooms] = useState(false)
+  const [currentBuildingName, setCurrentBuildingName] = useState('');
+  const [currentRoomId, setCurrentRoomId] = useState(null);
+  const [currentRoomNumber, setCurrentRoomNumber] = useState('');
+  const [currentRoomName, setCurrentRoomName] = useState('');
+  const [showQrCode, setshowQrCode] = useState(false);
+  const [decodedCodeForQr, setDecodedCodeForQr] = useState('');
+  const [noResultsFound, setNoResultsFound] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState(0);
   useEffect(() => {
     getAllRooms();
   }, []);
@@ -24,23 +33,27 @@ export default function Rooms() {
       setIsLoadingRooms(false)
     }
   };
-
-  const navigate = useNavigate();
-
-  const admin = () => {
-    navigate('/admin');
-  };
-
-  const [currentBuildingName, setCurrentBuildingName] =
-    useState('Sample sample');
-  const [currentRoomId, setCurrentRoomId] = useState(null);
-  const [currentRoomNumber, setCurrentRoomNumber] = useState('Sample sample');
-  const [currentRoomName, setCurrentRoomName] = useState('Sample');
-  const [showQrCode, setshowQrCode] = useState(false);
-  const [decodedCodeForQr, setDecodedCodeForQr] = useState('');
-  const [noResultsFound, setNoResultsFound] = useState(false);
-
-  const [searchTerm, setSearchTerm] = useState(0);
+  const debouncedSearchRoom = useDebounce(searchTerm, 1000)
+  useEffect(() => {
+    const searchRoom = async (roomNumber) => {
+      setNoResultsFound(false);
+      setSearchTerm(roomNumber);
+      if (isNaN(roomNumber) || roomNumber == '') return
+      try {
+        setIsLoadingRooms(true)
+        const res = await genericGetRequest(`rooms?search=${roomNumber}`)
+        if (res["total_rooms"] <= 0){
+          setNoResultsFound(true);
+        }
+        setAllRooms(res?.results ?? [])
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoadingRooms(false)
+      }
+    };
+    searchRoom(debouncedSearchRoom)
+  }, [debouncedSearchRoom])
 
   const viewQrCode = async (room) => {
     setCurrentBuildingName(room.building_name);
@@ -54,7 +67,6 @@ export default function Rooms() {
         room.id,
     );
     setshowQrCode(true);
-
   };
 
   const decodeToBase64Qr = (roomNumber, buildingName, roomName, roomId) => {
@@ -69,55 +81,6 @@ export default function Rooms() {
 
     setDecodedCodeForQr(initialDecodedB64);
     setshowQrCode(true);
-  };
-
-  const searchRoom = async roomNumber => {
-    setNoResultsFound(false);
-    setSearchTerm(room_number);
-    
-    if (isNaN(roomNumber )) {
-      setNoResultsFound(false);
-      return getAllRooms();
-    }
-
-    try {
-      const res = await genericGetRequest(`rooms?search=${roomNumber}`)
-      console.log(res)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      
-    }
-
-    // const token = localStorage.getItem('token');
-
-    // const headers = {
-    //   'Content-Type': 'application/json',
-    //   Authorization: `Bearer ${token}`,
-    // };
-
-    // const data = {
-    //   room_number: room_number,
-    // };
-
-    // await axios
-    //   .post('https://univtraze.herokuapp.com/api/rooms/searchRoom', data, {
-    //     headers: headers,
-    //   })
-    //   .then(response => {
-    //     var returnArr = [];
-    //     returnArr.push(response.data.data);
-    //     setAllRooms(returnArr[0]);
-
-    //     if (returnArr[0].length === 0) {
-    //       setNoResultsFound(true);
-    //       return;
-    //     }
-    //     setNoResultsFound(false);
-    //   })
-    //   .catch(error => {
-    //     console.log('Error ' + error);
-    //   });
   };
 
   const downloadQrCode = () => {
@@ -142,9 +105,7 @@ export default function Rooms() {
             type="text"
             className="search"
             placeholder="Search"
-            onChange={e => {
-              searchRoom(e.target.value * 1);
-            }}
+            onChange={e => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
