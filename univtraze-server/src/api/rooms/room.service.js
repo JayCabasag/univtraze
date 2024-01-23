@@ -27,9 +27,9 @@ module.exports = {
     );
   },
 
-  getAllRooms: (callBack) => {
+  getRooms: (callBack) => {
     pool.query(
-      `SELECT id, room_number, building_name, room_name, createdAt, updatedAt FROM rooms WHERE 1`,
+      `SELECT * FROM rooms WHERE 1`,
       (error, results, fields) => {
         if (error) {
           return callBack(error);

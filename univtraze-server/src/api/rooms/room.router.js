@@ -1,17 +1,17 @@
 const {
   addRoom,
-  getAllRooms,
   addVisitedRoom,
   searchRoomNumber,
   userVisitedRooms,
   userTodaysTemperature,
   searchUsersByRoomId,
+  getRooms,
 } = require('./room.controller');
 const router = require('express').Router();
 const { checkToken } = require('../../auth/token_validator');
 
+router.get('/', checkToken, getRooms);
 router.post('/addRoom', checkToken, addRoom);
-router.get('/allRooms', checkToken, getAllRooms);
 router.post('/addVisitedRoom', checkToken, addVisitedRoom);
 router.post('/searchRoom', checkToken, searchRoomNumber);
 router.post('/searchUsersByRoomId', checkToken, searchUsersByRoomId);

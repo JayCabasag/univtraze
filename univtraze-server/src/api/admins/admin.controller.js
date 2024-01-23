@@ -16,7 +16,7 @@ var generator = require('generate-password');
 const schemas = require('../../utils/helpers/schemas');
 
 module.exports = {
-  createAdmin: (req, res) => {
+  signUpAdmin: (req, res) => {
     const { error } = schemas.createAdminSchema.validate(req.body)
 
     if (error) {
@@ -79,7 +79,7 @@ module.exports = {
     });
   },
 
-  loginAdmin: (req, res) => {
+  signInAdmin: (req, res) => {
     const { error } = schemas.loginAdminSchema.validate(req.body);
 
     if (error) {

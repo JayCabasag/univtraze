@@ -7,7 +7,6 @@ const {
   checkIfRoomExists,
   searchRoomNumber,
   userVisitedRooms,
-  addUserNotification,
   userTodaysTemperature,
   searchUsersByRoomId,
   searchRoomsViaDateAndId,
@@ -16,6 +15,7 @@ const {
   getVisitorDetailsById,
   addRoomVisitedNotificationToUser,
   getRoomById,
+  getRooms,
 } = require('./room.service');
 
 module.exports = {
@@ -67,12 +67,11 @@ module.exports = {
       });
     });
   },
-  getAllRooms: (req, res) => {
-    getAllRooms(async (err, results) => {
+  getRooms: (req, res) => {
+    getRooms(async (err, results) => {
       if (err) {
         console.log(err);
-        return res.json({
-          success: 0,
+        return res.status(500).json({
           message: "Internal server error",
         });
       }
@@ -113,8 +112,7 @@ module.exports = {
       );
 
       return res.status(200).json({
-        success: 1,
-        data: queryResults,
+        results: queryResults,
       });
     });
   },
