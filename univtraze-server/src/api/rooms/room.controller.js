@@ -21,17 +21,17 @@ const {
 
 module.exports = {
   addRoom: (req, res) => {
-    const { error } = schemas.addRoomShema.validate(req.body)
+    const { error } = schemas.addRoomShema.validate(req.body);
     if (error) {
       return res.status(500).json({
-        message: "Invalid payload"
-      })
+        message: 'Invalid payload',
+      });
     }
     body = req.body;
     checkIfRoomExists(body, (err, results) => {
       if (err) {
         return res.status(500).json({
-          message: "Internal server error",
+          message: 'Internal server error',
         });
       }
 
@@ -44,74 +44,73 @@ module.exports = {
       addRoom(body, (err, results) => {
         if (err) {
           return res.status(500).json({
-            message: "Internal server error",
+            message: 'Internal server error',
           });
         }
 
         getRoomById(results.insertId, (error, results) => {
           if (error) {
             return res.status(500).json({
-              message: "Internal server error"
-            })
+              message: 'Internal server error',
+            });
           }
 
           if (!results) {
             return res.status(404).json({
-              message: "Room not found"
-            })
+              message: 'Room not found',
+            });
           }
 
           return res.status(200).json({
             room: results,
           });
-        })
+        });
       });
     });
   },
   getRooms: (req, res) => {
-    const { search } = req.query
+    const { search } = req.query;
     if (!search) {
       return getRooms(async (err, results) => {
         if (err) {
           return res.status(500).json({
-            message: "Internal server error",
+            message: 'Internal server error',
           });
         }
-  
+
         getTotalRoomCount((error, countResult) => {
           if (error) {
             return res.status(500).json({
-              message: "Internal server error"
-            })
+              message: 'Internal server error',
+            });
           }
-  
+
           return res.status(200).json({
             total_rooms: countResult,
             results,
           });
-  
-        })
+        });
       });
     }
 
     if (isNaN(search)) {
       return res.status(400).json({
-        message: "Can only search Room Number"
-      })
+        message: 'Can only search Room Number',
+      });
     }
 
     searchRoomNumber(parseInt(search), (error, results) => {
       if (error) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
 
       return res.status(200).json({
         total_rooms: results.length,
         results,
       });
-    })
+    });
   },
 
   addVisitedRoom: (req, res) => {
@@ -122,7 +121,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: "Internal server error",
+          message: 'Internal server error',
         });
       }
 
@@ -164,7 +163,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: "Internal server error",
+          message: 'Internal server error',
         });
       }
       return res.status(200).json({
@@ -181,7 +180,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: "Internal server error",
+          message: 'Internal server error',
         });
       }
 
@@ -200,7 +199,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: "Internal server error",
+          message: 'Internal server error',
         });
       }
 
@@ -232,7 +231,7 @@ module.exports = {
         console.log(err);
         return res.json({
           success: 0,
-          message: "Internal server error",
+          message: 'Internal server error',
         });
       }
 

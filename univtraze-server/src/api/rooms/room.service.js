@@ -28,29 +28,22 @@ module.exports = {
   },
 
   getRooms: (callBack) => {
-    pool.query(
-      `SELECT * FROM rooms WHERE 1`,
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results);
-      },
-    );
+    pool.query(`SELECT * FROM rooms WHERE 1`, (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    });
   },
 
   getTotalRoomCount: (callBack) => {
-    pool.query(
-      `SELECT COUNT(id) as count FROM rooms;`,
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results[0].count);
-      },
-    );
+    pool.query(`SELECT COUNT(id) as count FROM rooms;`, (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results[0].count);
+    });
   },
-
 
   addVisitedRoom: (data, callBack) => {
     pool.query(
@@ -75,16 +68,12 @@ module.exports = {
   },
 
   searchRoomNumber: (id, callBack) => {
-    pool.query(
-      `SELECT * FROM rooms WHERE room_number = ?`,
-      [id],
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results);
-      },
-    );
+    pool.query(`SELECT * FROM rooms WHERE room_number = ?`, [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    });
   },
 
   userVisitedRooms: (data, callBack) => {

@@ -161,12 +161,20 @@ class Schemas {
     });
   }
 
-  get addRoomShema(){
+  get addRoomShema() {
     return Joi.object({
       room_number: Joi.number().required(),
       building_name: Joi.string().required(),
-      room_name: Joi.string().required()
-    })
+      room_name: Joi.string().required(),
+    });
+  }
+
+  get addVisitedRoomSchema() {
+    return Joi.object({
+      user_id: Joi.number().required(),
+      room_id: Joi.number().required(),
+      temperature: Joi.any().required(),
+    });
   }
 }
 

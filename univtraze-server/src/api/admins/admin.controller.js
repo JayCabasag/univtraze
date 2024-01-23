@@ -17,12 +17,12 @@ const schemas = require('../../utils/helpers/schemas');
 
 module.exports = {
   signUpAdmin: (req, res) => {
-    const { error } = schemas.createAdminSchema.validate(req.body)
+    const { error } = schemas.createAdminSchema.validate(req.body);
 
     if (error) {
       return res.status(400).json({
-        message: "Invalid payload"
-      })
+        message: 'Invalid payload',
+      });
     }
     const body = req.body;
     const salt = genSaltSync(10);
