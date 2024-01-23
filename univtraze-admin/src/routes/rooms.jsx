@@ -3,41 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import QRCode from 'qrcode.react';
 import { Base64 } from 'js-base64';
 import axios from 'axios';
+import { genericGetRequest } from '../services/api/genericGetRequest';
 
 export default function Rooms() {
   const [allRooms, setAllRooms] = useState([]);
+  const [isLoadingRooms, setIsLoadingRooms] = useState(false)
 
   useEffect(() => {
     getAllRooms();
   }, []);
 
   const getAllRooms = async () => {
-    const token = localStorage.getItem('token');
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    };
-
-    await axios
-      .get('http://univtraze.herokuapp.com/api/rooms/allRooms', {
-        headers: headers,
-      })
-      .then(response => {
-        var returnArr = [];
-        returnArr.push(response.data.data);
-        setAllRooms(returnArr[0]);
-
-        if (returnArr[0].length === 0) {
-          setNoResultsFound(true);
-        } else {
-          setNoResultsFound(false);
-        }
-      })
-
-      .catch(error => {
-        console.log('Error ' + error);
-      });
+    try {
+      setIsLoadingRooms(true)
+      const res = await genericGetRequest('rooms')
+      setAllRooms(res?.results ?? [])
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoadingRooms(false)
+    }
   };
 
   const navigate = useNavigate();
@@ -57,25 +42,19 @@ export default function Rooms() {
 
   const [searchTerm, setSearchTerm] = useState(0);
 
-  const viewQrCode = async roomId => {
-    allRooms.map(room => {
-      if (room.room_id !== roomId) {
-        return;
-      }
-
-      setCurrentBuildingName(room.building_name);
-      setCurrentRoomNumber(room.room_number);
-      setCurrentRoomName(room.room_name);
-      setCurrentRoomId(room.room_id);
-      decodeToBase64Qr(
+  const viewQrCode = async (room) => {
+    setCurrentBuildingName(room.building_name);
+    setCurrentRoomNumber(room.room_number);
+    setCurrentRoomName(room.room_name);
+    setCurrentRoomId(room.id);
+    decodeToBase64Qr(
         room.room_number,
         room.building_name,
         room.room_name,
-        room.room_id,
-      );
-    });
-
+        room.id,
+    );
     setshowQrCode(true);
+
   };
 
   const decodeToBase64Qr = (roomNumber, buildingName, roomName, roomId) => {
@@ -176,39 +155,31 @@ export default function Rooms() {
                 </div>
                 <button
                   className="btn-primary btn-primary--rooms"
-                  onClick={() => viewQrCode(room.room_id)}
+                  onClick={() => viewQrCode(room)}
                 >
                   View QR code
                 </button>
               </div>
             );
           })}
-
-          {noResultsFound ? (
-            <p className="rooms-container__no-result">No results found</p>
-          ) : null}
+          {noResultsFound && <p className="rooms-container__no-result">No results found</p>}
         </div>
         <div className="rooms-container__qr-container">
           <div className="rooms-container__qr-details">
             <div className="rooms-container__box">
-              {showQrCode ? (
+              {showQrCode && (
                 <QRCode
                   id="qr-gen"
                   className="view-room__qr-code"
                   value={decodedCodeForQr}
                   size={130}
                 />
-              ) : null}
+              )}
             </div>
             <p className="rooms-container__build-name">{currentBuildingName}</p>
             <p className="rooms-container__room-number">{currentRoomNumber}</p>
             <p className="rooms-container__room-name">{currentRoomName}</p>
-            <button
-              className="btn-rooms"
-              onClick={() => {
-                downloadQrCode();
-              }}
-            >
+            <button className="btn-rooms" onClick={downloadQrCode} >
               print QR code
             </button>
           </div>

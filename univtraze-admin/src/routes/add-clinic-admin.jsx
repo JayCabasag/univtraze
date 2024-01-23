@@ -59,7 +59,7 @@ const AddClinicAdmin = () => {
       setSuccessMessage('');
       setError(true);
       setErrorMessage('Confirmed password did not match');
-      return;
+      return; 
     }
 
     await axios
