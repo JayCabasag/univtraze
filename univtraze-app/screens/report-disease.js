@@ -1,10 +1,8 @@
 import {
   StyleSheet,
-  StatusBar,
   Text,
   View,
   ImageBackground,
-  Pressable,
   Image,
   Modal,
   TextInput,
@@ -14,20 +12,25 @@ import {
   ActivityIndicator
 } from 'react-native'
 import { RadioButton } from 'react-native-paper'
-import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React, { useState } from 'react'
 import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
 import BackIcon from '../assets/back-icon.png'
 import { COLORS } from '../utils/app_constants'
+import { useUser } from '../services/store/user/UserContext'
+import { useAuth } from '../services/store/auth/AuthContext'
+import useFormErrors from '../hooks/useFormErrors'
 
-const ReportDiseaseScreen = ({
-  navigation,
-  route: {
-    params: { id, type }
-  }
-}) => {
+const ReportDiseaseScreen = ({ navigation}) => {
   // Notifications Variables
+  const { state: user } = useUser()
+  const { state: auth } = useAuth()
+
+  // Error
+  const { formErrors, resetFormErrors, setFormErrors } = useFormErrors([
+    "diseaseName",
+    "documentProofPhoto"
+  ])
 
   //end Notifications Variables
   const [isChecked, setIsChecked] = useState('')
@@ -43,10 +46,6 @@ const ReportDiseaseScreen = ({
 
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState('Please wait...')
-
-  //Error Handler variables
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
 
   const pickDocumentForProofDoc = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -173,14 +172,6 @@ const ReportDiseaseScreen = ({
             ></ImageBackground>
           </TouchableWithoutFeedback>
         </View>
-
-        {/*bottom navigation for user settings  */}
-
-        {/*end of bottom navigation for user settings  */}
-
-        {/* start of botton sheet for notification */}
-
-        {/*end of botton sheet for notification */}
       </View>
       {/*End  Notification View */}
       <View style={styles.bodyContainer}>

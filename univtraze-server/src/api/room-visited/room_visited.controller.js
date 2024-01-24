@@ -59,8 +59,8 @@ module.exports = {
               });
             }
 
-            delete userResult.password
-            delete userResult.provider
+            delete userResult.password;
+            delete userResult.provider;
             return res.status(200).json({
               user: userResult,
               room: roomResult,

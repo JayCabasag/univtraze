@@ -176,6 +176,14 @@ class Schemas {
       temperature: Joi.any().required(),
     });
   }
+
+  get addDiseaseCaseSchema() {
+    return Joi.object({
+      case_number: Joi.string().required(),
+      disease_name: Joi.string().required(),
+      document_proof_image: Joi.string().required(),
+    });
+  }
 }
 
 module.exports = new Schemas();
