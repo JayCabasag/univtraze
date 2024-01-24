@@ -36,19 +36,19 @@ export const UserTemperaturesContextProvider = ({ children }) => {
     if (!userId) return
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
-        let temperatures = [];
-        try {
-            const res = await genericGetRequest(`temperature-history?user_id=${userId}`)
-            temperatures = res.results
-            console.log(res)
-        } catch (e) {
-          // Restoring token failed
-        } finally {
-          // Final
-        }
-        dispatch({ type: 'RESTORE_USER_TEMPERATURES', temperatures })
+      let temperatures = []
+      try {
+        const res = await genericGetRequest(`temperature-history?user_id=${userId}`)
+        temperatures = res.results
+        console.log(res)
+      } catch (e) {
+        // Restoring token failed
+      } finally {
+        // Final
       }
-      bootstrapAsync()
+      dispatch({ type: 'RESTORE_USER_TEMPERATURES', temperatures })
+    }
+    bootstrapAsync()
   }, [userId])
   return (
     <UserTemperaturesContext.Provider value={{ temperatures: state.temperatures }}>

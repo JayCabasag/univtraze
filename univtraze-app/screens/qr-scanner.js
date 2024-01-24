@@ -8,21 +8,18 @@ import {
   Pressable,
   Image,
   StatusBar,
-  TouchableWithoutFeedback,
-  ImageBackground,
   TouchableOpacity,
   ScrollView
 } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import base64 from 'base-64'
-import axios from 'axios'
-import moment from 'moment'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import BackIcon from '../assets/back-icon.png'
 import { useUser } from '../services/store/user/UserContext'
-import { useAuth } from '../services/store/auth/AuthContext'
-import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
+import { genericPostRequest } from '../services/api/genericPostRequest'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import MovingForwardImage from './../assets/moving_forward.png'
 
 export default function QrScannerScreen({ navigation, route }) {
   const { state: user } = useUser()
@@ -84,6 +81,11 @@ export default function QrScannerScreen({ navigation, route }) {
     )
   }
 
+  const scanAgain = () => {
+    setModalVisible(false)
+    setScanned(false)
+  }
+
   const cancelScanning = () => {
     setModalVisible(!modalVisible)
     return navigation.goBack()
@@ -91,32 +93,19 @@ export default function QrScannerScreen({ navigation, route }) {
 
   const confirmScanning = async (currentRoomId) => {
     setModalVisible(!modalVisible)
-    const token = route.params.token
-
-    //Axios data starts here to add the room visited
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
+    try {
+      const payload = {
+        user_id: userId,
+        room_id: currentRoomId,
+        temperature: temp
+      }
+      const res = await genericPostRequest('room-visited', payload)
+      console.log(res)
+      alert('Scanned Succesfully')
+      return navigation.goBack()
+    } catch (error) {
+      return alert('Please try again')
     }
-
-    const data = {
-      user_id: userId,
-      room_id: currentRoomId,
-      temp: temp
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/rooms/addVisitedRoom`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return alert('Please try again')
-        }
-        alert('Scanned Succesfully')
-        return navigation.goBack()
-      })
-
-    //Axios data here to add a notification
   }
 
   return (
@@ -136,40 +125,16 @@ export default function QrScannerScreen({ navigation, route }) {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Pressable
-              onPress={() => {
-                setModalVisible(false), setScanned(false)
-              }}
-            >
-              <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
-                <Image
-                  source={{
-                    uri: 'https://firebasestorage.googleapis.com/v0/b/univtrazeapp.appspot.com/o/icons8-close-30.png?alt=media&token=a98c28bd-4319-479e-a085-cfc119f4974f'
-                  }}
-                  resizeMode='cover'
-                  style={{
-                    width: 20,
-                    height: 20,
-                    borderRadius: 100,
-                    borderColor: '#EEEEEE',
-                    shadowColor: 'black'
-                  }}
-                />
-              </View>
-            </Pressable>
+            <View style={styles.closeBtnContainer}>
+              <TouchableOpacity onPress={scanAgain}>
+                <Ionicons name='close' size={32}/>
+              </TouchableOpacity>
+            </View>
             <View style={{ alignItems: 'center', flexDirection: 'column' }}>
               <Image
-                source={{
-                  uri: 'https://media.istockphoto.com/vectors/door-icon-logo-isolated-on-white-background-vector-id1186732582?k=20&m=1186732582&s=612x612&w=0&h=gyg9mDl4WxlJ-vsiwFS_GoNktffrpWO8dk9DAmNK3ds='
-                }}
+                source={MovingForwardImage}
                 resizeMode='cover'
-                style={{
-                  width: 150,
-                  height: 150,
-                  borderRadius: 100,
-                  borderColor: '#EEEEEE',
-                  shadowColor: 'black'
-                }}
+                style={styles.modalViewImage}
               />
             </View>
 
@@ -177,7 +142,7 @@ export default function QrScannerScreen({ navigation, route }) {
               Confirm visiting room {roomNumber} of {buildingName}?
             </Text>
             <View style={{ flexDirection: 'row' }}>
-              <Pressable style={styles.cancelButton} onPress={() => cancelScanning()}>
+              <Pressable style={styles.cancelButton} onPress={cancelScanning}>
                 <Text style={styles.textStyleCancel}>Cancel</Text>
               </Pressable>
 
@@ -285,10 +250,9 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: '90%',
-    margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -297,6 +261,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5
+  },
+  closeBtnContainer: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
   },
   cancelButton: {
     borderRadius: 10,
@@ -319,16 +289,26 @@ const styles = StyleSheet.create({
 
   textStyle: {
     color: 'white',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     textAlign: 'center'
   },
   textStyleCancel: {
     color: '#364339',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     textAlign: 'center'
   },
-
+  modalViewImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 100,
+    borderColor: '#EEEEEE',
+    shadowColor: 'black'
+  },
   modalText: {
     fontSize: 22,
     marginBottom: 45,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    color: COLORS.PRIMARY
   }
 })
