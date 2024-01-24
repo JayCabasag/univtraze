@@ -127,15 +127,11 @@ export default function QrScannerScreen({ navigation, route }) {
           <View style={styles.modalView}>
             <View style={styles.closeBtnContainer}>
               <TouchableOpacity onPress={scanAgain}>
-                <Ionicons name='close' size={32}/>
+                <Ionicons name='close' size={32} />
               </TouchableOpacity>
             </View>
             <View style={{ alignItems: 'center', flexDirection: 'column' }}>
-              <Image
-                source={MovingForwardImage}
-                resizeMode='cover'
-                style={styles.modalViewImage}
-              />
+              <Image source={MovingForwardImage} resizeMode='cover' style={styles.modalViewImage} />
             </View>
 
             <Text style={styles.modalText}>
