@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Platform,
   KeyboardAvoidingView,
+  StatusBar,
   Alert
 } from 'react-native'
 import { RadioButton } from 'react-native-paper'
@@ -73,7 +74,7 @@ const ReportDiseaseScreen = ({ navigation }) => {
 
   const onSubmit = async () => {
     resetFormErrors()
-    if (diseaseName == null || diseaseName == ''){
+    if (diseaseName == null || diseaseName == '') {
       return setFormErrors('diseaseName', 'Disease name is required')
     }
     if (!diseaseName == 'Others' && (diseaseName == null || diseaseName == '')) {
@@ -97,11 +98,13 @@ const ReportDiseaseScreen = ({ navigation }) => {
         document_proof_image: docProofImage
       }
       const res = await genericPostRequest('disease-cases', payload, auth.userToken)
-      console.log(res)
+      Alert.alert('Success', 'Disease reported successfully', [
+        { text: 'OK', onPress: navigation.goBack }
+      ])
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
         { text: 'OK', onPress: () => console.log('OK') }
-      ]) 
+      ])
     } finally {
       setShowLoadingModal(false)
     }

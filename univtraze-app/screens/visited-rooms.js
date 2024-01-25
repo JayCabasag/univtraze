@@ -2,14 +2,13 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
-  StatusBar,
   TouchableWithoutFeedback,
   ImageBackground,
   ScrollView,
   Dimensions,
   Alert
 } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'

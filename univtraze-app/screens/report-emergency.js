@@ -5,37 +5,23 @@ import {
   StatusBar,
   Text,
   View,
-  ImageBackground,
-  Pressable,
   Image,
-  Modal,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   ScrollView,
-  ActivityIndicator
+  KeyboardAvoidingView
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker'
 import BackIcon from '../assets/back-icon.png'
-import { COLORS } from '../utils/app_constants'
-
-const menu_jpg = {
-  uri: 'https://firebasestorage.googleapis.com/v0/b/fir-phoneauth-74be7.appspot.com/o/menu.png?alt=media&token=e20ee94a-4632-467a-841c-c66659a2a3df'
-}
-
-const UselessTextInput = (props) => {
-  return (
-    <TextInput
-      {...props} // Inherit any props passed to it; e.g., multiline, numberOfLines below
-      editable
-    />
-  )
-}
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import LoadingModal from '../components/LoadingModal'
 
 const ReportEmergencyScreen = ({ navigation }) => {
-  const [textArea, onChangeTextArea] = React.useState('')
+  const [textArea, onChangeDescription] = React.useState('')
+  const [patientName, setPatientName] = useState('')
+  const [roomNumber, setRoomNumber] = useState(null)
+
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState([])
   const [items, setItems] = useState([
@@ -58,16 +44,9 @@ const ReportEmergencyScreen = ({ navigation }) => {
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingModalMessage, setLoadingModalMessage] = useState('Please wait...')
   // variables for user inputs
-
-  const [patientName, setPatientName] = useState('')
-  const [medicalCondition, setMedicalCondition] = useState([])
-  const [description, setDescription] = useState('')
-  const [roomNumber, setRoomNumber] = useState(0)
-
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
-  const [successMessage, setSuccessMessage] = useState('')
   const [loading, setLoading] = useState(false)
   //End of user input variables
 
@@ -81,7 +60,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
     setNotifVisible(!notifVisible)
   }
 
-  const submitEmergencyReport = async () => {
+  const onSubmit = async () => {
     const currentPatientName = patientName
     const currentMedicalCondition = value
     const currentConditionDescription = textArea
@@ -233,182 +212,120 @@ const ReportEmergencyScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Modal
-        animationType='fade'
-        transparent={true}
-        visible={showLoadingModal}
-        onRequestClose={() => {
-          setShowLoadingModal(!showLoadingModal)
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ActivityIndicator size={'large'} />
-            <Text style={styles.modalText}>{loadingModalMessage}</Text>
-          </View>
+    <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
+      <ScrollView contentContainerStyle={styles.scrollViewContentStyle} style={styles.scrollView}>
+        <LoadingModal
+          onRequestClose={() => setShowLoadingModal(false)}
+          open={showLoadingModal}
+          loadingMessage={loadingModalMessage}
+        />
+        <View style={styles.topContainer}>
+          <TouchableOpacity onPress={navigation.goBack}>
+            <Image source={BackIcon} style={{ marginLeft: -15, width: 60, height: 60 }} />
+          </TouchableOpacity>
         </View>
-      </Modal>
 
-      {/* Notification View */}
-      <View style={styles.topContainer}>
-        <View style={styles.backIcon}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.goBack()
-            }}
-          >
-            <ImageBackground
-              src={BackIcon}
-              resizeMode='contain'
-              style={styles.image}
-            ></ImageBackground>
-          </TouchableWithoutFeedback>
+        <Text style={styles.headerText}>Report Emergency</Text>
+
+        <View style={{ paddingVertical: 5 }}>
+          <Text style={styles.bodyText}>
+            Report an individual who has contracted a communicable disease.
+          </Text>
         </View>
-      </View>
-      {/*End  Notification View */}
-      {/* Body Container */}
-      <Text
-        style={{
-          height: 'auto',
-          fontSize: 28,
-          color: COLORS.TEXT_BLACK,
-          fontWeight: '700',
-          marginHorizontal: 40,
-          padding: 10
-        }}
-      >
-        Emergency {'\n'}Report
-      </Text>
-      <ScrollView showsVerticalScrollIndicator={false}>
+
         <View style={styles.bodyContainer}>
-          <View style={styles.formContainer}>
-            <Text>Patient Name</Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(e) => {
-                setPatientName(e)
-              }}
-              value={patientName}
-              placeholder='e.g John Doe'
-            />
+          <Text style={styles.label}>Patient Name</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(e) => {
+              setPatientName(e)
+            }}
+            value={patientName}
+            placeholder='e.g John Doe'
+          />
 
-            <Text style={{ marginTop: 20 }}>Medical condition</Text>
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              theme='LIGHT'
-              multiple={true}
-              mode='BADGE'
-              listMode='SCROLLVIEW'
-              badgeDotColors={[
-                '#e76f51',
-                '#00b4d8',
-                '#e9c46a',
-                '##25cf41',
-                '#8ac926',
-                '#2536cf',
-                '#d11f99'
-              ]}
-              style={{ borderColor: '#28CD4199' }}
-            />
+          <Text style={styles.label}>Medical condition</Text>
+          <DropDownPicker
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            theme='LIGHT'
+            multiple={true}
+            mode='BADGE'
+            listMode='SCROLLVIEW'
+            badgeDotColors={[
+              '#e76f51',
+              '#00b4d8',
+              '#e9c46a',
+              '##25cf41',
+              '#8ac926',
+              '#2536cf',
+              '#d11f99'
+            ]}
+            style={{ borderColor: COLORS.PRIMARY }}
+          />
 
-            <Text style={{ marginTop: 20 }}>Description</Text>
+          <Text style={styles.label}>Description</Text>
+          <TextInput
+            multiline={true}
+            numberOfLines={4}
+            onChangeText={(textArea) => onChangeDescription(textArea)}
+            value={textArea}
+            style={styles.textAreaInput}
+            placeholder='Condition description...'
+          />
 
-            <TextInput
-              multiline={true}
-              numberOfLines={4}
-              onChangeText={(textArea) => onChangeTextArea(textArea)}
-              value={textArea}
-              style={styles.inputss}
-              placeholder='Condition description...'
-            />
-
-            <Text style={{ marginTop: 20 }}>Room Number </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={(e) => {
-                setRoomNumber(e)
-              }}
-              value={roomNumber}
-              placeholder='e.g 401'
-            />
-            {success ? (
-              <Text
-                style={{
-                  paddingVertical: 10,
-                  color: '#28CD4199'
-                }}
-              >
-                Reported Successfully
-              </Text>
-            ) : null}
-
-            {loading ? (
-              <Text
-                style={{
-                  paddingVertical: 10,
-                  color: '#28CD4199'
-                }}
-              >
-                Please wait..
-              </Text>
-            ) : null}
-
-            {error ? (
-              <Text
-                style={{
-                  paddingVertical: 10,
-                  color: 'red'
-                }}
-              >
-                {errorMessage}
-              </Text>
-            ) : null}
-
-            <TouchableOpacity
-              style={{
-                width: 'auto',
-                height: 60,
-                backgroundColor: COLORS.PRIMARY,
-                borderRadius: 10,
-                marginTop: 10,
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-              onPress={() => {
-                submitEmergencyReport()
-              }}
-            >
-              <Text style={{ color: 'white', fontSize: 16, fontWeight: '700' }}>SUBMIT</Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.label}>Room Number </Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setRoomNumber}
+            value={roomNumber}
+            placeholder='e.g 401'
+          />
+          {success && (
+            <Text style={{ paddingVertical: 10, color: '#28CD4199' }}>Reported Successfully</Text>
+          )}
+          {loading && (
+            <Text style={{ paddingVertical: 10, color: '#28CD4199' }}> Please wait..</Text>
+          )}
+          {error && <Text style={{ paddingVertical: 10, color: 'red' }}>{errorMessage}</Text>}
         </View>
       </ScrollView>
-    </View>
+      <View style={styles.actionBtnContainer}>
+        <TouchableOpacity onPress={onSubmit} style={styles.submitBtn}>
+          <Text style={styles.submitButtonText}>Submit</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 export default ReportEmergencyScreen
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#E1F5E4',
-    height: '100%'
+  keyboardAvoidingView: {
+    flex: 1,
+    backgroundColor: '#E1F5E4'
+  },
+  scrollView: {
+    flex: 1,
+    backgroundColor: '#E1F5E4'
+  },
+  scrollViewContentStyle: {
+    paddingHorizontal: 30,
+    paddingBottom: 20
   },
   topContainer: {
-    zIndex: 1,
     width: '100%',
-    height: '15%',
+    height: 100,
+    justifyContent: 'space-between',
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 40
+    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
   },
-
   backIcon: {
     height: 75,
     width: 75,
@@ -416,11 +333,17 @@ const styles = StyleSheet.create({
     marginLeft: -15,
     justifyContent: 'center'
   },
-  menuLogo: {
-    height: '50%',
-    width: '20%',
-    justifyContent: 'center',
-    alignItems: 'center'
+  headerText: {
+    height: 'auto',
+    fontSize: 28,
+    color: COLORS.TEXT_BLACK,
+    fontWeight: '700',
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
+  },
+  bodyText: {
+    marginTop: 10,
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
   centeredView: {
     flex: 1,
@@ -475,22 +398,52 @@ const styles = StyleSheet.create({
   bodyContainer: {
     width: 'auto',
     height: '100%',
-    marginBottom: 50,
-    marginHorizontal: 48
+    marginBottom: 20
   },
-  formContainer: {
-    width: 'auto',
-    height: '90%'
+  label: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK,
+    marginTop: 10
+  },
+  inputWrapper: {
+    width: '100%',
+    alignItems: 'center',
+    borderRadius: 15,
+    marginBottom: 15
   },
   input: {
-    height: 40,
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
+    height: 50,
+    borderColor: COLORS.PRIMARY,
+    paddingHorizontal: 15,
     borderWidth: 1,
-    borderRadius: 10,
-    borderColor: '#28CD4199',
-    backgroundColor: '#FFFFFF',
-    padding: 10
+    borderRadius: 5,
+    overflow: 'hidden',
+    paddingVertical: 1,
+    fontSize: 14,
+    color: '#4d7861',
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
-  inputss: {
+  errorText: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
+  },
+  inputError: {
+    borderColor: COLORS.RED
+  },
+  textAreaInput: {
     height: 120,
     borderWidth: 1,
     borderRadius: 10,
@@ -499,5 +452,40 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'flex-start',
     textAlignVertical: 'top'
+  },
+  actionBtnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingBottom: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 30,
+    width: '100%'
+  },
+  submitBtn: {
+    marginBottom: 10,
+    backgroundColor: COLORS.PRIMARY,
+    padding: 10,
+    borderRadius: 10,
+    width: '100%',
+    marginTop: 5,
+    paddingVertical: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3
+  },
+  submitButtonText: {
+    color: '#FFF',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center',
+    textTransform: 'uppercase'
   }
 })

@@ -61,7 +61,7 @@ export default function MainNavigation({ onLayoutView }) {
                 <MainStack.Screen name='qr-scanner' component={QrScannerScreen} />
                 <MainStack.Screen name='visited-rooms' component={VisitedRoomsScreen} />
                 <MainStack.Screen name='daily-assessment' component={DailyAssessmentScreen} />
-                <MainStack.Screen name='report-emergecy' component={ReportEmergencyScreen} />
+                <MainStack.Screen name='report-emergency' component={ReportEmergencyScreen} />
                 <MainStack.Screen name='report-disease' component={ReportDiseaseScreen} />
                 <MainStack.Screen name='temperature-history' component={TemperatureHistoryScreen} />
                 <MainStack.Screen name='reset-password' component={ResetPasswordScreen} />

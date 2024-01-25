@@ -5,7 +5,6 @@ import {
   View,
   ImageBackground,
   TouchableOpacity,
-  StatusBar
 } from 'react-native'
 import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
