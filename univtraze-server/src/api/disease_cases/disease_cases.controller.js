@@ -10,7 +10,7 @@ module.exports = {
         message: 'Invalid payload',
       });
     }
-    req.body.user_id = req.user.id;
+    req.body.user_id = req.user.result.id;
 
     getUserById(req.body.user_id, (error, userResults) => {
       if (error) {

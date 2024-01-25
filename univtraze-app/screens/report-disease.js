@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Platform,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from 'react-native'
 import { RadioButton } from 'react-native-paper'
 import React, { Fragment, useState } from 'react'
@@ -22,28 +23,26 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import useFormErrors from '../hooks/useFormErrors'
 import { uploadImageAsync } from '../utils/helpers'
 import LoadingModal from '../components/LoadingModal'
+import { genericPostRequest } from '../services/api/genericPostRequest'
 
 const ReportDiseaseScreen = ({ navigation }) => {
   // Notifications Variables
   const { state: user } = useUser()
   const { state: auth } = useAuth()
 
+  const [isChecked, setIsChecked] = useState('')
+  const [diseaseName, setDiseaseName] = useState(null)
+  const [otherDiseaseName, setOtherDiseaseName] = useState('')
+  const [caseNumber, setCaseNumber] = useState('')
+  const [docProofImage, setDocProofImage] = useState(null)
+  const [isUploadingDocProfImage, setIsUploadingDocProfImage] = useState(false)
+
   // Error
   const { formErrors, resetFormErrors, setFormErrors } = useFormErrors([
     'diseaseName',
-    'documentProofPhoto'
+    'docProofImage',
+    'otherDiseaseName'
   ])
-
-  //end Notifications Variables
-  const [isChecked, setIsChecked] = useState('')
-  const [token, setToken] = useState('')
-
-  //Variables for data
-  const [proofDoc, setProofDoc] = useState(null)
-  const [selectedDisease, setSelectedDisease] = useState('')
-  const [otherDiseaseName, setOtherDiseaseName] = useState('')
-  const [docProofImage, setDocProofImage] = useState(null)
-  const [isUploadingDocProfImage, setIsUploadingDocProfImage] = useState(false)
 
   //Variables for loading
   const [showLoadingModal, setShowLoadingModal] = useState(false)
@@ -53,6 +52,7 @@ const ReportDiseaseScreen = ({ navigation }) => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
+      aspect: [6, 4],
       base64: true,
       quality: 1
     })
@@ -71,75 +71,40 @@ const ReportDiseaseScreen = ({ navigation }) => {
     }
   }
 
-  const handleSubmitReportDisease = async () => {
-    // if (isChecked === '') {
-    //   return alert('Please select a disease to report')
-    // }
-    // if (proofDoc === null) {
-    //   return alert('Please select ad a supporting document')
-    // }
-    // if (isChecked === 'Others') {
-    //   if (otherDiseaseName === '') {
-    //     return alert('Please input disease name')
-    //   }
-    //   setSelectedDisease(otherDiseaseName)
-    //   return handleUploadData(token, base64ProofDoc, otherDiseaseName)
-    // }
-    // handleUploadData(token, base64ProofDoc, selectedDisease)
-  }
+  const onSubmit = async () => {
+    resetFormErrors()
+    if (diseaseName == null || diseaseName == ''){
+      return setFormErrors('diseaseName', 'Disease name is required')
+    }
+    if (!diseaseName == 'Others' && (diseaseName == null || diseaseName == '')) {
+      return setFormErrors('diseaseName', 'Disease name is required')
+    }
+    if (diseaseName == 'Others' && (otherDiseaseName == null || otherDiseaseName == '')) {
+      return setFormErrors('otherDiseaseName', 'Disease name is required')
+    }
+    if (caseNumber == null || caseNumber == '') {
+      return setFormErrors('caseNumber', 'Case number is required')
+    }
+    if (docProofImage == null) {
+      return setFormErrors('docProofImage', 'Supporting documents is required')
+    }
 
-  const handleUploadData = async (token, base64ProofDoc, selectedDisease) => {
-    // var proofDocUrl = ''
-    // setShowLoadingModal(true)
-    // setLoadingMessage('Please wait while uploading your document.')
-    // await axios
-    //   .post('https://univtraze.herokuapp.com/api/files/uploadUserBase64Image', {
-    //     image: base64ProofDoc
-    //   })
-    //   .then(function (response) {
-    //     proofDocUrl = response.data.results.url
-    //     setLoadingMessage('Uploading profile document completed...')
-    //   })
-    //   .catch(function (error) {
-    //     alert('Error occured while uploading your profile photo')
-    //   })
-    // setShowLoadingModal(false)
-    // // console.log(proofDocUrl)
-    // submitDataToDatabase(token, id, type, selectedDisease, proofDocUrl)
-  }
-
-  const submitDataToDatabase = async (token, id, type, disease_name, proofDocUrl) => {
-    // setShowLoadingModal(true)
-    // setLoadingMessage('Please wait while finalizing your report.')
-    // const config = {
-    //   headers: { Authorization: `Bearer ${token}` }
-    // }
-    // const data = {
-    //   user_id: id,
-    //   type: type,
-    //   disease_name: disease_name,
-    //   document_proof_image: proofDocUrl
-    // }
-    // await axios
-    //   .post(
-    //     `https://univtraze.herokuapp.com/api/covid_cases/addCommunicableDiseaseCase`,
-    //     data,
-    //     config
-    //   )
-    //   .then((response) => {
-    //     const success = response.data.success
-    //     if (success === 0) {
-    //       return alert('Please try again later : ' + response.data.message)
-    //     }
-    //     setShowLoadingModal(false)
-    //     setLoadingMessage('Submitted Successfully.')
-    //     alert('Reported disease successfully')
-    //     navigation.goBack()
-    //   })
-  }
-
-  const onSubmit = () => {
-    console.log('Submit')
+    try {
+      setShowLoadingModal(true)
+      const payload = {
+        disease_name: diseaseName == 'Others' ? otherDiseaseName : diseaseName,
+        case_number: caseNumber,
+        document_proof_image: docProofImage
+      }
+      const res = await genericPostRequest('disease-cases', payload, auth.userToken)
+      console.log(res)
+    } catch (error) {
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ]) 
+    } finally {
+      setShowLoadingModal(false)
+    }
   }
 
   return (
@@ -186,7 +151,7 @@ const ReportDiseaseScreen = ({ navigation }) => {
               status={isChecked === 'Covid-19' ? 'checked' : 'unchecked'}
               onPress={() => {
                 setIsChecked('Covid-19')
-                setSelectedDisease('Covid-19')
+                setDiseaseName('Covid-19')
               }}
             />
             <Text style={styles.radioLabel}>Covid-19</Text>
@@ -204,12 +169,11 @@ const ReportDiseaseScreen = ({ navigation }) => {
               status={isChecked === 'Monkey Pox' ? 'checked' : 'unchecked'}
               onPress={() => {
                 setIsChecked('Monkey Pox')
-                setSelectedDisease('Monkey Pox')
+                setDiseaseName('Monkey Pox')
               }}
             />
             <Text style={styles.radioLabel}>Monkey Pox</Text>
           </View>
-
           <View
             style={{
               flexDirection: 'row',
@@ -223,7 +187,7 @@ const ReportDiseaseScreen = ({ navigation }) => {
               status={isChecked === 'Tuberculosis' ? 'checked' : 'unchecked'}
               onPress={() => {
                 setIsChecked('Tuberculosis')
-                setSelectedDisease('Tuberculosis')
+                setDiseaseName('Tuberculosis')
               }}
             />
             <Text style={styles.radioLabel}>Tuberculosis</Text>
@@ -240,33 +204,43 @@ const ReportDiseaseScreen = ({ navigation }) => {
               color={COLORS.PRIMARY}
               value='Others'
               status={isChecked === 'Others' ? 'checked' : 'unchecked'}
-              onPress={() => setIsChecked('Others')}
+              onPress={() => {
+                setIsChecked('Others')
+                setDiseaseName('Others')
+              }}
             />
             <Text style={styles.radioLabel}>Others : </Text>
           </View>
-
-          {isChecked === 'Others' && (
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'column',
-                alignItems: 'center',
-                paddingVertical: 5
-              }}
-            >
-              <View style={{ width: '95%', justifyContent: 'center', alignItems: 'center' }}>
-                <TextInput
-                  defaultValue={otherDiseaseName}
-                  style={styles.caseNumberInput}
-                  placeholder='Disease name'
-                  onChangeText={(text) => {
-                    setOtherDiseaseName(text)
-                  }}
-                />
-              </View>
+          {formErrors.diseaseName?.hasError && (
+            <Text style={styles.errorText}>{formErrors?.diseaseName?.message}</Text>
+          )}
+          {isChecked == 'Others' && (
+            <View style={[styles.inputWrapper]}>
+              <Text style={styles.label}>Other disease name (Please specify)</Text>
+              <TextInput
+                placeholder='Other disease name'
+                value={otherDiseaseName}
+                onChangeText={setOtherDiseaseName}
+                style={[styles.input, formErrors.otherDiseaseName?.hasError && styles.inputError]}
+              />
+              {formErrors.otherDiseaseName?.hasError && (
+                <Text style={styles.errorText}>{formErrors.otherDiseaseName.message}</Text>
+              )}
             </View>
           )}
-          <Text style={styles.sectionHeaderText}>Document proof </Text>
+          <Text style={styles.sectionHeaderText}>Upload document photo</Text>
+          <View style={[styles.inputWrapper]}>
+            <Text style={styles.label}>Case number</Text>
+            <TextInput
+              placeholder='e.g 1002HH3'
+              value={caseNumber}
+              onChangeText={setCaseNumber}
+              style={[styles.input, formErrors.caseNumber?.hasError && styles.inputError]}
+            />
+            {formErrors.caseNumber?.hasError && (
+              <Text style={styles.errorText}>{formErrors.caseNumber.message}</Text>
+            )}
+          </View>
           <View
             style={[
               styles.uploadIdContainer,
@@ -446,10 +420,11 @@ const styles = StyleSheet.create({
     height: 50,
     width: '100%',
     borderColor: COLORS.PRIMARY,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
     borderWidth: 1,
     borderRadius: 10,
     paddingVertical: 1,
-    fontSize: 16,
+    fontSize: 14,
     color: '#4d7861',
     backgroundColor: '#ffff',
     paddingLeft: 10
@@ -612,5 +587,48 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     textTransform: 'uppercase'
+  },
+  label: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK,
+    marginTop: 10
+  },
+  inputWrapper: {
+    width: '100%',
+    alignItems: 'center',
+    borderRadius: 15,
+    marginBottom: 15
+  },
+  input: {
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
+    height: 50,
+    borderColor: COLORS.PRIMARY,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    overflow: 'hidden',
+    paddingVertical: 1,
+    fontSize: 14,
+    color: '#4d7861',
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
+  },
+  errorText: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
+  },
+  inputError: {
+    borderColor: COLORS.RED
   }
 })
