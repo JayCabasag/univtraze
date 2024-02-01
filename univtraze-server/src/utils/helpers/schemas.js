@@ -191,7 +191,7 @@ class Schemas {
       patient_name: Joi.string().required(), 
       symptoms: Joi.string().required(), 
       description: Joi.string().required(), 
-      room_id: Joi.number().required()
+      room_id: Joi.number().required().allow(null)
     });
   }
 }
