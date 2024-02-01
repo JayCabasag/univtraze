@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  ImageBackground,
-  TouchableOpacity,
-} from 'react-native'
+import { StyleSheet, Text, Image, View, ImageBackground, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import WelcomeImgBackground from '../assets/welcome-bg.png'

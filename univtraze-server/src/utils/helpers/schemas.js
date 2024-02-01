@@ -184,6 +184,16 @@ class Schemas {
       document_proof_image: Joi.string().required(),
     });
   }
+
+  get createEmergencyReportSchema(){
+    return Joi.object({
+      reported_by: Joi.number().required(), 
+      patient_name: Joi.string().required(), 
+      symptoms: Joi.string().required(), 
+      description: Joi.string().required(), 
+      room_id: Joi.number().required()
+    });
+  }
 }
 
 module.exports = new Schemas();

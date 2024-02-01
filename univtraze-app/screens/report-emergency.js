@@ -1,4 +1,3 @@
-import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import {
   StyleSheet,
@@ -16,14 +15,20 @@ import DropDownPicker from 'react-native-dropdown-picker'
 import BackIcon from '../assets/back-icon.png'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
+import { useAuth } from '../services/store/auth/AuthContext'
+import { useUser } from '../services/store/user/UserContext'
+import useFormErrors from '../hooks/useFormErrors'
+import { genericPostRequest } from '../services/api/genericPostRequest'
 
 const ReportEmergencyScreen = ({ navigation }) => {
-  const [textArea, onChangeDescription] = React.useState('')
+  const { state: auth } = useAuth()
+  const { state: user } = useUser()
+
+  const [description, onChangeDescription] = React.useState('')
   const [patientName, setPatientName] = useState('')
   const [roomNumber, setRoomNumber] = useState(null)
-
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState([])
+  const [symptoms, setSymptoms] = useState([])
   const [items, setItems] = useState([
     { label: 'Fever', value: 'Fever' },
     { label: 'Cough or Colds', value: 'Cough or Colds' },
@@ -34,181 +39,196 @@ const ReportEmergencyScreen = ({ navigation }) => {
     { label: 'Breathing difficulties', value: 'Breathing difficulties' }
   ])
 
-  const [visible, setVisible] = useState(true)
-  const [notifVisible, setNotifVisible] = useState(false)
-
-  const [token, setToken] = useState('')
   const [currentUserId, setCurrentUserId] = useState(null)
 
   //Loading modal Variables
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [loadingModalMessage, setLoadingModalMessage] = useState('Please wait...')
-  // variables for user inputs
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [success, setSuccess] = useState(false)
-  const [loading, setLoading] = useState(false)
   //End of user input variables
 
-  const toggleBottomNavigationView = () => {
-    //Toggling the visibility state of the bottom sheet
-    setVisible(!visible)
-  }
+  // const onSubmit = async () => {
+  //   const currentPatientName = patientName
+  //   const currentMedicalCondition = value
+  //   const currentConditionDescription = textArea
+  //   const currentRoomNumber = roomNumber
 
-  const toggleNotifNavigationView = () => {
-    //Toggling the visibility state of the bottom sheet
-    setNotifVisible(!notifVisible)
-  }
+  //   setLoading(true)
+
+  //   if (currentPatientName === '') {
+  //     setLoading(false)
+  //     setError(true)
+  //     setErrorMessage('Please provide the patient name')
+
+  //     setTimeout(() => {
+  //       setError(false)
+  //       setErrorMessage('')
+  //       setSuccess(false)
+  //       setLoading(false)
+  //     }, 3000)
+
+  //     return
+  //   }
+
+  //   if (currentMedicalCondition.length === 0) {
+  //     setLoading(false)
+  //     setError(true)
+  //     setErrorMessage('Please select medical condition')
+
+  //     setTimeout(() => {
+  //       setError(false)
+  //       setErrorMessage('')
+  //       setSuccess(false)
+  //       setLoading(false)
+  //     }, 3000)
+
+  //     return
+  //   }
+
+  //   if (currentConditionDescription === '') {
+  //     setLoading(false)
+  //     setError(true)
+  //     setErrorMessage('Please patients condition description')
+
+  //     setTimeout(() => {
+  //       setError(false)
+  //       setErrorMessage('')
+  //       setSuccess(false)
+  //       setLoading(false)
+  //     }, 3000)
+
+  //     return
+  //   }
+
+  //   if (currentConditionDescription.length > 250) {
+  //     setLoading(false)
+  //     setError(true)
+  //     setErrorMessage('Description should not exceeds more than 250 characters')
+
+  //     setTimeout(() => {
+  //       setError(false)
+  //       setErrorMessage('')
+  //       setSuccess(false)
+  //       setLoading(false)
+  //     }, 3000)
+
+  //     return
+  //   }
+
+  //   if (roomNumber <= 0) {
+  //     setLoading(false)
+  //     setError(true)
+  //     setErrorMessage('Please provide a valid room number')
+
+  //     setTimeout(() => {
+  //       setError(false)
+  //       setErrorMessage('')
+  //       setSuccess(false)
+  //       setLoading(false)
+  //     }, 3000)
+
+  //     return
+  //   }
+
+  //   setShowLoadingModal(true)
+  //   setLoadingModalMessage('Please wait ...')
+
+  //   var data = {
+  //     reported_by: currentUserId,
+  //     patient_name: currentPatientName,
+  //     medical_condition: currentMedicalCondition,
+  //     description: currentConditionDescription,
+  //     room_number: currentRoomNumber
+  //   }
+
+  //   const headers = {
+  //     'Content-Type': 'application/json',
+  //     Authorization: `Bearer ${token}`
+  //   }
+
+  //   setLoading(true)
+
+  //   await axios
+  //     .post('https://univtraze.herokuapp.com/api/covid_cases/addEmergencyReport', data, {
+  //       headers: headers
+  //     })
+  //     .then((response) => {
+  //       if (response.data.success === 0 && response.data.message === 'Invalid token') {
+  //         navigation.navigate('signin')
+  //         return
+  //       }
+
+  //       if (response.data.success === 0) {
+  //         setLoadingModalMessage('Please wait...')
+  //         setShowLoadingModal(false)
+  //         setSuccess(false)
+  //         setError(true)
+  //         setErrorMessage('Failed reporting emergency. Please try again')
+  //         return
+  //       }
+
+  //       setLoadingModalMessage('Please wait...')
+  //       setShowLoadingModal(false)
+
+  //       setLoading(false)
+  //       setSuccess(true)
+  //       setError(false)
+  //       setErrorMessage('')
+  //       alert('Emergency report sent successfully.')
+  //       navigation.navigate('Dashboard')
+  //     })
+
+  //     .catch((error) => {
+  //       console.log('Error ' + error)
+  //       setLoading(false)
+  //     })
+
+  //   setError(false)
+  //   setErrorMessage('')
+  //   setLoading(false)
+
+  //   setTimeout(() => {
+  //     setError(false)
+  //     setErrorMessage('')
+  //     setSuccess(false)
+  //     setLoading(false)
+  //   }, 3000)
+
+  //   setLoadingModalMessage('Please wait...')
+  //   setShowLoadingModal(false)
+  // }
+
+  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors([
+    'patientName',
+    'symptoms',
+    'description',
+    'roomNumber'
+  ])
 
   const onSubmit = async () => {
-    const currentPatientName = patientName
-    const currentMedicalCondition = value
-    const currentConditionDescription = textArea
-    const currentRoomNumber = roomNumber
-
-    setLoading(true)
-
-    if (currentPatientName === '') {
-      setLoading(false)
-      setError(true)
-      setErrorMessage('Please provide the patient name')
-
-      setTimeout(() => {
-        setError(false)
-        setErrorMessage('')
-        setSuccess(false)
-        setLoading(false)
-      }, 3000)
-
-      return
+    resetFormErrors()
+    if (patientName == '' || patientName == null) {
+      return setFormErrors('patientName', 'Patient name is required')
+    }
+    if (symptoms.length < 1) {
+      return setFormErrors('symptoms', 'Symptom is required')
+    }
+    if (description == '' || description == null) {
+      return setFormErrors('description', 'Description is required')
+    }
+    if (roomNumber == null || roomNumber == '') {
+      return setFormErrors('roomNumber', 'Room number is required')
     }
 
-    if (currentMedicalCondition.length === 0) {
-      setLoading(false)
-      setError(true)
-      setErrorMessage('Please select medical condition')
-
-      setTimeout(() => {
-        setError(false)
-        setErrorMessage('')
-        setSuccess(false)
-        setLoading(false)
-      }, 3000)
-
-      return
+    try {
+      setLoadingModalMessage(true)
+      await genericPostRequest();
+    } catch (error) {
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
+      setLoadingModalMessage(false)
     }
-
-    if (currentConditionDescription === '') {
-      setLoading(false)
-      setError(true)
-      setErrorMessage('Please patients condition description')
-
-      setTimeout(() => {
-        setError(false)
-        setErrorMessage('')
-        setSuccess(false)
-        setLoading(false)
-      }, 3000)
-
-      return
-    }
-
-    if (currentConditionDescription.length > 250) {
-      setLoading(false)
-      setError(true)
-      setErrorMessage('Description should not exceeds more than 250 characters')
-
-      setTimeout(() => {
-        setError(false)
-        setErrorMessage('')
-        setSuccess(false)
-        setLoading(false)
-      }, 3000)
-
-      return
-    }
-
-    if (roomNumber <= 0) {
-      setLoading(false)
-      setError(true)
-      setErrorMessage('Please provide a valid room number')
-
-      setTimeout(() => {
-        setError(false)
-        setErrorMessage('')
-        setSuccess(false)
-        setLoading(false)
-      }, 3000)
-
-      return
-    }
-
-    setShowLoadingModal(true)
-    setLoadingModalMessage('Please wait ...')
-
-    var data = {
-      reported_by: currentUserId,
-      patient_name: currentPatientName,
-      medical_condition: currentMedicalCondition,
-      description: currentConditionDescription,
-      room_number: currentRoomNumber
-    }
-
-    const headers = {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
-
-    setLoading(true)
-
-    await axios
-      .post('https://univtraze.herokuapp.com/api/covid_cases/addEmergencyReport', data, {
-        headers: headers
-      })
-      .then((response) => {
-        if (response.data.success === 0 && response.data.message === 'Invalid token') {
-          navigation.navigate('signin')
-          return
-        }
-
-        if (response.data.success === 0) {
-          setLoadingModalMessage('Please wait...')
-          setShowLoadingModal(false)
-          setSuccess(false)
-          setError(true)
-          setErrorMessage('Failed reporting emergency. Please try again')
-          return
-        }
-
-        setLoadingModalMessage('Please wait...')
-        setShowLoadingModal(false)
-
-        setLoading(false)
-        setSuccess(true)
-        setError(false)
-        setErrorMessage('')
-        alert('Emergency report sent successfully.')
-        navigation.navigate('Dashboard')
-      })
-
-      .catch((error) => {
-        console.log('Error ' + error)
-        setLoading(false)
-      })
-
-    setError(false)
-    setErrorMessage('')
-    setLoading(false)
-
-    setTimeout(() => {
-      setError(false)
-      setErrorMessage('')
-      setSuccess(false)
-      setLoading(false)
-    }, 3000)
-
-    setLoadingModalMessage('Please wait...')
-    setShowLoadingModal(false)
   }
 
   return (
@@ -224,9 +244,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
             <Image source={BackIcon} style={{ marginLeft: -15, width: 60, height: 60 }} />
           </TouchableOpacity>
         </View>
-
         <Text style={styles.headerText}>Report Emergency</Text>
-
         <View style={{ paddingVertical: 5 }}>
           <Text style={styles.bodyText}>
             Report an individual who has contracted a communicable disease.
@@ -236,21 +254,22 @@ const ReportEmergencyScreen = ({ navigation }) => {
         <View style={styles.bodyContainer}>
           <Text style={styles.label}>Patient Name</Text>
           <TextInput
-            style={styles.input}
-            onChangeText={(e) => {
-              setPatientName(e)
-            }}
+            style={[styles.input, formErrors.patientName?.hasError && styles.inputError]}
+            onChangeText={setPatientName}
             value={patientName}
             placeholder='e.g John Doe'
           />
+          {formErrors.patientName?.hasError && (
+            <Text style={styles.errorText}>{formErrors?.patientName?.message}</Text>
+          )}
 
-          <Text style={styles.label}>Medical condition</Text>
+          <Text style={styles.label}>Symptoms</Text>
           <DropDownPicker
             open={open}
-            value={value}
+            value={symptoms}
             items={items}
             setOpen={setOpen}
-            setValue={setValue}
+            setValue={setSymptoms}
             setItems={setItems}
             theme='LIGHT'
             multiple={true}
@@ -265,33 +284,35 @@ const ReportEmergencyScreen = ({ navigation }) => {
               '#2536cf',
               '#d11f99'
             ]}
-            style={{ borderColor: COLORS.PRIMARY }}
+            style={[{ borderColor: COLORS.PRIMARY },  formErrors.symptoms.hasError && styles.inputError]}
           />
+          {formErrors.symptoms.hasError && (
+            <Text style={styles.errorText}>{formErrors?.symptoms.message}</Text>
+          )}
 
           <Text style={styles.label}>Description</Text>
           <TextInput
             multiline={true}
             numberOfLines={4}
-            onChangeText={(textArea) => onChangeDescription(textArea)}
-            value={textArea}
-            style={styles.textAreaInput}
+            onChangeText={onChangeDescription}
+            value={description}
+            style={[styles.textAreaInput, formErrors.description?.hasError && styles.inputError]}
             placeholder='Condition description...'
           />
+          {formErrors.description?.hasError && (
+            <Text style={styles.errorText}>{formErrors?.description?.message}</Text>
+          )}
 
           <Text style={styles.label}>Room Number </Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, formErrors.roomNumber.hasError && styles.inputError]}
             onChangeText={setRoomNumber}
             value={roomNumber}
             placeholder='e.g 401'
           />
-          {success && (
-            <Text style={{ paddingVertical: 10, color: '#28CD4199' }}>Reported Successfully</Text>
+          {formErrors.roomNumber?.hasError && (
+            <Text style={styles.errorText}>{formErrors?.roomNumber?.message}</Text>
           )}
-          {loading && (
-            <Text style={{ paddingVertical: 10, color: '#28CD4199' }}> Please wait..</Text>
-          )}
-          {error && <Text style={{ paddingVertical: 10, color: 'red' }}>{errorMessage}</Text>}
         </View>
       </ScrollView>
       <View style={styles.actionBtnContainer}>
