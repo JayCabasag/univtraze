@@ -8,7 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker'
@@ -239,6 +240,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
 
   const onSubmit = async () => {
     resetFormErrors()
+    setOpen(false) // Close symptoms dropdown
     if (patientName == '' || patientName == null) {
       return setFormErrors('patientName', 'Patient name is required')
     }
@@ -254,7 +256,18 @@ const ReportEmergencyScreen = ({ navigation }) => {
 
     try {
       setLoadingModalMessage(true)
-      await genericPostRequest('/')
+      const payload = {
+        "reported_by": user.user.id, 
+        "patient_name": patientName, 
+        "symptoms": symptoms.join(","), 
+        "description": description, 
+        "room_id": room
+      }
+
+      await genericPostRequest('emergency-reports', payload, auth.userToken)
+      Alert.alert('Auccess', "Emergency reported successfully", [
+        { text: 'OK', onPress: navigation.goBack }
+      ])
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
         { text: 'OK', onPress: () => console.log('OK') }
