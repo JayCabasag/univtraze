@@ -1,4 +1,5 @@
 const schemas = require("../../utils/helpers/schemas");
+const { getRoomById } = require("../rooms/room.service");
 const { getUserById } = require("../users/user.service");
 const { createEmergencyReport, getEmergencyReportById } = require("./emergency_reports.service");
 
@@ -21,34 +22,50 @@ module.exports = {
                 message: "User not found"
             })
         }
-        
-        delete userResults.password;
-        delete userResults.provider;
-        createEmergencyReport(req.body, (error, results) => {
+
+        getRoomById(req.body.room_id, (error, roomResults) => {
             if (error) {
-                return res.status(500).json({
+                return res.status(200).json({
                     message: "Internal server error"
                 })
             }
-            getEmergencyReportById(results.insertId, (error, results) => {
+
+            if (!roomResults) {
+                return res.status(404).json({
+                    message: "Room not found"
+                })
+            }
+
+            delete userResults.password;
+            delete userResults.provider;
+            createEmergencyReport(req.body, (error, results) => {
                 if (error) {
                     return res.status(500).json({
                         message: "Internal server error"
                     })
                 }
-
-                if (!results) {
-                    return res.status(404).json({
-                        message: "Emergency report not found"
+                getEmergencyReportById(results.insertId, (error, results) => {
+                    if (error) {
+                        return res.status(500).json({
+                            message: "Internal server error"
+                        })
+                    }
+    
+                    if (!results) {
+                        return res.status(404).json({
+                            message: "Emergency report not found"
+                        })
+                    }
+    
+                    return res.status(200).json({
+                        results,
+                        reported_by: userResults,
+                        room: roomResults
                     })
-                }
-
-                return res.status(200).json({
-                    results,
-                    reported_by: userResults
                 })
             })
         })
+        
     })
   },
   getEmergencyReportById: (req, res) => {

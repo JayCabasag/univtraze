@@ -1,4 +1,4 @@
-import axios from 'axios'
+import uuid from 'react-native-uuid'
 import {
   StyleSheet,
   StatusBar,
@@ -10,7 +10,7 @@ import {
   ScrollView,
   KeyboardAvoidingView
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker'
 import BackIcon from '../assets/back-icon.png'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
@@ -19,6 +19,8 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import useFormErrors from '../hooks/useFormErrors'
 import { genericPostRequest } from '../services/api/genericPostRequest'
+import CustomPicker from '../components/ui/CustomPicker'
+import { genericGetRequest } from '../services/api/genericGetRequest'
 
 const ReportEmergencyScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -26,7 +28,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
 
   const [description, onChangeDescription] = React.useState('')
   const [patientName, setPatientName] = useState('')
-  const [roomNumber, setRoomNumber] = useState(null)
+  const [room, setRoom] = useState(null)
   const [open, setOpen] = useState(false)
   const [symptoms, setSymptoms] = useState([])
   const [items, setItems] = useState([
@@ -38,6 +40,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
     { label: 'Diarrhea', value: 'Diarrhea' },
     { label: 'Breathing difficulties', value: 'Breathing difficulties' }
   ])
+  const [rooms, setRooms] = useState([])
 
   const [currentUserId, setCurrentUserId] = useState(null)
 
@@ -197,11 +200,41 @@ const ReportEmergencyScreen = ({ navigation }) => {
   //   setShowLoadingModal(false)
   // }
 
+  useEffect(() => {
+    const getRooms = async () => {
+      try {
+        const res = await genericGetRequest('rooms', auth.userToken)
+        setRooms(res.results)
+      } catch (error) {
+        console.log(error?.response.data)
+      }
+    }
+    getRooms()
+  }, [])
+
+  const roomOptions = useMemo(() => {
+    const withNullRooms = [
+      {
+        id: uuid.v4(),
+        room_name: 'Select room...',
+        building_name: null
+      },
+      ...rooms
+    ]
+    return withNullRooms.map((data) => ({
+      id: data.id,
+      label: `${data.room_name} ${data?.building_name ? "-": ''} ${data?.building_name ?? ''}`,
+      value: data.id
+    }))
+  })
+
+  console.log(roomOptions)
+
   const { resetFormErrors, formErrors, setFormErrors } = useFormErrors([
     'patientName',
     'symptoms',
     'description',
-    'roomNumber'
+    'room'
   ])
 
   const onSubmit = async () => {
@@ -215,13 +248,13 @@ const ReportEmergencyScreen = ({ navigation }) => {
     if (description == '' || description == null) {
       return setFormErrors('description', 'Description is required')
     }
-    if (roomNumber == null || roomNumber == '') {
-      return setFormErrors('roomNumber', 'Room number is required')
+    if (room == null || room == '') {
+      return setFormErrors('room', 'Room is required')
     }
 
     try {
       setLoadingModalMessage(true)
-      await genericPostRequest();
+      await genericPostRequest('/')
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
         { text: 'OK', onPress: () => console.log('OK') }
@@ -284,7 +317,10 @@ const ReportEmergencyScreen = ({ navigation }) => {
               '#2536cf',
               '#d11f99'
             ]}
-            style={[{ borderColor: COLORS.PRIMARY },  formErrors.symptoms.hasError && styles.inputError]}
+            style={[
+              { borderColor: COLORS.PRIMARY },
+              formErrors.symptoms.hasError && styles.inputError
+            ]}
           />
           {formErrors.symptoms.hasError && (
             <Text style={styles.errorText}>{formErrors?.symptoms.message}</Text>
@@ -303,16 +339,21 @@ const ReportEmergencyScreen = ({ navigation }) => {
             <Text style={styles.errorText}>{formErrors?.description?.message}</Text>
           )}
 
-          <Text style={styles.label}>Room Number </Text>
-          <TextInput
-            style={[styles.input, formErrors.roomNumber.hasError && styles.inputError]}
-            onChangeText={setRoomNumber}
-            value={roomNumber}
-            placeholder='e.g 401'
-          />
-          {formErrors.roomNumber?.hasError && (
-            <Text style={styles.errorText}>{formErrors?.roomNumber?.message}</Text>
-          )}
+          <View style={styles.inputWrapper}>
+            <Text style={styles.label}>Room</Text>
+            <CustomPicker
+              prompt='Room'
+              selectedValue={room}
+              onValueChange={(itemValue, itemIndex) => {
+                setRoom(itemValue)
+              }}
+              options={roomOptions}
+              hasError={formErrors.room?.hasError ?? false}
+            />
+            {formErrors?.room?.hasError && (
+              <Text style={styles.errorText}>{formErrors.room.message}</Text>
+            )}
+          </View>
         </View>
       </ScrollView>
       <View style={styles.actionBtnContainer}>
