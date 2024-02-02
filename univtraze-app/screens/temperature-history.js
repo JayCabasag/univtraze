@@ -10,7 +10,7 @@ import {
   Alert,
   ActivityIndicator
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { DataTable } from 'react-native-paper'
 import moment from 'moment'
@@ -18,14 +18,15 @@ import BackIcon from '../assets/back-icon.png'
 import { COLORS } from '../utils/app_constants'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
+import { genericGetRequest } from '../services/api/genericGetRequest'
 
 const TemperatureHistoryScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
   const { state: user } = useUser()
-  const [token, setToken] = useState('')
+
   //Variables for data
   const [currentUserTemperature, setCurrentUserTemperature] = useState('00.0')
-  const [allTemperatureHistoryScreen, setAllTemperatureHistory] = useState([])
+  const [allTemperatureHistory, setAllTemperatureHistory] = useState([])
 
   //Variables for loading
 
@@ -36,77 +37,18 @@ const TemperatureHistoryScreen = ({ navigation }) => {
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
-  const handleGetUserTemperature = async (token, id) => {
-    setAllTemperatureHistory([])
-
-    let initialDateToday = new Date()
-    let finalDateToday = moment(initialDateToday).format('YYYY-MM-DD')
-
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-
-    const data = {
-      user_id: id,
-      dateToday: finalDateToday
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/rooms/userTodaysTemperature`, data, config)
-      .then((response) => {
-        const success = response.data.success
-        if (success === 0 && response.data.data === 'Not set') {
-          return setCurrentUserTemperature('Not set')
-        }
-
-        if (success === 0) {
-          return alert('Please try again')
-        }
-
-        if (success === 1) {
-          //setTemp(response.data.data.temperature)
-          if (response.data.data === undefined) {
-            return setCurrentUserTemperature('Not set')
-          }
-
-          if (
-            response.data.data.temperature === undefined ||
-            response.data.data.temperature === null ||
-            response.data.data.temperature === ''
-          ) {
-            return setCurrentUserTemperature('Not set')
-          }
-
-          setCurrentUserTemperature(response.data.data.temperature)
-        }
-      })
-  }
-
-  const handleRefreshData = async (token, id) => {
-    handleGetUserTemperature(token, id)
-    handleGetAllUserTemperatureHistory(token, id)
-  }
-
-  const handleGetAllUserTemperatureHistory = async (token, id) => {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-
-    const data = {
-      user_id: id
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/rooms/userTemperatureHistory`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        const returnArray = response.data.data
-
-        setAllTemperatureHistory(returnArray)
-      })
-  }
-
+  // useEffect(() => {
+  //   const getUserTemperature = async () => {
+  //     try {
+  //       const res = await genericGetRequest('temperature-history', auth.userToken)
+  //       console.log("Hello", )
+  //     } catch (error) {
+  //       console.log("Error", error)
+  //     }
+  //   }
+  //   getUserTemperature()  
+  // }, [])
+  
   const viewHistoryData = (
     id,
     roomId,
@@ -156,21 +98,6 @@ const TemperatureHistoryScreen = ({ navigation }) => {
         </View>
       </Modal>
 
-      <View style={styles.topContainer}>
-        <View style={styles.backIcon}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.goBack()
-            }}
-          >
-            <ImageBackground
-              src={BackIcon}
-              resizeMode='contain'
-              style={styles.image}
-            ></ImageBackground>
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
 
       <View style={styles.bodyContainer}>
         <View
@@ -202,17 +129,6 @@ const TemperatureHistoryScreen = ({ navigation }) => {
           >
             History
           </Text>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              handleRefreshData(token, id)
-            }}
-          >
-            <Image
-              source={require('../assets/refresh_icon.png')}
-              resizeMode='contain'
-              style={{ width: 25, height: 25, marginLeft: 'auto', marginRight: 0 }}
-            />
-          </TouchableWithoutFeedback>
         </View>
         <ScrollView>
           <DataTable
