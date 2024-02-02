@@ -2,13 +2,9 @@ import {
   StyleSheet,
   Text,
   View,
-  ImageBackground,
   Image,
-  Modal,
   ScrollView,
-  TouchableWithoutFeedback,
   Alert,
-  ActivityIndicator,
   TouchableOpacity,
   RefreshControl
 } from 'react-native'
@@ -29,61 +25,32 @@ const TemperatureHistoryScreen = ({ navigation }) => {
   const { state: user } = useUser()
   const { temperatures } = useUserTemperatures()
   const [roomVisitedList, setRoomVisitedList] = useState([])
+  const userId = user.user.id
+  const userToken = auth.userToken
 
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false)
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
+    setRefreshing(true)
     const getRoomVisited = async () => {
       try {
-        const res = await genericGetRequest('/visited-rooms', auth.userToken)
-        console.log(res)
+        const res = await genericGetRequest(`room-visited?user_id=${userId}`, userToken)
+        setRoomVisitedList(res.results)
       } catch (error) {
-        console.log("Hehhe", error)
+        console.log('Hehhe', error)
       } finally {
         setRefreshing(false)
       }
     }
-
     getRoomVisited()
-  }, []);
-
-  const viewHistoryData = (
-    id,
-    roomId,
-    room_number,
-    building_name,
-    room_name,
-    temperature,
-    createdAt
-  ) => {
-    Alert.alert(
-      'Temperature History',
-      ' ID: ' +
-        id +
-        '\n Room Id: ' +
-        roomId +
-        '\n Room number: ' +
-        room_number +
-        '\n Building name: ' +
-        building_name +
-        '\n Room name: ' +
-        room_name +
-        '\n Temperature: ' +
-        temperature +
-        '\n Visited at: ' +
-        moment.utc(createdAt).local().format('ll') +
-        ' ' +
-        moment.utc(createdAt).local().format('LT'),
-      [{ text: 'OK', onPress: () => {} }]
-    )
-  }
+  }, [userId, userToken])
 
   return (
-    <ScrollView 
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
+    <ScrollView
+      onLayout={onRefresh}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      style={styles.scrollView}
+      contentContainerStyle={styles.scrollViewContainer}
+    >
       <View style={styles.topContainer}>
         <TouchableOpacity onPress={navigation.goBack}>
           <Image source={BackIcon} style={{ marginLeft: -15, width: 60, height: 60 }} />
@@ -93,65 +60,51 @@ const TemperatureHistoryScreen = ({ navigation }) => {
       <View style={styles.tempContainer}>
         <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
         <Text style={styles.tempText}>
-          {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'}
+          {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'} &deg;C
         </Text>
       </View>
 
       <View style={styles.dataTableContainer}>
-      <Text style={styles.tableHeaderText}>History</Text>
-      <DataTable
-        style={styles.dataTableStyles}
-      >
-        <DataTable.Header
-          style={{
-            backgroundColor: COLORS.PRIMARY,
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            elevation: 5
-          }}
-        >
-          <DataTable.Title>
-            <Text style={styles.dataTableTitleText}>Bldg name</Text>
-          </DataTable.Title>
-          <DataTable.Title>
-            <Text style={styles.dataTableTitleText}>Temp</Text>
-          </DataTable.Title>
-          <DataTable.Title>
-            <Text style={styles.dataTableTitleText}>Date</Text>
-          </DataTable.Title>
-          <DataTable.Title>
-            <Text style={styles.dataTableTitleText}>Time</Text>
-          </DataTable.Title>
-        </DataTable.Header>
-        {roomVisitedList == 0 && (<Text style={styles.emptyText}>Empty</Text>)}
-        {roomVisitedList > 0 && roomVisitedList.map((tempHistory) => {
+        <Text style={styles.tableHeaderText}>History</Text>
+        <DataTable style={styles.dataTableStyles}>
+          <DataTable.Header
+            style={{
+              backgroundColor: COLORS.PRIMARY,
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+              elevation: 5
+            }}
+          >
+            <DataTable.Title>
+              <Text style={styles.dataTableTitleText}>Room Id</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={styles.dataTableTitleText}>Temp</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={styles.dataTableTitleText}>Date</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={styles.dataTableTitleText}>Time</Text>
+            </DataTable.Title>
+          </DataTable.Header>
+          {roomVisitedList.length == 0 && <Text style={styles.emptyText}>Empty</Text>}
+          {roomVisitedList.length > 0 &&
+            roomVisitedList.map((roomVisited) => {
               return (
-                <DataTable.Row
-                  key={tempHistory.id}
-                  onPress={() => {
-                    viewHistoryData(
-                      tempHistory.id,
-                      tempHistory.room_id,
-                      tempHistory.room_number,
-                      tempHistory.building_name,
-                      tempHistory.room_name,
-                      tempHistory.temperature,
-                      tempHistory.createdAt
-                    )
-                  }}
-                >
-                  <DataTable.Cell>{tempHistory.building_name}</DataTable.Cell>
-                  <DataTable.Cell>{tempHistory.temperature}</DataTable.Cell>
+                <DataTable.Row key={roomVisited.id}>
+                  <DataTable.Cell>{roomVisited.room_id}</DataTable.Cell>
+                  <DataTable.Cell>{roomVisited.temperature}</DataTable.Cell>
                   <DataTable.Cell>
-                    {moment.utc(tempHistory.createdAt).local().format('ll')}
+                    {moment.utc(roomVisited.createdAt).local().format('ll')}
                   </DataTable.Cell>
                   <DataTable.Cell>
-                    {moment.utc(tempHistory.createdAt).local().format('LT')}
+                    {moment.utc(roomVisited.created_at).local().format('LT')}
                   </DataTable.Cell>
                 </DataTable.Row>
               )
             })}
-      </DataTable>
+        </DataTable>
       </View>
     </ScrollView>
   )
