@@ -11,19 +11,17 @@ import {
   ActivityIndicator
 } from 'react-native'
 import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import axios from 'axios'
 import { DataTable } from 'react-native-paper'
 import moment from 'moment'
 import BackIcon from '../assets/back-icon.png'
 import { COLORS } from '../utils/app_constants'
+import { useAuth } from '../services/store/auth/AuthContext'
+import { useUser } from '../services/store/user/UserContext'
 
-const TemperatureHistoryScreen = ({
-  navigation,
-  route: {
-    params: { id, type }
-  }
-}) => {
+const TemperatureHistoryScreen = ({ navigation }) => {
+  const { state: auth } = useAuth()
+  const { state: user } = useUser()
   const [token, setToken] = useState('')
   //Variables for data
   const [currentUserTemperature, setCurrentUserTemperature] = useState('00.0')
