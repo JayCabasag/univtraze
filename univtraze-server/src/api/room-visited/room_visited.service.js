@@ -21,4 +21,28 @@ module.exports = {
       callBack(null, results[0]);
     });
   },
+  getVisitedRoomsByUserId: (id, callBack) => {
+    pool.query('SELECT * from visited_rooms where user_id = ?', [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      callBack(null, results);
+    });
+  },
+  getVisitedRoomsByRoomId: (id, callBack) => {
+    pool.query('SELECT * from visited_rooms where room_id = ?', [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      callBack(null, results);
+    });
+  },
+  getAllVisitedRooms: (callBack) => {
+    pool.query('SELECT * from visited_rooms where 1', [], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      callBack(null, results);
+    });
+  },
 };

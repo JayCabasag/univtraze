@@ -224,7 +224,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
     ]
     return withNullRooms.map((data) => ({
       id: data.id,
-      label: `${data.room_name} ${data?.building_name ? "-": ''} ${data?.building_name ?? ''}`,
+      label: `${data.room_name} ${data?.building_name ? '-' : ''} ${data?.building_name ?? ''}`,
       value: data.id
     }))
   })
@@ -257,15 +257,15 @@ const ReportEmergencyScreen = ({ navigation }) => {
     try {
       setLoadingModalMessage(true)
       const payload = {
-        "reported_by": user.user.id, 
-        "patient_name": patientName, 
-        "symptoms": symptoms.join(","), 
-        "description": description, 
-        "room_id": room
+        reported_by: user.user.id,
+        patient_name: patientName,
+        symptoms: symptoms.join(','),
+        description: description,
+        room_id: room
       }
 
       await genericPostRequest('emergency-reports', payload, auth.userToken)
-      Alert.alert('Auccess', "Emergency reported successfully", [
+      Alert.alert('Auccess', 'Emergency reported successfully', [
         { text: 'OK', onPress: navigation.goBack }
       ])
     } catch (error) {

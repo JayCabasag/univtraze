@@ -8,47 +8,45 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableOpacity,
+  RefreshControl
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { DataTable } from 'react-native-paper'
 import moment from 'moment'
 import BackIcon from '../assets/back-icon.png'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
+import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
+import LoadingModal from '../components/LoadingModal'
 
 const TemperatureHistoryScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
   const { state: user } = useUser()
+  const { temperatures } = useUserTemperatures()
+  const [roomVisitedList, setRoomVisitedList] = useState([])
 
-  //Variables for data
-  const [currentUserTemperature, setCurrentUserTemperature] = useState('00.0')
-  const [allTemperatureHistory, setAllTemperatureHistory] = useState([])
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    const getRoomVisited = async () => {
+      try {
+        const res = await genericGetRequest('/visited-rooms', auth.userToken)
+        console.log(res)
+      } catch (error) {
+        console.log("Hehhe", error)
+      } finally {
+        setRefreshing(false)
+      }
+    }
 
-  //Variables for loading
+    getRoomVisited()
+  }, []);
 
-  const [showLoadingModal, setShowLoadingModal] = useState(false)
-  const [loadingMessage, setLoadingMessage] = useState('Please wait...')
-
-  //Error Handler variables
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
-
-  // useEffect(() => {
-  //   const getUserTemperature = async () => {
-  //     try {
-  //       const res = await genericGetRequest('temperature-history', auth.userToken)
-  //       console.log("Hello", )
-  //     } catch (error) {
-  //       console.log("Error", error)
-  //     }
-  //   }
-  //   getUserTemperature()  
-  // }, [])
-  
   const viewHistoryData = (
     id,
     roomId,
@@ -81,136 +79,105 @@ const TemperatureHistoryScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Modal
-        animationType='slide'
-        transparent={true}
-        visible={showLoadingModal}
-        onRequestClose={() => {
-          setShowLoadingModal(!showLoadingModal)
-        }}
+    <ScrollView 
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
+      <View style={styles.topContainer}>
+        <TouchableOpacity onPress={navigation.goBack}>
+          <Image source={BackIcon} style={{ marginLeft: -15, width: 60, height: 60 }} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.tempContainer}>
+        <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
+        <Text style={styles.tempText}>
+          {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'}
+        </Text>
+      </View>
+
+      <View style={styles.dataTableContainer}>
+      <Text style={styles.tableHeaderText}>History</Text>
+      <DataTable
+        style={styles.dataTableStyles}
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <ActivityIndicator size={'large'} />
-            <Text style={styles.modalText}>{loadingMessage}</Text>
-          </View>
-        </View>
-      </Modal>
-
-
-      <View style={styles.bodyContainer}>
-        <View
+        <DataTable.Header
           style={{
-            width: '100%',
-            height: 'auto'
+            backgroundColor: COLORS.PRIMARY,
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            elevation: 5
           }}
         >
-          <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
-          <Text
-            style={{ fontSize: 60, paddingBottom: 10, color: COLORS.PRIMARY, fontWeight: '700' }}
-          >
-            {currentUserTemperature === '' || currentUserTemperature === 'Not set'
-              ? 'Not set'
-              : currentUserTemperature + '°C'}
-          </Text>
-        </View>
-
-        <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%' }}>
-          <Text
-            style={{
-              fontSize: 25,
-              paddingBottom: 10,
-              color: '#000000',
-              fontWeight: '700',
-              marginLeft: 0,
-              marginRight: 'auto'
-            }}
-          >
-            History
-          </Text>
-        </View>
-        <ScrollView>
-          <DataTable
-            style={{
-              borderWidth: 1,
-              borderRadius: 10,
-              borderColor: COLORS.PRIMARY
-            }}
-          >
-            <DataTable.Header
-              style={{
-                backgroundColor: COLORS.PRIMARY,
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                elevation: 5
-              }}
-            >
-              <DataTable.Title>
-                <Text style={styles.dataTableTitleText}>Bldg name</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={styles.dataTableTitleText}>Temp</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={styles.dataTableTitleText}>Date</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={styles.dataTableTitleText}>Time</Text>
-              </DataTable.Title>
-            </DataTable.Header>
-            {allTemperatureHistory === undefined
-              ? null
-              : allTemperatureHistory.map((tempHistory) => {
-                  return (
-                    <DataTable.Row
-                      key={tempHistory.id}
-                      onPress={() => {
-                        viewHistoryData(
-                          tempHistory.id,
-                          tempHistory.room_id,
-                          tempHistory.room_number,
-                          tempHistory.building_name,
-                          tempHistory.room_name,
-                          tempHistory.temperature,
-                          tempHistory.createdAt
-                        )
-                      }}
-                    >
-                      <DataTable.Cell>{tempHistory.building_name}</DataTable.Cell>
-                      <DataTable.Cell>{tempHistory.temperature}</DataTable.Cell>
-                      <DataTable.Cell>
-                        {moment.utc(tempHistory.createdAt).local().format('ll')}
-                      </DataTable.Cell>
-                      <DataTable.Cell>
-                        {moment.utc(tempHistory.createdAt).local().format('LT')}
-                      </DataTable.Cell>
-                    </DataTable.Row>
-                  )
-                })}
-          </DataTable>
-        </ScrollView>
+          <DataTable.Title>
+            <Text style={styles.dataTableTitleText}>Bldg name</Text>
+          </DataTable.Title>
+          <DataTable.Title>
+            <Text style={styles.dataTableTitleText}>Temp</Text>
+          </DataTable.Title>
+          <DataTable.Title>
+            <Text style={styles.dataTableTitleText}>Date</Text>
+          </DataTable.Title>
+          <DataTable.Title>
+            <Text style={styles.dataTableTitleText}>Time</Text>
+          </DataTable.Title>
+        </DataTable.Header>
+        {roomVisitedList == 0 && (<Text style={styles.emptyText}>Empty</Text>)}
+        {roomVisitedList > 0 && roomVisitedList.map((tempHistory) => {
+              return (
+                <DataTable.Row
+                  key={tempHistory.id}
+                  onPress={() => {
+                    viewHistoryData(
+                      tempHistory.id,
+                      tempHistory.room_id,
+                      tempHistory.room_number,
+                      tempHistory.building_name,
+                      tempHistory.room_name,
+                      tempHistory.temperature,
+                      tempHistory.createdAt
+                    )
+                  }}
+                >
+                  <DataTable.Cell>{tempHistory.building_name}</DataTable.Cell>
+                  <DataTable.Cell>{tempHistory.temperature}</DataTable.Cell>
+                  <DataTable.Cell>
+                    {moment.utc(tempHistory.createdAt).local().format('ll')}
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    {moment.utc(tempHistory.createdAt).local().format('LT')}
+                  </DataTable.Cell>
+                </DataTable.Row>
+              )
+            })}
+      </DataTable>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 export default TemperatureHistoryScreen
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#E1F5E4',
-    paddingHorizontal: 40,
-    height: '100%'
+  scrollView: {
+    flex: 1,
+    backgroundColor: COLORS.SECONDARY
   },
-
+  scrollViewContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.SECONDARY
+  },
   topContainer: {
-    zIndex: 1,
+    paddingHorizontal: 25,
     width: '100%',
-    height: '15%',
+    height: 100,
+    justifyContent: 'space-between',
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0
+    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
   },
   backIcon: {
     height: 60,
@@ -267,14 +234,51 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     borderWidth: 1
   },
-
   bodyContainer: {
     width: '100%',
-    height: '80%',
     paddingBottom: 70
   },
   dataTableTitleText: {
     fontSize: 14,
     fontWeight: 'bold'
+  },
+  emptyText: {
+    paddingVertical: 15,
+    width: '100%',
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontFamily: FONT_FAMILY.POPPINS_LIGHT
+  },
+  tempContainer: {
+    width: '100%',
+    paddingHorizontal: 30
+  },
+  bodyText: {
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
+  },
+  dataTableContainer: {
+    width: '100%',
+    paddingHorizontal: 30
+  },
+  tempText: {
+    fontSize: 60,
+    paddingBottom: 10,
+    color: COLORS.PRIMARY,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
+  },
+  dataTableStyles: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: COLORS.PRIMARY
+  },
+  tableHeaderText: {
+    fontSize: 25,
+    paddingBottom: 10,
+    color: '#000000',
+    fontWeight: '700',
+    marginLeft: 0,
+    marginRight: 'auto'
   }
 })

@@ -40,7 +40,6 @@ export const UserTemperaturesContextProvider = ({ children }) => {
       try {
         const res = await genericGetRequest(`temperature-history?user_id=${userId}`)
         temperatures = res.results
-        console.log(res)
       } catch (e) {
         // Restoring token failed
       } finally {
