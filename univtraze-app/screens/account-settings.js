@@ -19,11 +19,12 @@ import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'
 import useFormErrors from '../hooks/useFormErrors'
 import { genericDeleteRequest } from '../services/api/genericDeleteRequest'
+import { genericPostRequest } from '../services/api/genericPostRequest'
 
 const AccountSettingsScreen = ({ navigation }) => {
   const toast = useToast()
-  const { state: user } = useUser()
-  const { state: auth } = useAuth()
+  const { state: user, clearUser } = useUser()
+  const { state: auth, signOut } = useAuth()
   const token = auth.userToken
   const userId = user.user.id
 
@@ -89,10 +90,15 @@ const AccountSettingsScreen = ({ navigation }) => {
     
     try {
       setIsLoading(true)
-      console.log("user id",userId)
-      const res = await genericDeleteRequest(`users/${userId}/deactivate`, token)
-      Alert.alert('Success', error?.response?.data?.message, [
-        { text: 'OK', onPress: () => console.log('OK') }
+      const payload = {
+        password
+      }
+      const res = await genericPostRequest(`users/${userId}/deactivate`, payload, token)
+      Alert.alert('Success', res.message, [
+        { text: 'OK', onPress: () =>  {
+          signOut();
+          clearUser();
+        }}
       ])
     } catch (error) {
       console.log(error)
