@@ -4,12 +4,10 @@ import {
   View,
   Image,
   ScrollView,
-  Alert,
   TouchableOpacity,
   RefreshControl
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React, { useState } from 'react'
 import { DataTable } from 'react-native-paper'
 import moment from 'moment'
 import BackIcon from '../assets/back-icon.png'
@@ -18,7 +16,6 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
-import LoadingModal from '../components/LoadingModal'
 
 const TemperatureHistoryScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -67,19 +64,12 @@ const TemperatureHistoryScreen = ({ navigation }) => {
       <View style={styles.dataTableContainer}>
         <Text style={styles.tableHeaderText}>History</Text>
         <DataTable style={styles.dataTableStyles}>
-          <DataTable.Header
-            style={{
-              backgroundColor: COLORS.PRIMARY,
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-              elevation: 5
-            }}
-          >
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Room Id</Text>
-            </DataTable.Title>
+          <DataTable.Header style={styles.dataTableHeaderStyle}>
             <DataTable.Title>
               <Text style={styles.dataTableTitleText}>Temp</Text>
+            </DataTable.Title>
+            <DataTable.Title>
+              <Text style={styles.dataTableTitleText}>Room Id</Text>
             </DataTable.Title>
             <DataTable.Title>
               <Text style={styles.dataTableTitleText}>Date</Text>
@@ -88,17 +78,24 @@ const TemperatureHistoryScreen = ({ navigation }) => {
               <Text style={styles.dataTableTitleText}>Time</Text>
             </DataTable.Title>
           </DataTable.Header>
-          {roomVisitedList.length == 0 && <Text style={styles.emptyText}>Empty</Text>}
+          {refreshing && <Text style={styles.emptyText}>Please wait...</Text>}
+          {roomVisitedList.length == 0 && !refreshing && (
+            <Text style={styles.emptyText}>Empty</Text>
+          )}
           {roomVisitedList.length > 0 &&
             roomVisitedList.map((roomVisited) => {
               return (
                 <DataTable.Row key={roomVisited.id}>
-                  <DataTable.Cell>{roomVisited.room_id}</DataTable.Cell>
-                  <DataTable.Cell>{roomVisited.temperature}</DataTable.Cell>
-                  <DataTable.Cell>
+                  <DataTable.Cell textStyle={styles.tableContentText}>
+                    {roomVisited.temperature}
+                  </DataTable.Cell>
+                  <DataTable.Cell textStyle={styles.tableContentText}>
+                    {roomVisited.room_id}
+                  </DataTable.Cell>
+                  <DataTable.Cell textStyle={styles.tableContentText}>
                     {moment.utc(roomVisited.createdAt).local().format('ll')}
                   </DataTable.Cell>
-                  <DataTable.Cell>
+                  <DataTable.Cell textStyle={styles.tableContentText}>
                     {moment.utc(roomVisited.created_at).local().format('LT')}
                   </DataTable.Cell>
                 </DataTable.Row>
@@ -191,9 +188,19 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingBottom: 70
   },
+  dataTableHeaderStyle: {
+    backgroundColor: COLORS.PRIMARY,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    elevation: 5
+  },
   dataTableTitleText: {
     fontSize: 14,
     fontWeight: 'bold'
+  },
+  tableContentText: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    color: COLORS.BLACK
   },
   emptyText: {
     paddingVertical: 15,

@@ -400,10 +400,10 @@ module.exports = {
     );
   },
 
-  deactivateAccount: (data, callBack) => {
+  deactivateAccount: (id, callBack) => {
     pool.query(
       `DELETE FROM users WHERE id = ?`,
-      [data.id],
+      [id],
 
       (error, results, fields) => {
         if (error) {

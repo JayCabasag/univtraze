@@ -194,6 +194,13 @@ class Schemas {
       room_id: Joi.number().required().allow(null)
     });
   }
+
+  get deactivateAccountSchema(){
+    return Joi.object({
+      userId: Joi.number().required(),
+      password: Joi.string().required(), 
+    });
+  }
 }
 
 module.exports = new Schemas();

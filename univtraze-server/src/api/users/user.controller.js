@@ -848,43 +848,49 @@ module.exports = {
     });
   },
   deactivateAccount: (req, res) => {
-    const body = req.body;
+    const data = {
+      userId: parseInt(req.params.userId),
+      password: req.body.password
+    }
+    
+    const { error } = schemas.deactivateAccountSchema.validate(data);
+    
+    if (error) {
+      console.log(error)
+      return res.status(409).json({
+        message: 'Some field where empty'
+      })
+    }
 
-    getUserById(body.id, (err, results) => {
+    getUserById(data.userId, (err, results) => {
       if (err) {
-        return res.json({
-          success: 0,
-          message: 'Database connection error',
-        });
+        return res.status(500).json({
+          message: 'Internal server error'
+        })
       }
 
       if (!results) {
-        return res.json({
-          success: 0,
+        return res.status(404).json({
           message: 'User not found',
         });
       }
 
-      let checkIfPasswordMatched = compareSync(body.password, results.password);
+      let checkIfPasswordMatched = compareSync(data.password, results.password);
 
       if (!checkIfPasswordMatched) {
-        return res.json({
-          success: 0,
-          message: 'Password is incorrect.',
+        return res.status(401).json({
+          message: 'Incorrect password.',
         });
       }
 
-      deactivateAccount(body, (err, finalResults) => {
+      deactivateAccount(data.userId, (err, _finalResults) => {
         if (err) {
-          return res.json({
-            success: 0,
-            message: 'Database connection error.',
-          });
+          return res.status(500).json({
+            message: 'Internal server error'
+          })
         }
-        return res.json({
-          success: 1,
-          message: 'Account deactivated',
-          finalResults,
+        return res.status(201).json({
+          message: 'Account deactivated'
         });
       });
     });

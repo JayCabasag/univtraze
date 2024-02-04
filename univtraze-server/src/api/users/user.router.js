@@ -42,7 +42,7 @@ router.post('/sendRecoveryPasswordViaEmail', sendRecoveryPasswordViaEmail);
 router.post('/updateUserPasswordFromRecovery', updateUserPasswordFromRecovery);
 router.post('/checkRecoveryPasswordAndEmailMatched', checkRecoveryPasswordAndEmailMatched);
 router.post('/changePassword', checkToken, changePassword);
-router.post('/deactivateAccount', checkToken, deactivateAccount);
+router.delete('/:userId/deactivate', checkToken, deactivateAccount);
 router.post('/updatePersonalInfo', checkToken, updatePersonalInfo);
 
 module.exports = router;

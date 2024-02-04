@@ -3,35 +3,35 @@ import {
   StatusBar,
   Text,
   View,
-  ImageBackground,
-  Pressable,
   Image,
-  Modal,
-  TextInput,
   ScrollView,
   TouchableOpacity,
-  TouchableWithoutFeedback,
+  Modal,
+  TextInput,
   Alert
 } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import axios from 'axios'
-import jwtDecode from 'jwt-decode'
+import React, { useState } from 'react'
 import { AntDesign } from '@expo/vector-icons'
 import { useToast } from 'react-native-toast-notifications'
 import BackIcon from '../assets/back-icon.png'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import { useUser } from '../services/store/user/UserContext'
+import { useAuth } from '../services/store/auth/AuthContext'
+import useFormErrors from '../hooks/useFormErrors'
+import { genericDeleteRequest } from '../services/api/genericDeleteRequest'
 
-const AccountSettingsScreen = ({ navigation, route: { params } }) => {
+const AccountSettingsScreen = ({ navigation }) => {
   const toast = useToast()
+  const { state: user } = useUser()
+  const { state: auth } = useAuth()
+  const token = auth.userToken
+  const userId = user.user.id
 
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [loadingMessage, setLoadingMessage] = useState('')
   const [password, setPassword] = useState('')
-  const [token, setToken] = useState(null)
-  const [userId, setUserId] = useState(null)
-  const [userType, setUserType] = useState('')
+
+  const { setFormErrors, formErrors, resetFormErrors } = useFormErrors(['password'])
 
   //Error handlers
 
@@ -39,62 +39,75 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
   const [errorMessage, setErrorMessage] = useState('Error')
 
   const deleteAccountPermanently = async (currentToken, id) => {
-    if (password === '') {
-      setError(true)
-      setErrorMessage('Please input your password.')
-      return
+    
+    // const config = {
+    //   headers: { Authorization: `Bearer ${currentToken}` }
+    // }
+    // const data = {
+    //   id: id,
+    //   password: password
+    // }
+    // setIsLoading(true)
+    // setError(false)
+    // try {
+    //   await axios
+    //     .post(`https://univtraze.herokuapp.com/api/user/deactivateAccount`, data, config)
+    //     .then((response) => {
+    //       const success = response.data.success
+    //       if (success === 0) {
+    //         setIsLoading(false)
+    //         setError(true)
+    //         setErrorMessage(response.data.message)
+    //         return
+    //       }
+    //       if (success === 1) {
+    //         setIsLoading(false)
+    //         setError(false)
+    //         navigation.navigate('signin')
+    //         toast.show('Account deactivated...', {
+    //           type: 'normal',
+    //           placement: 'bottom',
+    //           duration: 1000,
+    //           offset: 30,
+    //           animationType: 'slide-in'
+    //         })
+    //         return
+    //       }
+    //     })
+    // } catch (error) {
+    //   setIsLoading(false)
+    //   setError(true)
+    //   setErrorMessage('Network error')
+    // }
+  }
+
+  const confirmDeleteAccount = async () => {
+    resetFormErrors()
+    if (password == '' || password == null) {
+      return setFormErrors('password', 'Password is required')
     }
-
-    const config = {
-      headers: { Authorization: `Bearer ${currentToken}` }
-    }
-
-    const data = {
-      id: id,
-      password: password
-    }
-
-    setIsLoading(true)
-    setError(false)
-
+    
     try {
-      await axios
-        .post(`https://univtraze.herokuapp.com/api/user/deactivateAccount`, data, config)
-        .then((response) => {
-          const success = response.data.success
-
-          if (success === 0) {
-            setIsLoading(false)
-            setError(true)
-            setErrorMessage(response.data.message)
-            return
-          }
-
-          if (success === 1) {
-            setIsLoading(false)
-            setError(false)
-            navigation.navigate('signin')
-            toast.show('Account deactivated...', {
-              type: 'normal',
-              placement: 'bottom',
-              duration: 1000,
-              offset: 30,
-              animationType: 'slide-in'
-            })
-            return
-          }
-        })
+      setIsLoading(true)
+      const res = await genericDeleteRequest(`/users/${userId}/deactivate`)
+      Alert.alert('Success', error?.response?.data?.message, [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
     } catch (error) {
+      console.log(error)
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
       setIsLoading(false)
-      setError(true)
-      setErrorMessage('Network error')
     }
+
   }
 
   return (
-    <View style={styles.container}>
-      <Modal
-        animationType='slide'
+    <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
+     <Modal
+        animationType='fade'
         transparent={true}
         visible={showPasswordModal}
         statusBarTranslucent
@@ -104,38 +117,28 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={{ color: 'red' }}>
-              *Once account is deleted it can no longer be retrieved.
+            <Text style={styles.modalHeaderText}>
+              Once deleted, the account is irrecoverable.
             </Text>
+            <Text style={styles.passwordLabelText}>To continue, please confirm with password</Text>
             <TextInput
               placeholder='Password'
-              defaultValue={''}
-              onChangeText={(text) => {
-                setPassword(text)
-              }}
+              value={password}
+              onChangeText={setPassword}
               secureTextEntry
-              style={styles.input}
+              style={[styles.input, formErrors.password?.hasError && styles.inputError]}
             />
-            {error ? (
-              <Text style={{ color: 'red' }}>{errorMessage}</Text>
-            ) : isLoading ? (
-              <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text>
-            ) : null}
+            {formErrors.password?.hasError && (
+              <Text style={styles.errorText}>{formErrors.password?.message}</Text>
+            )}
             <View
-              style={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between'
-              }}
+              style={styles.menuItemContainer}
             >
               <TouchableOpacity
-                style={styles.deactivateButton}
-                onPress={() => {
-                  deleteAccountPermanently(token, userId)
-                }}
+                style={styles.confirmButton}
+                onPress={confirmDeleteAccount}
               >
-                <Text style={styles.deactivateButtonText}>Deactivate</Text>
+                <Text style={styles.deactivateButtonText}>Confirm</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.cancelButton}
@@ -149,45 +152,32 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
           </View>
         </View>
       </Modal>
+
       <View style={styles.topContainer}>
-        <View style={styles.backIcon}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.goBack()
-            }}
-          >
-            <Image src={BackIcon} resizeMode='contain' style={styles.image} />
-          </TouchableWithoutFeedback>
-        </View>
+        <TouchableOpacity onPress={navigation.goBack}>
+          <Image source={BackIcon} style={styles.backIconImage} />
+        </TouchableOpacity>
       </View>
 
-      {/*End  Notification View */}
-      <View style={styles.bodyContainer}>
+      <View style={styles.mainContainer}>
+        <Text style={styles.headerText}>Account settings</Text>
         <TouchableOpacity
           style={styles.settingsOption}
           onPress={() => {
-            navigation.navigate('UpdatePersonalInfo', {
-              id: params.id,
-              type: params.type,
-              token: token
-            })
+            navigation.navigate('UpdatePersonalInfo')
           }}
         >
-          <Text style={{ fontSize: 15 }}>Update Personal Information</Text>
-          <AntDesign name='right' size={15} color='black' />
+          <Text style={styles.menuItemText}>Update Personal Information</Text>
+          <AntDesign name='right' size={18} color='black' />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.settingsOption}
           onPress={() => {
-            navigation.navigate('UpdatePassword', {
-              id: params.id,
-              type: params.type,
-              token: token
-            })
+            navigation.navigate('UpdatePassword',)
           }}
         >
-          <Text style={{ fontSize: 15 }}>Update Password</Text>
-          <AntDesign name='right' size={15} color='black' />
+          <Text style={styles.menuItemText}>Update Password</Text>
+          <AntDesign name='right' size={18} color='black' />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deactivateButton}
@@ -198,26 +188,32 @@ const AccountSettingsScreen = ({ navigation, route: { params } }) => {
           <Text style={styles.deactivateButtonText}>Deactivate Account</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 export default AccountSettingsScreen
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#E1F5E4',
-    paddingHorizontal: 40,
-    height: '100%'
+  scrollView: {
+    flex: 1,
+    backgroundColor: COLORS.SECONDARY
   },
-
+  scrollViewContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.SECONDARY
+  },
+  backIconImage: { marginLeft: -15, width: 60, height: 60 },
   topContainer: {
-    zIndex: 1,
+    paddingHorizontal: 25,
     width: '100%',
-    height: '15%',
+    height: 100,
+    justifyContent: 'space-between',
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0
+    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
   },
   backIcon: {
     height: 60,
@@ -229,7 +225,15 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%'
   },
-
+  headerText: {
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    fontSize: 24,
+    marginBottom: 20
+  },
+  mainContainer: {
+    paddingHorizontal: 30,
+    width: '100%'
+  },
   centeredView: {
     flex: 1,
     backgroundColor: 'rgba(52, 52, 52, 0.3)',
@@ -251,6 +255,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5
+  },
+  modalHeaderText: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    textAlign: 'center',
+    marginBottom: 20,
+    fontSize: 20
+  },
+  passwordLabelText: {
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+    fontSize: 14,
+    textAlign: 'left',
+    width: '100%'
   },
 
   buttons: {
@@ -274,12 +290,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     borderWidth: 1
   },
-
-  bodyContainer: {
-    width: '100%',
-    height: '80%',
-    paddingBottom: 70
-  },
   input: {
     marginTop: 5,
     marginBottom: 5,
@@ -297,8 +307,24 @@ const styles = StyleSheet.create({
     color: '#4d7861',
     backgroundColor: '#ffff'
   },
+  inputError: {
+    borderColor: COLORS.RED
+  },
+  errorText: {
+    color: COLORS.RED,
+    fontFamily: FONT_FAMILY.POPPINS_LIGHT,
+    fontSize: 14,
+    width: '100%',
+    textAlign: 'left'
+  },
+  menuItemContainer: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 15
+  },
   deactivateButton: {
-    height: 35,
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: 'red',
@@ -309,10 +335,22 @@ const styles = StyleSheet.create({
   },
   deactivateButtonText: {
     color: 'white',
-    fontSize: 15
+    fontSize: 15,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    paddingHorizontal: 20,
+    paddingVertical: 10
+  },
+  confirmButton: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'red',
+    alignItems: 'center',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginTop: 15,
+    flex: 1,
   },
   cancelButton: {
-    height: 35,
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: 'white',
@@ -320,11 +358,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 5,
     paddingHorizontal: 10,
-    marginTop: 15
+    marginTop: 15,
+    flex: 1,
   },
   cancelButtonText: {
-    color: 'black',
-    fontSize: 15
+    color: COLORS.BLACK,
+    fontSize: 15,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    paddingHorizontal: 20,
+    paddingVertical: 10
   },
   settingsOption: {
     width: '100%',
@@ -333,5 +375,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row'
+  },
+  menuItemText: { 
+    fontSize: 14,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   }
 })
