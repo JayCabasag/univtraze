@@ -89,7 +89,8 @@ const AccountSettingsScreen = ({ navigation }) => {
     
     try {
       setIsLoading(true)
-      const res = await genericDeleteRequest(`/users/${userId}/deactivate`)
+      console.log("user id",userId)
+      const res = await genericDeleteRequest(`users/${userId}/deactivate`, token)
       Alert.alert('Success', error?.response?.data?.message, [
         { text: 'OK', onPress: () => console.log('OK') }
       ])
