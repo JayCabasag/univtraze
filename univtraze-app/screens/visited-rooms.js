@@ -49,22 +49,22 @@ const VisitedRoomsScreen = ({ navigation }) => {
             {visitedRooms[0] ? (`${visitedRooms[0].building_name} \nRoom-${visitedRooms[0].room_number}`) : "None"}
           </Text>
         </View>
-         <Text style={styles.tableHeaderText}>Visit History</Text>
+         <Text style={styles.tableHeaderText}>Visited rooms</Text>
          <DataTable
           style={styles.dataTableStyles}
         >
           <DataTable.Header style={styles.dataTableHeader}>
+          <DataTable.Title>
+              <Text style={styles.dataTableTitleText}>Time</Text>
+            </DataTable.Title>
+          <DataTable.Title>
+              <Text style={styles.dataTableTitleText}>Date</Text>
+            </DataTable.Title>
             <DataTable.Title>
               <Text style={styles.dataTableTitleText}>Building</Text>
             </DataTable.Title>
             <DataTable.Title>
               <Text style={styles.dataTableTitleText}>Room no.</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Date</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Time</Text>
             </DataTable.Title>
           </DataTable.Header>
           {visitedRooms.length <= 0 && (
@@ -73,10 +73,10 @@ const VisitedRoomsScreen = ({ navigation }) => {
           {visitedRooms.length > 0 && visitedRooms.map((visitedRoom, index) => {
               return (
                 <DataTable.Row key={index}>
+                  <DataTable.Cell>{moment(visitedRoom.createdAt).format('HH:mm A')}</DataTable.Cell>
+                  <DataTable.Cell>{moment(visitedRoom.createdAt).format('MM-DD-YYYY')}</DataTable.Cell>
                   <DataTable.Cell>{visitedRoom.building_name.replace("Building", "")}</DataTable.Cell>
                   <DataTable.Cell>{visitedRoom.room_number}</DataTable.Cell>
-                  <DataTable.Cell>{moment(visitedRoom.createdAt).format('MM-DD-YYYY')}</DataTable.Cell>
-                  <DataTable.Cell>{moment(visitedRoom.createdAt).format('HH:mm A')}</DataTable.Cell>
                 </DataTable.Row>
               )
             })}
