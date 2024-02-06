@@ -22,13 +22,12 @@ const VisitedRoomsScreen = ({ navigation }) => {
 
   const [visitedRooms, setVisitedRooms] = useState([])
   const [refreshing, setRefreshing] = React.useState(false)
-
     const onRefresh = React.useCallback(() => {
     const getRoomVisited = async () => {
       try {
         setRefreshing(true)
         const res = await genericGetRequest(`room-visited?user_id=${userId}`, userToken)
-        console.log(res.results)
+        console.log("Helloooo",res.results)
         setVisitedRooms(res.results)
       } catch (error) {
         console.log('Hehhe', error)
@@ -40,7 +39,7 @@ const VisitedRoomsScreen = ({ navigation }) => {
   }, [userId, userToken])
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onRefresh}>
       <TopNavigation navigation={navigation}/>
          <ScrollView
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -75,7 +74,7 @@ const VisitedRoomsScreen = ({ navigation }) => {
           {visitedRooms.length > 0 && visitedRooms.map((room) => {
               return (
                 <DataTable.Row key={room.id}>
-                  <DataTable.Cell>{room.room_id}</DataTable.Cell>
+                  <DataTable.Cell>{room.id}</DataTable.Cell>
                   <DataTable.Cell>{room.building_name}</DataTable.Cell>
                   <DataTable.Cell>{room.room_number}</DataTable.Cell>
                   <DataTable.Cell>{moment(room.createdAt).format('mm-DD-YYYY')}</DataTable.Cell>

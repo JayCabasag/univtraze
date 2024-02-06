@@ -111,63 +111,69 @@ export default function QrScannerScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <TopNavigation navigation={navigation}/>
+      <TopNavigation navigation={navigation} />
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
-      <Modal
-        animationType='slide'
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible)
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <View style={styles.closeBtnContainer}>
-              <TouchableOpacity onPress={scanAgain}>
-                <Ionicons name='close' size={32} />
-              </TouchableOpacity>
-            </View>
-            <View style={{ alignItems: 'center', flexDirection: 'column' }}>
-              <Image source={MovingForwardImage} resizeMode='cover' style={styles.modalViewImage} />
-            </View>
-
-            <Text style={styles.modalText}>
-              Confirm visiting room {roomNumber} of {buildingName}?
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Pressable style={styles.cancelButton} onPress={cancelScanning}>
-                <Text style={styles.textStyleCancel}>Cancel</Text>
-              </Pressable>
-
-              <Pressable style={styles.confirmButton} onPress={() => confirmScanning(roomId)}>
-                <Text style={styles.textStyle}>Confirm</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
-
-      <View style={styles.barCodeContainer}>
-        <View style={scanned ? styles.barcodeboxScanned : styles.barcodeboxScanning}>
-          <BarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            style={{ height: 400, width: 400 }}
-          />
-        </View>
-
-        <View
-          style={{
-            width: '75%'
+        <Modal
+          animationType='slide'
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible)
           }}
         >
-          <Text style={{ fontSize: 15, paddingTop: 10 }}>Body temperature:</Text>
-          <Text style={{ fontSize: 35, paddingBottom: 10, textAlign: 'center', color: '#4d7861' }}>
-            {temp === '' || temp === 'Not set' ? 'Not set' : temp + '°C'}
-          </Text>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <View style={styles.closeBtnContainer}>
+                <TouchableOpacity onPress={scanAgain}>
+                  <Ionicons name='close' size={32} />
+                </TouchableOpacity>
+              </View>
+              <View style={{ alignItems: 'center', flexDirection: 'column' }}>
+                <Image
+                  source={MovingForwardImage}
+                  resizeMode='cover'
+                  style={styles.modalViewImage}
+                />
+              </View>
+
+              <Text style={styles.modalText}>
+                Confirm visiting room {roomNumber} of {buildingName}?
+              </Text>
+              <View style={{ flexDirection: 'row' }}>
+                <Pressable style={styles.cancelButton} onPress={cancelScanning}>
+                  <Text style={styles.textStyleCancel}>Cancel</Text>
+                </Pressable>
+
+                <Pressable style={styles.confirmButton} onPress={() => confirmScanning(roomId)}>
+                  <Text style={styles.textStyle}>Confirm</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
+        <View style={styles.barCodeContainer}>
+          <View style={scanned ? styles.barcodeboxScanned : styles.barcodeboxScanning}>
+            <BarCodeScanner
+              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              style={{ height: 400, width: 400 }}
+            />
+          </View>
+
+          <View
+            style={{
+              width: '75%'
+            }}
+          >
+            <Text style={{ fontSize: 15, paddingTop: 10 }}>Body temperature:</Text>
+            <Text
+              style={{ fontSize: 35, paddingBottom: 10, textAlign: 'center', color: '#4d7861' }}
+            >
+              {temp === '' || temp === 'Not set' ? 'Not set' : temp + '°C'}
+            </Text>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
     </View>
   )
 }

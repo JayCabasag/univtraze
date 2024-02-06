@@ -106,7 +106,7 @@ const AccountSettingsScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-      <TopNavigation navigation={navigation}/>
+      <TopNavigation navigation={navigation} />
       <View style={styles.mainContainer}>
         <Text style={styles.headerText}>Account settings</Text>
         <TouchableOpacity
@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30
   },
   backIconImage: {
-    marginLeft: -15, 
-    width: 60, 
+    marginLeft: -15,
+    width: 60,
     height: 60
   },
   headerText: {

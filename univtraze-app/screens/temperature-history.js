@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  RefreshControl
-} from 'react-native'
+import { StyleSheet, Text, View, ScrollView, RefreshControl } from 'react-native'
 import React from 'react'
 import { DataTable } from 'react-native-paper'
 import moment from 'moment'

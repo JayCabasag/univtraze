@@ -22,7 +22,7 @@ module.exports = {
     });
   },
   getVisitedRoomsByUserId: (id, callBack) => {
-    pool.query('SELECT * from visited_rooms where user_id = ?', [id], (error, results, fields) => {
+    pool.query('SELECT * from visited_rooms LEFT JOIN rooms ON visited_rooms.room_id = rooms.id  where visited_rooms.user_id = ?', [id], (error, results, fields) => {
       if (error) {
         return callBack(error);
       }
