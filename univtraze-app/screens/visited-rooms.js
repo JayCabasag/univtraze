@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  RefreshControl
-} from 'react-native'
+import { StyleSheet, Text, View, ScrollView, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { DataTable } from 'react-native-paper'
@@ -22,7 +16,7 @@ const VisitedRoomsScreen = ({ navigation }) => {
 
   const [visitedRooms, setVisitedRooms] = useState([])
   const [refreshing, setRefreshing] = React.useState(false)
-    const onRefresh = React.useCallback(() => {
+  const onRefresh = React.useCallback(() => {
     const getRoomVisited = async () => {
       try {
         setRefreshing(true)
@@ -39,25 +33,26 @@ const VisitedRoomsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container} onLayout={onRefresh}>
-      <TopNavigation navigation={navigation}/>
-         <ScrollView
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-         style={styles.tableContainer}>
-         <View style={styles.roomDetailsContainer}>
+      <TopNavigation navigation={navigation} />
+      <ScrollView
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        style={styles.tableContainer}
+      >
+        <View style={styles.roomDetailsContainer}>
           <Text style={styles.bodyText}>Latest visited room is</Text>
           <Text style={styles.roomDeteilsText}>
-            {visitedRooms[0] ? (`${visitedRooms[0].building_name} \nRoom-${visitedRooms[0].room_number}`) : "None"}
+            {visitedRooms[0]
+              ? `${visitedRooms[0].building_name} \nRoom-${visitedRooms[0].room_number}`
+              : 'None'}
           </Text>
         </View>
-         <Text style={styles.tableHeaderText}>Visited rooms</Text>
-         <DataTable
-          style={styles.dataTableStyles}
-        >
+        <Text style={styles.tableHeaderText}>Visited rooms</Text>
+        <DataTable style={styles.dataTableStyles}>
           <DataTable.Header style={styles.dataTableHeader}>
-          <DataTable.Title>
+            <DataTable.Title>
               <Text style={styles.dataTableTitleText}>Time</Text>
             </DataTable.Title>
-          <DataTable.Title>
+            <DataTable.Title>
               <Text style={styles.dataTableTitleText}>Date</Text>
             </DataTable.Title>
             <DataTable.Title>
@@ -67,16 +62,21 @@ const VisitedRoomsScreen = ({ navigation }) => {
               <Text style={styles.dataTableTitleText}>Room no.</Text>
             </DataTable.Title>
           </DataTable.Header>
-          {visitedRooms.length <= 0 && (
-            <Text style={styles.emptyText}>No rooms visited</Text>
-          )}
-          {visitedRooms.length > 0 && visitedRooms.map((visitedRoom, index) => {
+          {visitedRooms.length <= 0 && <Text style={styles.emptyText}>No rooms visited</Text>}
+          {visitedRooms.length > 0 &&
+            visitedRooms.map((visitedRoom, index) => {
               return (
                 <DataTable.Row key={index}>
                   <DataTable.Cell>{moment(visitedRoom.createdAt).format('HH:mm A')}</DataTable.Cell>
-                  <DataTable.Cell>{moment(visitedRoom.createdAt).format('MM-DD-YYYY')}</DataTable.Cell>
-                  <DataTable.Cell>{visitedRoom.building_name.replace("Building", "")}</DataTable.Cell>
-                  <DataTable.Cell>{visitedRoom.room_number}</DataTable.Cell>
+                  <DataTable.Cell>
+                    {moment(visitedRoom.createdAt).format('MM-DD-YYYY')}
+                  </DataTable.Cell>
+                  <DataTable.Cell>
+                    {visitedRoom.building_name.replace('Building', '')}
+                  </DataTable.Cell>
+                  <DataTable.Cell textStyle={styles.roomNumberText}>
+                    {visitedRoom.room_number}
+                  </DataTable.Cell>
                 </DataTable.Row>
               )
             })}
@@ -140,5 +140,9 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: 'center',
     paddingVertical: 15
+  },
+  roomNumberText: {
+    textAlign: 'center',
+    flex: 1
   }
 })

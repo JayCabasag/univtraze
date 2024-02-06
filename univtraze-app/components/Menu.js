@@ -61,11 +61,16 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
                 justifyContent: 'center'
               }}
             >
-              <GeneratedAvatar
-                initials={initials}
-                textStyle={{ fontSize: 30 }}
-                containerStyle={{ height: 80, width: 80 }}
-              />
+               {state?.details?.profile_url && (
+                <Image source={{ uri: state.details.profile_url }}/>
+              )}
+              {!state?.details?.profile_url && (
+                <GeneratedAvatar
+                  initials={initials}
+                  textStyle={{ fontSize: 30 }}
+                  containerStyle={{ height: 80, width: 80 }}
+                />
+              )}
             </View>
             <View style={styles.modalUserDetailsContainer}>
               <Text numberOfLines={1} style={styles.fullNameText}>
