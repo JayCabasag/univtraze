@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useReducer, useState } from 'react'
 import { useUser } from '../user/UserContext'
 import { genericGetRequest } from '../../api/genericGetRequest'
 
@@ -49,8 +49,23 @@ export const UserTemperaturesContextProvider = ({ children }) => {
     }
     bootstrapAsync()
   }, [userId])
+
+  const userTemperatureContext = useMemo(
+    () => ({
+      updateUserTemperatures: ({ temperatures }) => {
+        dispatch({ type: 'RESTORE_USER_TEMPERATURES', temperatures })
+      }
+    }),
+    []
+  )
+
   return (
-    <UserTemperaturesContext.Provider value={{ temperatures: state.temperatures }}>
+    <UserTemperaturesContext.Provider
+      value={{
+        temperatures: state.temperatures,
+        updateUserTemperatures: userTemperatureContext.updateUserTemperatures
+      }}
+    >
       {children}
     </UserTemperaturesContext.Provider>
   )

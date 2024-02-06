@@ -12,7 +12,6 @@ import {
   Alert
 } from 'react-native'
 import React, { useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoginImage from '../assets/login_image.png'
 import { emailRegEx } from '../utils/regex'
@@ -21,12 +20,12 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import useFormErrors from '../hooks/useFormErrors'
+import BackIcon from '../assets/back-icon.png'
+import TopNavigation from '../components/TopNavigation'
 
 const SignInScreen = ({ navigation }) => {
   const { signIn } = useAuth()
   const { setUser } = useUser()
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
   const [email, onChangeEmail] = useState('')
   const [password, onChangePassword] = useState('')
 
@@ -69,6 +68,12 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView behavior='height' style={styles.container}>
+      <LoadingModal
+        onRequestClose={() => setShowLoadingModal(false)}
+        open={showLoadingModal}
+        loadingMessage={loadingMessage}
+      />
+      <TopNavigation navigation={navigation} />
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}
@@ -113,17 +118,12 @@ const SignInScreen = ({ navigation }) => {
             Forgot Password?
           </Text>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={onPressLogin} style={styles.signInBtn}>
-            <Text style={styles.buttonText}>Log in</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
-      <LoadingModal
-        onRequestClose={() => setShowLoadingModal(false)}
-        open={showLoadingModal}
-        loadingMessage={loadingMessage}
-      />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={onPressLogin} style={styles.signInBtn}>
+          <Text style={styles.buttonText}>Log in</Text>
+        </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   )
 }
@@ -134,23 +134,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
-    backgroundColor: '#E1F5E4'
+    backgroundColor: '#E1F5E4',
+    paddingHorizontal: 30
   },
   scrollView: {
     flex: 1,
-    width: '100%',
-    marginTop: 20
+    width: '100%'
   },
-  scrollViewContent: {},
   image: {
     justifyContent: 'center',
     width: 200,
     height: 200,
     resizeMode: 'center'
   },
-
+  backIconImage: { marginLeft: -15, width: 60, height: 60 },
+  topContainer: {
+    paddingHorizontal: 25,
+    width: '100%',
+    height: 90,
+    justifyContent: 'space-between',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
+  },
+  backIcon: {
+    height: 60,
+    width: 60,
+    marginLeft: -15,
+    justifyContent: 'center'
+  },
   imageContainer: {
-    marginTop: 50,
+    marginTop: 20,
     width: '100%',
     height: 200,
     alignItems: 'center',
@@ -159,7 +174,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginTop: 10,
     width: '100%',
-    paddingHorizontal: 30,
     display: 'flex'
   },
   label: {
@@ -197,7 +211,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     borderRadius: 10,
     width: '100%',
-    marginTop: 5,
+    marginTop: 10,
     paddingVertical: 15,
     shadowColor: '#000',
     shadowOffset: {
@@ -302,7 +316,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     height: 'auto',
-    paddingHorizontal: 30,
     paddingBottom: 10
   }
 })

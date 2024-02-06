@@ -9,7 +9,6 @@ import {
 } from 'react-native'
 import React, { useState, useEffect, Fragment } from 'react'
 import axios from 'axios'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dimensions } from 'react-native'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'

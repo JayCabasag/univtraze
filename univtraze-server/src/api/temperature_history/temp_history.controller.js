@@ -6,7 +6,6 @@ const { getAllTempHistory, getTempHistoryByUserId, addTemperatureHistory } = req
 module.exports = {
   getTempHistory: (req, res) => {
     const userId = req.query.user_id;
-
     if (!userId) {
       return getAllTempHistory((err, results) => {
         if (err) {

@@ -2,164 +2,87 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableWithoutFeedback,
-  ImageBackground,
   ScrollView,
-  Dimensions,
-  Alert
+  RefreshControl
 } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
-import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import moment from 'moment'
 import { DataTable } from 'react-native-paper'
-import BackIcon from '../assets/back-icon.png'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import TopNavigation from '../components/TopNavigation'
+import { useAuth } from '../services/store/auth/AuthContext'
+import { useUser } from '../services/store/user/UserContext'
+import { genericGetRequest } from '../services/api/genericGetRequest'
 
-const VisitedRoomsScreen = ({
-  navigation,
-  route: {
-    params: { id, type }
-  }
-}) => {
-  const [roomVisited, setRoomVisited] = useState([])
+const VisitedRoomsScreen = ({ navigation }) => {
+  const { state: auth } = useAuth()
+  const { state: user } = useUser()
+  const userId = user.user.id
+  const userToken = auth.userToken
 
-  const handleGetUserVisitedRooms = async (uid, userType, currentToken) => {
-    const config = {
-      headers: { Authorization: `Bearer ${currentToken}` }
+  const [visitedRooms, setVisitedRooms] = useState([])
+  const [refreshing, setRefreshing] = React.useState(false)
+
+    const onRefresh = React.useCallback(() => {
+    const getRoomVisited = async () => {
+      try {
+        setRefreshing(true)
+        const res = await genericGetRequest(`room-visited?user_id=${userId}`, userToken)
+        console.log(res.results)
+        setVisitedRooms(res.results)
+      } catch (error) {
+        console.log('Hehhe', error)
+      } finally {
+        setRefreshing(false)
+      }
     }
-
-    const data = {
-      user_id: uid
-    }
-
-    await axios
-      .post(`https://univtraze.herokuapp.com/api/rooms/userVisitedRooms`, data, config)
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return alert('An error has occured...')
-        }
-
-        if (success === 1) {
-          return setRoomVisited(response.data.data)
-        }
-      })
-  }
-
-  const [notificationCounts, setNotificationCounts] = useState(1)
-
-  const [visible, setVisible] = useState(false)
-  const [notifVisible, setNotifVisible] = useState(false)
-  const toggleBottomNavigationView = () => {
-    //Toggling the visibility state of the bottom sheet
-    setVisible(!visible)
-  }
-
-  const toggleNotifNavigationView = () => {
-    //Toggling the visibility state of the bottom sheet
-    setNotifVisible(!notifVisible)
-  }
-
-  const viewHistoryData = (room_id, building_name, room_number, date, time) => {
-    Alert.alert(
-      'Room visited History',
-      'Room ID: ' +
-        room_id +
-        '\n Building name : ' +
-        building_name +
-        '\n Room number: ' +
-        room_number +
-        '\n Date: ' +
-        date +
-        '\n Time: ' +
-        time,
-      [{ text: 'OK', onPress: () => {} }]
-    )
-  }
+    getRoomVisited()
+  }, [userId, userToken])
 
   return (
-    <View style={styles.mainContainer}>
-      <View style={styles.topContainer}>
-        <View style={styles.backIcon}>
-          <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.goBack()
-            }}
-          >
-            <ImageBackground
-              src={BackIcon}
-              resizeMode='contain'
-              style={styles.image}
-            ></ImageBackground>
-          </TouchableWithoutFeedback>
+    <View style={styles.container}>
+      <TopNavigation navigation={navigation}/>
+         <ScrollView
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+         style={styles.tableContainer}>
+         <View style={styles.roomDetailsContainer}>
+          <Text style={styles.bodyText}>Latest visited room is</Text>
+          <Text style={styles.roomDeteilsText}>
+            {"Bldg 1,\nRoom 404"}
+          </Text>
         </View>
-      </View>
-      <View style={{ width: 340, height: 'auto' }}>
-        <Text style={styles.roomVisitedText}>Room Visited</Text>
-      </View>
-      <ScrollView style={styles.tableContainer}>
-        <DataTable
-          style={{
-            borderWidth: 1,
-            borderRadius: 10,
-            borderColor: COLORS.PRIMARY
-          }}
+         <Text style={styles.tableHeaderText}>History</Text>
+         <DataTable
+          style={styles.dataTableStyles}
         >
-          <DataTable.Header
-            style={{
-              backgroundColor: COLORS.PRIMARY,
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-              elevation: 5
-            }}
-          >
+          <DataTable.Header style={styles.dataTableHeader}>
             <DataTable.Title>
-              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Room Id</Text>
+              <Text style={styles.dataTableTitleText}>Bldg</Text>
             </DataTable.Title>
             <DataTable.Title>
-              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Bldg name</Text>
+              <Text style={styles.dataTableTitleText}>Room no.</Text>
             </DataTable.Title>
             <DataTable.Title>
-              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Room no.</Text>
+              <Text style={styles.dataTableTitleText}>Date</Text>
             </DataTable.Title>
             <DataTable.Title>
-              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Date</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={{ fontSize: 14, fontWeight: 'bold' }}>Time</Text>
+              <Text style={styles.dataTableTitleText}>Time</Text>
             </DataTable.Title>
           </DataTable.Header>
-          {roomVisited ? (
-            <View>
-              <Text style={styles.rowBody}>No rooms visited</Text>
-            </View>
-          ) : (
-            roomVisited.map((room) => {
+          {visitedRooms.length <= 0 && (
+            <Text style={styles.emptyText}>No rooms visited</Text>
+          )}
+          {visitedRooms.length > 0 && visitedRooms.map((room) => {
               return (
-                <DataTable.Row
-                  key={room.id}
-                  onPress={() => {
-                    viewHistoryData(
-                      room.room_id,
-                      room.building_name,
-                      room.room_number,
-                      moment(room.createdAt).format('MM-DD-YY'),
-                      moment(room.createdAt).format('HH:mm A')
-                    )
-                  }}
-                >
+                <DataTable.Row key={room.id}>
                   <DataTable.Cell>{room.room_id}</DataTable.Cell>
                   <DataTable.Cell>{room.building_name}</DataTable.Cell>
                   <DataTable.Cell>{room.room_number}</DataTable.Cell>
-                  <DataTable.Cell>{moment(room.createdAt).format('MM-DD-YY')}</DataTable.Cell>
+                  <DataTable.Cell>{moment(room.createdAt).format('mm-DD-YYYY')}</DataTable.Cell>
                   <DataTable.Cell>{moment(room.createdAt).format('HH:mm A')}</DataTable.Cell>
                 </DataTable.Row>
               )
-            })
-          )}
+            })}
         </DataTable>
       </ScrollView>
     </View>
@@ -169,130 +92,56 @@ const VisitedRoomsScreen = ({
 export default VisitedRoomsScreen
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    backgroundColor: '#E1F5E4',
-    paddingHorizontal: 40,
-    height: '100%'
-  },
-  roomVisitedText: {
-    color: COLORS.TEXT_BLACK,
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 10
-  },
-  tableContainer: {
-    marginBottom: 10,
-    borderRadius: 10
-  },
-  topContainer: {
-    zIndex: 1,
-    width: '100%',
-    height: '15%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0
-  },
-
-  backIcon: {
-    height: 60,
-    width: 60,
-    marginLeft: -45,
-    justifyContent: 'center'
-  },
-
-  image: {
-    width: '100%',
-    height: '100%'
-  },
-
-  bodyContainer: {
-    height: '85%',
-    paddingHorizontal: 40,
-    borderWidth: 5
-  },
-  listWrapperHeader: {
-    height: 45,
-    width: '100%',
-    backgroundColor: COLORS.PRIMARY,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    elevation: 15,
-    shadowColor: COLORS.PRIMARY
-  },
-  listWrapper: {
-    height: 45,
-    width: '100%',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    borderBottomWidth: 0.5,
-    borderColor: '#E1F5E4',
-    backgroundColor: 'white'
-  },
-  row: {
+  container: {
     flex: 1,
-    padding: 15,
-    fontSize: 14,
-    color: '#E1F5E4'
-  },
-  rowBody: {
-    flex: 1,
-    padding: 15,
-    fontSize: 14,
-    color: COLORS.TEXT_BLACK
-  },
-  topContainer: {
-    zIndex: 1,
-    width: '100%',
-    height: '15%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-
+    backgroundColor: COLORS.SECONDARY,
     paddingHorizontal: 30
   },
-  menuLogo: {
-    height: '50%',
-    width: '20%',
-    justifyContent: 'center',
-    alignItems: 'center'
+  tableHeaderText: {
+    fontSize: 25,
+    paddingBottom: 10,
+    color: '#000000',
+    fontWeight: '700',
+    marginLeft: 0,
+    marginRight: 'auto'
   },
-  notifLogo: {
-    height: '50%',
-    width: '20%',
-    justifyContent: 'center',
-    alignItems: 'center'
+  tableSubHeaderText: {
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+    paddingVertical: 10
   },
-
-  bottomNavigationView: {
-    backgroundColor: '#fff',
-    width: '100%',
-    height: '60%',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30
+  roomDetailsContainer: {
+    width: '100%'
   },
-  centeredViews: {
-    flex: 1,
-    backgroundColor: 'rgba(52, 52, 52, 0.3)',
-    justifyContent: 'center',
-    alignItems: 'center'
+  bodyText: {
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
-  modalView: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    width: 350,
-    height: 474,
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
+  dataTableContainer: {
+    width: '100%'
+  },
+  roomDeteilsText: {
+    fontSize: 35,
+    marginTop: 10,
+    lineHeight: 43,
+    color: COLORS.PRIMARY,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
+  },
+  dataTableStyles: {
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: COLORS.PRIMARY
+  },
+  dataTableHeader: {
+    backgroundColor: COLORS.PRIMARY,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     elevation: 5
+  },
+  dataTableTitleText: {
+    fontSize: 14,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM
+  },
+  emptyText: {
+    textAlign: 'center',
+    paddingVertical: 15
   }
 })

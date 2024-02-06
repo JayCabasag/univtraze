@@ -20,6 +20,7 @@ import { useUserTemperatures } from '../services/store/user-temperature/UserTemp
 import { genericPostRequest } from '../services/api/genericPostRequest'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MovingForwardImage from './../assets/moving_forward.png'
+import TopNavigation from '../components/TopNavigation'
 
 export default function QrScannerScreen({ navigation, route }) {
   const { state: user } = useUser()
@@ -109,12 +110,9 @@ export default function QrScannerScreen({ navigation, route }) {
   }
 
   return (
-    <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
-      <View style={styles.topContainer}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image source={BackIcon} style={{ marginLeft: -15, width: 60, height: 60 }} />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      <TopNavigation navigation={navigation}/>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
       <Modal
         animationType='slide'
         transparent={true}
@@ -170,10 +168,16 @@ export default function QrScannerScreen({ navigation, route }) {
         </View>
       </View>
     </ScrollView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.SECONDARY,
+    paddingHorizontal: 30
+  },
   scrollView: {
     flex: 1,
     backgroundColor: COLORS.SECONDARY

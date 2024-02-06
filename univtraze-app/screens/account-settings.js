@@ -18,8 +18,8 @@ import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'
 import useFormErrors from '../hooks/useFormErrors'
-import { genericDeleteRequest } from '../services/api/genericDeleteRequest'
 import { genericPostRequest } from '../services/api/genericPostRequest'
+import TopNavigation from '../components/TopNavigation'
 
 const AccountSettingsScreen = ({ navigation }) => {
   const toast = useToast()
@@ -34,60 +34,12 @@ const AccountSettingsScreen = ({ navigation }) => {
 
   const { setFormErrors, formErrors, resetFormErrors } = useFormErrors(['password'])
 
-  //Error handlers
-
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('Error')
-
-  const deleteAccountPermanently = async (currentToken, id) => {
-    
-    // const config = {
-    //   headers: { Authorization: `Bearer ${currentToken}` }
-    // }
-    // const data = {
-    //   id: id,
-    //   password: password
-    // }
-    // setIsLoading(true)
-    // setError(false)
-    // try {
-    //   await axios
-    //     .post(`https://univtraze.herokuapp.com/api/user/deactivateAccount`, data, config)
-    //     .then((response) => {
-    //       const success = response.data.success
-    //       if (success === 0) {
-    //         setIsLoading(false)
-    //         setError(true)
-    //         setErrorMessage(response.data.message)
-    //         return
-    //       }
-    //       if (success === 1) {
-    //         setIsLoading(false)
-    //         setError(false)
-    //         navigation.navigate('signin')
-    //         toast.show('Account deactivated...', {
-    //           type: 'normal',
-    //           placement: 'bottom',
-    //           duration: 1000,
-    //           offset: 30,
-    //           animationType: 'slide-in'
-    //         })
-    //         return
-    //       }
-    //     })
-    // } catch (error) {
-    //   setIsLoading(false)
-    //   setError(true)
-    //   setErrorMessage('Network error')
-    // }
-  }
-
   const confirmDeleteAccount = async () => {
     resetFormErrors()
     if (password == '' || password == null) {
       return setFormErrors('password', 'Password is required')
     }
-    
+
     try {
       setIsLoading(true)
       const payload = {
@@ -95,10 +47,13 @@ const AccountSettingsScreen = ({ navigation }) => {
       }
       const res = await genericPostRequest(`users/${userId}/deactivate`, payload, token)
       Alert.alert('Success', res.message, [
-        { text: 'OK', onPress: () =>  {
-          signOut();
-          clearUser();
-        }}
+        {
+          text: 'OK',
+          onPress: () => {
+            signOut()
+            clearUser()
+          }
+        }
       ])
     } catch (error) {
       console.log(error)
@@ -108,12 +63,11 @@ const AccountSettingsScreen = ({ navigation }) => {
     } finally {
       setIsLoading(false)
     }
-
   }
 
   return (
     <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContainer}>
-     <Modal
+      <Modal
         animationType='fade'
         transparent={true}
         visible={showPasswordModal}
@@ -124,9 +78,7 @@ const AccountSettingsScreen = ({ navigation }) => {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalHeaderText}>
-              Once deleted, the account is irrecoverable.
-            </Text>
+            <Text style={styles.modalHeaderText}>Once deleted, the account is irrecoverable.</Text>
             <Text style={styles.passwordLabelText}>To continue, please confirm with password</Text>
             <TextInput
               placeholder='Password'
@@ -138,13 +90,8 @@ const AccountSettingsScreen = ({ navigation }) => {
             {formErrors.password?.hasError && (
               <Text style={styles.errorText}>{formErrors.password?.message}</Text>
             )}
-            <View
-              style={styles.menuItemContainer}
-            >
-              <TouchableOpacity
-                style={styles.confirmButton}
-                onPress={confirmDeleteAccount}
-              >
+            <View style={styles.menuItemContainer}>
+              <TouchableOpacity style={styles.confirmButton} onPress={confirmDeleteAccount}>
                 <Text style={styles.deactivateButtonText}>Confirm</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -159,13 +106,7 @@ const AccountSettingsScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-
-      <View style={styles.topContainer}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image source={BackIcon} style={styles.backIconImage} />
-        </TouchableOpacity>
-      </View>
-
+      <TopNavigation navigation={navigation}/>
       <View style={styles.mainContainer}>
         <Text style={styles.headerText}>Account settings</Text>
         <TouchableOpacity
@@ -180,7 +121,7 @@ const AccountSettingsScreen = ({ navigation }) => {
         <TouchableOpacity
           style={styles.settingsOption}
           onPress={() => {
-            navigation.navigate('UpdatePassword',)
+            navigation.navigate('UpdatePassword')
           }}
         >
           <Text style={styles.menuItemText}>Update Password</Text>
@@ -209,28 +150,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.SECONDARY
+    backgroundColor: COLORS.SECONDARY,
+    paddingHorizontal: 30
   },
-  backIconImage: { marginLeft: -15, width: 60, height: 60 },
-  topContainer: {
-    paddingHorizontal: 25,
-    width: '100%',
-    height: 100,
-    justifyContent: 'space-between',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
-  },
-  backIcon: {
-    height: 60,
-    width: 60,
-    marginLeft: -15,
-    justifyContent: 'center'
-  },
-  image: {
-    width: '100%',
-    height: '100%'
+  backIconImage: {
+    marginLeft: -15, 
+    width: 60, 
+    height: 60
   },
   headerText: {
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
@@ -238,7 +164,6 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   mainContainer: {
-    paddingHorizontal: 30,
     width: '100%'
   },
   centeredView: {
@@ -355,7 +280,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 15,
-    flex: 1,
+    flex: 1
   },
   cancelButton: {
     justifyContent: 'center',
@@ -366,7 +291,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 15,
-    flex: 1,
+    flex: 1
   },
   cancelButtonText: {
     color: COLORS.BLACK,
@@ -383,7 +308,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row'
   },
-  menuItemText: { 
+  menuItemText: {
     fontSize: 14,
     fontFamily: FONT_FAMILY.POPPINS_REGULAR
   }

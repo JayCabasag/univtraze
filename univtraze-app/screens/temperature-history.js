@@ -2,26 +2,23 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   ScrollView,
-  TouchableOpacity,
   RefreshControl
 } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { DataTable } from 'react-native-paper'
 import moment from 'moment'
-import BackIcon from '../assets/back-icon.png'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
+import TopNavigation from '../components/TopNavigation'
 
 const TemperatureHistoryScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
   const { state: user } = useUser()
-  const { temperatures } = useUserTemperatures()
-  const [roomVisitedList, setRoomVisitedList] = useState([])
+  const { temperatures, updateUserTemperatures } = useUserTemperatures()
   const userId = user.user.id
   const userToken = auth.userToken
 
@@ -30,8 +27,8 @@ const TemperatureHistoryScreen = ({ navigation }) => {
     setRefreshing(true)
     const getRoomVisited = async () => {
       try {
-        const res = await genericGetRequest(`room-visited?user_id=${userId}`, userToken)
-        setRoomVisitedList(res.results)
+        const res = await genericGetRequest(`temperature-history?user_id=${userId}`, userToken)
+        updateUserTemperatures({ temperatures: res.results })
       } catch (error) {
         console.log('Hehhe', error)
       } finally {
@@ -42,73 +39,73 @@ const TemperatureHistoryScreen = ({ navigation }) => {
   }, [userId, userToken])
 
   return (
-    <ScrollView
-      onLayout={onRefresh}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollViewContainer}
-    >
-      <View style={styles.topContainer}>
-        <TouchableOpacity onPress={navigation.goBack}>
-          <Image source={BackIcon} style={{ marginLeft: -15, width: 60, height: 60 }} />
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      <TopNavigation navigation={navigation} />
+      <ScrollView
+        onLayout={onRefresh}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContainer}
+      >
+        <View style={styles.tempContainer}>
+          <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
+          <Text style={styles.tempText}>
+            {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'} &deg;C
+          </Text>
+        </View>
 
-      <View style={styles.tempContainer}>
-        <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
-        <Text style={styles.tempText}>
-          {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'} &deg;C
-        </Text>
-      </View>
-
-      <View style={styles.dataTableContainer}>
-        <Text style={styles.tableHeaderText}>History</Text>
-        <DataTable style={styles.dataTableStyles}>
-          <DataTable.Header style={styles.dataTableHeaderStyle}>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Temp</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Room Id</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Date</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Time</Text>
-            </DataTable.Title>
-          </DataTable.Header>
-          {refreshing && <Text style={styles.emptyText}>Please wait...</Text>}
-          {roomVisitedList.length == 0 && !refreshing && (
-            <Text style={styles.emptyText}>Empty</Text>
-          )}
-          {roomVisitedList.length > 0 &&
-            roomVisitedList.map((roomVisited) => {
-              return (
-                <DataTable.Row key={roomVisited.id}>
-                  <DataTable.Cell textStyle={styles.tableContentText}>
-                    {roomVisited.temperature}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={styles.tableContentText}>
-                    {roomVisited.room_id}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={styles.tableContentText}>
-                    {moment.utc(roomVisited.createdAt).local().format('ll')}
-                  </DataTable.Cell>
-                  <DataTable.Cell textStyle={styles.tableContentText}>
-                    {moment.utc(roomVisited.created_at).local().format('LT')}
-                  </DataTable.Cell>
-                </DataTable.Row>
-              )
-            })}
-        </DataTable>
-      </View>
-    </ScrollView>
+        <View style={styles.dataTableContainer}>
+          <Text style={styles.tableHeaderText}>History</Text>
+          <DataTable style={styles.dataTableStyles}>
+            <DataTable.Header style={styles.dataTableHeaderStyle}>
+              <DataTable.Title>
+                <Text style={styles.dataTableTitleText}>Temp</Text>
+              </DataTable.Title>
+              <DataTable.Title>
+                <Text style={styles.dataTableTitleText}>Room Id</Text>
+              </DataTable.Title>
+              <DataTable.Title>
+                <Text style={styles.dataTableTitleText}>Date</Text>
+              </DataTable.Title>
+              <DataTable.Title>
+                <Text style={styles.dataTableTitleText}>Time</Text>
+              </DataTable.Title>
+            </DataTable.Header>
+            {refreshing && <Text style={styles.emptyText}>Please wait...</Text>}
+            {temperatures.length == 0 && !refreshing && <Text style={styles.emptyText}>Empty</Text>}
+            {temperatures.length > 0 &&
+              temperatures.map((roomVisited) => {
+                return (
+                  <DataTable.Row key={roomVisited.id}>
+                    <DataTable.Cell textStyle={styles.tableContentText}>
+                      {roomVisited.temperature}
+                    </DataTable.Cell>
+                    <DataTable.Cell textStyle={styles.tableContentText}>
+                      {roomVisited.room_id}
+                    </DataTable.Cell>
+                    <DataTable.Cell textStyle={styles.tableContentText}>
+                      {moment.utc(roomVisited.createdAt).local().format('ll')}
+                    </DataTable.Cell>
+                    <DataTable.Cell textStyle={styles.tableContentText}>
+                      {moment.utc(roomVisited.created_at).local().format('LT')}
+                    </DataTable.Cell>
+                  </DataTable.Row>
+                )
+              })}
+          </DataTable>
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 export default TemperatureHistoryScreen
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 30,
+    backgroundColor: COLORS.SECONDARY
+  },
   scrollView: {
     flex: 1,
     backgroundColor: COLORS.SECONDARY
@@ -119,27 +116,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: COLORS.SECONDARY
   },
-  topContainer: {
-    paddingHorizontal: 25,
-    width: '100%',
-    height: 100,
-    justifyContent: 'space-between',
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
-  },
-  backIcon: {
-    height: 60,
-    width: 60,
-    marginLeft: -15,
-    justifyContent: 'center'
-  },
-  image: {
-    width: '100%',
-    height: '100%'
-  },
-
   centeredView: {
     flex: 1,
     backgroundColor: 'rgba(52, 52, 52, 0.3)',
@@ -196,7 +172,7 @@ const styles = StyleSheet.create({
   },
   dataTableTitleText: {
     fontSize: 14,
-    fontWeight: 'bold'
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM
   },
   tableContentText: {
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
@@ -212,15 +188,13 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.POPPINS_LIGHT
   },
   tempContainer: {
-    width: '100%',
-    paddingHorizontal: 30
+    width: '100%'
   },
   bodyText: {
     fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
   dataTableContainer: {
-    width: '100%',
-    paddingHorizontal: 30
+    width: '100%'
   },
   tempText: {
     fontSize: 60,
