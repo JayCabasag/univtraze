@@ -49,7 +49,7 @@ const TemperatureHistoryScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.dataTableContainer}>
-          <Text style={styles.tableHeaderText}>History</Text>
+          <Text style={styles.tableHeaderText}>Temperature History</Text>
           <DataTable style={styles.dataTableStyles}>
             <DataTable.Header style={styles.dataTableHeaderStyle}>
               <DataTable.Title>

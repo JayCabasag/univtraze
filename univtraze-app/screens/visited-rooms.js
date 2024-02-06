@@ -27,7 +27,6 @@ const VisitedRoomsScreen = ({ navigation }) => {
       try {
         setRefreshing(true)
         const res = await genericGetRequest(`room-visited?user_id=${userId}`, userToken)
-        console.log("Helloooo",res.results)
         setVisitedRooms(res.results)
       } catch (error) {
         console.log('Hehhe', error)
@@ -47,16 +46,16 @@ const VisitedRoomsScreen = ({ navigation }) => {
          <View style={styles.roomDetailsContainer}>
           <Text style={styles.bodyText}>Latest visited room is</Text>
           <Text style={styles.roomDeteilsText}>
-            {"Bldg 1,\nRoom 404"}
+            {visitedRooms[0] ? (`${visitedRooms[0].building_name} \nRoom-${visitedRooms[0].room_number}`) : "None"}
           </Text>
         </View>
-         <Text style={styles.tableHeaderText}>History</Text>
+         <Text style={styles.tableHeaderText}>Visit History</Text>
          <DataTable
           style={styles.dataTableStyles}
         >
           <DataTable.Header style={styles.dataTableHeader}>
             <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Bldg</Text>
+              <Text style={styles.dataTableTitleText}>Building</Text>
             </DataTable.Title>
             <DataTable.Title>
               <Text style={styles.dataTableTitleText}>Room no.</Text>
@@ -71,14 +70,13 @@ const VisitedRoomsScreen = ({ navigation }) => {
           {visitedRooms.length <= 0 && (
             <Text style={styles.emptyText}>No rooms visited</Text>
           )}
-          {visitedRooms.length > 0 && visitedRooms.map((room) => {
+          {visitedRooms.length > 0 && visitedRooms.map((visitedRoom, index) => {
               return (
-                <DataTable.Row key={room.id}>
-                  <DataTable.Cell>{room.id}</DataTable.Cell>
-                  <DataTable.Cell>{room.building_name}</DataTable.Cell>
-                  <DataTable.Cell>{room.room_number}</DataTable.Cell>
-                  <DataTable.Cell>{moment(room.createdAt).format('mm-DD-YYYY')}</DataTable.Cell>
-                  <DataTable.Cell>{moment(room.createdAt).format('HH:mm A')}</DataTable.Cell>
+                <DataTable.Row key={index}>
+                  <DataTable.Cell>{visitedRoom.building_name.replace("Building", "")}</DataTable.Cell>
+                  <DataTable.Cell>{visitedRoom.room_number}</DataTable.Cell>
+                  <DataTable.Cell>{moment(visitedRoom.createdAt).format('MM-DD-YYYY')}</DataTable.Cell>
+                  <DataTable.Cell>{moment(visitedRoom.createdAt).format('HH:mm A')}</DataTable.Cell>
                 </DataTable.Row>
               )
             })}
