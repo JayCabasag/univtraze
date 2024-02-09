@@ -5,7 +5,8 @@ import {
   Pressable,
   Modal,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Image
 } from 'react-native'
 import React, { useId, useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
@@ -62,7 +63,7 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
               }}
             >
                {state?.details?.profile_url && (
-                <Image source={{ uri: state.details.profile_url }}/>
+                <Image source={{ uri: state.details.profile_url }} style={styles.profilePhoto}/>
               )}
               {!state?.details?.profile_url && (
                 <GeneratedAvatar
@@ -381,5 +382,10 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'flex-start',
     textAlignVertical: 'top'
+  },
+  profilePhoto: {
+    height: 80, 
+    width: 80,
+    borderRadius: 100
   }
 })

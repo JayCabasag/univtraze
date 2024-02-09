@@ -23,6 +23,7 @@ import Menu from '../components/Menu'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
+import DiseaseReportCard from '../components/DiseaseReportCard'
 
 const IndexScreen = ({ navigation }) => {
   const { state: user, updateUserDetails } = useUser()
@@ -79,64 +80,11 @@ const IndexScreen = ({ navigation }) => {
   }
 
   const handleUpdateNotificationStatus = async (userId, notification_is_viewed, currentToken) => {
-    const config = {
-      headers: { Authorization: `Bearer ${currentToken}` }
-    }
 
-    const data = {
-      notification_is_viewed: 1,
-      notification_for: userId
-    }
-
-    await axios
-      .post(
-        `https://univtraze.herokuapp.com/api/notifications/updateUserNotificationStatus `,
-        data,
-        config
-      )
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return
-        }
-
-        if (success === 1) {
-          return
-        }
-
-        alert('Something went wrong... Please try again')
-      })
   }
 
   const getTotalActiveNotifications = async (currentToken) => {
-    const config = {
-      headers: { Authorization: `Bearer ${currentToken}` }
-    }
-
-    const data = {
-      user_id: userId
-    }
-
-    await axios
-      .post(
-        `https://univtraze.herokuapp.com/api/notifications/getTotalActiveUserNotifications`,
-        data,
-        config
-      )
-      .then((response) => {
-        const success = response.data.success
-
-        if (success === 0) {
-          return alert('An error occured while getting on-going cases')
-        }
-
-        if (success === 1) {
-          return setNotificationCounts(response.data.results.total_notifications)
-        }
-
-        alert('Something went wrong... Please try again')
-      })
+   
   }
 
   useEffect(() => {
@@ -287,36 +235,13 @@ const IndexScreen = ({ navigation }) => {
           <Text style={styles.sectionSubText}>University</Text>
         </View>
         <View style={styles.casesContainer}>
-          <ImageBackground
-            source={require('../assets/confirmed_case_icon.png')}
-            resizeMode='stretch'
-            style={styles.confirmCasesCard}
-          >
-            <Text style={{ fontSize: 10 }}>Confirmed</Text>
-            <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
-              {reportedCommunicableDiseaseOnGoing && reportedCommunicableDiseaseOnGoing
-                ? reportedCommunicableDiseaseOnGoing.length
-                : 0}
-            </Text>
-          </ImageBackground>
-
-          <ImageBackground
-            source={require('../assets/confirmed_case_icon.png')}
-            resizeMode='stretch'
-            style={styles.confirmCasesCard}
-          >
-            <Text style={{ fontSize: 10 }}>Recovered</Text>
-            <Text style={{ fontSize: 22, fontWeight: 'bold', color: COLORS.PRIMARY }}>
-              {reportedCommunicableDiseaseResolved && reportedCommunicableDiseaseResolved
-                ? reportedCommunicableDiseaseResolved.length
-                : 0}
-            </Text>
-          </ImageBackground>
+          <DiseaseReportCard label={"Confirmed"} total={2}/>
+          <DiseaseReportCard label={"Recovered"} total={2}/>
         </View>
 
         <View style={styles.phUpdateContainer}>
           <Text numberOfLines={1} style={styles.sectionHeaderText}>
-            Philippines Update
+            Main Diseases
           </Text>
           {isLoadingPhCovidCases ? (
             <ActivityIndicator
@@ -401,6 +326,7 @@ const IndexScreen = ({ navigation }) => {
               />
             </View>
           )}
+
         </View>
       </View>
     </ScrollView>
@@ -542,7 +468,7 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
   },
   sectionSubText: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM
   },
   casesContainer: {
@@ -553,7 +479,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'transparent',
     marginBottom: 20,
-    paddingHorizontal: 15
+    paddingHorizontal: 20,
+    gap: 15
   },
   confirmCasesCard: {
     flex: 1,

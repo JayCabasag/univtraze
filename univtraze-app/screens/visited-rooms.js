@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import moment from 'moment'
 import { DataTable } from 'react-native-paper'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   roomDeteilsText: {
-    fontSize: 35,
+    fontSize: 30,
     marginTop: 10,
     lineHeight: 43,
     color: COLORS.PRIMARY,

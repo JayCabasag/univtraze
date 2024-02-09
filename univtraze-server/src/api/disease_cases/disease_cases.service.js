@@ -45,4 +45,20 @@ module.exports = {
       return callBack(null, results);
     });
   },
+  getUniqueDiseases: (callBack) => {
+    pool.query('SELECT disease_name, COUNT(*) AS total_cases from disease_reports GROUP BY disease_name;', [], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    });
+  },
+  getDiseaseStatusTotal: (callBack) => {
+    pool.query('SELECT CAST(SUM(CASE WHEN status = true THEN 1 ELSE 0 END) AS INTEGER) as resolved, CAST(SUM(CASE WHEN status = false THEN 1 ELSE 0 END) AS INTEGER) as active FROM disease_reports;', [], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    }); 
+  }
 };

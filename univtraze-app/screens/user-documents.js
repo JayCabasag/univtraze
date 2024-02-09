@@ -291,7 +291,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
         setShowLoadingModal(true)
         const payload = { type: userType }
         const res = await genericUpdateRequest('users/user-type', payload, auth.userToken)
-        updateUser({ user: res })
+        updateUser({ user: res.results })
         navigation.navigate('user-vaccine')
       } catch (error) {
         console.log(error)
