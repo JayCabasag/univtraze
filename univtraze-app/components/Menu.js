@@ -8,7 +8,7 @@ import {
   ScrollView,
   Image
 } from 'react-native'
-import React, { useId, useState } from 'react'
+import React, { useState } from 'react'
 import QRCode from 'react-native-qrcode-svg'
 import base64 from 'base-64'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
@@ -119,16 +119,10 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
                     <QRCode value={dataToConvertToQr} size={160} />
                   </View>
 
-                  {/* QR Code */}
                   <Text style={{ color: 'rgba(54, 77, 57, 0.6)', textTransform: 'uppercase' }}>
                     univtraze-{state?.user?.id ?? ''}
                   </Text>
-                  {/* User Name */}
-
                   <Text style={{ fontSize: 28, marginTop: 10 }}>{fullname}</Text>
-
-                  {/* User Type */}
-
                   <Text
                     style={{
                       fontSize: 16,
@@ -138,22 +132,6 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
                   >
                     {type}
                   </Text>
-
-                  {/* Download QR */}
-                  {/* <Pressable
-													style={[styles.buttons]}
-													// onPress={() => setModalVisible(!modalVisible)}
-												>
-													<Text
-														style={{
-															color: "white",
-															fontSize: 16,
-															fontWeight: "700",
-														}}
-													>
-														Download QR
-													</Text>
-												</Pressable> */}
                 </View>
               </Pressable>
             </Modal>

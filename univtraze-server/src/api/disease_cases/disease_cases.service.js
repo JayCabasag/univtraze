@@ -46,7 +46,7 @@ module.exports = {
     });
   },
   getUniqueDiseases: (callBack) => {
-    pool.query('SELECT disease_name, COUNT(*) AS total_cases from disease_reports GROUP BY disease_name;', [], (error, results, fields) => {
+    pool.query('SELECT disease_name, COUNT(*) AS total_cases, CAST(SUM(CASE WHEN status = true THEN 1 ELSE 0 END) AS INTEGER)  AS resolved_cases, CAST(SUM(CASE WHEN status = false THEN 1 ELSE 0 END) AS INTEGER) AS active_cases FROM disease_reports GROUP BY disease_name;', [], (error, results, fields) => {
       if (error) {
         return callBack(error);
       }
