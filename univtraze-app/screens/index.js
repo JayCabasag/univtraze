@@ -24,6 +24,7 @@ import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import DiseaseReportCard from '../components/DiseaseReportCard'
+import MainDiseaseCard from '../components/MainDiseaseCard'
 
 const IndexScreen = ({ navigation }) => {
   const { state: user, updateUserDetails } = useUser()
@@ -241,9 +242,10 @@ const IndexScreen = ({ navigation }) => {
 
         <View style={styles.phUpdateContainer}>
           <Text numberOfLines={1} style={styles.sectionHeaderText}>
-            Main Diseases
+            Leading Diseases
           </Text>
-          {isLoadingPhCovidCases ? (
+          <Text style={styles.sectionSubText}>Commonly reported diseases</Text>
+          {/* {isLoadingPhCovidCases ? (
             <ActivityIndicator
               size='large'
               color={COLORS.PRIMARY}
@@ -325,8 +327,12 @@ const IndexScreen = ({ navigation }) => {
                 absolute //for the absolute number remove if you want percentage
               />
             </View>
-          )}
-
+          )} */}
+          <View style={styles.mainDiseaseContainer}>
+          <MainDiseaseCard top name={"Tubercolusis"} diseaseLabel={"Communicable"} totalRecovered={10} totalActive={200}/>
+           <MainDiseaseCard name={"Covid-19"} diseaseLabel={"Communicable"}  totalRecovered={12} totalActive={20}/>
+           <MainDiseaseCard name={"HIV"} diseaseLabel={"Communicable"}  totalRecovered={1000} totalActive={20}/>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -442,11 +448,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   scrllViewContainer: {
-    paddingHorizontal: 5
+    paddingHorizontal: 16
   },
   actionBtn: {
     width: 180,
-    height: '100%'
+    height: '100%',
+    marginLeft: -12
   },
   btnimage: {
     width: '100%',
@@ -456,7 +463,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25
   },
   phUpdateContainer: {
-    paddingHorizontal: 25
+    paddingHorizontal: 25,
+    display: 'flex',
+    gap: 6
   },
   loadingPhCovidCaseIndicator: {
     paddingHorizontal: 20,
@@ -469,7 +478,7 @@ const styles = StyleSheet.create({
   },
   sectionSubText: {
     fontSize: 14,
-    fontFamily: FONT_FAMILY.POPPINS_MEDIUM
+    fontFamily: FONT_FAMILY.POPPINS_EXTRA_LIGHT
   },
   casesContainer: {
     width: '100%',
@@ -508,6 +517,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     borderRadius: 15,
     elevation: 5
+  },
+  mainDiseaseContainer: {
+    display: 'flex',
+    gap: 15
   },
   bottomNavigationView: {
     backgroundColor: '#fff',

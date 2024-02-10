@@ -5,13 +5,15 @@ import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 
 const DiseaseReportCard = ({ total = 0, label }) => {
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.cardContainer}>
+        <View style={styles.card}>
         <Image source={CirclesIcon} style={styles.circleStyles} />
-        <View style={styles.mainLabelStyles}>
-            <Text style={styles.confirmedText}>{label}</Text>
-            <Text style={styles.totalTextLabel}>
-                {total}
-            </Text>
+            <View style={styles.mainLabelStyles}>
+                <Text style={styles.confirmedText}>{label}</Text>
+                <Text style={styles.totalTextLabel}>
+                    {total}
+                </Text>
+            </View>
         </View>
     </TouchableOpacity>
   )
@@ -20,6 +22,19 @@ const DiseaseReportCard = ({ total = 0, label }) => {
 export default DiseaseReportCard
 
 const styles = StyleSheet.create({
+    cardContainer: {
+        flex: 1,
+        backgroundColor: COLORS.WHITE,
+        shadowColor: COLORS.PLACEHOLDER_BLACK,
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+        elevation: 5,
+        borderRadius: 20
+    },
     circleStyles: {
         display: 'flex',
         height: 50,
@@ -38,21 +53,13 @@ const styles = StyleSheet.create({
         height: 75,
         backgroundColor: COLORS.WHITE,
         borderRadius: 15,
-        overflow: 'hidden',
-        shadowColor: '#000',
-        shadowOffset: {
-          width: 0,
-          height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 5,
-        elevation: 5
+        overflow: 'hidden'
     },
     totalTextLabel: {
         fontSize: 22, 
         fontWeight: 'bold', 
         color: COLORS.PRIMARY,
-        paddingHorizontal: 7,
+        paddingHorizontal: 15,
         fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
     },
     confirmedText: {

@@ -2,10 +2,12 @@ export const COLORS = {
     PRIMARY: '#28CD41',
     SECONDARY: '#E1F5E4',
     BLACK: '#212121',
+    SHADED_BLACK: '#364D39',
     WHITE: '#FFFFFF',
     TEXT_BLACK: '#364D39',
     PLACEHOLDER_BLACK: '#364D39',
     RED: '#FF0000',
+    DARK_RED: '#CC3429',
     LIGHT_GRAY: '#DBDBDB80',
     GRAY: '#808080'
 }
