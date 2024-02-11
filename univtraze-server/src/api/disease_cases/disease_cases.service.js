@@ -54,7 +54,7 @@ module.exports = {
     });
   },
   getDiseaseStatusTotal: (callBack) => {
-    pool.query('SELECT CAST(SUM(CASE WHEN status = true THEN 1 ELSE 0 END) AS INTEGER) as resolved, CAST(SUM(CASE WHEN status = false THEN 1 ELSE 0 END) AS INTEGER) as active FROM disease_reports;', [], (error, results, fields) => {
+    pool.query('SELECT CAST(SUM(CASE WHEN status = true THEN 1 ELSE 0 END) AS INTEGER) as resolved_cases_total, CAST(SUM(CASE WHEN status = false THEN 1 ELSE 0 END) AS INTEGER) as active_cases_total FROM disease_reports;', [], (error, results, fields) => {
       if (error) {
         return callBack(error);
       }
