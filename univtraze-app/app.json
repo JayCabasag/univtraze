@@ -21,13 +21,36 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#28CD41"
-      }
+      },
+      "package": "com.univtraze.univtrazeapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "81e7c3c3-7874-44e3-a5ff-1b92ffc0933e"
+      }
+    },
+    "plugins": [
+      "expo-build-properties"
+    ]
   },
   "plugins": [
+    [
+      "expo-build-properties",
+      {
+        "android": {
+          "usesCleartextTraffic": true,
+          "compileSdkVersion": 31,
+          "targetSdkVersion": 31,
+          "buildToolsVersion": "31.0.0"
+        },
+        "ios": {
+          "deploymentTarget": "13.0"
+        }
+      }
+    ],
     [
       "expo-image-picker",
       {
