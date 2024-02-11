@@ -12,6 +12,8 @@ const {
   updateUserNotificationStatus,
   getTotalUsers,
   getTotalCommunicableDisease,
+  getUserNotificationsOverviewById,
+  updateNotificationToViewedStatus,
 } = require('./notifications.service');
 
 const moment = require('moment');
@@ -162,49 +164,39 @@ module.exports = {
     const startAt = req.query?.["start-at"] ?? 0;
     const body = { user_id: userId, start_at: startAt };
 
-    getUserNotificationsById(body, (err, results) => {
+    getUserNotificationsById(body, (err, notificationsResults) => {
       if (err) {
-        console.log(err)
         return res.status(500).json({
-          message: 'Database connection error',
+          message: 'Internal server error',
         });
       }
 
-      return res.status(200).json({
-        results: results,
-      });
-    });
-  },
-  getTotalActiveUserNotifications: (req, res) => {
-    const body = req.body;
+      getUserNotificationsOverviewById(body, (err, overviewResults) => {
+        if (err) {
+          return res.status(500).json({
+            message: "Internal server error"
+          })
+        }
 
-    getTotalActiveUserNotificationsById(body, (err, results) => {
-      if (err) {
-        return res.json({
-          success: 0,
-          message: 'Database connection error',
+        return res.status(200).json({
+          results: {
+            notifications: notificationsResults,
+            ...overviewResults
+          },
         });
-      }
-
-      return res.json({
-        success: 1,
-        results: results,
-      });
+      })
     });
   },
   updateUserNotificationStatus: (req, res) => {
-    const body = req.body;
+    const notificationId = req.body.notification_id
 
-    updateUserNotificationStatus(body, (err, results) => {
+    updateNotificationToViewedStatus(notificationId, (err, results) => {
       if (err) {
-        return res.json({
-          success: 0,
-          message: 'Database connection error',
+        return res.status(500).json({
+          message: 'Internal server error',
         });
       }
-
-      return res.json({
-        success: 1,
+      return res.status(200).json({
         message: 'Updated notification status successfully!',
       });
     });

@@ -151,6 +151,18 @@ module.exports = {
       },
     );
   },
+  getUserNotificationsOverviewById: (data, callBack) => {
+    pool.query(
+      `SELECT CAST(SUM(CASE WHEN notification_is_viewed = false THEN 1 ELSE 0 END) AS INTEGER) AS not_viewed_total, CAST(SUM(CASE WHEN notification_is_viewed = true THEN 1 ELSE 0 END) AS INTEGER) AS viewed_total FROM users_notifications WHERE notification_for = ?`,
+      [data.user_id, data.start_at],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results[0]);
+      },
+    );
+  },
   getTotalActiveUserNotificationsById: (data, callBack) => {
     pool.query(
       `SELECT COUNT(notification_is_viewed) AS total_notifications FROM users_notifications WHERE notification_for = ? AND notification_is_viewed = 0`,
@@ -163,10 +175,10 @@ module.exports = {
       },
     );
   },
-  updateUserNotificationStatus: (data, callBack) => {
+  updateNotificationToViewedStatus: (id, callBack) => {
     pool.query(
-      `UPDATE users_notifications SET notification_is_viewed = ? WHERE notification_for = ?`,
-      [data.notification_is_viewed, data.notification_for],
+      `UPDATE users_notifications SET notification_is_viewed = true WHERE id = ?`,
+      [id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
