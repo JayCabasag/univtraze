@@ -1,12 +1,5 @@
 import CirclesIcon from '../assets/circles.png'
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  TouchableWithoutFeedback
-} from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 

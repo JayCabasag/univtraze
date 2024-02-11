@@ -55,16 +55,16 @@ export const NotificationsContextProvider = ({ children }) => {
   }, [token])
 
   const dispatcherFn = useMemo(
-      () => ({
-        updateNotifications: ({ notifications, summary }) => {
-          dispatch({ type: 'RESTORE_NOTIFICATIONS', notifications, summary })
-        },
-        clearNotifications: () => {
-          dispatch({ type: 'CLEAR_NOTIFICATIONS' })
-        },
-      }),
-      []
-    )
+    () => ({
+      updateNotifications: ({ notifications, summary }) => {
+        dispatch({ type: 'RESTORE_NOTIFICATIONS', notifications, summary })
+      },
+      clearNotifications: () => {
+        dispatch({ type: 'CLEAR_NOTIFICATIONS' })
+      }
+    }),
+    []
+  )
 
   return (
     <NotificationsContext.Provider

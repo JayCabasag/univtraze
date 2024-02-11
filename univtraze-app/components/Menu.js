@@ -52,6 +52,39 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
       onBackButtonPress={toggleBottomNavigationView}
       onBackdropPress={toggleBottomNavigationView}
     >
+      <Modal
+        animationType='fade'
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(!modalVisible)}
+        statusBarTranslucent
+      >
+        <Pressable style={styles.centeredViews} onPress={() => setModalVisible(!modalVisible)}>
+          <View style={styles.modalView}>
+            <Text style={styles.univtrazeHeaderText}>
+              UnivTraze
+            </Text>
+            <View
+              style={styles.qrCodeContainer}
+            >
+              <QRCode value={dataToConvertToQr} size={160} />
+            </View>
+            <Text style={{ color: 'rgba(54, 77, 57, 0.6)', textTransform: 'uppercase' }}>
+              univtraze-{state?.user?.id ?? ''}
+            </Text>
+            <Text style={{ fontSize: 28, marginTop: 10 }}>{fullname}</Text>
+            <Text
+              style={{
+                fontSize: 16,
+                color: 'rgba(54, 77, 57, 0.6)',
+                textTransform: 'uppercase'
+              }}
+            >
+              {type}
+            </Text>
+          </View>
+        </Pressable>
+      </Modal>
       {/*Bottom Sheet inner View*/}
       <View style={styles.bottomNavigationView}>
         <View style={{ flex: 1 }}>
@@ -81,60 +114,6 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
                 <Text style={{ color: COLORS.PRIMARY, fontWeight: 'bold' }}> View QR Code</Text>
               </TouchableOpacity>
             </View>
-            <Modal
-              animationType='fade'
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                setModalVisible(!modalVisible)
-              }}
-              statusBarTranslucent
-            >
-              <Pressable
-                style={styles.centeredViews}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <View style={styles.modalView}>
-                  <Text
-                    style={{
-                      fontSize: 28,
-                      color: COLORS.PRIMARY,
-                      fontWeight: 'bold'
-                    }}
-                  >
-                    UnivTraze
-                  </Text>
-                  <View
-                    style={{
-                      width: 210,
-                      height: 210,
-                      borderWidth: 2,
-                      borderColor: COLORS.PRIMARY,
-                      borderRadius: 20,
-                      marginTop: 5,
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <QRCode value={dataToConvertToQr} size={160} />
-                  </View>
-
-                  <Text style={{ color: 'rgba(54, 77, 57, 0.6)', textTransform: 'uppercase' }}>
-                    univtraze-{state?.user?.id ?? ''}
-                  </Text>
-                  <Text style={{ fontSize: 28, marginTop: 10 }}>{fullname}</Text>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      color: 'rgba(54, 77, 57, 0.6)',
-                      textTransform: 'uppercase'
-                    }}
-                  >
-                    {type}
-                  </Text>
-                </View>
-              </Pressable>
-            </Modal>
           </View>
 
           <ScrollView
@@ -302,6 +281,21 @@ const styles = StyleSheet.create({
   centeredViews: {
     flex: 1,
     backgroundColor: 'rgba(52, 52, 52, 0.3)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  univtrazeHeaderText: {
+    fontSize: 28,
+    color: COLORS.PRIMARY,
+    fontWeight: 'bold'
+  },
+  qrCodeContainer: {
+    width: 210,
+    height: 210,
+    borderWidth: 2,
+    borderColor: COLORS.PRIMARY,
+    borderRadius: 20,
+    marginTop: 5,
     justifyContent: 'center',
     alignItems: 'center'
   },

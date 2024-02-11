@@ -14,9 +14,12 @@ const Notifications = ({ visible, toggleNotifNavigationView }) => {
     >
       <View style={styles.bottomNavigationView}>
         <Text style={styles.modalHeaderText}>Notifications </Text>
-        <ScrollView style={styles.scrolViewStyles} contentContainerStyle={styles.scrollViewCotainerStyles}>
+        <ScrollView
+          style={styles.scrolViewStyles}
+          contentContainerStyle={styles.scrollViewCotainerStyles}
+        >
           {notifications.notifications.map((notification, index) => {
-            return <NotificationCard notification={notification} key={index}/>
+            return <NotificationCard notification={notification} key={index} />
           })}
         </ScrollView>
       </View>
@@ -28,7 +31,7 @@ export default Notifications
 
 const styles = StyleSheet.create({
   scrolViewStyles: {
-    flex: 1,
+    flex: 1
   },
   scrollViewCotainerStyles: {
     paddingHorizontal: 30
@@ -52,5 +55,5 @@ const styles = StyleSheet.create({
     height: '100%',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30
-  },
+  }
 })
