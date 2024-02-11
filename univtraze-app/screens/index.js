@@ -22,6 +22,7 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import DiseaseReportCard from '../components/DiseaseReportCard'
 import MainDiseaseCard from '../components/MainDiseaseCard'
 import { useNotifications } from '../services/store/notifications/NotificationsContext'
+import { useFocusEffect } from '@react-navigation/native'
 
 const IndexScreen = ({ navigation }) => {
   const { state: user, updateUserDetails } = useUser()
@@ -39,20 +40,25 @@ const IndexScreen = ({ navigation }) => {
   const [totalCases, setTotalCases] = useState(0)
   const [leadingDiseasesList, setLeadingDiseasesList] = useState([])
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      if (!userId || !userToken) return
-      try {
-        const res = await genericGetRequest(`users/${userId}`, userToken)
-        updateUserDetails({ details: res.results })
-      } catch (error) {
-        Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
-          { text: 'OK', onPress: () => console.log('OK') }
-        ])
+  console.log(userId)
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUserDetails = async () => {
+        if (!userId || !userToken) return
+        try {
+          const res = await genericGetRequest(`users/${userId}`, userToken)
+          updateUserDetails({ details: res.results })
+        } catch (error) {
+          Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+            { text: 'OK', onPress: () => console.log('OK') }
+          ])
+        }
       }
-    }
-    fetchUserDetails()
-  }, [userId, userToken])
+      fetchUserDetails()
+    }, [userId, userToken])
+  )
+
 
   const toggleBottomNavigationView = () => {
     //Toggling the visibility state of the bottom sheet

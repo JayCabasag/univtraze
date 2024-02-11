@@ -1,6 +1,5 @@
 import { useAsyncStorage } from '@react-native-async-storage/async-storage'
 import React, { createContext, useContext, useReducer, useState } from 'react'
-import { USER_TYPE } from '../../../utils/app_constants'
 
 const UserContext = createContext()
 
