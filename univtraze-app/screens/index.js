@@ -40,8 +40,6 @@ const IndexScreen = ({ navigation }) => {
   const [totalCases, setTotalCases] = useState(0)
   const [leadingDiseasesList, setLeadingDiseasesList] = useState([])
 
-  console.log(userId)
-
   useFocusEffect(
     React.useCallback(() => {
       const fetchUserDetails = async () => {
@@ -58,7 +56,6 @@ const IndexScreen = ({ navigation }) => {
       fetchUserDetails()
     }, [userId, userToken])
   )
-
 
   const toggleBottomNavigationView = () => {
     //Toggling the visibility state of the bottom sheet
