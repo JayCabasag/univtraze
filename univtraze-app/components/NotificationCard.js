@@ -13,11 +13,11 @@ export default function NotificationCard({ notification }) {
   const { updateNofications } = useNotifications();
 
   const notificationId = notification.id;
-  const isNotificationViewed = notification.notification_is_viewed;
+  const isNotifViewed = notification.notification_is_viewed == 1;
   const userToken = auth.userToken;
   useEffect(() => {
     if (!notificationId) return;
-    if (!isNotificationViewed) return;
+    if (isNotifViewed) return;
     if (!userToken) return;
     const updateNotificationViewStatus = async () => {
         try {
@@ -30,7 +30,7 @@ export default function NotificationCard({ notification }) {
         }
     }
     updateNotificationViewStatus()
-  }, [isNotificationViewed, userToken, notificationId])
+  }, [isNotifViewed, userToken, notificationId])
   
   return (
     <View style={styles.notificationItem}>

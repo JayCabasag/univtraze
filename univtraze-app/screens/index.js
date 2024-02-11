@@ -84,13 +84,10 @@ const IndexScreen = ({ navigation }) => {
     loadDiseaseReportsOverview()
 
     const loadNotifications = async () => {
-      let notificationList
-      let summary
       try {
         const res = await genericGetRequest(`notifications`, userToken)
         const { notifications, not_viewed_total, viewed_total } = res.results
-        notificationList = notifications
-        summary = { not_viewed_total, viewed_total }
+        const summary = { not_viewed_total, viewed_total }
         updateNotifications({ notifications, summary })
       } catch (e) {
         console.log('Notification error', e)
@@ -159,6 +156,7 @@ const IndexScreen = ({ navigation }) => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             style={styles.scrllViewContainer}
+            contentContainerStyle={styles.scrollViewContainerStyles}
             contentOffset={{ x: 0, y: 0 }}
           >
             <TouchableOpacity
@@ -341,6 +339,9 @@ const styles = StyleSheet.create({
   },
   scrllViewContainer: {
     paddingHorizontal: 16
+  },
+  scrollViewContainerStyles: {
+    paddingRight: 30
   },
   actionBtn: {
     width: 180,
