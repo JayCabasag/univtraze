@@ -1,11 +1,11 @@
 import CirclesIcon from '../assets/circles.png'
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 
 const DiseaseReportCard = ({ total = 0, label }) => {
   return (
-    <TouchableOpacity style={styles.cardContainer}>
+    <TouchableWithoutFeedback style={styles.cardContainer}>
       <View style={styles.card}>
         <Image source={CirclesIcon} style={styles.circleStyles} />
         <View style={styles.mainLabelStyles}>
@@ -13,7 +13,7 @@ const DiseaseReportCard = ({ total = 0, label }) => {
           <Text style={styles.totalTextLabel}>{total}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   )
 }
 

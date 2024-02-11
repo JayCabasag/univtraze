@@ -141,7 +141,7 @@ module.exports = {
 
   getUserNotificationsById: (data, callBack) => {
     pool.query(
-      `SELECT * FROM users_notifications WHERE notification_for = ? order by createdAt DESC limit 100 OFFSET ? `,
+      `SELECT * FROM users_notifications WHERE notification_for = ? order by created_at DESC limit 100 OFFSET ? `,
       [data.user_id, data.start_at],
       (error, results, fields) => {
         if (error) {

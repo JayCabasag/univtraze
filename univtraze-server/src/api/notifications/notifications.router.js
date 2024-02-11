@@ -9,12 +9,13 @@ const {
   updateClinicNotificationsStatus,
   sendEmergencyReportPrescriptionViaEmail,
   sendSendCommunicableDiseaseReportPrescriptionViaEmail,
-  getUserNotificationsById,
   getTotalActiveUserNotifications,
   updateUserNotificationStatus,
   getUnivtrazeDataForLanding,
+  getUserNotificationsByUserId,
 } = require('./notifications.controller');
 
+router.get('/', checkToken, getUserNotificationsByUserId);
 router.post('/getAdminNotifications', checkToken, adminNotifications);
 router.post('/updateAdminNotificationStatus', checkToken, updateAdminNotificationStatus);
 router.get('/getTotalActiveAdminNotifications', checkToken, getTotalActiveAdminNotifications);
@@ -27,7 +28,6 @@ router.post(
   checkToken,
   sendSendCommunicableDiseaseReportPrescriptionViaEmail,
 );
-router.post('/getUserNotificationsById', checkToken, getUserNotificationsById);
 router.post('/getTotalActiveUserNotifications', checkToken, getTotalActiveUserNotifications);
 router.post('/updateUserNotificationStatus', checkToken, updateUserNotificationStatus);
 router.get('/getUnivtrazeDataForLanding', getUnivtrazeDataForLanding);

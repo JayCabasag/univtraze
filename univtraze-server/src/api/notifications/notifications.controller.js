@@ -157,19 +157,20 @@ module.exports = {
       });
     });
   },
-  getUserNotificationsById: (req, res) => {
-    const body = req.body;
+  getUserNotificationsByUserId: (req, res) => {
+    const userId = req.user.result.id;
+    const startAt = req.query?.["start-at"] ?? 0;
+    const body = { user_id: userId, start_at: startAt };
 
     getUserNotificationsById(body, (err, results) => {
       if (err) {
-        return res.json({
-          success: 0,
+        console.log(err)
+        return res.status(500).json({
           message: 'Database connection error',
         });
       }
 
-      return res.json({
-        success: 1,
+      return res.status(200).json({
         results: results,
       });
     });
