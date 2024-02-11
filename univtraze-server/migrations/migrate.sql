@@ -88,16 +88,13 @@ CREATE TABLE if not exists rooms (
 );
 
 CREATE TABLE if not exists vaccination_records (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    firstdose_vaxname VARCHAR(255),
-    firstdose_date DATE,
-    seconddose_vaxname VARCHAR(255),
-    seconddose_date DATE,
-    booster_vaxname VARCHAR(255),
-    booster_date DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+   vaccination_record_id INT(11) PRIMARY KEY AUTO_INCREMENT,
+   user_id INT(11),
+   type VARCHAR(100),
+   vaccine_name VARCHAR(100),
+   date DATE,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE if not exists room_visits (

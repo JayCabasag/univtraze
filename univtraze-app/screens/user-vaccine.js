@@ -87,6 +87,20 @@ const UserVaccine = ({ navigation, route }) => {
     }
   }
 
+  const handleUpdateUserVaccine = async () => {
+    try {
+      setShowLoadingModal(true)
+      console.log("Updating")
+
+    } catch (error) {
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
+      setShowLoadingModal(false)
+    }
+  }
+
   const skipVaccinationtion = async () => {
     navigation.navigate('index')
   }
@@ -227,7 +241,7 @@ const UserVaccine = ({ navigation, route }) => {
           </Fragment>
         )}
       </ScrollView>
-      <UserInfoWithSkipFooter onSkip={skipVaccinationtion} onNext={() => {}} />
+      <UserInfoWithSkipFooter onSkip={skipVaccinationtion} onNext={handleUpdateUserVaccine} />
     </KeyboardAvoidingView>
   )
 }

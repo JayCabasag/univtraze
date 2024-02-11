@@ -1,4 +1,4 @@
-const { insertVaccineData, updateVaccineData, checkIfVaccineRecordExists } = require('./vaccination.service');
+const { insertVaccineData, updateVaccineData, checkIfVaccineRecordExists, getVaccinationRecords } = require('./vaccination_records.service');
 
 module.exports = {
   updateVaccineData: (req, res) => {
@@ -81,28 +81,16 @@ module.exports = {
     });
   },
 
-  getVaccineDataByUserId: (req, res) => {
-    const body = req.body;
-
-    checkIfVaccineRecordExists(body, (err, results) => {
-      if (err) {
-        return res.json({
-          success: 0,
-          message: 'Database connection error',
-        });
+  getVaccinationRecords: (req, res) => {
+    getVaccinationRecords((error, results) => {
+      if (error) {
+        return res.status(500).json({
+          message: "Internal server error"
+        })
       }
-
-      if (results.length === 0) {
-        return res.json({
-          success: 1,
-          message: 'No Vaccine record found',
-        });
-      }
-
-      return res.json({
-        success: 1,
-        results: results[0],
-      });
-    });
+      return res.status(200).json({
+        results
+      })
+    })
   },
 };
