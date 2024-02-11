@@ -35,6 +35,8 @@ const IndexScreen = ({ navigation }) => {
   const [resolvedCasesTotal, setResolvedCasesTotal] = useState(0)
   const [totalCases, setTotalCases] = useState(0)
 
+  const [leadingDiseasesList, setLeadingDiseasesList] = useState([])
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (!userId || !userToken) return
@@ -57,7 +59,7 @@ const IndexScreen = ({ navigation }) => {
   const [reportedCommunicableDiseaseResolved, setReportedCommunicableDiseaseResolved] = useState([])
 
   //Special variables
-  const token = auth.userToken;
+  const token = auth.userToken
   const [notificationCounts, setNotificationCounts] = useState(0)
   const [visible, setVisible] = useState(false)
   const [notifVisible, setNotifVisible] = useState(false)
@@ -104,27 +106,30 @@ const IndexScreen = ({ navigation }) => {
       })
   }
 
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false)
 
   const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
+    setRefreshing(true)
     const loadDiseaseReportsOverview = async () => {
       try {
         const res = await genericGetRequest('disease-cases/overview', token)
-        const { active_cases, resolved_cases } = res.results.overview
-        console.log(res.results.overview)
-        setResolvedCasesTotal(resolved_cases)
-        setActiveCasesTotal(active_cases)
-        setTotalCases(active_cases + resolved_cases)
+        const { active_cases_total, resolved_cases_total } = res.results.overview
+        setLeadingDiseasesList(res.results.diseases)
+        setResolvedCasesTotal(resolved_cases_total)
+        setActiveCasesTotal(active_cases_total)
+        setTotalCases(active_cases_total + resolved_cases_total)
       } catch (error) {
-        
+        console.log(error)
       } finally {
         setRefreshing(false)
       }
     }
     loadDiseaseReportsOverview()
-  }, [token]);
+  }, [token])
 
+  useEffect(() => {
+    onRefresh()
+  }, [onRefresh])
 
   // Return
   return (
@@ -132,9 +137,7 @@ const IndexScreen = ({ navigation }) => {
       style={styles.container}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
       <Menu
         visible={visible}
@@ -228,7 +231,7 @@ const IndexScreen = ({ navigation }) => {
           <Text numberOfLines={1} style={styles.sectionHeaderText}>
             Disease Reports
           </Text>
-          <Text style={styles.sectionSubText}>University</Text>
+          <Text style={styles.sectionSubText}>All time reported ({totalCases})</Text>
         </View>
         <View style={styles.casesContainer}>
           <DiseaseReportCard label={'Active'} total={activeCasesTotal} />
@@ -240,109 +243,13 @@ const IndexScreen = ({ navigation }) => {
             Leading Diseases
           </Text>
           <Text style={styles.sectionSubText}>Commonly reported diseases</Text>
-          {/* {isLoadingPhCovidCases ? (
-            <ActivityIndicator
-              size='large'
-              color={COLORS.PRIMARY}
-              style={styles.loadingPhCovidCaseIndicator}
-            />
-          ) : (
-            <View style={styles.localCasesContainer}>
-              <View style={{ flexDirection: 'row', width: '100%' }}>
-                <Text style={styles.covidCasesText}>Covid-19 Cases</Text>
-                <Text
-                  style={{
-                    marginRight: 25,
-                    marginLeft: 'auto',
-                    paddingVertical: 10,
-                    fontSize: 14
-                  }}
-                >
-                  As of {moment().format('MMM Do')}
-                </Text>
-              </View>
-              <PieChart
-                data={[
-                  {
-                    name: 'Population',
-                    population: population,
-                    color: COLORS.PRIMARY,
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 10
-                  },
-                  {
-                    name: 'Cases',
-                    population: cases,
-                    color: '#F00',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 10
-                  },
-                  {
-                    name: 'Active cases',
-                    population: activeCases,
-                    color: 'rgb(255, 165, 0)',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 10
-                  },
-                  {
-                    name: 'Recovered',
-                    population: recovered,
-                    color: '#FFFF00',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 10
-                  },
-
-                  {
-                    name: 'Deaths',
-                    population: deaths,
-                    color: 'rgb(0, 0, 255)',
-                    legendFontColor: '#7F7F7F',
-                    legendFontSize: 10
-                  }
-                ]}
-                width={Dimensions.get('window').width - 100}
-                height={150}
-                chartConfig={{
-                  backgroundColor: '#1cc910',
-                  backgroundGradientFrom: '#eff3ff',
-                  backgroundGradientTo: '#efefef',
-                  decimalPlaces: 2,
-                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-                  style: {
-                    borderRadius: 16
-                  }
-                }}
-                style={{
-                  marginVertical: 8,
-                  borderRadius: 16
-                }}
-                accessor='population'
-                backgroundColor='transparent'
-                paddingLeft='2'
-                absolute //for the absolute number remove if you want percentage
-              />
-            </View>
-          )} */}
           <View style={styles.mainDiseaseContainer}>
-            <MainDiseaseCard
-              top
-              name={'Tubercolusis'}
-              diseaseLabel={'Communicable'}
-              totalRecovered={10}
-              totalActive={200}
-            />
-            <MainDiseaseCard
-              name={'Covid-19'}
-              diseaseLabel={'Communicable'}
-              totalRecovered={12}
-              totalActive={20}
-            />
-            <MainDiseaseCard
-              name={'HIV'}
-              diseaseLabel={'Communicable'}
-              totalRecovered={1000}
-              totalActive={20}
-            />
+            {leadingDiseasesList.length == 0 && (
+              <Text style={styles.sectionSubText}>Nothing here...</Text>
+            )}
+            {leadingDiseasesList.map((leadingDisease, index) => (
+              <MainDiseaseCard key={index} top data={leadingDisease} />
+            ))}
           </View>
         </View>
       </View>

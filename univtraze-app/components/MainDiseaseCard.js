@@ -4,32 +4,38 @@ import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import VirusIcon from '../assets/virus.png'
 import ProgressBar from './ProgressBar'
 
-export default function MainDiseaseCard(props) {
-  const recoveredPercentage = (props.totalRecovered /props.totalActive) * 100
+export default function MainDiseaseCard({ top = false, data }) {
+  const name = data?.disease_name ?? ''
+  const diseaseLabel = data?.disease_category ?? 'Communicable'
+  const totalRecovered = data?.resolved_cases ?? 0
+  const totalActive = data?.active_cases ?? 0
+  const recoveredPercentage = (totalRecovered / totalActive) * 100
   return (
-    <View style={[styles.cardContainerStyles, props.top && styles.cardContainerActiveStyles]}>
+    <View style={[styles.cardContainerStyles, top && styles.cardContainerActiveStyles]}>
       <View style={styles.cardStyles}>
         <View style={styles.virusContainetStyles}>
           <Image source={VirusIcon} style={styles.virusStyles} />
           <Image source={VirusIcon} style={styles.virus1Styles} />
           <Image source={VirusIcon} style={styles.virus2Styles} />
         </View>
-        <Text style={styles.cardHeaderTextStyle}>{props.name}</Text>
+        <Text style={styles.cardHeaderTextStyle}>{name}</Text>
         <ProgressBar value={recoveredPercentage} />
-        <Text style={styles.recoveredPercentageText}>{recoveredPercentage}% Recovered as of today</Text>
+        <Text style={styles.recoveredPercentageText}>
+          {recoveredPercentage}% Recovered as of today
+        </Text>
         <View style={styles.victimDetailsContainer}>
           <View style={styles.textDetailsContainer}>
-            <Text style={styles.headerTextDetailsStyles}>{props.totalRecovered}</Text>
+            <Text style={styles.headerTextDetailsStyles}>{totalRecovered}</Text>
             <Text style={styles.subHeaderTextDetailsStyles}>Recovered</Text>
           </View>
           <View style={styles.textDetailsContainer}>
-            <Text style={styles.headerTextDetailsRedStyles}>{props.totalActive}</Text>
+            <Text style={styles.headerTextDetailsRedStyles}>{totalActive}</Text>
             <Text style={styles.subHeaderTextDetailsRedStyles}>Active cases</Text>
           </View>
         </View>
         <View style={styles.subDetailsStyles}>
           <View style={styles.diseaseIndicator}></View>
-          <Text style={styles.diseaseLabelStyle}>{props.diseaseLabel}</Text>
+          <Text style={styles.diseaseLabelStyle}>{diseaseLabel}</Text>
         </View>
       </View>
     </View>
