@@ -62,8 +62,8 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
                 justifyContent: 'center'
               }}
             >
-               {state?.details?.profile_url && (
-                <Image source={{ uri: state.details.profile_url }} style={styles.profilePhoto}/>
+              {state?.details?.profile_url && (
+                <Image source={{ uri: state.details.profile_url }} style={styles.profilePhoto} />
               )}
               {!state?.details?.profile_url && (
                 <GeneratedAvatar
@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top'
   },
   profilePhoto: {
-    height: 80, 
+    height: 80,
     width: 80,
     borderRadius: 100
   }

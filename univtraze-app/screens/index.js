@@ -76,13 +76,9 @@ const IndexScreen = ({ navigation }) => {
     handleGetNotifications(userId, 0, token)
   }
 
-  const handleUpdateNotificationStatus = async (userId, notification_is_viewed, currentToken) => {
+  const handleUpdateNotificationStatus = async (userId, notification_is_viewed, currentToken) => {}
 
-  }
-
-  const getTotalActiveNotifications = async (currentToken) => {
-   
-  }
+  const getTotalActiveNotifications = async (currentToken) => {}
 
   useEffect(() => {
     const GetCovidUpdate = async () => {
@@ -232,8 +228,8 @@ const IndexScreen = ({ navigation }) => {
           <Text style={styles.sectionSubText}>University</Text>
         </View>
         <View style={styles.casesContainer}>
-          <DiseaseReportCard label={"Confirmed"} total={2}/>
-          <DiseaseReportCard label={"Recovered"} total={2}/>
+          <DiseaseReportCard label={'Confirmed'} total={2} />
+          <DiseaseReportCard label={'Recovered'} total={2} />
         </View>
 
         <View style={styles.phUpdateContainer}>
@@ -325,9 +321,25 @@ const IndexScreen = ({ navigation }) => {
             </View>
           )} */}
           <View style={styles.mainDiseaseContainer}>
-          <MainDiseaseCard top name={"Tubercolusis"} diseaseLabel={"Communicable"} totalRecovered={10} totalActive={200}/>
-           <MainDiseaseCard name={"Covid-19"} diseaseLabel={"Communicable"}  totalRecovered={12} totalActive={20}/>
-           <MainDiseaseCard name={"HIV"} diseaseLabel={"Communicable"}  totalRecovered={1000} totalActive={20}/>
+            <MainDiseaseCard
+              top
+              name={'Tubercolusis'}
+              diseaseLabel={'Communicable'}
+              totalRecovered={10}
+              totalActive={200}
+            />
+            <MainDiseaseCard
+              name={'Covid-19'}
+              diseaseLabel={'Communicable'}
+              totalRecovered={12}
+              totalActive={20}
+            />
+            <MainDiseaseCard
+              name={'HIV'}
+              diseaseLabel={'Communicable'}
+              totalRecovered={1000}
+              totalActive={20}
+            />
           </View>
         </View>
       </View>
