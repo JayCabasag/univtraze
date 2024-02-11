@@ -4,6 +4,6 @@ const { addDiseaseCase, getDiseaseCase, getAllDiseaseOverview } = require('./dis
 
 router.get('/', checkToken, getDiseaseCase);
 router.post('/', checkToken, addDiseaseCase);
-router.get('/overview', checkToken, getAllDiseaseOverview)
+router.get('/overview', checkToken, getAllDiseaseOverview);
 
 module.exports = router;

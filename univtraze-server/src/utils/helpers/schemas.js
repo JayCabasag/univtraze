@@ -185,27 +185,27 @@ class Schemas {
     });
   }
 
-  get createEmergencyReportSchema(){
+  get createEmergencyReportSchema() {
     return Joi.object({
-      reported_by: Joi.number().required(), 
-      patient_name: Joi.string().required(), 
-      symptoms: Joi.string().required(), 
-      description: Joi.string().required(), 
-      room_id: Joi.number().required().allow(null)
+      reported_by: Joi.number().required(),
+      patient_name: Joi.string().required(),
+      symptoms: Joi.string().required(),
+      description: Joi.string().required(),
+      room_id: Joi.number().required().allow(null),
     });
   }
 
-  get deactivateAccountSchema(){
+  get deactivateAccountSchema() {
     return Joi.object({
       userId: Joi.number().required(),
-      password: Joi.string().required(), 
+      password: Joi.string().required(),
     });
   }
 
-  get updateNotificationStatus(){
+  get updateNotificationStatus() {
     return Joi.object({
-      notificationId: Joi.number()
-    })
+      notificationId: Joi.number(),
+    });
   }
 }
 

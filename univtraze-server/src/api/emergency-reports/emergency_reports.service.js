@@ -14,39 +14,27 @@ module.exports = {
     );
   },
   getEmergencyReportById: (id, callBack) => {
-    pool.query(
-        'SELECT * from emergency_reports where id = ?',
-        [id],
-        (error, results, fields) => {
-            if (error) {
-              return callBack(error);
-            }
-            return callBack(null, results[0]);
-        },
-    )
+    pool.query('SELECT * from emergency_reports where id = ?', [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results[0]);
+    });
   },
   getEmergencyReportByRoomId: (id, callBack) => {
-    pool.query(
-        'SELECT * from emergency_reports where room_id = ?',
-        [id],
-        (error, results, fields) => {
-            if (error) {
-              return callBack(error);
-            }
-            return callBack(null, results[0]);
-        },
-    )
+    pool.query('SELECT * from emergency_reports where room_id = ?', [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results[0]);
+    });
   },
   getEmergencyReportByReportedById: (id, callBack) => {
-    pool.query(
-        'SELECT * from emergency_reports where reported_by = ?',
-        [id],
-        (error, results, fields) => {
-            if (error) {
-              return callBack(error);
-            }
-            return callBack(null, results[0]);
-        },
-    )
-  }
+    pool.query('SELECT * from emergency_reports where reported_by = ?', [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results[0]);
+    });
+  },
 };

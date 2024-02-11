@@ -504,7 +504,7 @@ module.exports = {
 
   getUserDetailsById: async (req, res) => {
     const { error } = schemas.userIdSchema.validate(req.params);
-    
+
     if (error) {
       return res.status(409).json({
         message: 'Invalid payload',
@@ -850,23 +850,23 @@ module.exports = {
   deactivateAccount: (req, res) => {
     const data = {
       userId: parseInt(req.params.userId),
-      password: req.body.password
-    }
-    
+      password: req.body.password,
+    };
+
     const { error } = schemas.deactivateAccountSchema.validate(data);
-    
+
     if (error) {
-      console.log(error)
+      console.log(error);
       return res.status(409).json({
-        message: 'Some field where empty'
-      })
+        message: 'Some field where empty',
+      });
     }
 
     getUserById(data.userId, (err, results) => {
       if (err) {
         return res.status(500).json({
-          message: 'Internal server error'
-        })
+          message: 'Internal server error',
+        });
       }
 
       if (!results) {
@@ -886,11 +886,11 @@ module.exports = {
       deactivateAccount(data.userId, (err, _finalResults) => {
         if (err) {
           return res.status(500).json({
-            message: 'Internal server error'
-          })
+            message: 'Internal server error',
+          });
         }
         return res.status(201).json({
-          message: 'Account deactivated'
+          message: 'Account deactivated',
         });
       });
     });

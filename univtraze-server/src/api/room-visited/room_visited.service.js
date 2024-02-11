@@ -22,12 +22,16 @@ module.exports = {
     });
   },
   getVisitedRoomsByUserId: (id, callBack) => {
-    pool.query('SELECT * from visited_rooms LEFT JOIN rooms ON visited_rooms.room_id = rooms.id  where visited_rooms.user_id = ? ORDER BY visited_rooms.id DESC', [id], (error, results, fields) => {
-      if (error) {
-        return callBack(error);
-      }
-      callBack(null, results);
-    });
+    pool.query(
+      'SELECT * from visited_rooms LEFT JOIN rooms ON visited_rooms.room_id = rooms.id  where visited_rooms.user_id = ? ORDER BY visited_rooms.id DESC',
+      [id],
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        callBack(null, results);
+      },
+    );
   },
   getVisitedRoomsByRoomId: (id, callBack) => {
     pool.query('SELECT * from visited_rooms where room_id = ?', [id], (error, results, fields) => {

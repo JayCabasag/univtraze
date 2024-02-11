@@ -1,6 +1,12 @@
 const schemas = require('../../utils/helpers/schemas');
 const { getUserById } = require('../users/user.service');
-const { addDiseaseCase, getDiseaseCaseByCaseNumber, getDiseaseCaseById, getUniqueDiseases, getDiseaseStatusTotal } = require('./disease_cases.service');
+const {
+  addDiseaseCase,
+  getDiseaseCaseByCaseNumber,
+  getDiseaseCaseById,
+  getUniqueDiseases,
+  getDiseaseStatusTotal,
+} = require('./disease_cases.service');
 
 module.exports = {
   addDiseaseCase: (req, res) => {
@@ -73,24 +79,24 @@ module.exports = {
     getUniqueDiseases((error, results) => {
       if (error) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
-      
+
       getDiseaseStatusTotal((error, statusTotalResults) => {
         if (error) {
           return res.status(500).json({
-            message: "Internal server error"
-          })
+            message: 'Internal server error',
+          });
         }
-  
+
         return res.status(200).json({
           results: {
             diseases: results,
-            overview: statusTotalResults
-          }
-        })
-      })
-    })
-  }
+            overview: statusTotalResults,
+          },
+        });
+      });
+    });
+  },
 };

@@ -1,7 +1,13 @@
 const schemas = require('../../utils/helpers/schemas');
 const { getRoomById } = require('../rooms/room.service');
 const { getUserById } = require('../users/user.service');
-const { addVisitedRoom, getVisitedRoomById, getVisitedRoomsByUserId, getVisitedRoomsByRoomId, getAllVisitedRooms } = require('./room_visited.service');
+const {
+  addVisitedRoom,
+  getVisitedRoomById,
+  getVisitedRoomsByUserId,
+  getVisitedRoomsByRoomId,
+  getAllVisitedRooms,
+} = require('./room_visited.service');
 
 module.exports = {
   addVisitedRoom: (req, res) => {
@@ -79,42 +85,42 @@ module.exports = {
       return getVisitedRoomsByUserId(userId, (error, results) => {
         if (error) {
           return res.status(500).json({
-            message: "Internal server error"
-          })
+            message: 'Internal server error',
+          });
         }
         return res.status(200).json({
           count: results.length,
-          results
-        })
-      })
+          results,
+        });
+      });
     }
 
     if (roomId) {
       return getVisitedRoomsByRoomId(roomId, (error, results) => {
         if (error) {
           return res.status(500).json({
-            message: "Internal server error"
-          })
+            message: 'Internal server error',
+          });
         }
 
         return res.status(200).json({
           count: results.length,
-          results
-        })
-      })
+          results,
+        });
+      });
     }
 
     getAllVisitedRooms((error, results) => {
       if (error) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
 
       res.status(200).json({
         count: results.length,
-        results
-      })
-    })
-  }
+        results,
+      });
+    });
+  },
 };

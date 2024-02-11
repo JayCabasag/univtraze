@@ -160,7 +160,7 @@ module.exports = {
   },
   getUserNotificationsByUserId: (req, res) => {
     const userId = req.user.result.id;
-    const startAt = req.query?.["start-at"] ?? 0;
+    const startAt = req.query?.['start-at'] ?? 0;
     const body = { user_id: userId, start_at: startAt };
 
     getUserNotificationsById(body, (err, notificationsResults) => {
@@ -173,27 +173,27 @@ module.exports = {
       getUserNotificationsOverviewById(body, (err, overviewResults) => {
         if (err) {
           return res.status(500).json({
-            message: "Internal server error"
-          })
+            message: 'Internal server error',
+          });
         }
 
         return res.status(200).json({
           results: {
             notifications: notificationsResults,
-            ...overviewResults
+            ...overviewResults,
           },
         });
-      })
+      });
     });
   },
   updateUserNotificationStatus: (req, res) => {
-    const { error } = schemas.updateNotificationStatus.validate(req.params)
+    const { error } = schemas.updateNotificationStatus.validate(req.params);
     if (error) {
       return res.status(409).json({
-        message: "Invalid payload"
-      })
+        message: 'Invalid payload',
+      });
     }
-    const notificationId = req.params.notificationId
+    const notificationId = req.params.notificationId;
     updateNotificationToViewedStatus(notificationId, (err, results) => {
       if (err) {
         return res.status(500).json({

@@ -1,4 +1,10 @@
-const { insertVaccineData, updateVaccineData, checkIfVaccineRecordExists, getVaccinationRecords } = require('./vaccination_records.service');
+const {
+  insertVaccineData,
+  updateVaccineData,
+  checkIfVaccineRecordExists,
+  getVaccinationRecords,
+  getVaccinationRecordsFilterByUserId,
+} = require('./vaccination_records.service');
 
 module.exports = {
   updateVaccineData: (req, res) => {
@@ -80,17 +86,31 @@ module.exports = {
       });
     });
   },
-
   getVaccinationRecords: (req, res) => {
+    const userId = req.query['user-id'];
+
+    if (userId) {
+      return getVaccinationRecordsFilterByUserId(userId, (error, results) => {
+        if (error) {
+          return res.status(500).json({
+            message: 'Internal server error',
+          });
+        }
+        return res.status(200).json({
+          results,
+        });
+      });
+    }
+
     getVaccinationRecords((error, results) => {
       if (error) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
       return res.status(200).json({
-        results
-      })
-    })
+        results,
+      });
+    });
   },
 };
