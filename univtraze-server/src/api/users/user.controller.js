@@ -504,7 +504,7 @@ module.exports = {
 
   getUserDetailsById: async (req, res) => {
     const { error } = schemas.userIdSchema.validate(req.params);
-
+    
     if (error) {
       return res.status(409).json({
         message: 'Invalid payload',
@@ -571,7 +571,7 @@ module.exports = {
         });
       }
       if (results.type == USER_TYPE.VISITOR) {
-        return getStudentDetailsById(body.id, (err, results) => {
+        return getVisitorDetailsById(body.id, (err, results) => {
           if (err) {
             return res.status(500).json({
               message: 'Internal server error',
