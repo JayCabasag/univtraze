@@ -1,10 +1,4 @@
-const {
-  insertVaccineData,
-  updateVaccineData,
-  checkIfVaccineRecordExists,
-  getVaccinationRecords,
-  getVaccinationRecordsFilterByUserId,
-} = require('./vaccination_records.service');
+const { getVaccinationRecords, getVaccinationRecordsFilterByUserId} = require('./vaccination_records.service');
 
 module.exports = {
   updateVaccineData: (req, res) => {
