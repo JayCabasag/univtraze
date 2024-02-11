@@ -2,18 +2,20 @@ import { View, Text, StyleSheet, Image, Platform } from 'react-native'
 import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import VirusIcon from '../assets/virus.png';
+import ProgressBar from './ProgressBar';
 
 export default function MainDiseaseCard(props) {
+  const recoveredPercentage = (props.totalActive / props.totalRecovered) * 100
   return (
     <View style={[styles.cardContainerStyles, props.top && styles.cardContainerActiveStyles]}>
         <View style={styles.cardStyles}>
-        {/* <Image source={CirclesIcon} style={styles.circleStyles} /> */}
         <View style={styles.virusContainetStyles}>
             <Image source={VirusIcon} style={styles.virusStyles} />
             <Image source={VirusIcon} style={styles.virus1Styles} />
             <Image source={VirusIcon} style={styles.virus2Styles} />
         </View>
         <Text style={styles.cardHeaderTextStyle}>{props.name}</Text>
+        <ProgressBar value={recoveredPercentage}/>
         <View style={styles.victimDetailsContainer}>
                 <View style={styles.textDetailsContainer}>
                     <Text style={styles.headerTextDetailsStyles}>{props.totalRecovered}</Text>
@@ -71,7 +73,8 @@ const styles = StyleSheet.create({
     },
     cardStyles: {
         width: '100%',
-        height: 127,
+        height: 'auto',
+        minHeight: 147,
         borderRadius: 20,
         backgroundColor: COLORS.WHITE,
         overflow: 'hidden'

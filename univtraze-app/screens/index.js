@@ -5,17 +5,13 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
-  Dimensions,
   Image,
   StatusBar,
   Platform,
-  ActivityIndicator,
   Alert
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { PieChart } from 'react-native-chart-kit'
-import moment from 'moment'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Notifications from '../components/Notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
