@@ -5,7 +5,7 @@ import VirusIcon from '../assets/virus.png'
 import ProgressBar from './ProgressBar'
 
 export default function MainDiseaseCard(props) {
-  const recoveredPercentage = (props.totalActive / props.totalRecovered) * 100
+  const recoveredPercentage = (props.totalRecovered /props.totalActive) * 100
   return (
     <View style={[styles.cardContainerStyles, props.top && styles.cardContainerActiveStyles]}>
       <View style={styles.cardStyles}>
@@ -16,6 +16,7 @@ export default function MainDiseaseCard(props) {
         </View>
         <Text style={styles.cardHeaderTextStyle}>{props.name}</Text>
         <ProgressBar value={recoveredPercentage} />
+        <Text style={styles.recoveredPercentageText}>{recoveredPercentage}% Recovered as of today</Text>
         <View style={styles.victimDetailsContainer}>
           <View style={styles.textDetailsContainer}>
             <Text style={styles.headerTextDetailsStyles}>{props.totalRecovered}</Text>
@@ -84,7 +85,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingHorizontal: 15,
     paddingTop: 15,
-    color: COLORS.SHADED_BLACK
+    color: COLORS.SHADED_BLACK,
+    textTransform: 'capitalize'
+  },
+  recoveredPercentageText: {
+    marginTop: 5,
+    fontSize: 12,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+    paddingHorizontal: 25,
+    color: COLORS.GRAY
   },
   victimDetailsContainer: {
     flex: 1,

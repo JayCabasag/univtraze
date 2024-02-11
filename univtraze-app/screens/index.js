@@ -8,7 +8,8 @@ import {
   Image,
   StatusBar,
   Platform,
-  Alert
+  Alert,
+  RefreshControl
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -30,6 +31,10 @@ const IndexScreen = ({ navigation }) => {
   const userId = user?.user?.id
   const userToken = auth?.userToken
 
+  const [activeCasesTotal, setActiveCasesTotal] = useState(0)
+  const [resolvedCasesTotal, setResolvedCasesTotal] = useState(0)
+  const [totalCases, setTotalCases] = useState(0)
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       if (!userId || !userToken) return
@@ -46,19 +51,13 @@ const IndexScreen = ({ navigation }) => {
   }, [userId, userToken])
 
   //covid api variables
-  const [population, setPopulation] = useState(0)
-  const [cases, setCases] = useState(0)
-  const [activeCases, setActiveCases] = useState(0)
-  const [recovered, setRecovered] = useState(0)
-  const [deaths, setDeaths] = useState(0)
-  const [isLoadingPhCovidCases, setIsLoadingPhCovidCases] = useState(true)
   const [notificationLists, setNotificationLists] = useState([])
 
   const [reportedCommunicableDiseaseOnGoing, setReportedCommunicableDiseaseOnGoing] = useState([])
   const [reportedCommunicableDiseaseResolved, setReportedCommunicableDiseaseResolved] = useState([])
 
   //Special variables
-  const [token, setToken] = useState('')
+  const token = auth.userToken;
   const [notificationCounts, setNotificationCounts] = useState(0)
   const [visible, setVisible] = useState(false)
   const [notifVisible, setNotifVisible] = useState(false)
@@ -79,27 +78,6 @@ const IndexScreen = ({ navigation }) => {
   const handleUpdateNotificationStatus = async (userId, notification_is_viewed, currentToken) => {}
 
   const getTotalActiveNotifications = async (currentToken) => {}
-
-  useEffect(() => {
-    const GetCovidUpdate = async () => {
-      setIsLoadingPhCovidCases(true)
-      try {
-        await axios
-          .get('https://disease.sh/v3/covid-19/countries/PH?strict=true')
-          .then((response) => {
-            setPopulation(response.data.population)
-            setActiveCases(response.data.active)
-            setCases(response.data.cases)
-            setRecovered(response.data.recovered)
-            setDeaths(response.data.deaths)
-          })
-      } catch (error) {
-      } finally {
-        setIsLoadingPhCovidCases(false)
-      }
-    }
-    GetCovidUpdate()
-  }, [])
 
   const handleGetNotifications = async (user_id, offset, token) => {
     const config = {
@@ -126,12 +104,37 @@ const IndexScreen = ({ navigation }) => {
       })
   }
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    const loadDiseaseReportsOverview = async () => {
+      try {
+        const res = await genericGetRequest('disease-cases/overview', token)
+        const { active_cases, resolved_cases } = res.results.overview
+        console.log(res.results.overview)
+        setResolvedCasesTotal(resolved_cases)
+        setActiveCasesTotal(active_cases)
+        setTotalCases(active_cases + resolved_cases)
+      } catch (error) {
+        
+      } finally {
+        setRefreshing(false)
+      }
+    }
+    loadDiseaseReportsOverview()
+  }, [token]);
+
+
   // Return
   return (
     <ScrollView
       style={styles.container}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       <Menu
         visible={visible}
@@ -228,8 +231,8 @@ const IndexScreen = ({ navigation }) => {
           <Text style={styles.sectionSubText}>University</Text>
         </View>
         <View style={styles.casesContainer}>
-          <DiseaseReportCard label={'Confirmed'} total={2} />
-          <DiseaseReportCard label={'Recovered'} total={2} />
+          <DiseaseReportCard label={'Active'} total={activeCasesTotal} />
+          <DiseaseReportCard label={'Resolved'} total={resolvedCasesTotal} />
         </View>
 
         <View style={styles.phUpdateContainer}>
