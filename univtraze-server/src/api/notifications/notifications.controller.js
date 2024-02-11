@@ -9,8 +9,6 @@ const {
   sendEmergencyReportPrescriptionViaEmail,
   sendSendCommunicableDiseaseReportPrescriptionViaEmail,
   getUserNotificationsById,
-  getTotalActiveUserNotificationsById,
-  updateUserNotificationStatus,
   getTotalUsers,
   getTotalCommunicableDisease,
   getUserNotificationsOverviewById,
