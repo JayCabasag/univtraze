@@ -2,12 +2,10 @@ import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import moment from 'moment'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import BottomSheet from './ui/BottomSheet'
+import { useNotifications } from '../services/store/notifications/NotificationsContext'
 
-const Notifications = ({
-  notifVisible,
-  toggleNotifNavigationView,
-  props: { notificationLists }
-}) => {
+const Notifications = ({ notifVisible, toggleNotifNavigationView }) => {
+  const { notifications } = useNotifications()
   return (
     <BottomSheet
       visible={notifVisible}
@@ -17,7 +15,7 @@ const Notifications = ({
       <View style={styles.bottomNavigationView}>
         <Text style={styles.modalHeaderText}>Notifications </Text>
         <ScrollView style={styles.scrolViewStyle}>
-          {notificationLists.map((notification) => {
+          {notifications.notifications.map((notification) => {
             return (
               <View style={styles.notificationItem} key={notification.id}>
                 <Image
@@ -82,6 +80,7 @@ const styles = StyleSheet.create({
   modalHeaderText: {
     fontSize: 24,
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    color: COLORS.TEXT_BLACK,
     paddingHorizontal: 20,
     paddingVertical: 20
   },

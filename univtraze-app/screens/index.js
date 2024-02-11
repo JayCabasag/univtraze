@@ -12,7 +12,6 @@ import {
   RefreshControl
 } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import Notifications from '../components/Notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
@@ -22,19 +21,22 @@ import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import DiseaseReportCard from '../components/DiseaseReportCard'
 import MainDiseaseCard from '../components/MainDiseaseCard'
+import { useNotifications } from '../services/store/notifications/NotificationsContext'
 
 const IndexScreen = ({ navigation }) => {
   const { state: user, updateUserDetails } = useUser()
   const { state: auth } = useAuth()
+  const { notifications } = useNotifications()
 
   const fullname = `${user?.details?.firstname ?? ''} ${user?.details?.lastname ?? ''}`
   const userId = user?.user?.id
   const userToken = auth?.userToken
-
+  const notificationCounts = notifications.summary?.not_viewed_total ?? 0
+  const [visible, setVisible] = useState(false)
+  const [notifVisible, setNotifVisible] = useState(false)
   const [activeCasesTotal, setActiveCasesTotal] = useState(0)
   const [resolvedCasesTotal, setResolvedCasesTotal] = useState(0)
   const [totalCases, setTotalCases] = useState(0)
-
   const [leadingDiseasesList, setLeadingDiseasesList] = useState([])
 
   useEffect(() => {
@@ -52,18 +54,6 @@ const IndexScreen = ({ navigation }) => {
     fetchUserDetails()
   }, [userId, userToken])
 
-  //covid api variables
-  const [notificationLists, setNotificationLists] = useState([])
-
-  const [reportedCommunicableDiseaseOnGoing, setReportedCommunicableDiseaseOnGoing] = useState([])
-  const [reportedCommunicableDiseaseResolved, setReportedCommunicableDiseaseResolved] = useState([])
-
-  //Special variables
-  const token = auth.userToken
-  const [notificationCounts, setNotificationCounts] = useState(0)
-  const [visible, setVisible] = useState(false)
-  const [notifVisible, setNotifVisible] = useState(false)
-
   const toggleBottomNavigationView = () => {
     //Toggling the visibility state of the bottom sheet
     setVisible(!visible)
@@ -71,48 +61,15 @@ const IndexScreen = ({ navigation }) => {
 
   const toggleNotifNavigationView = () => {
     //Toggling the visibility state of the bottom sheet
-    getTotalActiveNotifications(token)
     setNotifVisible(!notifVisible)
-    handleUpdateNotificationStatus(userId, 1, token)
-    handleGetNotifications(userId, 0, token)
-  }
-
-  const handleUpdateNotificationStatus = async (userId, notification_is_viewed, currentToken) => {}
-
-  const getTotalActiveNotifications = async (currentToken) => {}
-
-  const handleGetNotifications = async (user_id, offset, token) => {
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-
-    const data = {
-      user_id: user_id,
-      start_at: offset
-    }
-    await axios
-      .post(
-        `https://univtraze.herokuapp.com/api/notifications/getUserNotificationsById`,
-        data,
-        config
-      )
-      .then((response) => {
-        if (response.data.success === 0) {
-          return console.log(response.data)
-        }
-
-        let returnArray = response.data.results
-        return setNotificationLists(returnArray)
-      })
   }
 
   const [refreshing, setRefreshing] = React.useState(false)
-
   const onRefresh = React.useCallback(() => {
     setRefreshing(true)
     const loadDiseaseReportsOverview = async () => {
       try {
-        const res = await genericGetRequest('disease-cases/overview', token)
+        const res = await genericGetRequest('disease-cases/overview', userToken)
         const { active_cases_total, resolved_cases_total } = res.results.overview
         setLeadingDiseasesList(res.results.diseases)
         setResolvedCasesTotal(resolved_cases_total)
@@ -125,7 +82,7 @@ const IndexScreen = ({ navigation }) => {
       }
     }
     loadDiseaseReportsOverview()
-  }, [token])
+  }, [userToken])
 
   useEffect(() => {
     onRefresh()
@@ -147,7 +104,6 @@ const IndexScreen = ({ navigation }) => {
       <Notifications
         notifVisible={notifVisible}
         toggleNotifNavigationView={toggleNotifNavigationView}
-        props={{ userId, token, notificationLists }}
         navigation={navigation}
       />
       <View style={styles.topContainer}>

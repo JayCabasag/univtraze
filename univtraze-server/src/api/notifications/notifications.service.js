@@ -153,7 +153,7 @@ module.exports = {
   },
   getUserNotificationsOverviewById: (data, callBack) => {
     pool.query(
-      `SELECT CAST(SUM(CASE WHEN notification_is_viewed = false THEN 1 ELSE 0 END) AS INTEGER) AS not_viewed_total, CAST(SUM(CASE WHEN notification_is_viewed = true THEN 1 ELSE 0 END) AS INTEGER) AS viewed_total FROM users_notifications WHERE notification_for = ?`,
+      `SELECT CAST(SUM(CASE WHEN notification_is_viewed = false THEN 0 ELSE 1 END) AS INTEGER) AS not_viewed_total, CAST(SUM(CASE WHEN notification_is_viewed = true THEN 0 ELSE 1 END) AS INTEGER) AS viewed_total FROM users_notifications WHERE notification_for = ?`,
       [data.user_id, data.start_at],
       (error, results, fields) => {
         if (error) {

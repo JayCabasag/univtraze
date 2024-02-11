@@ -9,7 +9,7 @@ module.exports = {
 
       verify(token, process.env.JSON_KEY, (err, decoded) => {
         if (err) {
-          res.json({
+          res.status(401).json({
             success: 0,
             message: 'Invalid token',
           });
@@ -19,8 +19,7 @@ module.exports = {
         }
       });
     } else {
-      res.json({
-        success: 0,
+      res.status(401).json({
         message: 'Access denied, unauthorized user.',
       });
     }

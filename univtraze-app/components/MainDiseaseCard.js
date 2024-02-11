@@ -19,7 +19,10 @@ export default function MainDiseaseCard({ top = false, data }) {
           <Image source={VirusIcon} style={styles.virus2Styles} />
         </View>
         <Text style={styles.cardHeaderTextStyle}>{name}</Text>
-        <ProgressBar value={recoveredPercentage} />
+        <ProgressBar
+          value={recoveredPercentage}
+          progressBarContainerStyles={styles.progressBarContainerStyles}
+        />
         <Text style={styles.recoveredPercentageText}>
           {recoveredPercentage}% Recovered as of today
         </Text>
@@ -62,6 +65,9 @@ const styles = StyleSheet.create({
     width: 30,
     top: -20,
     right: -40
+  },
+  progressBarContainerStyles: {
+    marginTop: 10
   },
   cardContainerStyles: {
     borderRadius: 20,
@@ -113,23 +119,27 @@ const styles = StyleSheet.create({
   headerTextDetailsStyles: {
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
     color: COLORS.PRIMARY,
-    fontSize: 28,
-    marginBottom: Platform.OS == 'ios' ? -6 : -12
+    fontSize: 20,
+    marginBottom: Platform.OS == 'ios' ? -2 : -6
   },
   subHeaderTextDetailsStyles: {
     color: COLORS.PRIMARY,
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
+    fontSize: 12,
+    fontFamily: FONT_FAMILY.POPPINS_LIGHT
   },
   headerTextDetailsRedStyles: {
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
     color: COLORS.DARK_RED,
-    fontSize: 28,
+    fontSize: 20,
     alignSelf: 'flex-end',
-    marginBottom: Platform.OS == 'ios' ? -6 : -12
+    marginBottom: Platform.OS == 'ios' ? -2 : -6
   },
   subHeaderTextDetailsRedStyles: {
     color: COLORS.DARK_RED,
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
+    fontSize: 12,
+    fontFamily: FONT_FAMILY.POPPINS_LIGHT
   },
   textDetailsContainer: {
     display: 'flex',
@@ -155,6 +165,7 @@ const styles = StyleSheet.create({
   },
   diseaseLabelStyle: {
     fontFamily: FONT_FAMILY.POPPINS_LIGHT,
-    fontSize: 12
+    fontSize: 12,
+    color: COLORS.TEXT_BLACK
   }
 })
