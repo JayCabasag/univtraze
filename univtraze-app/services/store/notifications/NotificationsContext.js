@@ -54,15 +54,14 @@ export const NotificationsContextProvider = ({ children }) => {
     bootstrapAsync()
   }, [token])
 
-  const dispatcherFn = () =>
-    useMemo(
+  const dispatcherFn = useMemo(
       () => ({
-        updateNotifications: ({ notifications }) => {
-          dispatch({ type: 'RESTORE_NOTIFICATIONS', notifications })
+        updateNotifications: ({ notifications, summary }) => {
+          dispatch({ type: 'RESTORE_NOTIFICATIONS', notifications, summary })
         },
         clearNotifications: () => {
           dispatch({ type: 'CLEAR_NOTIFICATIONS' })
-        }
+        },
       }),
       []
     )

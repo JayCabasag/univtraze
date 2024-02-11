@@ -16,6 +16,9 @@ const {
 
 router.get('/', checkToken, getUserNotificationsByUserId);
 router.put('/:notificationId', checkToken, updateUserNotificationStatus);
+/**
+ * below requires refactor
+ */
 router.post('/getAdminNotifications', checkToken, adminNotifications);
 router.post('/updateAdminNotificationStatus', checkToken, updateAdminNotificationStatus);
 router.get('/getTotalActiveAdminNotifications', checkToken, getTotalActiveAdminNotifications);

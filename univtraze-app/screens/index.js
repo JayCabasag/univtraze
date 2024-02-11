@@ -26,7 +26,7 @@ import { useNotifications } from '../services/store/notifications/NotificationsC
 const IndexScreen = ({ navigation }) => {
   const { state: user, updateUserDetails } = useUser()
   const { state: auth } = useAuth()
-  const { notifications } = useNotifications()
+  const { notifications, updateNotifications } = useNotifications()
 
   const fullname = `${user?.details?.firstname ?? ''} ${user?.details?.lastname ?? ''}`
   const userId = user?.user?.id
@@ -82,6 +82,24 @@ const IndexScreen = ({ navigation }) => {
       }
     }
     loadDiseaseReportsOverview()
+
+    const loadNotifications = async () => {
+      let notificationList
+      let summary
+      try {
+        const res = await genericGetRequest(`notifications`, userToken)
+        const { notifications, not_viewed_total, viewed_total } = res.results
+        notificationList = notifications
+        summary = { not_viewed_total, viewed_total }
+        updateNotifications({ notifications, summary })
+      } catch (e) {
+        console.log('Notification error', e)
+        // Restoring token failed
+      } finally {
+        // Final
+      }
+    }
+    loadNotifications()
   }, [userToken])
 
   useEffect(() => {
@@ -102,7 +120,7 @@ const IndexScreen = ({ navigation }) => {
         navigation={navigation}
       />
       <Notifications
-        notifVisible={notifVisible}
+        visible={notifVisible}
         toggleNotifNavigationView={toggleNotifNavigationView}
         navigation={navigation}
       />

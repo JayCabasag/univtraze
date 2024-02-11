@@ -177,7 +177,7 @@ module.exports = {
   },
   updateNotificationToViewedStatus: (id, callBack) => {
     pool.query(
-      `UPDATE users_notifications SET notification_is_viewed = true WHERE id = ?`,
+      `UPDATE users_notifications SET notification_is_viewed = 1 WHERE id = ?`,
       [id],
       (error, results, fields) => {
         if (error) {
