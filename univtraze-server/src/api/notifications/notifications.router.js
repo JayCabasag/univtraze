@@ -15,7 +15,7 @@ const {
 } = require('./notifications.controller');
 
 router.get('/', checkToken, getUserNotificationsByUserId);
-router.update('/', checkToken, updateUserNotificationStatus);
+router.put('/:notificationId', checkToken, updateUserNotificationStatus);
 router.post('/getAdminNotifications', checkToken, adminNotifications);
 router.post('/updateAdminNotificationStatus', checkToken, updateAdminNotificationStatus);
 router.get('/getTotalActiveAdminNotifications', checkToken, getTotalActiveAdminNotifications);

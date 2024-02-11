@@ -1,3 +1,4 @@
+const schemas = require('../../utils/helpers/schemas');
 const {
   getAdminNotifications,
   updateAdminNotificationStatus,
@@ -188,8 +189,13 @@ module.exports = {
     });
   },
   updateUserNotificationStatus: (req, res) => {
-    const notificationId = req.body.notification_id
-
+    const { error } = schemas.updateNotificationStatus.validate(req.params)
+    if (error) {
+      return res.status(409).json({
+        message: "Invalid payload"
+      })
+    }
+    const notificationId = req.params.notificationId
     updateNotificationToViewedStatus(notificationId, (err, results) => {
       if (err) {
         return res.status(500).json({
@@ -197,7 +203,7 @@ module.exports = {
         });
       }
       return res.status(200).json({
-        message: 'Updated notification status successfully!',
+        results,
       });
     });
   },

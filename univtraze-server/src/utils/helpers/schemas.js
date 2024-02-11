@@ -201,6 +201,12 @@ class Schemas {
       password: Joi.string().required(), 
     });
   }
+
+  get updateNotificationStatus(){
+    return Joi.object({
+      notificationId: Joi.number()
+    })
+  }
 }
 
 module.exports = new Schemas();
