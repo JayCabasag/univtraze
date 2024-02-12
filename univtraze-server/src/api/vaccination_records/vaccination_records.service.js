@@ -18,19 +18,19 @@ module.exports = {
     });
   },
   isVaccinationRecordExists: (data, callBack) => {
-    pool.query(`select * from vaccination_records where user_id = ? AND vaccine_disease = ? AND vaccine_name = ?`,
+    pool.query(
+      `select * from vaccination_records where user_id = ? AND vaccine_disease = ? AND vaccine_name = ?`,
       [data.user_id, data.vaccine_disease, data.vaccine_name],
-     (error, results, fields) => {
-      if (error) {
-        return callBack(error);
-      }
-      return callBack(null, results[0]);
-    });
+      (error, results, fields) => {
+        if (error) {
+          return callBack(error);
+        }
+        return callBack(null, results[0]);
+      },
+    );
   },
-  searchVaccinationRecordById: (id, callBack) => {
-    pool.query(`select * from vaccination_records where vaccination_record_id = ?`,
-      [id],
-     (error, results, fields) => {
+  getVaccinationRecordsFilterById: (id, callBack) => {
+    pool.query(`select * from vaccination_records where vaccination_record_id = ?`, [id], (error, results, fields) => {
       if (error) {
         return callBack(error);
       }
@@ -60,5 +60,13 @@ module.exports = {
         return callBack(null, results);
       },
     );
+  },
+  deleteVaccinationRecord: (id, callBack) => {
+    pool.query(`DELETE FROM vaccination_records WHERE vaccination_record_id = ?`, [id], (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    });
   },
 };

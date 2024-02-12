@@ -7,7 +7,7 @@ import {
   Image,
   Platform
 } from 'react-native'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import moment from 'moment'
 import axios from 'axios'
 import StepperIcon3 from '../assets/step-3-credentials.png'
@@ -19,10 +19,16 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import UserInfoWithSkipFooter from '../components/UserInfoWithSkipFooter'
 import CustomCalendar from '../components/ui/CustomCalendar'
 import { useUser } from '../services/store/user/UserContext'
+import { genericGetRequest } from '../services/api/genericGetRequest'
 
 const UserVaccine = ({ navigation, route }) => {
   const { state: auth } = useAuth()
   const { state: userState, updateUser } = useUser()
+
+  const userId = userState.user.id;
+  const userToken = auth.userToken;
+
+  const [allVaccinationRecords, setAllVaccinationRecords] = useState([])
 
   const [firstDoseName, setFirstDoseName] = useState('none')
   const [firstDoseDate, setFirstDoseDate] = useState(new Date())
@@ -46,46 +52,22 @@ const UserVaccine = ({ navigation, route }) => {
   ])
 
   const [showLoadingModal, setShowLoadingModal] = useState(false)
-  const [userId, setUserId] = useState(null)
 
-  const handleUpdateVaccineData = async () => {
-    try {
-      const data = {
-        user_id: userId,
-        firstdose_vaxname: firstDoseName,
-        firstdose_date: moment(firstDoseDate).format('YYYY-MM-DD'),
-        seconddose_vaxname: secondDoseName,
-        seconddose_date: moment(secondDoseDate).format('YYYY-MM-DD'),
-        booster_vaxname: boosterDoseName,
-        booster_date: moment(boosterDoseDate).format('YYYY-MM-DD')
+  useEffect(() => {
+    if (!userId || !userToken) return;
+    const getVaccinationRecords = async () => {
+      try {
+        setShowLoadingModal(true)
+        const res = await genericGetRequest(`vaccination-records?userd_id=${userId}`, userToken)
+        setAllVaccinationRecords(res.results)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setShowLoadingModal(false)
       }
-
-      const config = {
-        headers: { Authorization: `Bearer ${auth.userToken}` }
-      }
-
-      setShowLoadingModal(true)
-      await axios
-        .post(`https://univtraze.herokuapp.com/api/vaccine_info/addVaccineData`, data, config)
-        .then((response) => {
-          const success = response.data.success
-          setShowLoadingModal(false)
-          if (success === 0) {
-            return alert('An error occured while updating your vaccine record')
-          }
-
-          if (success === 1) {
-            navigation.navigate('Dashboard', { type: route.params.type })
-            return alert('Successfully updated vaccine information.')
-          }
-
-          alert('An error occured while updating your vaccine record')
-        })
-    } catch (error) {
-      alert('An error occured!. Please try again')
-      setShowLoadingModal(false)
-    }
-  }
+    } 
+    getVaccinationRecords()
+  }, [userId, userToken])
 
   const handleUpdateUserVaccine = async () => {
     try {

@@ -215,7 +215,7 @@ class Schemas {
       vaccine_name: Joi.string().required(),
       dose_number: Joi.string().required(),
       date: Joi.date().iso().required(),
-    })
+    });
   }
 
   get updateVaccineRecordSchema() {
@@ -226,9 +226,14 @@ class Schemas {
       vaccine_name: Joi.string().required(),
       dose_number: Joi.string().required(),
       date: Joi.date().iso().required(),
-    })
+    });
   }
 
+  get deleteVaccinationRecordSchema() {
+    return Joi.object({
+      vaccination_record_id: Joi.number().required(),
+    });
+  }
 }
 
 module.exports = new Schemas();
