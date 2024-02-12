@@ -36,7 +36,7 @@ module.exports = {
       }
 
       if (results.length > 0) {
-        return res.status(403).json({
+        return res.status(409).json({
           message: 'Email/Username already have an account',
         });
       }
@@ -57,7 +57,7 @@ module.exports = {
           }
 
           if (!results) {
-            return res.status(403).json({
+            return res.status(404).json({
               message: 'Admin does not exists',
             });
           }

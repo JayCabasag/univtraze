@@ -36,7 +36,7 @@ module.exports = {
       }
 
       if (results.length > 0) {
-        return res.status(403).json({
+        return res.status(409).json({
           message: 'Room already Exist',
         });
       }

@@ -60,7 +60,7 @@ module.exports = {
             }
 
             if (!results) {
-              return res.status(403).json({
+              return res.status(404).json({
                 message: 'Visited room does not exists',
               });
             }
