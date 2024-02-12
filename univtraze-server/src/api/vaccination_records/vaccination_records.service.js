@@ -27,6 +27,16 @@ module.exports = {
       return callBack(null, results[0]);
     });
   },
+  searchVaccinationRecordById: (id, callBack) => {
+    pool.query(`select * from vaccination_records where vaccination_record_id = ?`,
+      [id],
+     (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results[0]);
+    });
+  },
   addVaccinationRecord: (data, callBack) => {
     pool.query(
       `INSERT INTO vaccination_records (user_id, vaccine_disease, dose_number, vaccine_name, date) VALUES (?,?,?,?,?)`,
@@ -41,8 +51,8 @@ module.exports = {
   },
   updateVaccinationRecord: (data, callBack) => {
     pool.query(
-      `UPDATE vaccination_records SET user_id = ?, vaccine_disease = ?, vaccine_name = ?, dose_number = ?, date = ?) WHERE id = ?`,
-      [data.user_id, data.vaccine_disease, data.vaccine_name, data.dose_number, data.vaccine_name, data.date, data.vaccination_record_id],
+      `UPDATE vaccination_records SET user_id = ?, vaccine_disease = ?, vaccine_name = ?, dose_number = ?, date = ? WHERE vaccination_record_id = ?`,
+      [data.user_id, data.vaccine_disease, data.vaccine_name, data.dose_number, data.date, data.vaccination_record_id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
