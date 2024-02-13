@@ -2,15 +2,12 @@ const pool = require('../../config/database');
 
 module.exports = {
   getAllTempHistory: (callBack) => {
-    pool.query(
-      `SELECT * FROM temperature_history ORDER BY id DESC LIMIT 100;`,
-      (error, results, fields) => {
-        if (error) {
-          return callBack(error);
-        }
-        return callBack(null, results);
-      },
-    );
+    pool.query(`SELECT * FROM temperature_history ORDER BY id DESC LIMIT 100;`, (error, results, fields) => {
+      if (error) {
+        return callBack(error);
+      }
+      return callBack(null, results);
+    });
   },
   getTempHistoryByUserId: (id, callBack) => {
     pool.query(

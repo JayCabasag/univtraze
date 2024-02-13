@@ -20,7 +20,7 @@ const victimsRouter = require('./api/victims/victims.router');
 const notificationsRouter = require('./api/notifications/notifications.router');
 const roomVisitedRouter = require('./api/room-visited/room_visited.router');
 const emergencyReportsRouter = require('./api/emergency-reports/emergency_reports.routes');
-
+const kioskRouter = require('./api/kiosk/kiosk.router');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -43,6 +43,7 @@ app.use('/api/victims', victimsRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/room-visited', roomVisitedRouter);
 app.use('/api/emergency-reports', emergencyReportsRouter);
+app.use('/api/kiosk', kioskRouter);
 
 app.get('/', (req, res) => {
   res.send('Welcome to univtraze server!!');
