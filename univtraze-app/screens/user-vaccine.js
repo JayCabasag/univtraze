@@ -5,13 +5,14 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Image,
-  Platform
+  Platform,
+  TouchableOpacity
 } from 'react-native'
 import React, { Fragment, useEffect, useState } from 'react'
 import moment from 'moment'
 import axios from 'axios'
 import StepperIcon3 from '../assets/step-3-credentials.png'
-import { COLORS, VACCINES } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY, VACCINES } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
 import useFormErrors from '../hooks/useFormErrors'
 import CustomPicker from '../components/ui/CustomPicker'
@@ -20,15 +21,16 @@ import UserInfoWithSkipFooter from '../components/UserInfoWithSkipFooter'
 import CustomCalendar from '../components/ui/CustomCalendar'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
+import VaccinationRecordCard from '../components/VaccinationRecordCard'
 
 const UserVaccine = ({ navigation, route }) => {
   const { state: auth } = useAuth()
   const { state: userState, updateUser } = useUser()
 
-  const userId = userState.user.id;
-  const userToken = auth.userToken;
+  const userId = userState.user.id
+  const userToken = auth.userToken
 
-  const [allVaccinationRecords, setAllVaccinationRecords] = useState([])
+  const [vaccinationRecords, setVaccinationRecords] = useState([])
 
   const [firstDoseName, setFirstDoseName] = useState('none')
   const [firstDoseDate, setFirstDoseDate] = useState(new Date())
@@ -54,26 +56,25 @@ const UserVaccine = ({ navigation, route }) => {
   const [showLoadingModal, setShowLoadingModal] = useState(false)
 
   useEffect(() => {
-    if (!userId || !userToken) return;
+    if (!userId || !userToken) return
     const getVaccinationRecords = async () => {
       try {
         setShowLoadingModal(true)
         const res = await genericGetRequest(`vaccination-records?userd_id=${userId}`, userToken)
-        setAllVaccinationRecords(res.results)
+        setVaccinationRecords(res.results)
       } catch (error) {
         console.log(error)
       } finally {
         setShowLoadingModal(false)
       }
-    } 
+    }
     getVaccinationRecords()
   }, [userId, userToken])
 
   const handleUpdateUserVaccine = async () => {
     try {
       setShowLoadingModal(true)
-      console.log("Updating")
-
+      console.log('Updating')
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
         { text: 'OK', onPress: () => console.log('OK') }
@@ -107,121 +108,20 @@ const UserVaccine = ({ navigation, route }) => {
           style={{ width: '100%', marginTop: 30 }}
         />
       </View>
-
       <ScrollView style={styles.bodyContainer} contentContainerStyle={styles.scrollViewContent}>
-        <Text style={styles.label}>1st Dose</Text>
-        <CustomPicker
-          prompt='1st Dose'
-          containerStyle={{ marginBottom: 10 }}
-          selectedValue={firstDoseName}
-          onValueChange={(itemValue, itemIndex) => {
-            setFirstDoseName(itemValue)
-          }}
-          hasError={formErrors.firstDoseName?.hasError ?? false}
-          options={vaccineOptions}
-        />
-        {formErrors.firstDoseName?.hasError && (
-          <Text style={styles.errorText}>{formErrors.firstDoseName.message}</Text>
-        )}
-        {firstDoseName != VACCINES.NONE && (
-          <Fragment>
-            <CustomCalendar
-              value={firstDoseDate}
-              showDatePicker={showFirstDoseDatePicker}
-              placeholder={'Date of birth'}
-              onChange={(_event, date) => {
-                // This is required to cancel close when selecting date in spinner
-                if (!(Platform.OS == 'ios')) {
-                  setShowFirstDoseDatePicker(false)
-                }
-                setFirstDoseDate(date)
-              }}
-              setShowDatePicker={(value) => {
-                setShowFirstDoseDatePicker(value)
-              }}
-              hasError={formErrors.firstDoseDate?.hasError}
+        <View style={styles.addNewBtnContainer}>
+          <TouchableOpacity style={styles.addNewBtn}>
+            <Text style={styles.addNewBtnText}>Add new</Text>
+          </TouchableOpacity>
+        </View>
+        {vaccinationRecords.map((vaccinationRecord) => {
+          return (
+            <VaccinationRecordCard
+              vaccinationRecord={vaccinationRecord}
+              key={vaccinationRecord.vaccination_record_id}
             />
-            {formErrors.firstDoseDate?.hasError && (
-              <Text style={styles.errorText}>{formErrors.firstDoseDate.message}</Text>
-            )}
-          </Fragment>
-        )}
-
-        <Text style={styles.label}>2nd Dose</Text>
-        <CustomPicker
-          prompt='2st Dose'
-          containerStyle={{ marginBottom: 10 }}
-          selectedValue={secondDoseName}
-          onValueChange={(itemValue, itemIndex) => {
-            setSecondDoseName(itemValue)
-          }}
-          hasError={formErrors.secondDoseName?.hasError ?? false}
-          options={vaccineOptions}
-        />
-        {formErrors.secondDoseName?.hasError && (
-          <Text style={styles.errorText}>{formErrors.secondDoseName.message}</Text>
-        )}
-        {secondDoseName != VACCINES.NONE && (
-          <Fragment>
-            <CustomCalendar
-              value={secondDoseDate}
-              showDatePicker={showSecondDoseDatePicker}
-              placeholder={'Date'}
-              onChange={(_event, date) => {
-                // This is required to cancel close when selecting date in spinner
-                if (!(Platform.OS == 'ios')) {
-                  setShowSecondDoseDatePicker(false)
-                }
-                setSecondDoseDate(date)
-              }}
-              setShowDatePicker={(value) => {
-                setShowSecondDoseDatePicker(value)
-              }}
-              hasError={formErrors.secondDoseDate?.hasError}
-            />
-            {formErrors.secondDoseDate?.hasError && (
-              <Text style={styles.errorText}>{formErrors.secondDoseDate.message}</Text>
-            )}
-          </Fragment>
-        )}
-
-        <Text style={styles.label}>3rd Dose</Text>
-        <CustomPicker
-          prompt='Booster Dose'
-          containerStyle={{ marginBottom: 10 }}
-          selectedValue={boosterDoseName}
-          onValueChange={(itemValue, itemIndex) => {
-            setBoosterDoseName(itemValue)
-          }}
-          hasError={formErrors.boosterDoseName?.hasError ?? false}
-          options={vaccineOptions}
-        />
-        {formErrors.boosterDoseName?.hasError && (
-          <Text style={styles.errorText}>{formErrors.boosterDoseName.message}</Text>
-        )}
-        {boosterDoseName != VACCINES.NONE && (
-          <Fragment>
-            <CustomCalendar
-              value={boosterDoseDate}
-              showDatePicker={showBoosterDoseDatePicker}
-              placeholder={'Date'}
-              onChange={(_event, date) => {
-                // This is required to cancel close when selecting date in spinner
-                if (!(Platform.OS == 'ios')) {
-                  setShowBoosterDoseDatePicker(false)
-                }
-                setBoosterDoseDate(date)
-              }}
-              setShowDatePicker={(value) => {
-                setShowBoosterDoseDatePicker(value)
-              }}
-              hasError={formErrors.boosterDoseDate?.hasError}
-            />
-            {formErrors.boosterDoseDate?.hasError && (
-              <Text style={styles.errorText}>{formErrors.boosterDoseDate.message}</Text>
-            )}
-          </Fragment>
-        )}
+          )
+        })}
       </ScrollView>
       <UserInfoWithSkipFooter onSkip={skipVaccinationtion} onNext={handleUpdateUserVaccine} />
     </KeyboardAvoidingView>
@@ -266,9 +166,24 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1
   },
+  addNewBtnContainer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'flex-end'
+  },
+  addNewBtn: {
+    backgroundColor: COLORS.PRIMARY,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20
+  },
+  addNewBtnText: {
+    color: COLORS.WHITE,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM
+  },
   scrollViewContent: {
     paddingHorizontal: 30,
-    paddingVertical: 20
+    paddingBottom: 20 
   },
   label: {
     width: '100%',

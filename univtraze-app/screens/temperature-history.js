@@ -39,6 +39,8 @@ const TemperatureHistoryScreen = ({ navigation }) => {
         onLayout={onRefresh}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollViewContainer}
       >
         <View style={styles.tempContainer}>
@@ -55,33 +57,21 @@ const TemperatureHistoryScreen = ({ navigation }) => {
               <DataTable.Title>
                 <Text style={styles.dataTableTitleText}>Temp</Text>
               </DataTable.Title>
-              <DataTable.Title>
-                <Text style={styles.dataTableTitleText}>Room Id</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={styles.dataTableTitleText}>Date</Text>
-              </DataTable.Title>
-              <DataTable.Title>
-                <Text style={styles.dataTableTitleText}>Time</Text>
+              <DataTable.Title style={{ minWidth: 100}} >
+                <Text style={styles.dataTableTitleText}>Date & time</Text>
               </DataTable.Title>
             </DataTable.Header>
             {refreshing && <Text style={styles.emptyText}>Please wait...</Text>}
             {temperatures.length == 0 && !refreshing && <Text style={styles.emptyText}>Empty</Text>}
             {temperatures.length > 0 &&
-              temperatures.map((roomVisited) => {
+              temperatures.map((roomVisited, index) => {
                 return (
-                  <DataTable.Row key={roomVisited.id}>
+                  <DataTable.Row key={index}>
                     <DataTable.Cell textStyle={styles.tableContentText}>
-                      {roomVisited.temperature}
+                      {roomVisited.temperature}&deg;C
                     </DataTable.Cell>
-                    <DataTable.Cell textStyle={styles.tableContentText}>
-                      {roomVisited.room_id}
-                    </DataTable.Cell>
-                    <DataTable.Cell textStyle={styles.tableContentText}>
-                      {moment.utc(roomVisited.createdAt).local().format('ll')}
-                    </DataTable.Cell>
-                    <DataTable.Cell textStyle={styles.tableContentText}>
-                      {moment.utc(roomVisited.created_at).local().format('LT')}
+                    <DataTable.Cell style={{ minWidth: 100}} textStyle={styles.tableContentText}>
+                      {moment.utc(roomVisited.createdAt).local().format('MMM-DD-YYYY HH:mm A')}
                     </DataTable.Cell>
                   </DataTable.Row>
                 )
@@ -108,7 +98,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.SECONDARY
+    backgroundColor: COLORS.SECONDARY,
+    paddingBottom: 20
   },
   centeredView: {
     flex: 1,

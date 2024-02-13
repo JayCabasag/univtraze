@@ -54,6 +54,9 @@ export const UserTemperaturesContextProvider = ({ children }) => {
     () => ({
       updateUserTemperatures: ({ temperatures }) => {
         dispatch({ type: 'RESTORE_USER_TEMPERATURES', temperatures })
+      },
+      clearUserTemperatures: () => {
+        dispatch({ type: 'CLEAR_USER_TEMPERATURES'})
       }
     }),
     []
@@ -63,6 +66,7 @@ export const UserTemperaturesContextProvider = ({ children }) => {
     <UserTemperaturesContext.Provider
       value={{
         temperatures: state.temperatures,
+        clearUserTemperatures: userTemperatureContext.clearUserTemperatures,
         updateUserTemperatures: userTemperatureContext.updateUserTemperatures
       }}
     >

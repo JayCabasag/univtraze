@@ -61,12 +61,8 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
       >
         <Pressable style={styles.centeredViews} onPress={() => setModalVisible(!modalVisible)}>
           <View style={styles.modalView}>
-            <Text style={styles.univtrazeHeaderText}>
-              UnivTraze
-            </Text>
-            <View
-              style={styles.qrCodeContainer}
-            >
+            <Text style={styles.univtrazeHeaderText}>UnivTraze</Text>
+            <View style={styles.qrCodeContainer}>
               <QRCode value={dataToConvertToQr} size={160} />
             </View>
             <Text style={{ color: 'rgba(54, 77, 57, 0.6)', textTransform: 'uppercase' }}>

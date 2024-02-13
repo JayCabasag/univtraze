@@ -4,7 +4,7 @@ var nodemailer = require('nodemailer');
 module.exports = {
   getAllTempHistory: (callBack) => {
     pool.query(
-      `SELECT * FROM temperature_history LEFT JOIN rooms ON temperature_history.room_id = rooms.id WHERE 1 ORDER BY temperature_history.id DESC;`,
+      `SELECT * FROM temperature_history LEFT JOIN rooms ON temperature_history.room_id = rooms.id WHERE 1 ORDER BY temperature_history.id DESC LIMIT 100;`,
       (error, results, fields) => {
         if (error) {
           return callBack(error);
@@ -15,7 +15,7 @@ module.exports = {
   },
   getTempHistoryByUserId: (id, callBack) => {
     pool.query(
-      `SELECT * FROM temperature_history LEFT JOIN rooms ON temperature_history.room_id = rooms.id WHERE temperature_history.user_id = ? ORDER BY temperature_history.id DESC;`,
+      `SELECT * FROM temperature_history LEFT JOIN rooms ON temperature_history.room_id = rooms.id WHERE temperature_history.user_id = ? ORDER BY temperature_history.id DESC LIMIT 100;`,
       [id],
       (error, results, fields) => {
         if (error) {
