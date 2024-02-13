@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, ScrollView, RefreshControl } from 'react-native
 import React from 'react'
 import { DataTable } from 'react-native-paper'
 import moment from 'moment'
-import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import { COLORS, FEVERISH, FONT_FAMILY } from '../utils/app_constants'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
@@ -32,6 +32,8 @@ const TemperatureHistoryScreen = ({ navigation }) => {
     getRoomVisited()
   }, [userId, userToken])
 
+  const currentTemperature = temperatures[0].temperature * 1
+
   return (
     <View style={styles.container}>
       <TopNavigation navigation={navigation} />
@@ -45,33 +47,49 @@ const TemperatureHistoryScreen = ({ navigation }) => {
       >
         <View style={styles.tempContainer}>
           <Text style={styles.bodyText}>My temperature {'\n'}for today is</Text>
-          <Text style={styles.tempText}>
+          <Text style={[styles.tempText, currentTemperature > FEVERISH && { color: COLORS.RED }]}>
             {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'} &deg;C
           </Text>
         </View>
 
         <View style={styles.dataTableContainer}>
           <Text style={styles.tableHeaderText}>Temperature History</Text>
+          <Text style={styles.temperatureInfoText}>
+            The average normal body temperature is generally accepted as{' '}
+            <Text style={styles.highlightedText}>98.6°F (37°C)</Text>. Some studies have shown that
+            the <Text style={styles.highlightedText}>"normal"</Text> body temperature can have a
+            wide range, from{' '}
+            <Text style={styles.highlightedText}>97°F (36.1°C) to 99°F (37.2°C)</Text>.
+          </Text>
           <DataTable style={styles.dataTableStyles}>
             <DataTable.Header style={styles.dataTableHeaderStyle}>
               <DataTable.Title>
                 <Text style={styles.dataTableTitleText}>Temp</Text>
               </DataTable.Title>
-              <DataTable.Title style={{ minWidth: 100}} >
+              <DataTable.Title style={{ minWidth: 50 }}>
                 <Text style={styles.dataTableTitleText}>Date & time</Text>
               </DataTable.Title>
             </DataTable.Header>
             {refreshing && <Text style={styles.emptyText}>Please wait...</Text>}
             {temperatures.length == 0 && !refreshing && <Text style={styles.emptyText}>Empty</Text>}
             {temperatures.length > 0 &&
-              temperatures.map((roomVisited, index) => {
+              temperatures.map((temperatureHistory, index) => {
+                const temperature = temperatureHistory.temperature
                 return (
                   <DataTable.Row key={index}>
-                    <DataTable.Cell textStyle={styles.tableContentText}>
-                      {roomVisited.temperature}&deg;C
+                    <DataTable.Cell
+                      textStyle={[
+                        styles.tableContentText,
+                        temperature > FEVERISH && styles.tableContextFeverishText
+                      ]}
+                    >
+                      {temperatureHistory.temperature}&deg;C
                     </DataTable.Cell>
-                    <DataTable.Cell style={{ minWidth: 100}} textStyle={styles.tableContentText}>
-                      {moment.utc(roomVisited.createdAt).local().format('MMM-DD-YYYY HH:mm A')}
+                    <DataTable.Cell style={{ minWidth: 50 }} textStyle={styles.tableContentText}>
+                      {moment
+                        .utc(temperatureHistory.createdAt)
+                        .local()
+                        .format('MMM-DD-YYYY HH:mm A')}
                     </DataTable.Cell>
                   </DataTable.Row>
                 )
@@ -163,6 +181,13 @@ const styles = StyleSheet.create({
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     color: COLORS.BLACK
   },
+  tableContextNormalText: {
+    color: COLORS.PRIMARY
+  },
+  tableContextFeverishText: {
+    color: COLORS.RED,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD
+  },
   emptyText: {
     paddingVertical: 15,
     width: '100%',
@@ -199,5 +224,14 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginLeft: 0,
     marginRight: 'auto'
+  },
+  temperatureInfoText: {
+    paddingBottom: 10,
+    fontFamily: FONT_FAMILY.POPPINS_EXTRA_LIGHT,
+    fontSize: 12
+  },
+  highlightedText: {
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    color: COLORS.PRIMARY
   }
 })

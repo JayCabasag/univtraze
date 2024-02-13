@@ -56,7 +56,7 @@ export const UserTemperaturesContextProvider = ({ children }) => {
         dispatch({ type: 'RESTORE_USER_TEMPERATURES', temperatures })
       },
       clearUserTemperatures: () => {
-        dispatch({ type: 'CLEAR_USER_TEMPERATURES'})
+        dispatch({ type: 'CLEAR_USER_TEMPERATURES' })
       }
     }),
     []

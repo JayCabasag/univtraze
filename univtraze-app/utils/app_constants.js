@@ -48,3 +48,4 @@ export const FONT_FAMILY = {
     OTHERS: 'others',
   };
   
+  export const FEVERISH = 37.2

@@ -11,7 +11,6 @@ export default function VaccinationRecordCard({ vaccinationRecord }) {
     label: data.toUpperCase()
   }))
 
-
   const [isEditable, setIsEditable] = useState(false)
   const [vaccineName, setVaccineName] = useState(
     (vaccinationRecord.vaccine_name ?? '').toLowerCase()
@@ -73,5 +72,5 @@ const styles = StyleSheet.create({
   },
   errorPickerStyle: {
     borderColor: COLORS.RED
-  },
+  }
 })

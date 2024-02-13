@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     paddingHorizontal: 30,
-    paddingBottom: 20 
+    paddingBottom: 20
   },
   label: {
     width: '100%',
