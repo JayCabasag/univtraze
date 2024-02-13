@@ -37,6 +37,8 @@ const VisitedRoomsScreen = ({ navigation }) => {
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         style={styles.tableContainer}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.roomDetailsContainer}>
           <Text style={styles.bodyText}>Latest visited room is</Text>
