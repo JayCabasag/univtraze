@@ -73,9 +73,6 @@ const VisitedRoomsScreen = ({ navigation }) => {
                   <DataTable.Cell>
                     {moment(visitedRoom.createdAt).format('MM-DD-YYYY')}
                   </DataTable.Cell>
-                  {/* <DataTable.Cell>
-                    {visitedRoom.building_name.replace('Building', '')}
-                  </DataTable.Cell> */}
                   <DataTable.Cell textStyle={styles.roomNumberText}>
                     {visitedRoom.room_number}
                   </DataTable.Cell>

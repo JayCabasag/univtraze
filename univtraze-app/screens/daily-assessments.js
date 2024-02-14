@@ -14,8 +14,7 @@ import {
   Alert
 } from 'react-native'
 import BottomSheet from '../components/ui/BottomSheet'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import CheckBox from 'expo-checkbox'
 import { COLORS } from '../utils/app_constants'
 

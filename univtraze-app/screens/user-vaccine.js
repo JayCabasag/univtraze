@@ -8,51 +8,25 @@ import {
   Platform,
   TouchableOpacity
 } from 'react-native'
-import React, { Fragment, useEffect, useState } from 'react'
-import moment from 'moment'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react'
 import StepperIcon3 from '../assets/step-3-credentials.png'
 import { COLORS, FONT_FAMILY, VACCINES } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
-import useFormErrors from '../hooks/useFormErrors'
-import CustomPicker from '../components/ui/CustomPicker'
 import { useAuth } from '../services/store/auth/AuthContext'
 import UserInfoWithSkipFooter from '../components/UserInfoWithSkipFooter'
-import CustomCalendar from '../components/ui/CustomCalendar'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import VaccinationRecordCard from '../components/VaccinationRecordCard'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-const UserVaccine = ({ navigation, route }) => {
+const UserVaccine = ({ navigation }) => {
   const { state: auth } = useAuth()
-  const { state: userState, updateUser } = useUser()
+  const { state: userState } = useUser()
 
   const userId = userState.user.id
   const userToken = auth.userToken
 
   const [vaccinationRecords, setVaccinationRecords] = useState([])
-
-  const [firstDoseName, setFirstDoseName] = useState('none')
-  const [firstDoseDate, setFirstDoseDate] = useState(new Date())
-  const [showFirstDoseDatePicker, setShowFirstDoseDatePicker] = useState(false)
-
-  const [secondDoseName, setSecondDoseName] = useState('none')
-  const [secondDoseDate, setSecondDoseDate] = useState(new Date())
-  const [showSecondDoseDatePicker, setShowSecondDoseDatePicker] = useState(false)
-
-  const [boosterDoseName, setBoosterDoseName] = useState('none')
-  const [boosterDoseDate, setBoosterDoseDate] = useState(new Date())
-  const [showBoosterDoseDatePicker, setShowBoosterDoseDatePicker] = useState(false)
-
-  const { formErrors } = useFormErrors([
-    'firstDose',
-    'firstDoseDate',
-    'secondDose',
-    'secondDoseDate',
-    'boosterDose',
-    'boosterDoseDate'
-  ])
-
   const [showLoadingModal, setShowLoadingModal] = useState(false)
 
   useEffect(() => {
@@ -111,6 +85,7 @@ const UserVaccine = ({ navigation, route }) => {
       <ScrollView style={styles.bodyContainer} contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.addNewBtnContainer}>
           <TouchableOpacity style={styles.addNewBtn}>
+            <Ionicons name='add' size={24} color={COLORS.WHITE} />
             <Text style={styles.addNewBtnText}>Add new</Text>
           </TouchableOpacity>
         </View>
@@ -175,7 +150,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: 20
+    borderRadius: 8,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    elevation: 5,
+    shadowColor: COLORS.PLACEHOLDER_BLACK,
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 5
   },
   addNewBtnText: {
     color: COLORS.WHITE,
@@ -183,7 +170,8 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     paddingHorizontal: 30,
-    paddingBottom: 20
+    paddingBottom: 20,
+    gap: 12
   },
   label: {
     width: '100%',
