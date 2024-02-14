@@ -9,4 +9,7 @@ module.exports = {
     unit_of_measurement: Joi.string().required(),
     remarks: Joi.string().required(),
   }),
+  getKioskUserByIdSchema: Joi.object({
+    user_id: Joi.number().required(),
+  }),
 };
