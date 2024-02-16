@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useId, useState } from 'react'
 import CustomPicker from './ui/CustomPicker'
 import { COLORS, FONT_FAMILY, VACCINES } from '../utils/app_constants'
 import CustomCalendar from './ui/CustomCalendar'
@@ -21,19 +21,17 @@ export default function VaccinationRecordCard({ vaccinationRecord }) {
 
   return (
     <View style={styles.cardStyles}>
-      <View style={styles.cardHeaderContainer}>
-        <Ionicons name='shield-outline' size={30} color={COLORS.PRIMARY} />
-        <View style={styles.cardHeader}>
-          <Text style={styles.label}>
-            {vaccinationRecord.vaccine_disease}
-          </Text>
-          <Text style={styles.doseText}>
-            DOSE {vaccinationRecord.dose_number}
-          </Text>
+      <View style={styles.vaccineInfoContainer}>
+        <View style={styles.cardHeaderContainer}>
+          <Ionicons name='shield-outline' size={30} color={COLORS.PRIMARY} />
+          <View style={styles.cardHeader}>
+            <Text style={styles.label}>{vaccinationRecord.vaccine_disease}</Text>
+            <Text style={styles.doseText}>DOSE {vaccinationRecord.dose_number}</Text>
+          </View>
         </View>
+        <Text style={styles.vaccineNameStyles}>{vaccineName}</Text>
+        <Text style={styles.vaccineDateStyles}>{doseDate.toDateString()}</Text>
       </View>
-      <Text style={styles.vaccineNameStyles}>{vaccineName}</Text>
-      <Text style={styles.vaccineDateStyles}>{doseDate.toDateString()}</Text>
       <View style={styles.actionBtnContainer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Edit</Text>
@@ -48,19 +46,24 @@ export default function VaccinationRecordCard({ vaccinationRecord }) {
 
 const styles = StyleSheet.create({
   cardStyles: {
+    display: 'flex',
+    flexDirection: 'row',
     width: '100%',
     backgroundColor: '#F7FFF8',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
     elevation: 5,
-    shadowColor: COLORS.PLACEHOLDER_BLACK,
+    shadowColor: COLORS.PRIMARY,
     shadowOffset: {
       width: 0,
       height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 5
+  },
+  vaccineInfoContainer: {
+    flex: 1
   },
   cardHeaderContainer: {
     display: 'flex',
@@ -85,13 +88,13 @@ const styles = StyleSheet.create({
   },
   vaccineDateStyles: {
     fontFamily: FONT_FAMILY.POPPINS_LIGHT
-
   },
   actionBtnContainer: {
     display: 'flex',
     alignItems: 'flex-end',
-    flexDirection: 'row',
-    width: '100%',
+    flexDirection: 'column',
+    flex: 1,
+    maxWidth: 100,
     justifyContent: 'flex-end',
     paddingVertical: 6,
     gap: 6

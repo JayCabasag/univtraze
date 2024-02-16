@@ -8,7 +8,7 @@ import {
   Platform,
   TouchableOpacity
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useId, useState } from 'react'
 import StepperIcon3 from '../assets/step-3-credentials.png'
 import { COLORS, FONT_FAMILY, VACCINES } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
@@ -18,6 +18,7 @@ import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import VaccinationRecordCard from '../components/VaccinationRecordCard'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import VaccinationRecordModal from '../components/VaccinationRecordModal'
 
 const UserVaccine = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -28,6 +29,7 @@ const UserVaccine = ({ navigation }) => {
 
   const [vaccinationRecords, setVaccinationRecords] = useState([])
   const [showLoadingModal, setShowLoadingModal] = useState(false)
+  const [showVaccinationRecordModal, setShowVaccinationRecordModal] = useState(false)
 
   useEffect(() => {
     if (!userId || !userToken) return
@@ -35,7 +37,8 @@ const UserVaccine = ({ navigation }) => {
       try {
         setShowLoadingModal(true)
         const res = await genericGetRequest(`vaccination-records?userd_id=${userId}`, userToken)
-        setVaccinationRecords(res.results)
+        // setVaccinationRecords(res.results)
+        setVaccinationRecords([])
       } catch (error) {
         console.log(error)
       } finally {
@@ -44,6 +47,10 @@ const UserVaccine = ({ navigation }) => {
     }
     getVaccinationRecords()
   }, [userId, userToken])
+
+  const handleAddNew = () => {
+    setShowVaccinationRecordModal(true)
+  }
 
   const handleUpdateUserVaccine = async () => {
     try {
@@ -62,18 +69,17 @@ const UserVaccine = ({ navigation }) => {
     navigation.navigate('index')
   }
 
-  const vaccineOptions = Object.values(VACCINES).map((data, index) => ({
-    id: index,
-    value: data,
-    label: data.toUpperCase()
-  }))
-
   return (
     <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
       <LoadingModal
         onRequestClose={() => setShowLoadingModal(false)}
         open={showLoadingModal}
         loadingMessage={'Please wait'}
+      />
+      <VaccinationRecordModal
+        key={`${showVaccinationRecordModal}-vr-modal`} // To not remember the state
+        onRequestClose={() => setShowVaccinationRecordModal(false)}
+        open={showVaccinationRecordModal}
       />
       <View style={styles.header}>
         <Image
@@ -84,11 +90,17 @@ const UserVaccine = ({ navigation }) => {
       </View>
       <ScrollView style={styles.bodyContainer} contentContainerStyle={styles.scrollViewContent}>
         <View style={styles.addNewBtnContainer}>
-          <TouchableOpacity style={styles.addNewBtn}>
+          <TouchableOpacity
+            disabled={showLoadingModal}
+            style={styles.addNewBtn}
+            onPress={handleAddNew}
+          >
             <Ionicons name='add' size={24} color={COLORS.WHITE} />
             <Text style={styles.addNewBtnText}>Add new</Text>
           </TouchableOpacity>
         </View>
+        <Text style={styles.headerText}>Vaccination Records</Text>
+        {vaccinationRecords.length <= 0 && <Text style={styles.noRecordsText}>No Records</Text>}
         {vaccinationRecords.map((vaccinationRecord) => {
           return (
             <VaccinationRecordCard
@@ -167,6 +179,15 @@ const styles = StyleSheet.create({
   addNewBtnText: {
     color: COLORS.WHITE,
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM
+  },
+  headerText: {
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    fontSize: 22
+  },
+  noRecordsText: {
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR,
+    width: '100%',
+    textAlign: 'center'
   },
   scrollViewContent: {
     paddingHorizontal: 30,
