@@ -87,7 +87,7 @@ const TemperatureHistoryScreen = ({ navigation }) => {
                     </DataTable.Cell>
                     <DataTable.Cell style={{ minWidth: 50 }} textStyle={styles.tableContentText}>
                       {moment
-                        .utc(temperatureHistory.createdAt)
+                        .utc(temperatureHistory.created_at)
                         .local()
                         .format('MMM-DD-YYYY HH:mm A')}
                     </DataTable.Cell>

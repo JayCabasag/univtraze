@@ -37,6 +37,7 @@ const VisitedRoomsScreen = ({ navigation }) => {
       <ScrollView
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         style={styles.tableContainer}
+        contentContainerStyle={styles.scrollViewContentStyles}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       >
@@ -51,17 +52,11 @@ const VisitedRoomsScreen = ({ navigation }) => {
         <Text style={styles.tableHeaderText}>Visited rooms</Text>
         <DataTable style={styles.dataTableStyles}>
           <DataTable.Header style={styles.dataTableHeader}>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Time</Text>
+            <DataTable.Title style={{ flex: 1 }}>
+              <Text style={styles.dataTableTitleText}>Date & Time</Text>
             </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Date</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Building</Text>
-            </DataTable.Title>
-            <DataTable.Title>
-              <Text style={styles.dataTableTitleText}>Room no.</Text>
+            <DataTable.Title style={{ flex: 1 }}>
+              <Text style={styles.dataTableTitleText}>Building & Room no.</Text>
             </DataTable.Title>
           </DataTable.Header>
           {visitedRooms.length <= 0 && <Text style={styles.emptyText}>No rooms visited</Text>}
@@ -69,12 +64,11 @@ const VisitedRoomsScreen = ({ navigation }) => {
             visitedRooms.map((visitedRoom, index) => {
               return (
                 <DataTable.Row key={index}>
-                  <DataTable.Cell>{moment(visitedRoom.createdAt).format('HH:mm A')}</DataTable.Cell>
-                  <DataTable.Cell>
-                    {moment(visitedRoom.createdAt).format('MM-DD-YYYY')}
+                  <DataTable.Cell style={styles.tableItemText}>
+                    {moment(visitedRoom.created_at).format('MM-DD-YYYY HH:mm A')}
                   </DataTable.Cell>
-                  <DataTable.Cell textStyle={styles.roomNumberText}>
-                    {visitedRoom.room_number}
+                  <DataTable.Cell style={styles.tableItemText}>
+                    {visitedRoom.building_name} - {visitedRoom.room_number}
                   </DataTable.Cell>
                 </DataTable.Row>
               )
@@ -142,6 +136,14 @@ const styles = StyleSheet.create({
   },
   roomNumberText: {
     textAlign: 'center',
-    flex: 1
+    maxWidth: 50,
+    borderWidth: 2
+  },
+  tableItemText: {
+    flex: 1,
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
+  },
+  scrollViewContentStyles: {
+    paddingBottom: 20
   }
 })

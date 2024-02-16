@@ -37,8 +37,7 @@ const UserVaccine = ({ navigation }) => {
       try {
         setShowLoadingModal(true)
         const res = await genericGetRequest(`vaccination-records?userd_id=${userId}`, userToken)
-        // setVaccinationRecords(res.results)
-        setVaccinationRecords([])
+        setVaccinationRecords(res.results)
       } catch (error) {
         console.log(error)
       } finally {
