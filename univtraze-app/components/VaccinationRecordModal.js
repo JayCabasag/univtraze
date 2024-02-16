@@ -15,6 +15,13 @@ export default function VaccinationRecordModal(props) {
     label: data.toUpperCase()
   }))
 
+
+  console.log({
+    selectedVaccine,
+    showDatePicker,
+    vaccinationDate
+  })
+
   return (
     <Modal
       animationType={props.animationType ?? 'fade'}
@@ -27,6 +34,7 @@ export default function VaccinationRecordModal(props) {
         <View style={styles.modalView}>
           <Text style={styles.vaccineInfoText}>Vaccine Information</Text>
           <View style={styles.inputContainer}>
+            <Text style={styles.label}>Vaccine name</Text>
             <CustomPicker
               prompt='Vaccine name'
               selectedValue={selectedVaccine}
@@ -36,6 +44,7 @@ export default function VaccinationRecordModal(props) {
               options={vaccineOptions}
               hasError={false}
             />
+            <Text style={styles.label}>Vaccine Date</Text>
             <CustomCalendar
               value={vaccinationDate}
               showDatePicker={showDatePicker}
@@ -75,15 +84,16 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(250, 250, 250, .7)',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 30,
   },
   modalView: {
-    width: '80%',
+    width: '100%',
     margin: 20,
     backgroundColor: 'white',
-    borderRadius: 20,
+    borderRadius: 8,
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 20,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -101,7 +111,16 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '100%',
     display: 'flex',
-    gap: 8
+    gap: 2,
+    marginVertical: 12
+  },
+  label: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK,
+    marginTop: 12
   },
   modalText: {
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
