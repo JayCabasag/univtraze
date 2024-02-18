@@ -47,5 +47,12 @@ export const FONT_FAMILY = {
     OXFORD_ASTRAZENECA: 'oxford/astrazeneca',
     OTHERS: 'others',
   };
+
+  export const VACCINES_DOSES = {
+    NONE: 'none',
+    FIRST: '1st',
+    SECOND: '2nd',
+    BOOSTER: 'booster'
+  };
   
   export const FEVERISH = 37.2

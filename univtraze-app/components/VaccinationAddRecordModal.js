@@ -1,12 +1,26 @@
-import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native'
 import React, { useState } from 'react'
-import { COLORS, FONT_FAMILY, VACCINES } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY, VACCINES, VACCINES_DOSES } from '../utils/app_constants'
 import CustomPicker from './ui/CustomPicker'
 import CustomCalendar from './ui/CustomCalendar'
 import { genericPostRequest } from '../services/api/genericPostRequest'
+import { useUser } from '../services/store/user/UserContext'
+import { useAuth } from '../services/store/auth/AuthContext'
+import useFormErrors from '../hooks/useFormErrors'
+import moment from 'moment'
+
+const DISEASE_NAME = 'COVID-19'
 
 export default function VaccinationRecordModal(props) {
-  const [selectedVaccine, setSelectedVaccine] = useState(null)
+  const { state: user } = useUser();
+  const { state: auth } = useAuth();
+  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors(["vaccineDose", "vaccineName", "vaccinationDate"]);
+
+  const userId = user.details.id
+  const token = auth.userToken;
+
+  const [vaccineDose, setVaccineDose] = useState(null)
+  const [vaccineName, setVaccineName] = useState(null)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [vaccinationDate, setVaccinationDate] = useState(new Date())
 
@@ -16,22 +30,38 @@ export default function VaccinationRecordModal(props) {
     label: data.toUpperCase()
   }))
 
+  const vaccineDoseOptions = Object.values(VACCINES_DOSES).map((data, index) => ({
+    id: index,
+    value: data,
+    label: data.toUpperCase()
+  }))
+
   const handleSaveVaccination = async () => {
+    resetFormErrors();
+    if (vaccineDose == '' || vaccineDose == null) {
+      return setFormErrors('vaccineDose', 'Vaccine dose is required')
+    }
+    if (vaccineName == '' || vaccineName == null) {
+      return setFormErrors('vaccineName', 'Vaccine name is required')
+    }
+    if (vaccinationDate == '' || vaccineName == null) {
+      return setFormErrors('vaccinationDate', 'Vaccination date is required')
+    }
     try {
       const payload = {
-        
+        user_id: userId,
+        vaccine_disease: DISEASE_NAME,
+        vaccine_name: vaccineName,
+        dose_number: vaccineDose,
+        date: moment(vaccinationDate).format()
       }
-      const res = await genericPostRequest();
+      console.log(payload)
+      await genericPostRequest("/vaccination-records", payload, token);
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
         { text: 'OK', onPress: () => console.log('OK') }
       ])
     }
-    // console.log("SAVE ", {
-    //   selectedVaccine,
-    //   showDatePicker,
-    //   vaccinationDate
-    // })
   }
 
   return (
@@ -46,16 +76,33 @@ export default function VaccinationRecordModal(props) {
         <View style={styles.modalView}>
           <Text style={styles.vaccineInfoText}>Vaccine Information</Text>
           <View style={styles.inputContainer}>
+            <Text style={styles.label}>Dose Number</Text>
+            <CustomPicker
+              prompt='Vaccine Dose'
+              selectedValue={vaccineDose}
+              onValueChange={(itemValue, itemIndex) => {
+               setVaccineDose(itemValue)
+              }}
+              options={vaccineDoseOptions}
+              hasError={formErrors.vaccineDose.hasError}
+            />
+            {formErrors.vaccineDose.hasError && (
+              <Text style={styles.errorText}>{formErrors.vaccineDose.message}</Text>
+            )}
             <Text style={styles.label}>Vaccine name</Text>
             <CustomPicker
               prompt='Vaccine name'
-              selectedValue={selectedVaccine}
+              selectedValue={vaccineName}
               onValueChange={(itemValue, itemIndex) => {
-                setSelectedVaccine(itemValue)
+                setVaccineName(itemValue)
               }}
               options={vaccineOptions}
-              hasError={false}
+              hasError={formErrors.vaccineName.hasError}
             />
+             {formErrors.vaccineName.hasError && (
+              <Text style={styles.errorText}>{formErrors.vaccineName.message}</Text>
+            )}
+            {/* Place errore her */}
             <Text style={styles.label}>Vaccine Date</Text>
             <CustomCalendar
               value={vaccinationDate}
@@ -71,8 +118,11 @@ export default function VaccinationRecordModal(props) {
               setShowDatePicker={(value) => {
                 setShowDatePicker(value)
               }}
-              hasError={false}
+              hasError={formErrors.vaccinationDate.hasError}
             />
+            {formErrors.vaccinationDate.hasError && (
+              <Text style={styles.errorText}>{formErrors.vaccinationDate.message}</Text>
+            )}
           </View>
           <View style={styles.actionBtnContainer}>
             <TouchableOpacity
@@ -97,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 30
   },
   modalView: {
     width: '100%',
@@ -133,6 +183,35 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.TEXT_BLACK,
     marginTop: 12
+  },
+  errorText: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
+  },
+  textInput: {
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
+    height: 50,
+    borderColor: COLORS.PRIMARY,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderRadius: 5,
+    overflow: 'hidden',
+    paddingVertical: 1,
+    fontSize: 14,
+    color: '#4d7861',
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
+  },
+  inputError: {
+    borderColor: COLORS.RED
   },
   modalText: {
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,

@@ -19,8 +19,8 @@ module.exports = {
   },
   isVaccinationRecordExists: (data, callBack) => {
     pool.query(
-      `select * from vaccination_records where user_id = ? AND vaccine_disease = ? AND vaccine_name = ?`,
-      [data.user_id, data.vaccine_disease, data.vaccine_name],
+      `select * from vaccination_records where user_id = ? AND vaccine_disease = ? AND vaccine_name = ? AND dose_number = ?`,
+      [data.user_id, data.vaccine_disease, data.vaccine_name, data.dose_number],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
