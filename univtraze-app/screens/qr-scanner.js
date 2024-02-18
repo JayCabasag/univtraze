@@ -21,7 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import MovingForwardImage from './../assets/moving_forward.png'
 import TopNavigation from '../components/TopNavigation'
 
-export default function QrScannerScreen({ navigation, route }) {
+export default function QrScannerScreen({ navigation }) {
   const { state: user } = useUser()
   const { temperatures } = useUserTemperatures()
   const userId = user?.user?.id
