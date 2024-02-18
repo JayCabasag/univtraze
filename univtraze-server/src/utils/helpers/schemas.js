@@ -207,33 +207,6 @@ class Schemas {
       notificationId: Joi.number(),
     });
   }
-
-  get addVaccineRecordSchema() {
-    return Joi.object({
-      user_id: Joi.number().required(),
-      vaccine_disease: Joi.string().required(),
-      vaccine_name: Joi.string().required(),
-      dose_number: Joi.string().required(),
-      date: Joi.date().iso().required(),
-    });
-  }
-
-  get updateVaccineRecordSchema() {
-    return Joi.object({
-      vaccination_record_id: Joi.number().required(),
-      user_id: Joi.number().required(),
-      vaccine_disease: Joi.string().required(),
-      vaccine_name: Joi.string().required(),
-      dose_number: Joi.string().required(),
-      date: Joi.date().iso().required(),
-    });
-  }
-
-  get deleteVaccinationRecordSchema() {
-    return Joi.object({
-      vaccination_record_id: Joi.number().required(),
-    });
-  }
 }
 
 module.exports = new Schemas();

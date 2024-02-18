@@ -1,4 +1,5 @@
 const schemas = require('../../utils/helpers/schemas');
+const { addVaccineRecordSchema, updateVaccineRecordSchema } = require('./vaccination_records.schemas');
 const {
   getVaccinationRecords,
   getVaccinationRecordsFilterByUserId,
@@ -12,7 +13,7 @@ const {
 module.exports = {
   addVaccinationRecord: (req, res) => {
     req.body.user_id = req.user.result.id;
-    const { error } = schemas.addVaccineRecordSchema.validate(req.body);
+    const { error } = addVaccineRecordSchema.validate(req.body);
     if (error) {
       console.log(error);
       return res.status(409).json({
@@ -48,7 +49,7 @@ module.exports = {
   },
   updateVaccinationRecord: (req, res) => {
     req.body.user_id = req.user.result.id;
-    const { error } = schemas.updateVaccineRecordSchema.validate(req.body);
+    const { error } = updateVaccineRecordSchema.validate(req.body);
 
     if (error) {
       return res.status(400).json({

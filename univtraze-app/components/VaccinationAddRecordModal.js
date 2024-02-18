@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY, VACCINES } from '../utils/app_constants'
 import CustomPicker from './ui/CustomPicker'
 import CustomCalendar from './ui/CustomCalendar'
+import { genericPostRequest } from '../services/api/genericPostRequest'
 
 export default function VaccinationRecordModal(props) {
   const [selectedVaccine, setSelectedVaccine] = useState(null)
@@ -15,12 +16,23 @@ export default function VaccinationRecordModal(props) {
     label: data.toUpperCase()
   }))
 
-
-  console.log({
-    selectedVaccine,
-    showDatePicker,
-    vaccinationDate
-  })
+  const handleSaveVaccination = async () => {
+    try {
+      const payload = {
+        
+      }
+      const res = await genericPostRequest();
+    } catch (error) {
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    }
+    // console.log("SAVE ", {
+    //   selectedVaccine,
+    //   showDatePicker,
+    //   vaccinationDate
+    // })
+  }
 
   return (
     <Modal
@@ -69,7 +81,7 @@ export default function VaccinationRecordModal(props) {
             >
               <Text style={styles.btnText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handleSaveVaccination}>
               <Text style={styles.btnText}>Save</Text>
             </TouchableOpacity>
           </View>

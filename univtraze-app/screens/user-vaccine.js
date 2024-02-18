@@ -18,7 +18,7 @@ import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import VaccinationRecordCard from '../components/VaccinationRecordCard'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import VaccinationRecordModal from '../components/VaccinationRecordModal'
+import VaccinationRecordModal from '../components/VaccinationAddRecordModal'
 
 const UserVaccine = ({ navigation }) => {
   const { state: auth } = useAuth()
