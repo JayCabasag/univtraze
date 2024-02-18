@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { genericDeleteRequest } from '../services/api/genericDeleteRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 
-export default function VaccinationRecordCard({ vaccinationRecord, onRefresh }) {
+export default function VaccinationRecordCard({ vaccinationRecord, onRefresh, onPressEdit }) {
   const { state: auth } = useAuth()
   const token = auth.userToken
 
@@ -25,7 +25,7 @@ export default function VaccinationRecordCard({ vaccinationRecord, onRefresh }) 
               `vaccination-records/${vaccinationRecord.vaccination_record_id}`,
               token
             )
-            onRefresh();
+            onRefresh()
           } catch (error) {
             Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
               { text: 'OK', onPress: () => console.log('OK') }
@@ -37,7 +37,7 @@ export default function VaccinationRecordCard({ vaccinationRecord, onRefresh }) 
       }
     ])
   }
-  
+
   return (
     <View style={styles.cardStyles}>
       <View style={[styles.vaccineInfoContainer, isLoading && styles.loadingStyle]}>
@@ -52,7 +52,7 @@ export default function VaccinationRecordCard({ vaccinationRecord, onRefresh }) 
         <Text style={styles.vaccineDateStyles}>{vaccinationDate}</Text>
       </View>
       <View style={styles.actionBtnContainer}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={onPressEdit}>
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   loadingStyle: {
-    opacity: .4
+    opacity: 0.4
   },
   cardHeaderContainer: {
     display: 'flex',

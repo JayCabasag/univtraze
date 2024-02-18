@@ -72,10 +72,13 @@ export default function VaccinationRecordModal(props) {
       await genericPostRequest('vaccination-records', payload, token)
 
       Alert.alert('Success', 'Vaccination record added successfully', [
-        { text: 'Ok', onPress: () => {
-          props.onRequestClose();
-          props.onRefresh();
-        } }
+        {
+          text: 'Ok',
+          onPress: () => {
+            props.onRequestClose()
+            props.onRefresh()
+          }
+        }
       ])
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [

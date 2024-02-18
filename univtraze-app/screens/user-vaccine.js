@@ -19,6 +19,7 @@ import { genericGetRequest } from '../services/api/genericGetRequest'
 import VaccinationRecordCard from '../components/VaccinationRecordCard'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import VaccinationRecordModal from '../components/VaccinationAddRecordModal'
+import VaccinationEditRecordModal from '../components/VaccinationEditRecordModal'
 
 const UserVaccine = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -29,20 +30,22 @@ const UserVaccine = ({ navigation }) => {
 
   const [vaccinationRecords, setVaccinationRecords] = useState([])
   const [showLoadingModal, setShowLoadingModal] = useState(false)
-  const [showVaccinationRecordModal, setShowVaccinationRecordModal] = useState(false)
-
+  const [showVaccinationAddRecordModal, setShowVaccinationAddRecordModal] = useState(false)
+  const [showVaccinationEditRecordModal, setShowVaccinationEditRecordModal] = useState(false)
+  const [vaccinationRecordForEditing, setVaccinationRecordForEditing] = useState(null)
   const [refreshing, setRefreshing] = React.useState(false)
+
   const onRefresh = useCallback(() => {
     const loadVaccinationRecords = async () => {
       if (!userId || !userToken) return
       try {
-        setShowLoadingModal(true)
+        setRefreshing(true)
         const res = await genericGetRequest(`vaccination-records?userd_id=${userId}`, userToken)
         setVaccinationRecords(res.results)
       } catch (error) {
         console.log(error)
       } finally {
-        setShowLoadingModal(false)
+        setRefreshing(false)
       }
     }
     loadVaccinationRecords()
@@ -53,34 +56,35 @@ const UserVaccine = ({ navigation }) => {
   }, [onRefresh])
 
   const handleAddNew = () => {
-    setShowVaccinationRecordModal(true)
-  }
-
-  const handleUpdateUserVaccine = async () => {
-    try {
-      setShowLoadingModal(true)
-      console.log('Updating')
-    } catch (error) {
-      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
-        { text: 'OK', onPress: () => console.log('OK') }
-      ])
-    } finally {
-      setShowLoadingModal(false)
-    }
+    setShowVaccinationAddRecordModal(true)
   }
 
   const skipVaccinationtion = async () => {
     navigation.navigate('index')
   }
 
+  const onPressEditRecord = (record) => {
+    setVaccinationRecordForEditing(record)
+    setShowVaccinationEditRecordModal(true)
+  }
+
   return (
     <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
       <VaccinationRecordModal
         onRefresh={onRefresh}
-        key={`${showVaccinationRecordModal}-vr-modal`} // To not remember the state
-        onRequestClose={() => setShowVaccinationRecordModal(false)}
-        open={showVaccinationRecordModal}
+        key={`${showVaccinationAddRecordModal}-vr-modal`} // To not remember the state
+        onRequestClose={() => setShowVaccinationAddRecordModal(false)}
+        open={showVaccinationAddRecordModal}
       />
+      {vaccinationRecordForEditing && (
+        <VaccinationEditRecordModal
+          onRefresh={onRefresh}
+          vaccinationRecord={vaccinationRecordForEditing}
+          key={`${showVaccinationEditRecordModal}-vr-edit-modal`} // To not remember the state
+          onRequestClose={() => setShowVaccinationEditRecordModal(false)}
+          open={showVaccinationEditRecordModal}
+        />
+      )}
       <View style={styles.header}>
         <Image
           source={StepperIcon3}
@@ -111,6 +115,7 @@ const UserVaccine = ({ navigation }) => {
           return (
             <VaccinationRecordCard
               onRefresh={onRefresh}
+              onPressEdit={() => onPressEditRecord(vaccinationRecord)}
               vaccinationRecord={vaccinationRecord}
               key={vaccinationRecord.vaccination_record_id}
             />

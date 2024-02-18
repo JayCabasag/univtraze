@@ -16,6 +16,7 @@ import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'
 import useFormErrors from '../hooks/useFormErrors'
 import moment from 'moment'
+import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 
 const DISEASE_NAME = 'COVID-19'
 
@@ -31,10 +32,12 @@ export default function VaccinationEditRecordModal(props) {
   const userId = user.details.id
   const token = auth.userToken
 
-  const [vaccineDose, setVaccineDose] = useState(null)
-  const [vaccineName, setVaccineName] = useState(null)
+  const [vaccineDose, setVaccineDose] = useState(props.vaccinationRecord.dose_number)
+  const [vaccineName, setVaccineName] = useState(props.vaccinationRecord.vaccine_name)
   const [showDatePicker, setShowDatePicker] = useState(false)
-  const [vaccinationDate, setVaccinationDate] = useState(new Date())
+  const [vaccinationDate, setVaccinationDate] = useState(
+    new Date(props.vaccinationRecord.date) ?? new Date()
+  )
   const [isLoading, setIsLoading] = useState(false)
 
   const vaccineOptions = Object.values(VACCINES).map((data, index) => ({
@@ -63,16 +66,23 @@ export default function VaccinationEditRecordModal(props) {
     try {
       setIsLoading(true)
       const payload = {
+        vaccination_record_id: props.vaccinationRecord.vaccination_record_id,
         user_id: userId,
         vaccine_disease: DISEASE_NAME,
         vaccine_name: vaccineName,
         dose_number: vaccineDose,
         date: moment(vaccinationDate).format('YYYY-MM-DD')
       }
-      await genericPostRequest('vaccination-records', payload, token)
+      await genericUpdateRequest('vaccination-records', payload, token)
 
       Alert.alert('Success', 'Vaccination record added successfully', [
-        { text: 'Ok', onPress: props.onRequestClose }
+        {
+          text: 'Ok',
+          onPress: () => {
+            props.onRequestClose()
+            props.onRefresh()
+          }
+        }
       ])
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
@@ -93,7 +103,7 @@ export default function VaccinationEditRecordModal(props) {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.vaccineInfoText}>Vaccine Information</Text>
+          <Text style={styles.vaccineInfoText}>Update Vaccine Information</Text>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Dose Number</Text>
             <CustomPicker
