@@ -98,7 +98,7 @@ export default function QrScannerScreen({ navigation }) {
       const payload = {
         user_id: userId,
         room_id: currentRoomId,
-        temperature: temperatures?.[0] ?? "0.00"
+        temperature: temperatures?.[0] ?? '0.00'
       }
       const res = await genericPostRequest('room-visited', payload)
       console.log(res)
@@ -166,10 +166,9 @@ export default function QrScannerScreen({ navigation }) {
             }}
           >
             <Text style={{ fontSize: 15, paddingTop: 10 }}>Body temperature:</Text>
-            <Text
-              style={styles.temperatureText}
-            >
-               {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'} &deg;C
+            <Text style={styles.temperatureText}>
+              {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'}{' '}
+              &deg;C
             </Text>
           </View>
         </View>
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: "center"
+    justifyContent: 'center'
   },
   scrollView: {
     flex: 1,

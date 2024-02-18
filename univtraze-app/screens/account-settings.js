@@ -19,7 +19,6 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import TopNavigation from '../components/TopNavigation'
 
 const AccountSettingsScreen = ({ navigation }) => {
-  const toast = useToast()
   const { state: user, clearUser } = useUser()
   const { state: auth, signOut } = useAuth()
   const token = auth.userToken
@@ -108,27 +107,21 @@ const AccountSettingsScreen = ({ navigation }) => {
         <Text style={styles.headerText}>Account settings</Text>
         <TouchableOpacity
           style={styles.settingsOption}
-          onPress={() => {
-            navigation.navigate('UpdatePersonalInfo')
-          }}
+          onPress={() => navigation.navigate('update-personal-information')}
         >
           <Text style={styles.menuItemText}>Update Personal Information</Text>
           <AntDesign name='right' size={18} color='black' />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.settingsOption}
-          onPress={() => {
-            navigation.navigate('UpdatePassword')
-          }}
+          onPress={() => navigation.navigate('update-password')}
         >
           <Text style={styles.menuItemText}>Update Password</Text>
           <AntDesign name='right' size={18} color='black' />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deactivateButton}
-          onPress={() => {
-            setShowPasswordModal(true)
-          }}
+          onPress={() => setShowPasswordModal(true)}
         >
           <Text style={styles.deactivateButtonText}>Deactivate Account</Text>
         </TouchableOpacity>

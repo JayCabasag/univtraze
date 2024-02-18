@@ -29,6 +29,7 @@ import { firebaseConfig } from '../configs/firebaseConfig'
 import { convertStringDateToISOString, uploadImageAsync } from '../utils/helpers'
 import { useUser } from '../services/store/user/UserContext'
 import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
+import { convertNameToInitials } from '../utils/formatters'
 
 if (!getApps().length) {
   initializeApp(firebaseConfig)
@@ -38,15 +39,15 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   const { state: auth } = useAuth()
   const { state: userState, updateUser } = useUser()
 
-  const scrollViewRef = useRef()
-
   const userType = route.params?.userType
+
+  const scrollViewRef = useRef()
 
   useEffect(() => {
     if (!userType) {
       return navigation.navigate('select-user-type')
     }
-  }, [])
+  }, [userType])
 
   // For Student Only
   const [studentId, setStudentId] = useState('')
@@ -84,8 +85,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
     'backIdPhoto'
   ])
 
-  const initials =
-    (route.params?.firstName ?? '').charAt(0) + (route.params?.lastName ?? '').charAt(0)
+  const initials = convertNameToInitials(route.params.firstName, route.params.lastName)
 
   const pickProfileImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({

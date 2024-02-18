@@ -1,31 +1,20 @@
 import {
   StyleSheet,
-  StatusBar,
   Text,
   View,
   ImageBackground,
-  Pressable,
-  Image,
-  Modal,
   TextInput,
-  ScrollView,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  Alert
+  TouchableWithoutFeedback
 } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React, { useState } from 'react'
 import axios from 'axios'
-import { useToast } from 'react-native-toast-notifications'
 import BackIcon from '../assets/back-icon.png'
 import { COLORS } from '../utils/app_constants'
 
 const UpdatePasswordScreen = ({ navigation, route }) => {
-  const toast = useToast()
-  // console.log(route.params.token)
-
-  const [token, setToken] = useState(route.params.token)
-  const [userId, setUserId] = useState(route.params.id)
+  const [token, setToken] = useState('')
+  const [userId, setUserId] = useState('')
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [confirmNewPassword, setConfirmNewPassword] = useState('')
@@ -116,7 +105,7 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <View style={styles.backIcon}>
-          <TouchableWithoutFeedback
+          {/* <TouchableWithoutFeedback
             onPress={() => {
               navigation.goBack()
             }}
@@ -126,7 +115,7 @@ const UpdatePasswordScreen = ({ navigation, route }) => {
               resizeMode='contain'
               style={styles.image}
             ></ImageBackground>
-          </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback> */}
         </View>
       </View>
 
