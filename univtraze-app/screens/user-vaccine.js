@@ -6,12 +6,12 @@ import {
   KeyboardAvoidingView,
   Image,
   Platform,
-  TouchableOpacity
+  TouchableOpacity,
+  RefreshControl
 } from 'react-native'
-import React, { useEffect, useId, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import StepperIcon3 from '../assets/step-3-credentials.png'
-import { COLORS, FONT_FAMILY, VACCINES } from '../utils/app_constants'
-import LoadingModal from '../components/LoadingModal'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import { useAuth } from '../services/store/auth/AuthContext'
 import UserInfoWithSkipFooter from '../components/UserInfoWithSkipFooter'
 import { useUser } from '../services/store/user/UserContext'
@@ -31,9 +31,10 @@ const UserVaccine = ({ navigation }) => {
   const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [showVaccinationRecordModal, setShowVaccinationRecordModal] = useState(false)
 
-  useEffect(() => {
-    if (!userId || !userToken) return
-    const getVaccinationRecords = async () => {
+  const [refreshing, setRefreshing] = React.useState(false)
+  const onRefresh = useCallback(() => {
+    const loadVaccinationRecords = async () => {
+      if (!userId || !userToken) return
       try {
         setShowLoadingModal(true)
         const res = await genericGetRequest(`vaccination-records?userd_id=${userId}`, userToken)
@@ -44,8 +45,12 @@ const UserVaccine = ({ navigation }) => {
         setShowLoadingModal(false)
       }
     }
-    getVaccinationRecords()
+    loadVaccinationRecords()
   }, [userId, userToken])
+
+  useEffect(() => {
+    onRefresh()
+  }, [onRefresh])
 
   const handleAddNew = () => {
     setShowVaccinationRecordModal(true)
@@ -70,12 +75,8 @@ const UserVaccine = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView style={styles.keyboardAvoidingView}>
-      <LoadingModal
-        onRequestClose={() => setShowLoadingModal(false)}
-        open={showLoadingModal}
-        loadingMessage={'Please wait'}
-      />
       <VaccinationRecordModal
+        onRefresh={onRefresh}
         key={`${showVaccinationRecordModal}-vr-modal`} // To not remember the state
         onRequestClose={() => setShowVaccinationRecordModal(false)}
         open={showVaccinationRecordModal}
@@ -87,7 +88,13 @@ const UserVaccine = ({ navigation }) => {
           style={{ width: '100%', marginTop: 30 }}
         />
       </View>
-      <ScrollView style={styles.bodyContainer} contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView
+        style={styles.bodyContainer}
+        contentContainerStyle={styles.scrollViewContent}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View style={styles.addNewBtnContainer}>
           <TouchableOpacity
             disabled={showLoadingModal}
@@ -103,13 +110,14 @@ const UserVaccine = ({ navigation }) => {
         {vaccinationRecords.map((vaccinationRecord) => {
           return (
             <VaccinationRecordCard
+              onRefresh={onRefresh}
               vaccinationRecord={vaccinationRecord}
               key={vaccinationRecord.vaccination_record_id}
             />
           )
         })}
       </ScrollView>
-      <UserInfoWithSkipFooter onSkip={skipVaccinationtion} onNext={handleUpdateUserVaccine} />
+      <UserInfoWithSkipFooter onSkip={skipVaccinationtion} onNext={skipVaccinationtion} />
     </KeyboardAvoidingView>
   )
 }

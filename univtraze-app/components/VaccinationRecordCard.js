@@ -1,27 +1,46 @@
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
-import React, { Fragment, useId, useState } from 'react'
-import CustomPicker from './ui/CustomPicker'
-import { COLORS, FONT_FAMILY, VACCINES } from '../utils/app_constants'
-import CustomCalendar from './ui/CustomCalendar'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import React, { useState } from 'react'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { genericDeleteRequest } from '../services/api/genericDeleteRequest'
+import { useAuth } from '../services/store/auth/AuthContext'
 
-export default function VaccinationRecordCard({ vaccinationRecord }) {
-  const vaccineOptions = Object.values(VACCINES).map((data, index) => ({
-    id: index,
-    value: data,
-    label: data.toUpperCase()
-  }))
+export default function VaccinationRecordCard({ vaccinationRecord, onRefresh }) {
+  const { state: auth } = useAuth()
+  const token = auth.userToken
 
-  const [isEditable, setIsEditable] = useState(false)
-  const [vaccineName, setVaccineName] = useState(
-    (vaccinationRecord.vaccine_name ?? '').toLowerCase()
-  )
-  const [showDoseDatePicker, setShowDoseDatePicker] = useState(false)
-  const [doseDate, setDoseDate] = useState(new Date(vaccinationRecord.date) ?? new Date())
+  const vaccinationDate = (new Date(vaccinationRecord.date) ?? new Date()).toDateString()
 
+  const [isLoading, setIsLoading] = useState(false)
+
+  const deleteVaccinationRecord = async () => {
+    Alert.alert('Warning', 'Do you want to continue removing your vaccination record?', [
+      { text: 'Cancel', onPress: () => console.log('canceled') },
+      {
+        text: 'Continue',
+        onPress: async () => {
+          try {
+            setIsLoading(true)
+            const res = await genericDeleteRequest(
+              `vaccination-records/${vaccinationRecord.vaccination_record_id}`,
+              token
+            )
+            onRefresh();
+          } catch (error) {
+            Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+              { text: 'OK', onPress: () => console.log('OK') }
+            ])
+          } finally {
+            setIsLoading(false)
+          }
+        }
+      }
+    ])
+  }
+  
   return (
     <View style={styles.cardStyles}>
-      <View style={styles.vaccineInfoContainer}>
+      <View style={[styles.vaccineInfoContainer, isLoading && styles.loadingStyle]}>
         <View style={styles.cardHeaderContainer}>
           <Ionicons name='shield-outline' size={30} color={COLORS.PRIMARY} />
           <View style={styles.cardHeader}>
@@ -29,14 +48,17 @@ export default function VaccinationRecordCard({ vaccinationRecord }) {
             <Text style={styles.doseText}>DOSE {vaccinationRecord.dose_number}</Text>
           </View>
         </View>
-        <Text style={styles.vaccineNameStyles}>{vaccineName}</Text>
-        <Text style={styles.vaccineDateStyles}>{doseDate.toDateString()}</Text>
+        <Text style={styles.vaccineNameStyles}>{vaccinationRecord.vaccine_name}</Text>
+        <Text style={styles.vaccineDateStyles}>{vaccinationDate}</Text>
       </View>
       <View style={styles.actionBtnContainer}>
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, { backgroundColor: COLORS.RED }]}>
+        <TouchableOpacity
+          onPress={deleteVaccinationRecord}
+          style={[styles.button, { backgroundColor: COLORS.RED }]}
+        >
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -64,6 +86,9 @@ const styles = StyleSheet.create({
   },
   vaccineInfoContainer: {
     flex: 1
+  },
+  loadingStyle: {
+    opacity: .4
   },
   cardHeaderContainer: {
     display: 'flex',
