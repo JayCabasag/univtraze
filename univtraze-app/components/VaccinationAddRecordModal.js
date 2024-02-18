@@ -1,4 +1,12 @@
-import { View, Text, Modal, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  Modal,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator
+} from 'react-native'
 import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY, VACCINES, VACCINES_DOSES } from '../utils/app_constants'
 import CustomPicker from './ui/CustomPicker'
@@ -12,17 +20,22 @@ import moment from 'moment'
 const DISEASE_NAME = 'COVID-19'
 
 export default function VaccinationRecordModal(props) {
-  const { state: user } = useUser();
-  const { state: auth } = useAuth();
-  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors(["vaccineDose", "vaccineName", "vaccinationDate"]);
+  const { state: user } = useUser()
+  const { state: auth } = useAuth()
+  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors([
+    'vaccineDose',
+    'vaccineName',
+    'vaccinationDate'
+  ])
 
   const userId = user.details.id
-  const token = auth.userToken;
+  const token = auth.userToken
 
   const [vaccineDose, setVaccineDose] = useState(null)
   const [vaccineName, setVaccineName] = useState(null)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [vaccinationDate, setVaccinationDate] = useState(new Date())
+  const [isLoading, setIsLoading] = useState(false)
 
   const vaccineOptions = Object.values(VACCINES).map((data, index) => ({
     id: index,
@@ -37,7 +50,7 @@ export default function VaccinationRecordModal(props) {
   }))
 
   const handleSaveVaccination = async () => {
-    resetFormErrors();
+    resetFormErrors()
     if (vaccineDose == '' || vaccineDose == null) {
       return setFormErrors('vaccineDose', 'Vaccine dose is required')
     }
@@ -48,19 +61,25 @@ export default function VaccinationRecordModal(props) {
       return setFormErrors('vaccinationDate', 'Vaccination date is required')
     }
     try {
+      setIsLoading(true)
       const payload = {
         user_id: userId,
         vaccine_disease: DISEASE_NAME,
         vaccine_name: vaccineName,
         dose_number: vaccineDose,
-        date: moment(vaccinationDate).format()
+        date: moment(vaccinationDate).format('YYYY-MM-DD')
       }
-      console.log(payload)
-      await genericPostRequest("/vaccination-records", payload, token);
+      await genericPostRequest('vaccination-records', payload, token)
+
+      Alert.alert('Success', 'Vaccination record added successfully', [
+        { text: 'Ok', onPress: props.onRequestClose }
+      ])
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
         { text: 'OK', onPress: () => console.log('OK') }
       ])
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -81,7 +100,7 @@ export default function VaccinationRecordModal(props) {
               prompt='Vaccine Dose'
               selectedValue={vaccineDose}
               onValueChange={(itemValue, itemIndex) => {
-               setVaccineDose(itemValue)
+                setVaccineDose(itemValue)
               }}
               options={vaccineDoseOptions}
               hasError={formErrors.vaccineDose.hasError}
@@ -99,7 +118,7 @@ export default function VaccinationRecordModal(props) {
               options={vaccineOptions}
               hasError={formErrors.vaccineName.hasError}
             />
-             {formErrors.vaccineName.hasError && (
+            {formErrors.vaccineName.hasError && (
               <Text style={styles.errorText}>{formErrors.vaccineName.message}</Text>
             )}
             {/* Place errore her */}
@@ -126,13 +145,22 @@ export default function VaccinationRecordModal(props) {
           </View>
           <View style={styles.actionBtnContainer}>
             <TouchableOpacity
+              disabled={isLoading}
               style={[styles.button, { backgroundColor: COLORS.RED }]}
               onPress={props.onRequestClose}
             >
               <Text style={styles.btnText}>Cancel</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleSaveVaccination}>
-              <Text style={styles.btnText}>Save</Text>
+            <TouchableOpacity
+              disabled={isLoading}
+              style={[styles.button]}
+              onPress={handleSaveVaccination}
+            >
+              {isLoading ? (
+                <ActivityIndicator style={styles.loadingIconStyles} color={COLORS.WHITE} />
+              ) : (
+                <Text style={styles.btnText}>Save</Text>
+              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -246,6 +274,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 5
+  },
+  loadingIconStyles: {
+    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]
   },
   btnText: {
     color: COLORS.WHITE,
