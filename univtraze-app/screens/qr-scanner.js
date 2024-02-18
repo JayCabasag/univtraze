@@ -32,7 +32,6 @@ export default function QrScannerScreen({ navigation }) {
   const [roomNumber, setRoomNumber] = useState(null)
   const [buildingName, setBuildingName] = useState('')
   const [roomId, setRoomId] = useState(null)
-  const [temp, setTemp] = useState('')
 
   // THis is for modal
   const [modalVisible, setModalVisible] = useState(false)
@@ -99,7 +98,7 @@ export default function QrScannerScreen({ navigation }) {
       const payload = {
         user_id: userId,
         room_id: currentRoomId,
-        temperature: temp
+        temperature: temperatures?.[0] ?? "0.00"
       }
       const res = await genericPostRequest('room-visited', payload)
       console.log(res)
