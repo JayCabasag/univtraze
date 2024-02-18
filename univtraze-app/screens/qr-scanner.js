@@ -14,7 +14,6 @@ import {
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import base64 from 'base-64'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
-import BackIcon from '../assets/back-icon.png'
 import { useUser } from '../services/store/user/UserContext'
 import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
 import { genericPostRequest } from '../services/api/genericPostRequest'
@@ -69,7 +68,9 @@ export default function QrScannerScreen({ navigation, route }) {
   if (hasPermission === null) {
     return (
       <View style={styles.container}>
-        <Text>Requesting for camera permission</Text>
+        <View style={styles.subContainer}>
+          <Text>Requesting for camera permission</Text>
+        </View>
       </View>
     )
   }
@@ -167,9 +168,9 @@ export default function QrScannerScreen({ navigation, route }) {
           >
             <Text style={{ fontSize: 15, paddingTop: 10 }}>Body temperature:</Text>
             <Text
-              style={{ fontSize: 35, paddingBottom: 10, textAlign: 'center', color: '#4d7861' }}
+              style={styles.temperatureText}
             >
-              {temp === '' || temp === 'Not set' ? 'Not set' : temp + '°C'}
+               {temperatures?.[0] ? (temperatures[0].temperature * 1).toLocaleString() : '0.00'} &deg;C
             </Text>
           </View>
         </View>
@@ -183,6 +184,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.SECONDARY,
     paddingHorizontal: 30
+  },
+  subContainer: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: "center"
   },
   scrollView: {
     flex: 1,
@@ -316,5 +323,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     color: COLORS.PRIMARY
+  },
+  temperatureText: {
+    fontSize: 35,
+    paddingBottom: 10,
+    fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
+    textAlign: 'center',
+    color: '#4d7861'
   }
 })
