@@ -152,7 +152,7 @@ export default function VaccinationRecordModal(props) {
           <View style={styles.actionBtnContainer}>
             <TouchableOpacity
               disabled={isLoading}
-              style={[styles.button, { backgroundColor: COLORS.RED }]}
+              style={[styles.button, { backgroundColor: COLORS.DARK_RED }]}
               onPress={props.onRequestClose}
             >
               <Text style={styles.btnText}>Cancel</Text>

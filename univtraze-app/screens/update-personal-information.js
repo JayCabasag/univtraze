@@ -9,29 +9,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useUser } from '../services/store/user/UserContext';
 import { convertNameToInitials } from '../utils/formatters';
 import useFormErrors from '../hooks/useFormErrors';
-import { PhoneNumbers } from '../services/phone-numbers/phone-numbers';
-import CustomPicker from '../components/ui/CustomPicker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { phoneNumberRegex } from '../utils/regex';
 
 export default function UpdatePersonalInformationScreen({ navigation }) {
   const { state: user } = useUser();
 
   const initials = convertNameToInitials(user.details.firstname, user.details.lastname)
   
-  const [profilePhoto, setProfilePhoto] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(user?.details?.profile_url ?? null);
   const [isUploadingProfilePhoto, setIsUploadingProfilePhoto] = useState(false)
-  const [countryDialCode, setCountryDialCode] = useState('+63')
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors(["phoneNumber", "countryCode"])
-
-  const countryDialCodes = useMemo(() => {
-    const countryCodes = PhoneNumbers.getPhoneNumberPrefixes()
-    return countryCodes.map((countryCode) => ({
-      id: countryCode.code,
-      label: `${countryCode.flag} (${countryCode.dial_code}) ${countryCode.name}`,
-      value: countryCode.dial_code
-    }))
-  }, [])
+  const [phoneNumber, setPhoneNumber] = useState(user?.details?.mobile_number)
+  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors(["phoneNumber"])
 
   const pickProfileImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -54,6 +43,19 @@ export default function UpdatePersonalInformationScreen({ navigation }) {
         setIsUploadingProfilePhoto(false)
       }
     }
+  }
+
+  const saveAndExit = () => {
+    resetFormErrors();
+    if (phoneNumber == null || phoneNumber == '') {
+      return setFormErrors("phoneNumber", "Phone number is required")
+    }
+
+    if (!phoneNumberRegex.test(phoneNumber)) {
+      return setFormErrors('phoneNumber', 'Phone number is invalid')
+    }
+
+    console.log(profilePhoto, phoneNumber)
   }
 
   return (
@@ -96,21 +98,6 @@ export default function UpdatePersonalInformationScreen({ navigation }) {
           Contact Information
         </Text>
         <View style={styles.phoneNumberContainer}>
-          <View style={styles.countryCodeWrapper}>
-            <Text style={styles.label}>Country Dial Code</Text>
-            <CustomPicker
-              prompt='Country code'
-              selectedValue={countryDialCode}
-              onValueChange={(itemValue, itemIndex) => {
-                setCountryDialCode(itemValue)
-              }}
-              hasError={formErrors.countryDialCode?.hasError ?? false}
-              options={countryDialCodes}
-            />
-            {formErrors.countryDialCode?.hasError && (
-              <Text style={styles.errorText}>{formErrors.countryDialCode.message}</Text>
-            )}
-          </View>
           <View style={styles.phoneNumberWrapper}>
             <Text style={styles.label}>Phone number</Text>
             <TextInput
@@ -128,8 +115,8 @@ export default function UpdatePersonalInformationScreen({ navigation }) {
       </View>
     </ScrollView>
     <View style={styles.footer}>
-        <TouchableOpacity style={styles.saveButton}>
-          <Text style={styles.buttonText}>Update Information</Text>
+        <TouchableOpacity style={styles.saveButton} onPress={saveAndExit}>
+          <Text style={styles.buttonText}>Save and Exit</Text>
         </TouchableOpacity>
       </View>
    </SafeAreaView>

@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
     fontSize: 14,
-    color: COLORS.RED,
+    color: COLORS.DARK_RED,
     marginTop: 5
   },
   textInput: {

@@ -42,7 +42,7 @@ export default function VaccinationRecordCard({ vaccinationRecord, onRefresh, on
     <View style={styles.cardStyles}>
       <View style={[styles.vaccineInfoContainer, isLoading && styles.loadingStyle]}>
         <View style={styles.cardHeaderContainer}>
-          <Ionicons name='shield-outline' size={30} color={COLORS.PRIMARY} />
+          <Ionicons name='shield-outline' size={30} color={COLORS.DARK_RED} />
           <View style={styles.cardHeader}>
             <Text style={styles.label}>{vaccinationRecord.vaccine_disease}</Text>
             <Text style={styles.doseText}>DOSE {vaccinationRecord.dose_number}</Text>
@@ -57,7 +57,7 @@ export default function VaccinationRecordCard({ vaccinationRecord, onRefresh, on
         </TouchableOpacity>
         <TouchableOpacity
           onPress={deleteVaccinationRecord}
-          style={[styles.button, { backgroundColor: COLORS.RED }]}
+          style={[styles.button, { backgroundColor: COLORS.DARK_RED }]}
         >
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
   label: {
     width: '100%',
     fontFamily: FONT_FAMILY.POPPINS_SEMI_BOLD,
-    fontSize: 18
+    fontSize: 18,
+    color: COLORS.DARK_RED
   },
   doseText: {
     fontFamily: FONT_FAMILY.POPPINS_EXTRA_LIGHT,
