@@ -33,6 +33,7 @@ const { sign } = require('jsonwebtoken');
 var generator = require('generate-password');
 const schemas = require('../../utils/helpers/schemas');
 const { USER_TYPE } = require('../../utils/helpers/types');
+const { updateUserProfileSchema } = require('./user.schema');
 
 module.exports = {
   createUser: (req, res) => {
@@ -954,4 +955,73 @@ module.exports = {
       });
     });
   },
+  updateUserProfileInformation: (req, res) => {
+    req.body.user_id = req.user.result.id
+    const { error } = updateUserProfileSchema.validate(req.body)
+
+    if (error) {
+      console.log(error)
+      return res.status(400).json({
+        message: "Invalid payload"
+      })
+    }
+
+    getUserById(req.body.user_id, (error, userResult) => {
+      if (error) {
+        return res.status(500).json({
+          message: "Internal server error"
+        })
+      }
+
+      if (!userResult) {
+        return res.status(404).json({
+          message: "User not found"
+        })
+      }
+
+      switch (userResult.type) {
+        case "student":
+          return updateStudentDetails(req.body, (error, result) => {
+            if (error) {
+              return res.status(500).json({
+                message: "Internal server error"
+              })
+            }
+  
+            return res.status(200).json({
+              result
+            })
+          });
+        case 'employee':
+          return updateEmployeeDetails(req.body, (error, result) => {
+            if (error) {
+              return res.status(500).json({
+                message: "Internal server error"
+              })
+            }
+  
+            return res.status(200).json({
+              result
+            })
+          });
+        case 'visitor':
+          return updateVisitorDetails(req.body, (error, result) => {
+            if (error) {
+              return res.status(500).json({
+                message: "Internal server error"
+              })
+            }
+  
+            return res.status(200).json({
+              result
+            })
+          })
+      
+        default:
+          return res.status(401).json({
+            message: "User not verified"
+          })
+      }
+    })
+  }
 };

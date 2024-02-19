@@ -19,6 +19,9 @@ const {
   deactivateAccount,
   updatePersonalInfo,
   verifyUser,
+  updateUserProfilePhoto,
+  updateUserPhoneNumber,
+  updateUserProfileInformation,
 } = require('./user.controller');
 
 const router = require('express').Router();
@@ -45,5 +48,6 @@ router.post('/changePassword', checkToken, changePassword);
 // DEACTIVATE should have been DELETE verb but we need body so I use POST
 router.post('/:userId/deactivate', checkToken, deactivateAccount);
 router.post('/updatePersonalInfo', checkToken, updatePersonalInfo);
+router.put('/profile-information', checkToken, updateUserProfileInformation);
 
 module.exports = router;

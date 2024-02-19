@@ -92,23 +92,10 @@ module.exports = {
 
   updateStudentDetails: (data, callBack) => {
     pool.query(
-      'UPDATE  `student_details` SET firstname=?,lastname=?,middlename=?,suffix=?,gender=?,address=?,course=?,year_section=?,birthday=?,student_id=?,mobile_number=?,email=?,profile_url=?,back_id_photo=?,front_id_photo=? WHERE user_id = ?',
+      'UPDATE  `student_details` SET mobile_number=?,profile_url=? WHERE user_id = ?',
       [
-        data.firstname,
-        data.lastname,
-        data.middlename,
-        data.suffix,
-        data.gender,
-        data.address,
-        data.course,
-        data.year_section,
-        data.birthday,
-        data.student_id,
         data.mobile_number,
-        data.email,
         data.profile_url,
-        data.back_id_photo,
-        data.front_id_photo,
         data.user_id,
       ],
       (error, results, fields) => {
@@ -129,24 +116,11 @@ module.exports = {
   },
   updateEmployeeDetails: (data, callBack) => {
     pool.query(
-      'UPDATE `employee_details` SET firstname=?,lastname=?,middlename=?,suffix=?,gender=?,address=?,department=?,position=?,birthday=?,employee_id=?,mobile_number=?, email=?, profile_url=?, front_id_photo=?, back_id_photo=? WHERE user_id=?',
+      'UPDATE `employee_details` SET profile_url=?, mobile_number=? WHERE user_id=?',
       [
-        data.firstname,
-        data.lastname,
-        data.middlename,
-        data.suffix,
-        data.gender,
-        data.address,
-        data.department,
-        data.position,
-        data.birthday,
-        data.employee_id,
-        data.mobile_number,
-        data.email,
         data.profile_url,
-        data.back_id_photo,
-        data.front_id_photo,
-        data.user_id,
+        data.mobile_number,
+        data.user_id
       ],
       (error, results, fields) => {
         if (error) {
@@ -253,20 +227,10 @@ module.exports = {
 
   updateVisitorDetails: (data, callBack) => {
     pool.query(
-      'UPDATE `visitor_details` SET firstname=?,lastname=?,middlename=?,suffix=?,gender=?,address=?,birthday=?,email=?,mobile_number=?, profile_url=?, back_id_photo=?, front_id_photo=? WHERE user_id=?',
+      'UPDATE `visitor_details` SET mobile_number=?, profile_url=? WHERE user_id=?',
       [
-        data.firstname,
-        data.lastname,
-        data.middlename,
-        data.suffix,
-        data.gender,
-        data.address,
-        data.birthday,
-        data.email,
         data.mobile_number,
         data.profile_url,
-        data.back_id_photo,
-        data.front_id_photo,
         data.user_id,
       ],
       (error, results, fields) => {

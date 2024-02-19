@@ -10,7 +10,6 @@ module.exports = {
       verify(token, process.env.JSON_KEY, (err, decoded) => {
         if (err) {
           res.status(401).json({
-            success: 0,
             message: 'Invalid token',
           });
         } else {
