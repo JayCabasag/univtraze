@@ -19,7 +19,7 @@ import moment from 'moment'
 
 const DISEASE_NAME = 'COVID-19'
 
-export default function VaccinationRecordModal(props) {
+export default function VaccinationAddRecordModal(props) {
   const { state: user } = useUser()
   const { state: auth } = useAuth()
   const { resetFormErrors, formErrors, setFormErrors } = useFormErrors([
@@ -28,7 +28,7 @@ export default function VaccinationRecordModal(props) {
     'vaccinationDate'
   ])
 
-  const userId = user.details.id
+  const userId = user?.details?.id ?? ''
   const token = auth.userToken
 
   const [vaccineDose, setVaccineDose] = useState(null)

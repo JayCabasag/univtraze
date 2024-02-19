@@ -1,26 +1,42 @@
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator, Image } from 'react-native'
-import React, { useState, Fragment, useMemo } from 'react'
+import {
+  View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ActivityIndicator,
+  Image,
+  Alert
+} from 'react-native'
+import React, { useState, Fragment } from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Header from '../components/Header'
-import GeneratedAvatar from '../components/GeneratedAvatar';
+import GeneratedAvatar from '../components/GeneratedAvatar'
 import * as ImagePicker from 'expo-image-picker'
-import { uploadImageAsync } from '../utils/helpers';
+import { uploadImageAsync } from '../utils/helpers'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { useUser } from '../services/store/user/UserContext';
-import { convertNameToInitials } from '../utils/formatters';
-import useFormErrors from '../hooks/useFormErrors';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { phoneNumberRegex } from '../utils/regex';
+import { useUser } from '../services/store/user/UserContext'
+import { convertNameToInitials } from '../utils/formatters'
+import useFormErrors from '../hooks/useFormErrors'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { phoneNumberRegex } from '../utils/regex'
+import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
+import { useAuth } from '../services/store/auth/AuthContext'
+import LoadingModal from '../components/LoadingModal'
 
 export default function UpdatePersonalInformationScreen({ navigation }) {
-  const { state: user } = useUser();
+  const { state: user } = useUser()
+  const { state: auth } = useAuth()
 
+  const token = auth.userToken
   const initials = convertNameToInitials(user.details.firstname, user.details.lastname)
-  
-  const [profilePhoto, setProfilePhoto] = useState(user?.details?.profile_url ?? null);
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [profilePhoto, setProfilePhoto] = useState(user?.details?.profile_url ?? null)
   const [isUploadingProfilePhoto, setIsUploadingProfilePhoto] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState(user?.details?.mobile_number)
-  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors(["phoneNumber"])
+  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors(['phoneNumber'])
 
   const pickProfileImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -45,81 +61,107 @@ export default function UpdatePersonalInformationScreen({ navigation }) {
     }
   }
 
-  const saveAndExit = () => {
-    resetFormErrors();
+  const saveAndExit = async () => {
+    resetFormErrors()
     if (phoneNumber == null || phoneNumber == '') {
-      return setFormErrors("phoneNumber", "Phone number is required")
+      return setFormErrors('phoneNumber', 'Phone number is required')
     }
 
     if (!phoneNumberRegex.test(phoneNumber)) {
       return setFormErrors('phoneNumber', 'Phone number is invalid')
     }
 
-    console.log(profilePhoto, phoneNumber)
+    try {
+      setIsLoading(true)
+      const payload = {
+        profile_url: profilePhoto,
+        mobile_number: phoneNumber
+      }
+      await genericUpdateRequest('users/profile-information', payload, token)
+      Alert.alert('Success', 'User information updated successfully', [
+        {
+          text: 'Ok',
+          onPress: navigation.goBack
+        }
+      ])
+    } catch (error) {
+      console.log(error)
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-   <SafeAreaView style={styles.safeAreaViewStyles}>
-      <Header navigation={navigation}  />
-     <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollViewContent}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={styles.container}>
-      <View style={styles.profileContainer}>
-          <Text style={styles.sectionHeaderText}>Profile photo</Text>
-          {profilePhoto == null ? (
-            <GeneratedAvatar initials={initials} />
-          ) : (
-            <Image source={{ uri: profilePhoto }} resizeMode='cover' style={styles.profilePhoto} />
-          )}
-          <TouchableOpacity
-            disabled={isUploadingProfilePhoto}
-            style={styles.editProfileButton}
-            onPress={pickProfileImage}
-          >
-            {isUploadingProfilePhoto ? (
-              <Fragment>
-                <ActivityIndicator color={COLORS.WHITE} size='small' />
-                <Text style={styles.uploadPhotoText}> Uploading photo.. </Text>
-              </Fragment>
+    <SafeAreaView style={styles.safeAreaViewStyles}>
+      <LoadingModal
+        onRequestClose={() => setIsLoading(false)}
+        open={isLoading}
+        loadingMessage='Please wait...'
+      />
+      <Header navigation={navigation} />
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          <View style={styles.profileContainer}>
+            <Text style={styles.sectionHeaderText}>Profile photo</Text>
+            {profilePhoto == null ? (
+              <GeneratedAvatar initials={initials} />
             ) : (
-              <Fragment>
-                <Ionicons name='md-cloud-upload-outline' size={18} color={COLORS.WHITE} />
-                <Text style={styles.uploadPhotoText}> Change Profile </Text>
-              </Fragment>
+              <Image
+                source={{ uri: profilePhoto }}
+                resizeMode='cover'
+                style={styles.profilePhoto}
+              />
             )}
-          </TouchableOpacity>
-        </View>
-          
-        <Text style={styles.sectionHeaderText}>
-          Contact Information
-        </Text>
-        <View style={styles.phoneNumberContainer}>
-          <View style={styles.phoneNumberWrapper}>
-            <Text style={styles.label}>Phone number</Text>
-            <TextInput
-              placeholder='Phone number'
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              style={[styles.input, formErrors.phoneNumber?.hasError && styles.inputError]}
-            />
-            {formErrors.phoneNumber?.hasError && (
-              <Text style={styles.errorText}>{formErrors.phoneNumber.message}</Text>
-            )}
+            <TouchableOpacity
+              disabled={isUploadingProfilePhoto}
+              style={styles.editProfileButton}
+              onPress={pickProfileImage}
+            >
+              {isUploadingProfilePhoto ? (
+                <Fragment>
+                  <ActivityIndicator color={COLORS.WHITE} size='small' />
+                  <Text style={styles.uploadPhotoText}> Uploading photo.. </Text>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <Ionicons name='md-cloud-upload-outline' size={18} color={COLORS.WHITE} />
+                  <Text style={styles.uploadPhotoText}> Change Profile </Text>
+                </Fragment>
+              )}
+            </TouchableOpacity>
+          </View>
+
+          <Text style={styles.sectionHeaderText}>Contact Information</Text>
+          <View style={styles.phoneNumberContainer}>
+            <View style={styles.phoneNumberWrapper}>
+              <Text style={styles.label}>Phone number</Text>
+              <TextInput
+                placeholder='Phone number'
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                style={[styles.input, formErrors.phoneNumber?.hasError && styles.inputError]}
+              />
+              {formErrors.phoneNumber?.hasError && (
+                <Text style={styles.errorText}>{formErrors.phoneNumber.message}</Text>
+              )}
+            </View>
           </View>
         </View>
-
-      </View>
-    </ScrollView>
-    <View style={styles.footer}>
+      </ScrollView>
+      <View style={styles.footer}>
         <TouchableOpacity style={styles.saveButton} onPress={saveAndExit}>
           <Text style={styles.buttonText}>Save and Exit</Text>
         </TouchableOpacity>
       </View>
-   </SafeAreaView>
+    </SafeAreaView>
   )
 }
 
@@ -137,9 +179,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     display: 'flex'
   },
-  container: {
-
-  },
+  container: {},
   profileContainer: {
     marginVertical: 15,
     display: 'flex',
@@ -276,7 +316,7 @@ const styles = StyleSheet.create({
   sectionHeaderText: {
     fontSize: 24,
     fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
-    width: "100%"
+    width: '100%'
   },
   label: {
     width: '100%',
@@ -285,5 +325,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.TEXT_BLACK,
     marginTop: 10
-  },
+  }
 })
