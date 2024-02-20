@@ -6,7 +6,7 @@ import { COLORS } from '../utils/app_constants'
 export const withSafeAreaView = (WrappedComponent) => {
   return class extends React.Component {
     componentDidMount() {
-      console.log('On Initil load')
+      // Add some functions here
     }
     render() {
       return (
