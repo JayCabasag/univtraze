@@ -14,6 +14,7 @@ import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
 import Header from '../components/Header'
 import { emailRegEx } from '../utils/regex'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
@@ -135,54 +136,60 @@ const ForgotPasswordScreen = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior='height'>
-      <LoadingModal
-        onRequestClose={() => setShowLoadingModal(false)}
-        open={showLoadingModal}
-        loadingMessage={loadingMessage}
-      />
-      <Header navigation={navigation} />
-      <View style={styles.inputContainer}>
-        <Text style={styles.headerText}>Forgot password</Text>
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          placeholder='Email Address'
-          defaultValue={email}
-          onChangeText={(text) => setEmail(text)}
-          style={styles.input}
+    <SafeAreaView style={styles.safeAreaView}>
+      <KeyboardAvoidingView style={styles.container} behavior='height'>
+        <LoadingModal
+          onRequestClose={() => setShowLoadingModal(false)}
+          open={showLoadingModal}
+          loadingMessage={loadingMessage}
         />
+        <Header navigation={navigation} />
+        <View style={styles.inputContainer}>
+          <Text style={styles.headerText}>Forgot password</Text>
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            placeholder='Email Address'
+            defaultValue={email}
+            onChangeText={(text) => setEmail(text)}
+            style={styles.input}
+          />
 
-        {showCodeInput && (
-          <Fragment>
-            <Text style={styles.label}>Code</Text>
-            <TextInput
-              placeholder='Recovery code'
-              defaultValue={codeInput}
-              onChangeText={(text) => setCodeInput(text)}
-              style={styles.input}
-            />
-          </Fragment>
-        )}
+          {showCodeInput && (
+            <Fragment>
+              <Text style={styles.label}>Code</Text>
+              <TextInput
+                placeholder='Recovery code'
+                defaultValue={codeInput}
+                onChangeText={(text) => setCodeInput(text)}
+                style={styles.input}
+              />
+            </Fragment>
+          )}
 
-        {error ? (
-          <Text style={styles.errorMessage}>*{errorMessage}</Text>
-        ) : success ? (
-          <Text style={styles.successMessage}>Recovery password sent to your email</Text>
-        ) : null}
+          {error ? (
+            <Text style={styles.errorMessage}>*{errorMessage}</Text>
+          ) : success ? (
+            <Text style={styles.successMessage}>Recovery password sent to your email</Text>
+          ) : null}
 
-        <TouchableOpacity onPress={() => validateUserInput()} style={styles.confirmEmailBtn}>
-          {<Text style={styles.buttonText}>{showCodeInput ? 'Resend code' : 'Send to email'}</Text>}
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.buttonContainer}>
-        {showCodeInput ? (
-          <TouchableOpacity onPress={() => verifyViaEmailRecovery()} style={styles.verifyBtn}>
-            <Text style={styles.buttonText}>Verify</Text>
+          <TouchableOpacity onPress={() => validateUserInput()} style={styles.confirmEmailBtn}>
+            {
+              <Text style={styles.buttonText}>
+                {showCodeInput ? 'Resend code' : 'Send to email'}
+              </Text>
+            }
           </TouchableOpacity>
-        ) : null}
-      </View>
-    </KeyboardAvoidingView>
+        </View>
+
+        <View style={styles.buttonContainer}>
+          {showCodeInput ? (
+            <TouchableOpacity onPress={() => verifyViaEmailRecovery()} style={styles.verifyBtn}>
+              <Text style={styles.buttonText}>Verify</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 
@@ -191,6 +198,10 @@ export default ForgotPasswordScreen
 const windowWidth = Dimensions.get('screen').width
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: COLORS.SECONDARY
+  },
   buttonContainer: {
     width: '100%'
   },

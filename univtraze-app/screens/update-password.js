@@ -20,43 +20,63 @@ import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 
 export default function UpdatePasswordScreen({ navigation }) {
   const { state: user } = useUser()
-  const { state: auth } = useAuth()
+  const { signOut, state: auth } = useAuth()
+  const { clearUser, state } = useUser()
 
   const token = auth.userToken
 
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [oldPassword, setOldPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors(['oldPassword', 'newPassword', 'confirmPassword'])
+  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors([
+    'oldPassword',
+    'newPassword',
+    'confirmPassword'
+  ])
 
   const saveAndExit = async () => {
     resetFormErrors()
-    if (oldPassword == '' || oldPassword == null){
-      return setFormErrors("oldPassword", "Old password is required")
+    if (oldPassword == '' || oldPassword == null) {
+      return setFormErrors('oldPassword', 'Old password is required')
     }
-    if (newPassword == '' || newPassword == null){
-      return setFormErrors("newPassword", "New password is required")
+    if (newPassword == '' || newPassword == null) {
+      return setFormErrors('newPassword', 'New password is required')
     }
-    if (newPassword.length < 7){
-      return setFormErrors("newPassword", "New password too short")
+    if (newPassword.length < 7) {
+      return setFormErrors('newPassword', 'New password too short')
     }
-    if (confirmPassword == '' || confirmPassword == null){
-      return setFormErrors("confirmPassword", "Confirm password is required is required")
+    if (confirmPassword == '' || confirmPassword == null) {
+      return setFormErrors('confirmPassword', 'Confirm password is required is required')
     }
-    if (newPassword != confirmPassword){
-      return setFormErrors("confirmPassword", "Confirm password don't match")
+    if (newPassword != confirmPassword) {
+      return setFormErrors('confirmPassword', "Confirm password don't match")
     }
 
     try {
+      setIsLoading(true)
       const payload = {
-        "old_password": oldPassword,
-        "new_password": newPassword,
-        "confirm_password": confirmPassword
+        old_password: oldPassword,
+        new_password: newPassword,
+        confirm_password: confirmPassword
       }
-      const res = await genericUpdateRequest("users/password", payload, token) 
+      const res = await genericUpdateRequest('users/change-password', payload, token)
+      Alert.alert('Success', 'Password update successfully. Please relogin to continue', [
+        {
+          text: 'OK',
+          onPress: () => {
+            signOut()
+            clearUser()
+          }
+        }
+      ])
     } catch (error) {
-      
+      console.log(error)
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -110,7 +130,6 @@ export default function UpdatePasswordScreen({ navigation }) {
             {formErrors.confirmPassword?.hasError && (
               <Text style={styles.errorText}>{formErrors.confirmPassword.message}</Text>
             )}
-           
           </View>
         </View>
       </ScrollView>

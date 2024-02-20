@@ -20,6 +20,7 @@ import { PROVIDER } from '../utils/helpers'
 import { genericPostRequest } from '../services/api/genericPostRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const SignUpScreen = ({ navigation }) => {
   const { signIn } = useAuth()
@@ -119,85 +120,95 @@ const SignUpScreen = ({ navigation }) => {
   }
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior='height'>
-      <Header navigation={navigation} />
-      <LoadingModal
-        onRequestClose={() => setShowLoadingModal(false)}
-        open={showLoadingModal}
-        loadingMessage={loadingMessage}
-      />
-      <Text style={styles.loginText}>Sign up</Text>
-      <ScrollView
-        ref={scrollViewContainerRef}
-        showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-        style={styles.scrollViewContainer}
-      >
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          placeholder='Email'
-          value={email}
-          onChangeText={onChangeEmail}
-          style={[styles.input, formErrors.email?.hasError && styles.inputError]}
+    <SafeAreaView style={styles.safeAreaView}>
+      <KeyboardAvoidingView style={styles.container} behavior='height'>
+        <Header navigation={navigation} />
+        <LoadingModal
+          onRequestClose={() => setShowLoadingModal(false)}
+          open={showLoadingModal}
+          loadingMessage={loadingMessage}
         />
-        {formErrors.email?.hasError && (
-          <Text style={styles.errorText}>{formErrors.email.message}</Text>
-        )}
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          placeholder='Password'
-          value={password}
-          onChangeText={onChangePassword}
-          style={[styles.input, formErrors.password?.hasError && styles.inputError]}
-          secureTextEntry
-        />
-        {formErrors.password?.hasError && (
-          <Text style={styles.errorText}>{formErrors.password.message}</Text>
-        )}
-        <Text style={styles.label}>Confirm Password</Text>
-        <TextInput
-          placeholder='Confirm password'
-          value={confirmPassword}
-          onChangeText={onChangeConfirmPassword}
-          style={[styles.input, formErrors.confirmPassword?.hasError && styles.inputError]}
-          secureTextEntry
-        />
-        {formErrors.confirmPassword?.hasError && (
-          <Text style={styles.errorText}>{formErrors.confirmPassword.message}</Text>
-        )}
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={onSignUp} style={styles.signUpBtn}>
-          <Text style={styles.buttonText}>Sign up</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('signin')}>
-          <Text style={styles.goToLoginText}>Login to an existing account</Text>
-        </TouchableOpacity>
-      </View>
-      <Modal transparent statusBarTranslucent visible={isModalVisible}>
-        <View style={styles.congratsModalOverlay}>
-          <View style={styles.congratsModal}>
-            <Text style={styles.congratsHeaderText}>Sign up successful!</Text>
-            <Text style={styles.successModalSubtext}>
-              Awesome, press continue {'\n'} to proceed to next step
-            </Text>
-            <TouchableOpacity style={styles.buttonContinue} onPress={onLogin} disabled={isLogginIn}>
-              {isLogginIn ? (
-                <ActivityIndicator color={COLORS.WHITE} size='large' />
-              ) : (
-                <Text style={styles.buttonText}>Continue</Text>
-              )}
-            </TouchableOpacity>
-          </View>
+        <Text style={styles.loginText}>Sign up</Text>
+        <ScrollView
+          ref={scrollViewContainerRef}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          style={styles.scrollViewContainer}
+        >
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            placeholder='Email'
+            value={email}
+            onChangeText={onChangeEmail}
+            style={[styles.input, formErrors.email?.hasError && styles.inputError]}
+          />
+          {formErrors.email?.hasError && (
+            <Text style={styles.errorText}>{formErrors.email.message}</Text>
+          )}
+          <Text style={styles.label}>Password</Text>
+          <TextInput
+            placeholder='Password'
+            value={password}
+            onChangeText={onChangePassword}
+            style={[styles.input, formErrors.password?.hasError && styles.inputError]}
+            secureTextEntry
+          />
+          {formErrors.password?.hasError && (
+            <Text style={styles.errorText}>{formErrors.password.message}</Text>
+          )}
+          <Text style={styles.label}>Confirm Password</Text>
+          <TextInput
+            placeholder='Confirm password'
+            value={confirmPassword}
+            onChangeText={onChangeConfirmPassword}
+            style={[styles.input, formErrors.confirmPassword?.hasError && styles.inputError]}
+            secureTextEntry
+          />
+          {formErrors.confirmPassword?.hasError && (
+            <Text style={styles.errorText}>{formErrors.confirmPassword.message}</Text>
+          )}
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={onSignUp} style={styles.signUpBtn}>
+            <Text style={styles.buttonText}>Sign up</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('signin')}>
+            <Text style={styles.goToLoginText}>Login to an existing account</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
-    </KeyboardAvoidingView>
+        <Modal transparent statusBarTranslucent visible={isModalVisible}>
+          <View style={styles.congratsModalOverlay}>
+            <View style={styles.congratsModal}>
+              <Text style={styles.congratsHeaderText}>Sign up successful!</Text>
+              <Text style={styles.successModalSubtext}>
+                Awesome, press continue {'\n'} to proceed to next step
+              </Text>
+              <TouchableOpacity
+                style={styles.buttonContinue}
+                onPress={onLogin}
+                disabled={isLogginIn}
+              >
+                {isLogginIn ? (
+                  <ActivityIndicator color={COLORS.WHITE} size='large' />
+                ) : (
+                  <Text style={styles.buttonText}>Continue</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   )
 }
 
 export default SignUpScreen
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: COLORS.SECONDARY
+  },
   centeredView: {
     backgroundColor: 'rgba(250, 250, 250, .7)',
     flex: 1,
