@@ -19,13 +19,13 @@ export default function MainDiseaseCard({ top = false, data }) {
           <Image source={VirusIcon} style={styles.virus2Styles} />
         </View>
         <Text style={styles.cardHeaderTextStyle}>{name}</Text>
+        <Text style={styles.recoveredPercentageText}>
+          {recoveredPercentage}% Recovered
+        </Text>
         <ProgressBar
           value={recoveredPercentage}
           progressBarContainerStyles={styles.progressBarContainerStyles}
         />
-        <Text style={styles.recoveredPercentageText}>
-          {recoveredPercentage}% Recovered as of today
-        </Text>
         <View style={styles.victimDetailsContainer}>
           <View style={styles.textDetailsContainer}>
             <Text style={styles.headerTextDetailsStyles}>{totalRecovered}</Text>
@@ -36,10 +36,10 @@ export default function MainDiseaseCard({ top = false, data }) {
             <Text style={styles.subHeaderTextDetailsRedStyles}>Active cases</Text>
           </View>
         </View>
-        <View style={styles.subDetailsStyles}>
+        {/* <View style={styles.subDetailsStyles}>
           <View style={styles.diseaseIndicator}></View>
           <Text style={styles.diseaseLabelStyle}>{diseaseLabel}</Text>
-        </View>
+        </View> */}
       </View>
     </View>
   )
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
   cardStyles: {
     width: '100%',
     height: 'auto',
-    minHeight: 147,
     borderRadius: 20,
     backgroundColor: COLORS.WHITE,
     overflow: 'hidden'
@@ -102,10 +101,13 @@ const styles = StyleSheet.create({
   },
   recoveredPercentageText: {
     marginTop: 5,
+    marginBottom: -10,
     fontSize: 12,
     fontFamily: FONT_FAMILY.POPPINS_REGULAR,
-    paddingHorizontal: 25,
-    color: COLORS.GRAY
+    paddingHorizontal: 15,
+    color: COLORS.GRAY,
+    width: '100%',
+    textAlign: 'left'
   },
   victimDetailsContainer: {
     flex: 1,
@@ -114,6 +116,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
     gap: 15,
+    marginTop: 10,
     marginBottom: 20
   },
   headerTextDetailsStyles: {
