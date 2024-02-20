@@ -832,6 +832,13 @@ module.exports = {
         })
       }
 
+      const isMatchOldPassword = compareSync(req.body.new_password, userResult.password);
+      if (isMatchOldPassword) {
+        return res.status(400).json({
+          message: "Old and new password is the same!"
+        })
+      }
+
       const isMatchPassword = compareSync(req.body.old_password, userResult.password);
 
       if (!isMatchPassword) {
