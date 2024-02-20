@@ -23,6 +23,7 @@ import DiseaseReportCard from '../components/DiseaseReportCard'
 import MainDiseaseCard from '../components/MainDiseaseCard'
 import { useNotifications } from '../services/store/notifications/NotificationsContext'
 import { useFocusEffect } from '@react-navigation/native'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const IndexScreen = ({ navigation }) => {
   const { state: user, updateUserDetails } = useUser()
@@ -231,7 +232,7 @@ const IndexScreen = ({ navigation }) => {
     </ScrollView>
   )
 }
-export default IndexScreen
+export default withSafeAreaView(IndexScreen)
 
 const styles = StyleSheet.create({
   container: {
@@ -245,8 +246,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
+    alignItems: 'center'
   },
   menuIcon: {
     height: 60,

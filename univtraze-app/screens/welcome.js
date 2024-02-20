@@ -2,6 +2,7 @@ import { StyleSheet, Text, Image, View, ImageBackground, TouchableOpacity } from
 import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import WelcomeImgBackground from '../assets/welcome-bg.png'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -42,7 +43,7 @@ const WelcomeScreen = ({ navigation }) => {
   )
 }
 
-export default WelcomeScreen
+export default withSafeAreaView(WelcomeScreen)
 
 const styles = StyleSheet.create({
   container: {

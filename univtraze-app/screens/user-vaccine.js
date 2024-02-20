@@ -20,6 +20,7 @@ import VaccinationRecordCard from '../components/VaccinationRecordCard'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import VaccinationRecordModal from '../components/VaccinationAddRecordModal'
 import VaccinationEditRecordModal from '../components/VaccinationEditRecordModal'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const UserVaccine = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -127,7 +128,7 @@ const UserVaccine = ({ navigation }) => {
   )
 }
 
-export default UserVaccine
+export default withSafeAreaView(UserVaccine)
 
 const styles = StyleSheet.create({
   keyboardAvoidingView: {

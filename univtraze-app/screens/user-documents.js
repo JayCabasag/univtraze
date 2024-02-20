@@ -30,6 +30,7 @@ import { convertStringDateToISOString, uploadImageAsync } from '../utils/helpers
 import { useUser } from '../services/store/user/UserContext'
 import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 import { convertNameToInitials } from '../utils/formatters'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 if (!getApps().length) {
   initializeApp(firebaseConfig)
@@ -471,7 +472,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   )
 }
 
-export default UserDocumentsScreen
+export default withSafeAreaView(UserDocumentsScreen)
 
 const styles = StyleSheet.create({
   keyboardAvoidingView: {

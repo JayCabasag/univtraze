@@ -21,6 +21,7 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const SignUpScreen = ({ navigation }) => {
   const { signIn } = useAuth()
@@ -202,7 +203,7 @@ const SignUpScreen = ({ navigation }) => {
   )
 }
 
-export default SignUpScreen
+export default withSafeAreaView(SignUpScreen)
 
 const styles = StyleSheet.create({
   safeAreaView: {

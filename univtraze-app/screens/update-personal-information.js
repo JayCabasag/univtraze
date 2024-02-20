@@ -24,8 +24,9 @@ import { phoneNumberRegex } from '../utils/regex'
 import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import LoadingModal from '../components/LoadingModal'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
-export default function UpdatePersonalInformationScreen({ navigation }) {
+function UpdatePersonalInformationScreen({ navigation }) {
   const { state: user } = useUser()
   const { state: auth } = useAuth()
 
@@ -164,6 +165,8 @@ export default function UpdatePersonalInformationScreen({ navigation }) {
     </SafeAreaView>
   )
 }
+
+export default withSafeAreaView(UpdatePersonalInformationScreen)
 
 const styles = StyleSheet.create({
   safeAreaViewStyles: {

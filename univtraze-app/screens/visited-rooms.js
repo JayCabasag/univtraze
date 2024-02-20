@@ -7,6 +7,7 @@ import TopNavigation from '../components/TopNavigation'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const VisitedRoomsScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -79,7 +80,7 @@ const VisitedRoomsScreen = ({ navigation }) => {
   )
 }
 
-export default VisitedRoomsScreen
+export default withSafeAreaView(VisitedRoomsScreen)
 
 const styles = StyleSheet.create({
   container: {

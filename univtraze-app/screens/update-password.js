@@ -12,13 +12,12 @@ import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Header from '../components/Header'
 import { useUser } from '../services/store/user/UserContext'
 import useFormErrors from '../hooks/useFormErrors'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuth } from '../services/store/auth/AuthContext'
 import LoadingModal from '../components/LoadingModal'
-import { genericPostRequest } from '../services/api/genericPostRequest'
 import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
-export default function UpdatePasswordScreen({ navigation }) {
+function UpdatePasswordScreen({ navigation }) {
   const { state: user } = useUser()
   const { signOut, state: auth } = useAuth()
   const { clearUser, state } = useUser()
@@ -81,7 +80,7 @@ export default function UpdatePasswordScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.safeAreaViewStyles}>
+    <View style={styles.safeAreaViewStyles}>
       <LoadingModal
         onRequestClose={() => setIsLoading(false)}
         open={isLoading}
@@ -138,9 +137,11 @@ export default function UpdatePasswordScreen({ navigation }) {
           <Text style={styles.buttonText}>Save and Exit</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
+
+export default withSafeAreaView(UpdatePasswordScreen)
 
 const styles = StyleSheet.create({
   safeAreaViewStyles: {

@@ -20,8 +20,9 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MovingForwardImage from './../assets/moving_forward.png'
 import TopNavigation from '../components/TopNavigation'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
-export default function QrScannerScreen({ navigation }) {
+function QrScannerScreen({ navigation }) {
   const { state: user } = useUser()
   const { temperatures } = useUserTemperatures()
   const userId = user?.user?.id
@@ -177,6 +178,8 @@ export default function QrScannerScreen({ navigation }) {
   )
 }
 
+export default withSafeAreaView(QrScannerScreen)
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -212,8 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
+    alignItems: 'center'
   },
   backIcon: {
     height: 60,

@@ -398,8 +398,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: Platform.OS == 'ios' ? StatusBar.currentHeight + 40 : 40
+    alignItems: 'center'    
   },
   backIcon: {
     height: 75,

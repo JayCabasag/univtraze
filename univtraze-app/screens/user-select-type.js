@@ -16,6 +16,7 @@ import SelectTypeImage from '../assets/select-type-image.png'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const UserSelectTypeScreen = ({ navigation }) => {
   const { signOut } = useAuth()
@@ -91,7 +92,7 @@ const UserSelectTypeScreen = ({ navigation }) => {
   )
 }
 
-export default UserSelectTypeScreen
+export default withSafeAreaView(UserSelectTypeScreen)
 
 const styles = StyleSheet.create({
   customTopNav: {

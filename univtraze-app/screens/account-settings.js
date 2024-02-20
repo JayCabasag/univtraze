@@ -16,6 +16,7 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import useFormErrors from '../hooks/useFormErrors'
 import { genericPostRequest } from '../services/api/genericPostRequest'
 import TopNavigation from '../components/TopNavigation'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const AccountSettingsScreen = ({ navigation }) => {
   const { state: user, clearUser } = useUser()
@@ -128,7 +129,7 @@ const AccountSettingsScreen = ({ navigation }) => {
     </ScrollView>
   )
 }
-export default AccountSettingsScreen
+export default withSafeAreaView(AccountSettingsScreen)
 
 const styles = StyleSheet.create({
   scrollView: {

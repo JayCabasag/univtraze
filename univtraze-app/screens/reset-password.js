@@ -1,20 +1,18 @@
 import {
   KeyboardAvoidingView,
-  Image,
   StyleSheet,
   TextInput,
   View,
   TouchableOpacity,
   Text,
-  StatusBar,
   Modal,
   ActivityIndicator
 } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { Dimensions } from 'react-native'
 import { COLORS } from '../utils/app_constants'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const ResetPasswordScreen = ({
   navigation,
@@ -158,7 +156,7 @@ const ResetPasswordScreen = ({
   )
 }
 
-export default ResetPasswordScreen
+export default withSafeAreaView(ResetPasswordScreen)
 
 const windowWidth = Dimensions.get('screen').width
 const windowHeight = Dimensions.get('screen').height

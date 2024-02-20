@@ -8,6 +8,7 @@ import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
 import TopNavigation from '../components/TopNavigation'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const TemperatureHistoryScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -100,7 +101,7 @@ const TemperatureHistoryScreen = ({ navigation }) => {
     </View>
   )
 }
-export default TemperatureHistoryScreen
+export default withSafeAreaView(TemperatureHistoryScreen)
 
 const styles = StyleSheet.create({
   container: {

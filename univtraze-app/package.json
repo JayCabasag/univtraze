@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint  --fix src/**/*.js",
-    "format": "prettier --write \"screens/**/*.js\" \"components/**/*.js\" \"services/**/*.js\" \"navigations/**/*.js\"  \"*.js\""
+    "format": "prettier --write \"screens/**/*.js\" \"components/**/*.js\" \"hoc/**/*.js\" \"services/**/*.js\" \"navigations/**/*.js\"  \"*.js\""
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.21.0",

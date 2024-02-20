@@ -1,14 +1,17 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import React from 'react'
 import SplashImage from '../assets/splash.png'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
-export default function SplashScreen() {
+function SplashScreen() {
   return (
     <View style={styles.container}>
       <Image source={SplashImage} style={styles.backgroundImage} />
     </View>
   )
 }
+
+export default withSafeAreaView(SplashScreen)
 
 const styles = StyleSheet.create({
   ccontainer: {

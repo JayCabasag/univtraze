@@ -20,6 +20,7 @@ import { nameRegex, optionalNameRegex, phoneNumberRegex } from '../utils/regex'
 import UserInformationFooter from '../components/UserInfoFooter'
 import CustomPicker from '../components/ui/CustomPicker'
 import CustomCalendar from '../components/ui/CustomCalendar'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const scrollViewContainerRef = useRef()
@@ -492,7 +493,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
     </KeyboardAvoidingView>
   )
 }
-export default UserInformationScreen
+export default withSafeAreaView(UserInformationScreen)
 
 const styles = StyleSheet.create({
   keyboardAvoidingView: {

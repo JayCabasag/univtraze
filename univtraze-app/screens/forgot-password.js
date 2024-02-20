@@ -15,6 +15,7 @@ import LoadingModal from '../components/LoadingModal'
 import Header from '../components/Header'
 import { emailRegEx } from '../utils/regex'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
@@ -136,7 +137,6 @@ const ForgotPasswordScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <LoadingModal
           onRequestClose={() => setShowLoadingModal(false)}
@@ -182,26 +182,19 @@ const ForgotPasswordScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          {showCodeInput ? (
+          {showCodeInput && (
             <TouchableOpacity onPress={() => verifyViaEmailRecovery()} style={styles.verifyBtn}>
               <Text style={styles.buttonText}>Verify</Text>
             </TouchableOpacity>
-          ) : null}
+          )}
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
   )
 }
 
-export default ForgotPasswordScreen
-
-const windowWidth = Dimensions.get('screen').width
+export default withSafeAreaView(ForgotPasswordScreen)
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: COLORS.SECONDARY
-  },
   buttonContainer: {
     width: '100%'
   },
