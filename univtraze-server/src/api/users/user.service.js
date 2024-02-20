@@ -320,8 +320,7 @@ module.exports = {
   updateUserPassword: (data, callBack) => {
     pool.query(
       `update users set password = ? where id = ?`,
-      [data.new_password, data.id],
-
+      [data.new_password, data.user_id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);

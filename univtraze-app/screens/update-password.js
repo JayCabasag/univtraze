@@ -1,240 +1,175 @@
 import {
-  StyleSheet,
-  Text,
   View,
-  ImageBackground,
-  TextInput,
+  Text,
+  ScrollView,
+  StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback
+  Alert,
+  TextInput
 } from 'react-native'
 import React, { useState } from 'react'
-import axios from 'axios'
-import BackIcon from '../assets/back-icon.png'
-import { COLORS } from '../utils/app_constants'
+import { COLORS, FONT_FAMILY } from '../utils/app_constants'
+import Header from '../components/Header'
+import { useUser } from '../services/store/user/UserContext'
+import useFormErrors from '../hooks/useFormErrors'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useAuth } from '../services/store/auth/AuthContext'
+import LoadingModal from '../components/LoadingModal'
+import { genericPostRequest } from '../services/api/genericPostRequest'
+import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 
-const UpdatePasswordScreen = ({ navigation, route }) => {
-  const [token, setToken] = useState('')
-  const [userId, setUserId] = useState('')
-  const [oldPassword, setOldPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-  const [confirmNewPassword, setConfirmNewPassword] = useState('')
+export default function UpdatePasswordScreen({ navigation }) {
+  const { state: user } = useUser()
+  const { state: auth } = useAuth()
 
-  // Error handler variables here
+  const token = auth.userToken
 
-  const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
-  const [success, setSuccess] = useState(false)
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const { resetFormErrors, formErrors, setFormErrors } = useFormErrors(['oldPassword', 'newPassword', 'confirmPassword'])
 
-  const handleUpdatePassword = async () => {
-    setIsLoading(false)
-    setError(false)
-    setSuccess(false)
-
-    if (oldPassword === '') {
-      setError(true)
-      setErrorMessage('Please enter old password.')
-      return
+  const saveAndExit = async () => {
+    resetFormErrors()
+    if (oldPassword == '' || oldPassword == null){
+      return setFormErrors("oldPassword", "Old password is required")
     }
-    if (newPassword === '') {
-      setError(true)
-      setErrorMessage('Please enter new password.')
-      return
+    if (newPassword == '' || newPassword == null){
+      return setFormErrors("newPassword", "New password is required")
     }
-    if (confirmNewPassword === '') {
-      setError(true)
-      setErrorMessage('Please enter confirm password.')
-      return
+    if (newPassword.length < 7){
+      return setFormErrors("newPassword", "New password too short")
+    }
+    if (confirmPassword == '' || confirmPassword == null){
+      return setFormErrors("confirmPassword", "Confirm password is required is required")
+    }
+    if (newPassword != confirmPassword){
+      return setFormErrors("confirmPassword", "Confirm password don't match")
     }
 
-    if (newPassword.length <= 7) {
-      setError(true)
-      setErrorMessage('Password should contain at least 8 characters')
-      return
-    }
-
-    if (newPassword !== confirmNewPassword) {
-      setError(true)
-      setErrorMessage('New password and confirm password does not match.')
-      return
-    }
-
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    }
-
-    const data = {
-      user_id: userId,
-      old_password: oldPassword,
-      new_password: confirmNewPassword
-    }
-
-    setIsLoading(true)
     try {
-      await axios
-        .post(`https://univtraze.herokuapp.com/api/user/changePassword`, data, config)
-        .then((response) => {
-          const success = response.data.success
-
-          if (success === 0) {
-            setError(true)
-            setErrorMessage(response.data.message)
-            setSuccess(false)
-            setIsLoading(false)
-            return
-          }
-
-          setError(false)
-          setErrorMessage('')
-          setSuccess(true)
-          setIsLoading(false)
-
-          setOldPassword('')
-          setNewPassword('')
-          setConfirmNewPassword('')
-        })
+      const payload = {
+        "old_password": oldPassword,
+        "new_password": newPassword,
+        "confirm_password": confirmPassword
+      }
+      const res = await genericUpdateRequest("users/password", payload, token) 
     } catch (error) {
-      setError(false)
-      setErrorMessage('Network connection error.')
-      setSuccess(false)
-      setIsLoading(false)
+      
     }
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.topContainer}>
-        <View style={styles.backIcon}>
-          {/* <TouchableWithoutFeedback
-            onPress={() => {
-              navigation.goBack()
-            }}
-          >
-            <ImageBackground
-              src={BackIcon}
-              resizeMode='contain'
-              style={styles.image}
-            ></ImageBackground>
-          </TouchableWithoutFeedback> */}
+    <SafeAreaView style={styles.safeAreaViewStyles}>
+      <LoadingModal
+        onRequestClose={() => setIsLoading(false)}
+        open={isLoading}
+        loadingMessage='Please wait...'
+      />
+      <Header navigation={navigation} />
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          <View style={styles.profileContainer}>
+            <Text style={styles.sectionHeaderText}>Update password</Text>
+            <Text style={styles.label}>Old Password</Text>
+            <TextInput
+              placeholder='Old Password'
+              value={oldPassword}
+              onChangeText={setOldPassword}
+              style={[styles.input, formErrors.oldPassword?.hasError && styles.inputError]}
+              secureTextEntry
+            />
+            {formErrors.oldPassword?.hasError && (
+              <Text style={styles.errorText}>{formErrors.oldPassword.message}</Text>
+            )}
+            <Text style={styles.label}>New Password</Text>
+            <TextInput
+              placeholder='New password'
+              value={newPassword}
+              onChangeText={setNewPassword}
+              style={[styles.input, formErrors.newPassword?.hasError && styles.inputError]}
+              secureTextEntry
+            />
+            {formErrors.newPassword?.hasError && (
+              <Text style={styles.errorText}>{formErrors.newPassword.message}</Text>
+            )}
+            <Text style={styles.label}>Confirm Password</Text>
+            <TextInput
+              placeholder='Confirm password'
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              style={[styles.input, formErrors.confirmPassword?.hasError && styles.inputError]}
+              secureTextEntry
+            />
+            {formErrors.confirmPassword?.hasError && (
+              <Text style={styles.errorText}>{formErrors.confirmPassword.message}</Text>
+            )}
+           
+          </View>
         </View>
-      </View>
-
-      {/*End  Notification View */}
-      <View style={styles.bodyContainer}>
-        <Text style={styles.headerText}>Update Password</Text>
-
-        <TextInput
-          placeholder='Old password'
-          value={oldPassword}
-          style={styles.input}
-          secureTextEntry
-          onChangeText={(text) => setOldPassword(text)}
-        />
-        <TextInput
-          placeholder='New password'
-          value={newPassword}
-          style={styles.input}
-          secureTextEntry
-          onChangeText={(text) => setNewPassword(text)}
-        />
-        <TextInput
-          placeholder='Re-type password'
-          value={confirmNewPassword}
-          style={styles.input}
-          secureTextEntry
-          onChangeText={(text) => setConfirmNewPassword(text)}
-        />
-        {error ? <Text style={{ color: 'red' }}>{errorMessage}</Text> : null}
-        {success ? (
-          <Text style={{ color: COLORS.PRIMARY }}>Password updated successfully</Text>
-        ) : null}
-        {isLoading ? <Text style={{ color: COLORS.PRIMARY }}>Please wait ...</Text> : null}
-
-        <TouchableOpacity style={styles.buttons} onPress={() => handleUpdatePassword()}>
-          <Text style={{ fontSize: 15, color: 'white' }}>Update password</Text>
+      </ScrollView>
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.saveButton} onPress={saveAndExit}>
+          <Text style={styles.buttonText}>Save and Exit</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
-export default UpdatePasswordScreen
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#E1F5E4',
-    paddingHorizontal: 40,
-    height: '100%'
-  },
-
-  topContainer: {
-    zIndex: 1,
-    width: '100%',
-    height: '15%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0
-  },
-  backIcon: {
-    height: 60,
-    width: 60,
-    marginLeft: -15,
-    justifyContent: 'center'
-  },
-  image: {
-    width: '100%',
-    height: '100%'
-  },
-
-  centeredView: {
+  safeAreaViewStyles: {
     flex: 1,
-    backgroundColor: 'rgba(52, 52, 52, 0.3)',
-    justifyContent: 'center',
-    alignItems: 'center'
+    paddingHorizontal: 30,
+    backgroundColor: COLORS.SECONDARY
   },
-  modalView: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    width: 340,
+  scrollView: {
+    flex: 1
+  },
+  scrollViewContent: {
+    width: '100%',
     height: 'auto',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
+    display: 'flex'
   },
-
-  buttons: {
+  container: {},
+  label: {
+    width: '80%',
+    textAlign: 'left'
+  },
+  errorText: {
     width: '100%',
-    height: 48,
-    borderRadius: 20,
-    elevation: 2,
-    marginTop: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.PRIMARY
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
   },
-  modalButton: {
-    width: 80,
-    height: 60,
-    borderRadius: 20,
-    elevation: 2,
-    marginTop: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.PRIMARY,
-    borderWidth: 1
-  },
-
-  bodyContainer: {
+  inputWrapper: {
     width: '100%',
-    height: '80%',
-    paddingBottom: 70
+    alignItems: 'center',
+    borderRadius: 15
+  },
+  label: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.TEXT_BLACK,
+    marginTop: 10
+  },
+  errorText: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
   },
   input: {
     marginTop: 5,
@@ -246,57 +181,52 @@ const styles = StyleSheet.create({
     borderColor: COLORS.PRIMARY,
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 5,
     overflow: 'hidden',
     paddingVertical: 1,
-    fontSize: 16,
+    fontSize: 14,
     color: '#4d7861',
-    backgroundColor: '#ffff'
+    backgroundColor: '#ffff',
+    fontFamily: FONT_FAMILY.POPPINS_REGULAR
   },
-  deactivateButton: {
-    height: 35,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: 'red',
-    alignItems: 'center',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginTop: 15
+  inputError: {
+    borderColor: COLORS.RED
   },
-  deactivateButtonText: {
-    color: 'white',
-    fontSize: 15
-  },
-  cancelButton: {
-    height: 35,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    alignItems: 'center',
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginTop: 15
-  },
-  cancelButtonText: {
-    color: 'black',
-    fontSize: 15
-  },
-  settingsOption: {
+  footer: {
     width: '100%',
-    height: 50,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row'
+    marginTop: 'auto',
+    marginBottom: 0,
+    backgroundColor: COLORS.SECONDARY,
+    paddingVertical: 10
   },
-  headerText: {
+  saveButton: {
+    marginBottom: 10,
+    backgroundColor: COLORS.PRIMARY,
+    padding: 10,
+    borderRadius: 10,
+    width: '100%',
+    marginTop: 5,
+    paddingVertical: 15,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3
+  },
+  buttonText: {
+    color: '#FFF',
+    fontStyle: 'normal',
     fontWeight: 'bold',
-    textAlign: 'left',
-    color: COLORS.TEXT_BLACK,
-    fontSize: 25,
-    lineHeight: 30,
-    textTransform: 'uppercase',
-    paddingVertical: 15
+    fontSize: 16,
+    textAlign: 'center',
+    textTransform: 'uppercase'
+  },
+  sectionHeaderText: {
+    fontSize: 24,
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    width: '100%'
   }
 })

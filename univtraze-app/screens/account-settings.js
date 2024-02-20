@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 import React, { useState } from 'react'
 import { AntDesign } from '@expo/vector-icons'
-import { useToast } from 'react-native-toast-notifications'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'

@@ -33,7 +33,7 @@ const { sign } = require('jsonwebtoken');
 var generator = require('generate-password');
 const schemas = require('../../utils/helpers/schemas');
 const { USER_TYPE } = require('../../utils/helpers/types');
-const { updateUserProfileSchema } = require('./user.schema');
+const { updateUserProfileSchema, changeUserPasswordSchema } = require('./user.schema');
 
 module.exports = {
   createUser: (req, res) => {
@@ -803,50 +803,58 @@ module.exports = {
       });
     });
   },
-  changePassword: (req, res) => {
-    const body = req.body;
+  changeUserPassword: (req, res) => {
+    req.body.user_id = req.user.result.id
+    const { error } = changeUserPasswordSchema.validate(req.body)
 
-    getUserById(body.user_id, (err, results) => {
-      if (err) {
-        return res.json({
-          success: 0,
-          message: 'Database connection error',
+    if (error) {
+      return res.status(400).json({
+        message: "Invalid payload"
+      })
+    }
+
+    if (req.body.new_password != req.body.confirm_password) {
+      return res.status(400).json({
+        message: "Confirm password don't match"
+      })
+    }
+
+    getUserById(req.body.user_id, (error, userResult) => {
+      if (error) {
+        return res.status(500).json({
+          message: "Internal server error"
+        })
+      }
+
+      if (!userResult){
+        return res.status(404).json({
+          message: "User not found"
+        })
+      }
+
+      const isMatchPassword = compareSync(req.body.old_password, userResult.password);
+
+      if (!isMatchPassword) {
+        return res.status(401).json({
+          message: 'Wrong Password',
         });
       }
 
-      if (!results) {
-        return res.json({
-          success: 0,
-          message: 'User not found',
-        });
-      }
+      const passwordSalt = genSaltSync(10);
+      req.body.new_password = hashSync(req.body.new_password, passwordSalt);
 
-      let checkIfPasswordMatched = compareSync(body.old_password, results.password);
-
-      if (!checkIfPasswordMatched) {
-        return res.json({
-          success: 0,
-          message: 'Old password did not match.',
-        });
-      }
-
-      const salt = genSaltSync(10);
-      body.new_password = hashSync(body.new_password, salt);
-
-      updateUserPassword({ id: body.user_id, new_password: body.new_password }, (err, finalResults) => {
+      updateUserPassword(req.body, (err, finalResults) => {
         if (err) {
-          return res.json({
-            success: 0,
-            message: 'Database connection error',
+          return res.status(500).json({
+            message: 'Internal server error',
           });
         }
 
-        return res.json({
-          success: 1,
-          message: 'Password updated successfully',
-        });
+        return res.status(200).json({
+          result: finalResults
+        })
       });
-    });
+    })
   },
   deactivateAccount: (req, res) => {
     const data = {

@@ -5,7 +5,8 @@ class Schemas {
     return Joi.object({
       email: Joi.string().email().required(),
       provider: Joi.string().required(),
-      password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+      password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:\\\'",.<>/?]{3,30}$')) // Adjusted pattern to include special characters
+      .required(),
       confirm_password: Joi.ref('password'),
     })
       .with('password', 'confirm_password')
@@ -22,7 +23,8 @@ class Schemas {
   get siginSchema() {
     return Joi.object({
       email: Joi.string().email().required(),
-      password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+      password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};:\\\'",.<>/?]{3,30}$')) // Adjusted pattern to include special characters
+      .required()
     }).messages({
       'any.required': '{{#label}} is required',
       'string.empty': '{{#label}} cannot be empty',

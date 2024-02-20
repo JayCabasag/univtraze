@@ -15,4 +15,10 @@ module.exports = {
             'string.pattern.base': 'Phone number must be in international format, e.g., +1234567890'
         }).required()
     }),
+    changeUserPasswordSchema: Joi.object({
+        user_id: Joi.number().required(),
+        old_password: Joi.string().required(),
+        new_password: Joi.string().required(),
+        confirm_password: Joi.string().required()
+    })
 }
