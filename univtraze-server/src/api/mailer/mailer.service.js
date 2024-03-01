@@ -2,21 +2,60 @@ const { transporter } = require("../../config/emailConfig");
 
 module.exports = {
   sendEmailNotification: (data, callBack) => {
-    var mailOptions = {
-      from: data.sent_by,
-      to: data.user_email,
-      subject: data.email_subject,
-      text: data.email_message,
+    const mailOptions = {
+      from: process.env.EMAIL_ADDRESS,
+      to: data.email,
+      subject: "Successful Disease Report Submission",
       attachments: [
         {
           filename: 'clinic.png',
-          path: 'https://firebasestorage.googleapis.com/v0/b/univtrazeapp.appspot.com/o/Untitled.png?alt=media&token=b42bbec9-0b9d-48c1-9d76-50ec761f4578',
-          cid: 'logo', //my mistake was putting "cid:logo@cid" here!
+          path: 'https://firebasestorage.googleapis.com/v0/b/univtraze-9ec8d.appspot.com/o/mailer-assets%2Funivtraze-clinic.png?alt=media&token=32844c0d-81a3-4aec-8f74-502b4f34e169',
+          cid: 'logo',
         },
       ],
-      html: `<b>Hi ${data.fullname}, your report has been recieved by our Univtraze clinic. Please wait for further notification and instructions from us.</b>
-                   <p>Case number: ${data.case_number} <br> Disease name: ${data.disease_name}<br>Date reported: ${data.date_reported}</p> 
-                   <img src='cid:logo'></img>`,
+      html: `
+        <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+          <p style="font-size: 18px;">Hi ${data.fullname},</p>
+          <p style="font-size: 16px;">Your report has been received by our Univtraze clinic. Please wait for further notification and instructions from us.</p>
+          <hr style="border: 0; border-top: 1px solid #ddd;">
+          <p style="font-size: 16px;"><strong>Case number:</strong> ${data.case_number}</p>
+          <p style="font-size: 16px;"><strong>Disease name:</strong> ${data.disease_name}</p>
+          <p style="font-size: 16px;"><strong>Date reported:</strong> ${data.date_reported}</p>
+          <img src='cid:logo' alt="Clinic Logo" style="width: 100%; margin-top: 20px;">
+        </div>
+      `.trim()
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return callBack(error);
+      } else {
+        return callBack(null, info.response);
+      }
+    });
+  },
+
+  sendRecoveryPassword: (data, callBack) => {
+    const mailOptions = {
+      from: process.env.EMAIL_ADDRESS,
+      to: data.email,
+      subject: "Recovery Password",
+      attachments: [
+        {
+          filename: 'clinic.png',
+          path: 'https://firebasestorage.googleapis.com/v0/b/univtraze-9ec8d.appspot.com/o/mailer-assets%2Funivtraze-app.png?alt=media&token=d6829fb9-ff46-4f12-860a-781dd6f86f29',
+          cid: 'logo',
+        },
+      ],
+      html: `
+        <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
+          <p style="font-size: 18px;">Hi ${data.fullname},</p>
+          <p style="font-size: 16px;">Your recovery password is <span style="color: #0000FF">${data.recovery_password}</span>.</p>
+          <hr style="border: 0; border-top: 1px solid #ddd;">
+          <p style="font-size: 16px;"><strong style="color: #FF0000">Note:</strong> This is only valid for 24 Hours</p>
+          <img src='cid:logo' alt="Clinic Logo" style="width: 100%; margin-top: 20px;">
+        </div>
+      `.trim()
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
