@@ -33,7 +33,7 @@ const { sign } = require('jsonwebtoken');
 var generator = require('generate-password');
 const schemas = require('../../utils/helpers/schemas');
 const { USER_TYPE } = require('../../utils/helpers/types');
-const { updateUserProfileSchema, changeUserPasswordSchema } = require('./user.schema');
+const { updateUserProfileSchema, changeUserPasswordSchema, sendUserRecoveryCodeSchema } = require('./user.schema');
 
 module.exports = {
   createUser: (req, res) => {
@@ -673,35 +673,37 @@ module.exports = {
     });
   },
 
-  sendRecoveryPasswordViaEmail: (req, res) => {
-    const body = req.body;
+  sendUserRecoveryCode: (req, res) => {
+    const { error } = sendUserRecoveryCodeSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        message: "Invalid payload"
+      })
+    }
 
-    emailCheck(body, (err, results) => {
+    const datas = req.body;
+    
+    emailCheck(datas, (err, userResult) => {
       if (err) {
-        return res.json({
-          success: false,
-          message: err.message,
+        return res.status(500).json({
+          message: "Internal server error",
         });
       }
 
-      if (results.length === 0) {
-        return res.json({
-          success: false,
+      if (!userResult) {
+        return res.status(404).json({
           message: 'Email is not registered yet.',
         });
       }
 
-      body['recovery_password'] = generator.generate({
+      datas.user_id = userResult.id
+      datas.recovery_password = generator.generate({
         length: 10,
         numbers: true,
         exclude: '/',
       });
 
-      let returnedResults = results[0];
-
-      updateUserRecoveryPassword(
-        { recovery_password: body.recovery_password, id: returnedResults.id },
-        async (err, finalResults) => {
+      updateUserRecoveryPassword(datas, async (err, finalResults) => {
           if (err) {
             return res.json({
               success: false,
@@ -709,25 +711,10 @@ module.exports = {
             });
           }
 
-          await new Promise((resolve, reject) => {
-            sendLinkToEmail(body, (err, results) => {
-              if (err)
-                return reject(
-                  res.json({
-                    success: false,
-                    message: err.message,
-                  }),
-                );
+          // sendLinkToEmail(datas, (error, result) => {
 
-              return resolve(
-                res.json({
-                  success: true,
-                  data: results,
-                  message: 'Recovery password was sent to your email',
-                }),
-              );
-            });
-          });
+          // })
+
         },
       );
     });

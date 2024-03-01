@@ -1,15 +1,5 @@
 const pool = require('../../config/database');
-var nodemailer = require('nodemailer');
-
-var transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  service: 'gmail',
-  auth: {
-    user: 'univtraze.2022@gmail.com',
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+const { transporter } = require('../../config/emailConfig');
 
 module.exports = {
   getAllUsers: (callBack) => {
@@ -26,7 +16,7 @@ module.exports = {
       if (error) {
         return callBack(error);
       }
-      return callBack(null, results);
+      return callBack(null, results[0]);
     });
   },
   create: (data, callBack) => {
@@ -275,8 +265,7 @@ module.exports = {
   updateUserRecoveryPassword: (data, callBack) => {
     pool.query(
       `update users set recovery_password = ? where id = ?`,
-      [data.recovery_password, data.id],
-
+      [data.recovery_password, data.user_id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);

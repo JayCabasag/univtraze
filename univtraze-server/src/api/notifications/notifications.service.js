@@ -1,14 +1,5 @@
 const pool = require('../../config/database');
-var nodemailer = require('nodemailer');
-var transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  service: 'gmail',
-  auth: {
-    user: 'univtraze.2022@gmail.com',
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+const { transporter } = require('../../config/emailConfig');
 
 module.exports = {
   getAdminNotifications: (data, callBack) => {

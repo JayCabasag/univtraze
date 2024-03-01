@@ -20,5 +20,8 @@ module.exports = {
         old_password: Joi.string().required(),
         new_password: Joi.string().required(),
         confirm_password: Joi.string().required()
+    }),
+    sendUserRecoveryCodeSchema: Joi.object({
+        email: Joi.string().email().required()
     })
 }
