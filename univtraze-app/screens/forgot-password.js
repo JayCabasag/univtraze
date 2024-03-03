@@ -13,6 +13,7 @@ import Header from '../components/Header'
 import { emailRegEx } from '../utils/regex'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import useFormErrors from '../hooks/useFormErrors'
+import { genericGetRequest } from '../services/api/genericGetRequest'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
@@ -27,14 +28,25 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(["email"])
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (isEmpty(email)){
       return setFormErrors("email", "Email is reuired");
     }
     if (!emailRegEx.test(email)){
       return setFormErrors("email", "Email is not valid");
     }
-      console.log("handle submit")
+    
+    try {
+      setShowLoadingModal(true)
+      await genericGetRequest("account-recovery/recovery-code");
+      
+    } catch (error) {
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
+      setShowLoadingModal(false)
+    }
   }
 
   return (
