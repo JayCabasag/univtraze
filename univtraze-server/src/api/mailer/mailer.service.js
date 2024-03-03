@@ -1,11 +1,11 @@
-const { transporter } = require("../../config/emailConfig");
+const { transporter } = require('../../config/emailConfig');
 
 module.exports = {
   sendEmailNotification: (data, callBack) => {
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: data.email,
-      subject: "Successful Disease Report Submission",
+      subject: 'Successful Disease Report Submission',
       attachments: [
         {
           filename: 'clinic.png',
@@ -23,7 +23,7 @@ module.exports = {
           <p style="font-size: 16px;"><strong>Date reported:</strong> ${data.date_reported}</p>
           <img src='cid:logo' alt="Clinic Logo" style="width: 100%; margin-top: 20px;">
         </div>
-      `.trim()
+      `.trim(),
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
@@ -39,23 +39,22 @@ module.exports = {
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS,
       to: data.email,
-      subject: "Recovery Password",
+      subject: 'Recovery Password',
       attachments: [
         {
-          filename: 'clinic.png',
+          filename: 'univtraze_app.png',
           path: 'https://firebasestorage.googleapis.com/v0/b/univtraze-9ec8d.appspot.com/o/mailer-assets%2Funivtraze-app.png?alt=media&token=d6829fb9-ff46-4f12-860a-781dd6f86f29',
           cid: 'logo',
         },
       ],
       html: `
         <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
-          <p style="font-size: 18px;">Hi ${data.fullname},</p>
-          <p style="font-size: 16px;">Your recovery password is <span style="color: #0000FF">${data.recovery_password}</span>.</p>
+          <p style="font-size: 16px;">Your recovery password is <span style="color: #0000FF">${data.unhashed_recovery_password}</span>.</p>
           <hr style="border: 0; border-top: 1px solid #ddd;">
-          <p style="font-size: 16px;"><strong style="color: #FF0000">Note:</strong> This is only valid for 24 Hours</p>
+          <p style="font-size: 16px;"><strong style="color: #FF0000">Note:</strong> This is only valid for 15 minutes</p>
           <img src='cid:logo' alt="Clinic Logo" style="width: 100%; margin-top: 20px;">
         </div>
-      `.trim()
+      `.trim(),
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

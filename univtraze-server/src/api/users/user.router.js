@@ -12,7 +12,6 @@ const {
   getAllUsers,
   getUserDetailsById,
   getUserDetailsByIds,
-  sendRecoveryPasswordViaEmail,
   updateUserPasswordFromRecovery,
   checkRecoveryPasswordAndEmailMatched,
   deactivateAccount,
@@ -20,7 +19,6 @@ const {
   verifyUser,
   updateUserProfileInformation,
   changeUserPassword,
-  sendUserRecoveryCode,
 } = require('./user.controller');
 
 const router = require('express').Router();
@@ -40,10 +38,8 @@ router.post('/visitor-details', checkToken, addVisitorDetails);
 router.get('/student', checkToken, getStudentDetailsById);
 router.get('/employee', checkToken, getEmployeeDetailsById);
 router.get('/visitor', checkToken, getVisitorDetailsById);
-router.post('/send-recovery-code', sendUserRecoveryCode);
 router.post('/update-password', updateUserPasswordFromRecovery);
 router.post('/checkRecoveryPasswordAndEmailMatched', checkRecoveryPasswordAndEmailMatched);
-// DEACTIVATE should have been DELETE verb but we need body so I use POST
 router.post('/:userId/deactivate', checkToken, deactivateAccount);
 router.post('/updatePersonalInfo', checkToken, updatePersonalInfo);
 router.put('/profile-information', checkToken, updateUserProfileInformation);

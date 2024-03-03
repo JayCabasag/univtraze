@@ -30,10 +30,10 @@ const {
 } = require('./user.service');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
-var generator = require('generate-password');
 const schemas = require('../../utils/helpers/schemas');
 const { USER_TYPE } = require('../../utils/helpers/types');
 const { updateUserProfileSchema, changeUserPasswordSchema, sendUserRecoveryCodeSchema } = require('./user.schema');
+const { sendRecoveryPassword } = require('../mailer/mailer.service');
 
 module.exports = {
   createUser: (req, res) => {
@@ -672,53 +672,6 @@ module.exports = {
       results: queryResults,
     });
   },
-
-  sendUserRecoveryCode: (req, res) => {
-    const { error } = sendUserRecoveryCodeSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({
-        message: "Invalid payload"
-      })
-    }
-
-    const datas = req.body;
-    
-    emailCheck(datas, (err, userResult) => {
-      if (err) {
-        return res.status(500).json({
-          message: "Internal server error",
-        });
-      }
-
-      if (!userResult) {
-        return res.status(404).json({
-          message: 'Email is not registered yet.',
-        });
-      }
-
-      datas.user_id = userResult.id
-      datas.recovery_password = generator.generate({
-        length: 10,
-        numbers: true,
-        exclude: '/',
-      });
-
-      updateUserRecoveryPassword(datas, async (err, finalResults) => {
-          if (err) {
-            return res.json({
-              success: false,
-              message: err.message,
-            });
-          }
-
-          // sendLinkToEmail(datas, (error, result) => {
-
-          // })
-
-        },
-      );
-    });
-  },
   updateUserPassword: (req, res) => {
     const body = req.body;
 
@@ -791,39 +744,39 @@ module.exports = {
     });
   },
   changeUserPassword: (req, res) => {
-    req.body.user_id = req.user.result.id
-    const { error } = changeUserPasswordSchema.validate(req.body)
+    req.body.user_id = req.user.result.id;
+    const { error } = changeUserPasswordSchema.validate(req.body);
 
     if (error) {
       return res.status(400).json({
-        message: "Invalid payload"
-      })
+        message: 'Invalid payload',
+      });
     }
 
     if (req.body.new_password != req.body.confirm_password) {
       return res.status(400).json({
-        message: "Confirm password don't match"
-      })
+        message: "Confirm password don't match",
+      });
     }
 
     getUserById(req.body.user_id, (error, userResult) => {
       if (error) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
 
-      if (!userResult){
+      if (!userResult) {
         return res.status(404).json({
-          message: "User not found"
-        })
+          message: 'User not found',
+        });
       }
 
       const isMatchOldPassword = compareSync(req.body.new_password, userResult.password);
       if (isMatchOldPassword) {
         return res.status(400).json({
-          message: "Old and new password is the same!"
-        })
+          message: 'Old and new password is the same!',
+        });
       }
 
       const isMatchPassword = compareSync(req.body.old_password, userResult.password);
@@ -845,10 +798,10 @@ module.exports = {
         }
 
         return res.status(200).json({
-          result: finalResults
-        })
+          result: finalResults,
+        });
       });
-    })
+    });
   },
   deactivateAccount: (req, res) => {
     const data = {
@@ -958,72 +911,72 @@ module.exports = {
     });
   },
   updateUserProfileInformation: (req, res) => {
-    req.body.user_id = req.user.result.id
-    const { error } = updateUserProfileSchema.validate(req.body)
+    req.body.user_id = req.user.result.id;
+    const { error } = updateUserProfileSchema.validate(req.body);
 
     if (error) {
-      console.log(error)
+      console.log(error);
       return res.status(400).json({
-        message: "Invalid payload"
-      })
+        message: 'Invalid payload',
+      });
     }
 
     getUserById(req.body.user_id, (error, userResult) => {
       if (error) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
 
       if (!userResult) {
         return res.status(404).json({
-          message: "User not found"
-        })
+          message: 'User not found',
+        });
       }
 
       switch (userResult.type) {
-        case "student":
+        case 'student':
           return updateStudentDetails(req.body, (error, result) => {
             if (error) {
               return res.status(500).json({
-                message: "Internal server error"
-              })
+                message: 'Internal server error',
+              });
             }
-  
+
             return res.status(200).json({
-              result
-            })
+              result,
+            });
           });
         case 'employee':
           return updateEmployeeDetails(req.body, (error, result) => {
             if (error) {
               return res.status(500).json({
-                message: "Internal server error"
-              })
+                message: 'Internal server error',
+              });
             }
-  
+
             return res.status(200).json({
-              result
-            })
+              result,
+            });
           });
         case 'visitor':
           return updateVisitorDetails(req.body, (error, result) => {
             if (error) {
               return res.status(500).json({
-                message: "Internal server error"
-              })
+                message: 'Internal server error',
+              });
             }
-  
+
             return res.status(200).json({
-              result
-            })
-          })
-      
+              result,
+            });
+          });
+
         default:
           return res.status(401).json({
-            message: "User not verified"
-          })
+            message: 'User not verified',
+          });
       }
-    })
-  }
+    });
+  },
 };

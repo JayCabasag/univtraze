@@ -29,6 +29,7 @@ app.use('/api/notifications', require('./api/notifications/notifications.router'
 app.use('/api/room-visited', require('./api/room-visited/room_visited.router'));
 app.use('/api/emergency-reports', require('./api/emergency-reports/emergency_reports.routes'));
 app.use('/api/kiosk', require('./api/kiosk/kiosk.router'));
+app.use('/api/account-recovery', require('./api/account_recovery/account_recovery.router'));
 
 app.get('/', (req, res) => {
   res.send('Welcome to univtraze server!!');

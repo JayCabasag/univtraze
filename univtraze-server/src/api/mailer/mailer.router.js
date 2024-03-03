@@ -1,4 +1,4 @@
-const { notifyUserForCaseReported, sendUserRecoveryPassword} = require('./mailer.controller');
+const { notifyUserForCaseReported, sendUserRecoveryPassword } = require('./mailer.controller');
 const router = require('express').Router();
 const { checkToken } = require('../../auth/token_validator');
 

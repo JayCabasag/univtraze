@@ -5,28 +5,28 @@ module.exports = {
     const body = req.body;
     sendEmailNotification(body, (err, results) => {
       if (err) {
-        console.log(err)
+        console.log(err);
         return res.status(500).json({
           message: 'Internal server error',
         });
       }
 
       return res.status(200).json({
-        results
+        results,
       });
     });
   },
   sendUserRecoveryPassword: (req, res) => {
-    const body = req.body
+    const body = req.body;
     sendRecoveryPassword(body, (error, results) => {
-      if (error){
+      if (error) {
         return res.status(500).json({
-          message: "Internal server error"
-        })
+          message: 'Internal server error',
+        });
       }
       return res.status(200).json({
-        results
-      })
-    })
-  }
+        results,
+      });
+    });
+  },
 };

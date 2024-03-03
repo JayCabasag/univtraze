@@ -83,11 +83,7 @@ module.exports = {
   updateStudentDetails: (data, callBack) => {
     pool.query(
       'UPDATE  `student_details` SET mobile_number=?,profile_url=? WHERE user_id = ?',
-      [
-        data.mobile_number,
-        data.profile_url,
-        data.user_id,
-      ],
+      [data.mobile_number, data.profile_url, data.user_id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
@@ -107,11 +103,7 @@ module.exports = {
   updateEmployeeDetails: (data, callBack) => {
     pool.query(
       'UPDATE `employee_details` SET profile_url=?, mobile_number=? WHERE user_id=?',
-      [
-        data.profile_url,
-        data.mobile_number,
-        data.user_id
-      ],
+      [data.profile_url, data.mobile_number, data.user_id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
@@ -218,11 +210,7 @@ module.exports = {
   updateVisitorDetails: (data, callBack) => {
     pool.query(
       'UPDATE `visitor_details` SET mobile_number=?, profile_url=? WHERE user_id=?',
-      [
-        data.mobile_number,
-        data.profile_url,
-        data.user_id,
-      ],
+      [data.mobile_number, data.profile_url, data.user_id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
