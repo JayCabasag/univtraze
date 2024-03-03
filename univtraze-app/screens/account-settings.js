@@ -17,6 +17,7 @@ import useFormErrors from '../hooks/useFormErrors'
 import { genericPostRequest } from '../services/api/genericPostRequest'
 import TopNavigation from '../components/TopNavigation'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { isEmpty } from '../utils/helpers'
 
 const AccountSettingsScreen = ({ navigation }) => {
   const { state: user, clearUser } = useUser()
@@ -32,7 +33,7 @@ const AccountSettingsScreen = ({ navigation }) => {
 
   const confirmDeleteAccount = async () => {
     resetFormErrors()
-    if (password == '' || password == null) {
+    if (isEmpty(password)) {
       return setFormErrors('password', 'Password is required')
     }
 

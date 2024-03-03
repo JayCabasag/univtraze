@@ -17,6 +17,7 @@ import BottomSheet from '../components/ui/BottomSheet'
 import React, { useState } from 'react'
 import CheckBox from 'expo-checkbox'
 import { COLORS } from '../utils/app_constants'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const menu_jpg = {
   uri: 'https://firebasestorage.googleapis.com/v0/b/fir-phoneauth-74be7.appspot.com/o/menu.png?alt=media&token=e20ee94a-4632-467a-841c-c66659a2a3df'
@@ -769,7 +770,7 @@ const DailyAssessmentScreen = () => {
   )
 }
 
-export default DailyAssessmentScreen
+export default withSafeAreaView(DailyAssessmentScreen)
 
 const styles = StyleSheet.create({
   container: {

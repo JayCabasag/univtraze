@@ -16,6 +16,7 @@ import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'
 import useFormErrors from '../hooks/useFormErrors'
 import moment from 'moment'
+import { isEmpty } from '../utils/helpers'
 
 const DISEASE_NAME = 'COVID-19'
 
@@ -51,13 +52,13 @@ export default function VaccinationAddRecordModal(props) {
 
   const handleSaveVaccination = async () => {
     resetFormErrors()
-    if (vaccineDose == '' || vaccineDose == null) {
+    if (isEmpty(vaccineDose)) {
       return setFormErrors('vaccineDose', 'Vaccine dose is required')
     }
-    if (vaccineName == '' || vaccineName == null) {
+    if (isEmpty(vaccineName)) {
       return setFormErrors('vaccineName', 'Vaccine name is required')
     }
-    if (vaccinationDate == '' || vaccineName == null) {
+    if (isEmpty(vaccinationDate)) {
       return setFormErrors('vaccinationDate', 'Vaccination date is required')
     }
     try {

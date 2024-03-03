@@ -21,6 +21,7 @@ import UserInformationFooter from '../components/UserInfoFooter'
 import CustomPicker from '../components/ui/CustomPicker'
 import CustomCalendar from '../components/ui/CustomCalendar'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { isEmpty } from '../utils/helpers'
 
 const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const scrollViewContainerRef = useRef()
@@ -81,11 +82,11 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
 
   const onNext = async () => {
     resetFormErrors()
-    if (userType === null || userType === '') {
+    if (isEmpty(userType)) {
       return navigation.pop()
     }
 
-    if (firstName === null || firstName === '') {
+    if (isEmpty(firstName)) {
       scrollToPublicProfile()
       return setFormErrors('firstName', 'First name is required')
     }
@@ -100,7 +101,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
       return setFormErrors('middleName', 'Middle name is not valid')
     }
 
-    if (lastName === null || lastName === '') {
+    if (isEmpty(lastName)) {
       scrollToPublicProfile()
       return setFormErrors('lastName', 'Last name is required')
     }
@@ -109,12 +110,12 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
       return setFormErrors('lastName', 'Last name is not valid')
     }
 
-    if (gender === null || gender === '') {
+    if (isEmpty(gender)) {
       scrollToPublicProfile()
       return setFormErrors('gender', 'Gender is required')
     }
 
-    if (dateOfBirth === null || dateOfBirth === '') {
+    if (isEmpty(dateOfBirth)) {
       scrollToPublicProfile()
       return setFormErrors('dob', 'Date of birth is required')
     }
@@ -126,11 +127,11 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
       return setFormErrors('dob', "User below 12 yrs old can't use the app")
     }
 
-    if (countryDialCode == null || countryDialCode == '') {
+    if (isEmpty(countryDialCode)) {
       return setFormErrors('countryDialCode', 'Country dial code is required')
     }
 
-    if (phoneNumber == null || phoneNumber == '') {
+    if (isEmpty(phoneNumber)) {
       return setFormErrors('phoneNumber', 'Phone number is required')
     }
 
@@ -138,27 +139,27 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
       return setFormErrors('phoneNumber', 'Phone number is invalid')
     }
 
-    if (addressRegion == null || addressRegion == '') {
+    if (isEmpty(addressRegion )) {
       scrollToCurrentAddress()
       return setFormErrors('region', 'Region address is required')
     }
 
-    if (addressProvince == null || addressProvince == '') {
+    if (isEmpty(addressProvince)) {
       scrollToCurrentAddress()
       return setFormErrors('province', 'Province address is required')
     }
 
-    if (addressCity == null || addressCity == '') {
+    if (isEmpty(addressCity)) {
       scrollToCurrentAddress()
       return setFormErrors('city', 'City address is required')
     }
 
-    if (addressBrgy == null || addressBrgy == '') {
+    if (isEmpty(addressBrgy)) {
       scrollToCurrentAddress()
       return setFormErrors('brgy', 'Barangay address is required')
     }
 
-    if (addressStreet == null || addressStreet == '') {
+    if (isEmpty(addressStreet)) {
       scrollToCurrentAddress()
       return setFormErrors('street', 'Street address is required')
     }

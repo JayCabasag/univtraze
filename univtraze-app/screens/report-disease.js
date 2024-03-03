@@ -7,9 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Platform,
   KeyboardAvoidingView,
-  StatusBar,
   Alert
 } from 'react-native'
 import { RadioButton } from 'react-native-paper'
@@ -22,9 +20,10 @@ import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import { useUser } from '../services/store/user/UserContext'
 import { useAuth } from '../services/store/auth/AuthContext'
 import useFormErrors from '../hooks/useFormErrors'
-import { uploadImageAsync } from '../utils/helpers'
+import { isEmpty, uploadImageAsync } from '../utils/helpers'
 import LoadingModal from '../components/LoadingModal'
 import { genericPostRequest } from '../services/api/genericPostRequest'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const ReportDiseaseScreen = ({ navigation }) => {
   // Notifications Variables
@@ -74,19 +73,19 @@ const ReportDiseaseScreen = ({ navigation }) => {
 
   const onSubmit = async () => {
     resetFormErrors()
-    if (diseaseName == null || diseaseName == '') {
+    if (isEmpty(diseaseName)) {
       return setFormErrors('diseaseName', 'Disease name is required')
     }
-    if (!diseaseName == 'Others' && (diseaseName == null || diseaseName == '')) {
+    if (!diseaseName == 'Others' && isEmpty(diseaseName)) {
       return setFormErrors('diseaseName', 'Disease name is required')
     }
-    if (diseaseName == 'Others' && (otherDiseaseName == null || otherDiseaseName == '')) {
+    if (diseaseName == 'Others' && isEmpty(otherDiseaseName)) {
       return setFormErrors('otherDiseaseName', 'Disease name is required')
     }
-    if (caseNumber == null || caseNumber == '') {
+    if (isEmpty(caseNumber)) {
       return setFormErrors('caseNumber', 'Case number is required')
     }
-    if (docProofImage == null) {
+    if (isEmpty(docProofImage)) {
       return setFormErrors('docProofImage', 'Supporting documents is required')
     }
 
@@ -255,7 +254,7 @@ const ReportDiseaseScreen = ({ navigation }) => {
                 <ActivityIndicator size='large' color={COLORS.PRIMARY} />
               </View>
             )}
-            {!isUploadingDocProfImage && docProofImage == null ? (
+            {!isUploadingDocProfImage && isEmpty(docProofImage) ? (
               <TouchableOpacity style={styles.uploadIdBtn} onPress={pickDocumentForProof}>
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
               </TouchableOpacity>
@@ -289,7 +288,7 @@ const ReportDiseaseScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   )
 }
-export default ReportDiseaseScreen
+export default withSafeAreaView(ReportDiseaseScreen)
 
 const styles = StyleSheet.create({
   keyboardAvoidingView: {

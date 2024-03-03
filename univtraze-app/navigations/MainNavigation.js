@@ -23,6 +23,7 @@ import UserInformationScreen from '../screens/user-information'
 import UserSelectTypeScreen from '../screens/user-select-type'
 import UserDocumentsScreen from '../screens/user-documents'
 import { StatusBar } from 'expo-status-bar'
+import { isEmpty } from '../utils/helpers'
 
 const MainStack = createNativeStackNavigator()
 
@@ -41,7 +42,7 @@ export default function MainNavigation({ onLayoutView }) {
       <MainStack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           <MainStack.Group>
-            {userState?.user?.type == null ? (
+            {isEmpty(userState?.user?.type) ? (
               <MainStack.Group>
                 <MainStack.Screen name='user-select-type' component={UserSelectTypeScreen} />
                 <MainStack.Screen

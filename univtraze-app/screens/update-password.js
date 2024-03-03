@@ -16,6 +16,7 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import LoadingModal from '../components/LoadingModal'
 import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { isEmpty } from '../utils/helpers'
 
 function UpdatePasswordScreen({ navigation }) {
   const { state: user } = useUser()
@@ -36,16 +37,16 @@ function UpdatePasswordScreen({ navigation }) {
 
   const saveAndExit = async () => {
     resetFormErrors()
-    if (oldPassword == '' || oldPassword == null) {
+    if (isEmpty(oldPassword)) {
       return setFormErrors('oldPassword', 'Old password is required')
     }
-    if (newPassword == '' || newPassword == null) {
+    if (isEmpty(newPassword)) {
       return setFormErrors('newPassword', 'New password is required')
     }
     if (newPassword.length < 7) {
       return setFormErrors('newPassword', 'New password too short')
     }
-    if (confirmPassword == '' || confirmPassword == null) {
+    if (isEmpty(confirmPassword )) {
       return setFormErrors('confirmPassword', 'Confirm password is required is required')
     }
     if (newPassword != confirmPassword) {

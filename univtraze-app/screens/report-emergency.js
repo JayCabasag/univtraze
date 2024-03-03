@@ -22,6 +22,8 @@ import useFormErrors from '../hooks/useFormErrors'
 import { genericPostRequest } from '../services/api/genericPostRequest'
 import CustomPicker from '../components/ui/CustomPicker'
 import { genericGetRequest } from '../services/api/genericGetRequest'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { isEmpty } from '../utils/helpers'
 
 const ReportEmergencyScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -241,16 +243,16 @@ const ReportEmergencyScreen = ({ navigation }) => {
   const onSubmit = async () => {
     resetFormErrors()
     setOpen(false) // Close symptoms dropdown
-    if (patientName == '' || patientName == null) {
+    if (isEmpty(patientName)) {
       return setFormErrors('patientName', 'Patient name is required')
     }
     if (symptoms.length < 1) {
       return setFormErrors('symptoms', 'Symptom is required')
     }
-    if (description == '' || description == null) {
+    if (isEmpty(description)) {
       return setFormErrors('description', 'Description is required')
     }
-    if (room == null || room == '') {
+    if (isEmpty(room)) {
       return setFormErrors('room', 'Room is required')
     }
 
@@ -377,7 +379,7 @@ const ReportEmergencyScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   )
 }
-export default ReportEmergencyScreen
+export default withSafeAreaView(ReportEmergencyScreen)
 
 const styles = StyleSheet.create({
   keyboardAvoidingView: {

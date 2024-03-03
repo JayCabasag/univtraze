@@ -6,9 +6,7 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Dimensions,
   ScrollView,
-  StatusBar,
   Alert
 } from 'react-native'
 import React, { useState } from 'react'
@@ -20,8 +18,9 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import useFormErrors from '../hooks/useFormErrors'
-import BackIcon from '../assets/back-icon.png'
 import TopNavigation from '../components/TopNavigation'
+import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { isEmpty } from '../utils/helpers'
 
 const SignInScreen = ({ navigation }) => {
   const { signIn } = useAuth()
@@ -36,16 +35,16 @@ const SignInScreen = ({ navigation }) => {
 
   const onPressLogin = async () => {
     resetFormErrors()
-    if (email == '' || email == null) {
+    if (isEmpty(email)) {
       return setFormErrors('email', 'Email is required')
     }
     if (!emailRegEx.test(email)) {
       return setFormErrors('email', 'Email is not valid.')
     }
-    if (password == null || password == '') {
+    if (isEmpty(password)) {
       return setFormErrors('password', 'Password is required.')
     }
-
+    
     try {
       setShowLoadingModal(true)
       setLoadingMessage('Checking your credentials...')
@@ -128,7 +127,7 @@ const SignInScreen = ({ navigation }) => {
   )
 }
 
-export default SignInScreen
+export default withSafeAreaView(SignInScreen)
 
 const styles = StyleSheet.create({
   container: {

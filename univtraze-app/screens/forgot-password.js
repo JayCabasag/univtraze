@@ -5,135 +5,36 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Image
 } from 'react-native'
-import React, { useState, useEffect, Fragment } from 'react'
-import axios from 'axios'
-import { Dimensions } from 'react-native'
+import React, { useState,Fragment } from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
 import Header from '../components/Header'
 import { emailRegEx } from '../utils/regex'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import useFormErrors from '../hooks/useFormErrors'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
   const [showCodeInput, setShowCodeInput] = useState(false)
-  const [codeInput, setCodeInput] = useState('')
+  const [recoveryCode, setRecoveryCode] = useState('')
 
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [success, setSuccess] = useState(false)
 
   const [showLoadingModal, setShowLoadingModal] = useState(false)
-  const [loadingMessage, setLoadingMessage] = useState('Please wait...')
 
-  async function save(key, value) {
-    await SecureStore.setItemAsync(key, value)
-  }
+  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(["email"])
 
-  const validateUserInput = async () => {
-    if (email === '') {
-      setError(true)
-      setErrorMessage('Please input your email address')
-      setShowCodeInput(false)
-    } else {
-      if (emailRegEx.test(email)) {
-        setError(false)
-        setErrorMessage('')
-        setShowCodeInput(true)
-        setShowLoadingModal(true)
-        try {
-          const data = {
-            email: email
-          }
-
-          await axios
-            .post(`https://univtraze.herokuapp.com/api/user/sendRecoveryPasswordViaEmail`, data)
-            .then((response) => {
-              const success = response.data.success
-
-              if (success === false) {
-                setError(true)
-                setErrorMessage(response.data.message)
-                setSuccess(false)
-                setShowLoadingModal(false)
-                return
-              }
-
-              setError(false)
-              setErrorMessage('')
-              setSuccess(true)
-              setShowCodeInput(true)
-              setShowLoadingModal(false)
-            })
-        } catch (error) {
-          setError(true)
-          setSuccess(false)
-          setErrorMessage('Network connection error, please try again.')
-          setShowLoadingModal(false)
-        }
-      } else {
-        setSuccess(false)
-        setError(true)
-        setErrorMessage('Invalid email address')
-        setShowCodeInput(false)
-        setShowLoadingModal(false)
-      }
+  const handleSubmit = () => {
+    if (isEmpty(email)){
+      return setFormErrors("email", "Email is reuired");
     }
-  }
-
-  const [shoot, setShoot] = useState(false)
-
-  useEffect(() => {
-    //Time out to fire the cannon
-    setTimeout(() => {
-      setShoot(true)
-    }, 1000)
-  }, [])
-
-  const verifyViaEmailRecovery = async () => {
-    if (codeInput === '') {
-      setSuccess(false)
-      setError(true)
-      setErrorMessage('Please input recovery password')
-      setShowLoadingModal(false)
-      return
+    if (!emailRegEx.test(email)){
+      return setFormErrors("email", "Email is not valid");
     }
-
-    try {
-      const data = {
-        email: email,
-        recovery_password: codeInput
-      }
-
-      await axios
-        .post(`https://univtraze.herokuapp.com/api/user/checkRecoveryPasswordAndEmailMatched`, data)
-        .then((response) => {
-          const success = response.data.success
-
-          if (success === false) {
-            setError(true)
-            setErrorMessage(response.data.message)
-            setSuccess(false)
-            setShowLoadingModal(false)
-            return
-          }
-
-          setError(false)
-          setErrorMessage('')
-          setSuccess(true)
-          setShowCodeInput(true)
-          setShowLoadingModal(false)
-          navigation.navigate('ResetPassword', { email, recovery_password: codeInput })
-        })
-    } catch (error) {
-      setError(true)
-      setSuccess(false)
-      setErrorMessage('Network connection error, please try again.')
-      setShowLoadingModal(false)
-    }
+      console.log("handle submit")
   }
 
   return (
@@ -141,7 +42,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         <LoadingModal
           onRequestClose={() => setShowLoadingModal(false)}
           open={showLoadingModal}
-          loadingMessage={loadingMessage}
+          loadingMessage={"Please wait..."}
         />
         <Header navigation={navigation} />
         <View style={styles.inputContainer}>
@@ -159,8 +60,8 @@ const ForgotPasswordScreen = ({ navigation }) => {
               <Text style={styles.label}>Code</Text>
               <TextInput
                 placeholder='Recovery code'
-                defaultValue={codeInput}
-                onChangeText={(text) => setCodeInput(text)}
+                defaultValue={recoveryCode}
+                onChangeText={setRecoveryCode}
                 style={styles.input}
               />
             </Fragment>
@@ -172,7 +73,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
             <Text style={styles.successMessage}>Recovery password sent to your email</Text>
           ) : null}
 
-          <TouchableOpacity onPress={() => validateUserInput()} style={styles.confirmEmailBtn}>
+          <TouchableOpacity onPress={handleSubmit} style={styles.confirmEmailBtn}>
             {
               <Text style={styles.buttonText}>
                 {showCodeInput ? 'Resend code' : 'Send to email'}

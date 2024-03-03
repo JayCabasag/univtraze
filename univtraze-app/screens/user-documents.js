@@ -26,7 +26,7 @@ import UserEmployeeInformation from '../components/UserEmployeeInformation'
 import UserVisitorInformation from '../components/UserVisitorInformation'
 import { getApps, initializeApp } from 'firebase/app'
 import { firebaseConfig } from '../configs/firebaseConfig'
-import { convertStringDateToISOString, uploadImageAsync } from '../utils/helpers'
+import { convertStringDateToISOString, isEmpty, uploadImageAsync } from '../utils/helpers'
 import { useUser } from '../services/store/user/UserContext'
 import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 import { convertNameToInitials } from '../utils/formatters'
@@ -156,29 +156,29 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   }
 
   const validateStudentInfo = () => {
-    if (studentId == null || studentId == '') {
+    if (isEmpty(studentId)) {
       return setFormErrors('studentId', 'Student year is required')
     }
-    if (studentCourse == null || studentCourse == '') {
+    if (isEmpty(studentCourse)) {
       return setFormErrors('studentCourse', 'Student course is required')
     }
-    if (studentYear == null || studentYear == '') {
+    if (isEmpty(studentYear)) {
       return setFormErrors('studentYear', 'Student year is required')
     }
-    if (studentSection == null || studentSection == '') {
+    if (isEmpty(studentSection)) {
       return setFormErrors('studentSection', 'Student section is required')
     }
     validateIdInputs()
   }
 
   const validateEmployeeInfo = () => {
-    if (employeeId == null || employeeId == '') {
+    if (isEmpty(employeeId)) {
       return setFormErrors('employeeId', 'Employee Id is required')
     }
-    if (employeeDepartment == null || employeeDepartment == '') {
+    if (isEmpty(employeeDepartment)) {
       return setFormErrors('employeeDepartment', 'Employee Department is required')
     }
-    if (employeePosition == null || employeePosition == '') {
+    if (isEmpty(employeePosition)) {
       return setFormErrors('employeePosition', 'Employee position is required')
     }
     validateIdInputs()
@@ -191,10 +191,10 @@ const UserDocumentsScreen = ({ navigation, route }) => {
   }
 
   const validateIdInputs = async () => {
-    if (frontIdPhoto == null) {
+    if (isEmpty(frontIdPhoto)) {
       return setFormErrors('frontIdPhoto', 'Front ID photo is required')
     }
-    if (backIdPhoto == null) {
+    if (isEmpty(backIdPhoto)) {
       // scrollViewRef.current.scrollToEnd({ animated: true })
       return setFormErrors('backIdPhoto', 'Back ID photo is required')
     }
@@ -338,7 +338,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
       >
         <View style={styles.profileContainer}>
           <Text style={styles.sectionHeaderText}>Profile photo</Text>
-          {profilePhoto == null ? (
+          {isEmpty(profilePhoto) ? (
             <GeneratedAvatar initials={initials} />
           ) : (
             <Image source={{ uri: profilePhoto }} resizeMode='cover' style={styles.profilePhoto} />
@@ -404,7 +404,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
                 <ActivityIndicator size='large' color={COLORS.PRIMARY} />
               </View>
             )}
-            {!isUploadingFrontIdPhoto && frontIdPhoto == null ? (
+            {!isUploadingFrontIdPhoto && isEmpty(frontIdPhoto) ? (
               <TouchableOpacity style={styles.uploadIdBtn} onPress={pickFrontIdImage}>
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
               </TouchableOpacity>
@@ -441,7 +441,7 @@ const UserDocumentsScreen = ({ navigation, route }) => {
                 <ActivityIndicator size='large' color={COLORS.PRIMARY} />
               </View>
             )}
-            {!isUploadingBackIdPhoto && backIdPhoto == null ? (
+            {!isUploadingBackIdPhoto && isEmpty(backIdPhoto) ? (
               <TouchableOpacity style={styles.uploadIdBtn} onPress={pickBackIdImage}>
                 <FontAwesome5 name='id-card' size={34} color={COLORS.PRIMARY} />
               </TouchableOpacity>

@@ -14,7 +14,7 @@ import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import Header from '../components/Header'
 import GeneratedAvatar from '../components/GeneratedAvatar'
 import * as ImagePicker from 'expo-image-picker'
-import { uploadImageAsync } from '../utils/helpers'
+import { isEmpty, uploadImageAsync } from '../utils/helpers'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useUser } from '../services/store/user/UserContext'
 import { convertNameToInitials } from '../utils/formatters'
@@ -64,7 +64,7 @@ function UpdatePersonalInformationScreen({ navigation }) {
 
   const saveAndExit = async () => {
     resetFormErrors()
-    if (phoneNumber == null || phoneNumber == '') {
+    if (isEmpty(phoneNumber)) {
       return setFormErrors('phoneNumber', 'Phone number is required')
     }
 
@@ -112,7 +112,7 @@ function UpdatePersonalInformationScreen({ navigation }) {
         <View style={styles.container}>
           <View style={styles.profileContainer}>
             <Text style={styles.sectionHeaderText}>Profile photo</Text>
-            {profilePhoto == null ? (
+            {isEmpty(profilePhoto) ? (
               <GeneratedAvatar initials={initials} />
             ) : (
               <Image

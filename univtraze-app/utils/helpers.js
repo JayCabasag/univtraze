@@ -48,3 +48,7 @@ export const PROVIDER = {
   GOOGLE: 'google',
   FACEBOOK: 'facebook'
 }
+
+export const isEmpty = (value) => {
+  return value == null || value == ''
+}

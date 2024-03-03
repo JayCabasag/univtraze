@@ -16,7 +16,7 @@ import Header from '../components/Header'
 import LoadingModal from '../components/LoadingModal'
 import { emailRegEx } from '../utils/regex'
 import useFormErrors from '../hooks/useFormErrors'
-import { PROVIDER } from '../utils/helpers'
+import { PROVIDER, isEmpty } from '../utils/helpers'
 import { genericPostRequest } from '../services/api/genericPostRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
@@ -56,19 +56,19 @@ const SignUpScreen = ({ navigation }) => {
 
   const onSignUp = () => {
     resetFormErrors()
-    if (email == null || email == '') {
+    if (isEmpty(email)) {
       return setFormErrors('email', 'Email is required')
     }
     if (!emailRegEx.test(email)) {
       return setFormErrors('email', 'Invalid email')
     }
-    if (password == '' || password == null) {
+    if (isEmpty(password)) {
       return setFormErrors('password', 'Password is required')
     }
     if (password.length < 7) {
       return setFormErrors('password', 'Password too short')
     }
-    if (confirmPassword == '' || confirmPassword == null) {
+    if (isEmpty(confirmPassword)) {
       return setFormErrors('confirmPassword', 'Confirm Password is required')
     }
     if (confirmPassword.length < 7) {
