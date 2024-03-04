@@ -8,13 +8,14 @@ const {
 } = require('./account_recovery.schemas');
 const { updateUserRecoveryPassword, isRecoveryCodeWithin30Minutes } = require('./account_recovery.service');
 var generator = require('generate-password');
+const messages = require('../../utils/messages')
 
 module.exports = {
   getEmailRecoveryCode: (req, res) => {
     const { error } = sendUserRecoveryCodeSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
-        message: 'Invalid payload',
+        message: messages.INVALID_PAYLOAD,
       });
     }
 
@@ -23,13 +24,13 @@ module.exports = {
     emailCheck(datas, (err, userResult) => {
       if (err) {
         return res.status(500).json({
-          message: 'Internal server error',
+          message: messages.INTERNAL_SERVER_ERROR,
         });
       }
 
       if (!userResult) {
         return res.status(404).json({
-          message: 'Email is not registered yet.',
+          message: messages.EMAIL_NOT_FOUND,
         });
       }
 
@@ -55,7 +56,7 @@ module.exports = {
         sendRecoveryPassword(datas, (error, _results) => {
           if (error) {
             return res.status(500).json({
-              message: 'Internal server error',
+              message: messages.INTERNAL_SERVER_ERROR,
             });
           }
           return res.status(200).json({
@@ -89,7 +90,7 @@ module.exports = {
       }
       const isRecoveryPasswordMatched = compareSync(datas.recovery_password, results.recovery_password);
 
-      if (isRecoveryPasswordMatched) {
+      if (!isRecoveryPasswordMatched) {
         return res.status(401).json({
           message: "Recovery password don't match.",
         });
