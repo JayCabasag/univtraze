@@ -18,6 +18,7 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import TopNavigation from '../components/TopNavigation'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import { isEmpty } from '../utils/helpers'
+import { StatusBar } from 'expo-status-bar'
 
 const AccountSettingsScreen = ({ navigation }) => {
   const { state: user, clearUser } = useUser()

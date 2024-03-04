@@ -17,6 +17,7 @@ import LoadingModal from '../components/LoadingModal'
 import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import { isEmpty } from '../utils/helpers'
+import { StatusBar } from 'expo-status-bar'
 
 function UpdatePasswordScreen({ navigation }) {
   const { state: user } = useUser()

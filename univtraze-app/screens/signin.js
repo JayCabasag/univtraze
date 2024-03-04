@@ -21,6 +21,7 @@ import useFormErrors from '../hooks/useFormErrors'
 import TopNavigation from '../components/TopNavigation'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import { isEmpty } from '../utils/helpers'
+import { StatusBar } from 'expo-status-bar'
 
 const SignInScreen = ({ navigation }) => {
   const { signIn } = useAuth()

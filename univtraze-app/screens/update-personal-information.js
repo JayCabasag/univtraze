@@ -25,6 +25,7 @@ import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import LoadingModal from '../components/LoadingModal'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 function UpdatePersonalInformationScreen({ navigation }) {
   const { state: user } = useUser()

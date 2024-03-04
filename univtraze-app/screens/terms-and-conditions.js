@@ -18,7 +18,6 @@ import { COLORS } from '../utils/app_constants'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
 
 const TermsAndConditionsScreen = ({ navigation }) => {
-  const windowWidth = Dimensions.get('window').width
   const windowHeight = Dimensions.get('window').height
 
   return (

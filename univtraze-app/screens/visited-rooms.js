@@ -8,6 +8,7 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 const VisitedRoomsScreen = ({ navigation }) => {
   const { state: auth } = useAuth()

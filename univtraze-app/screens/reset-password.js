@@ -13,6 +13,7 @@ import axios from 'axios'
 import { Dimensions } from 'react-native'
 import { COLORS } from '../utils/app_constants'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 const ResetPasswordScreen = ({
   navigation,

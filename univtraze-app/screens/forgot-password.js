@@ -16,9 +16,10 @@ import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import useFormErrors from '../hooks/useFormErrors'
 import { isEmpty } from '../utils/helpers'
 import { genericPostRequest } from '../services/api/genericPostRequest'
+import { StatusBar } from 'expo-status-bar'
 
 const ForgotPasswordScreen = ({ navigation }) => {
-  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(['email'])
+  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(['email', "recoveryCode"])
 
   const [email, setEmail] = useState('')
   const [showCodeInput, setShowCodeInput] = useState(false)
@@ -33,11 +34,11 @@ const ForgotPasswordScreen = ({ navigation }) => {
     if (!emailRegEx.test(email)) {
       return setFormErrors('email', 'Email is not valid')
     }
-    console.log(emailRegEx.test('email'))
+
     try {
       setShowLoadingModal(true)
       await genericPostRequest('account-recovery/recovery-code', { email })
-      Alert.alert('success', 'Recovery password is sent to your email.')
+      Alert.alert('success', 'Recovery password has been sent to your email.')
       setShowCodeInput(true)
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
@@ -48,7 +49,34 @@ const ForgotPasswordScreen = ({ navigation }) => {
     }
   }
 
-  const changePassword = () => {}
+  const verifyRecoveryPassword = async () => {
+    resetFormErrors();
+    if (isEmpty(email)) {
+      return setFormErrors('email', 'Email is required')
+    }
+    if (!emailRegEx.test(email)) {
+      return setFormErrors('email', 'Email is not valid')
+    }
+    if (isEmpty(recoveryCode)){
+      return setFormErrors("recoveryCode", "Recovery code is required")
+    }
+
+    try {
+      setShowLoadingModal(true)
+      const payload = {
+        email,
+        recovery_password: recoveryCode
+      }
+      await genericPostRequest("account-recovery/verify", payload);
+      navigation.push("choose-new-password", { recoveryCode, email })
+    } catch (error) {
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
+    } finally {
+      setShowLoadingModal(false)
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -61,9 +89,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       <View style={styles.inputContainer}>
         <Text style={styles.headerText}>Forgot password</Text>
         <Text style={styles.forgotPasswordDescription}>
-          If you have forgotten your password, enter the email address associated with your account
-          below. We will send you a recovery password to this email address, allowing you to reset
-          your password and regain access to your account.
+         Enter your email below. We'll send a recovery password to reset it and regain access.
         </Text>
         <Text style={styles.label}>Email</Text>
         <TextInput
@@ -100,7 +126,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
       <View style={styles.buttonContainer}>
         {showCodeInput && (
-          <TouchableOpacity onPress={changePassword} style={styles.verifyBtn}>
+          <TouchableOpacity onPress={verifyRecoveryPassword} style={styles.verifyBtn}>
             <Text style={styles.buttonText}>Verify</Text>
           </TouchableOpacity>
         )}

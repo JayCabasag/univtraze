@@ -9,6 +9,7 @@ import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
 import TopNavigation from '../components/TopNavigation'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 const TemperatureHistoryScreen = ({ navigation }) => {
   const { state: auth } = useAuth()

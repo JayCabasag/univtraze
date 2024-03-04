@@ -52,3 +52,7 @@ export const PROVIDER = {
 export const isEmpty = (value) => {
   return value == null || value == ''
 }
+
+export const isStrictEquals = (value1, value2) => {
+  return value1 === value2
+}

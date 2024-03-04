@@ -7,24 +7,61 @@ import {
   Text,
   Alert
 } from 'react-native'
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import LoadingModal from '../components/LoadingModal'
 import Header from '../components/Header'
-import { emailRegEx } from '../utils/regex'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import useFormErrors from '../hooks/useFormErrors'
-import { isEmpty } from '../utils/helpers'
+import { isEmpty, isStrictEquals } from '../utils/helpers'
 import { genericPostRequest } from '../services/api/genericPostRequest'
+import { StatusBar } from 'expo-status-bar'
 
-const ChooseNewPassword = ({ navigation }) => {
-  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(['email'])
-
-  const [email, setEmail] = useState('')
-  const [recoveryCode, setRecoveryCode] = useState('')
+const ChooseNewPasswordScreen = ({ navigation, route }) => {
+  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(['newPassword', "confirmPassword"])
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showLoadingModal, setShowLoadingModal] = useState(false)
 
-  const changePassword = () => {}
+  if (!route.params.recoveryCode) {
+    return navigation.goBack();
+  }
+
+  if (!route.params.email) {
+    return navigation.goBack();
+  }
+
+  const handleSubmit = async () => {
+    resetFormErrors();
+    if (isEmpty(newPassword)){
+        return setFormErrors("newPassword", "New password is required");
+    }
+    if (isEmpty(confirmPassword)){
+        return setFormErrors("confirmPassword", "Confirm password is required.")
+    }
+    if (!isStrictEquals(newPassword, confirmPassword)){
+        return setFormErrors("confirmPassword", "Confirm passwor don't match.")
+    }
+    try {
+        setShowLoadingModal(true)
+        const payload = {
+            "email": route.params.email,
+            "recovery_password": route.params.recoveryCode,
+            "new_password": confirmPassword
+        }
+        await genericPostRequest("account-recovery/change-password", payload)
+        Alert.alert("Success", "Password changed succefully", [
+            {text: "Ok", onPress: () => navigation.navigate("signin")}
+        ])
+    } catch (error) {
+        console.log(error)
+        Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+            { text: 'OK', onPress: () => console.log('OK') }
+        ])
+    } finally {
+        setShowLoadingModal(false)
+    }
+  }
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior='height'>
@@ -35,21 +72,31 @@ const ChooseNewPassword = ({ navigation }) => {
       />
       <Header navigation={navigation} />
       <View style={styles.inputContainer}>
-        <Text style={styles.headerText}>Forgot password</Text>
+        <Text style={styles.headerText}>Choose new password</Text>
         <Text>
-          If you have forgotten your password, enter the email address associated with your account
-          below. We will send you a recovery password to this email address, allowing you to reset
-          your password and regain access to your account.
+        Select a new password to update your account credentials.
         </Text>
-        <Text style={styles.label}>Email</Text>
+        <Text style={styles.label}>New password</Text>
         <TextInput
-          placeholder='Email Address'
-          defaultValue={email}
-          onChangeText={(text) => setEmail(text)}
-          style={[styles.input, formErrors.email.hasError && styles.errorInput]}
+          placeholder='New password'
+          defaultValue={newPassword}
+          onChangeText={setNewPassword}
+          secureTextEntry
+          style={[styles.input, formErrors.newPassword.hasError && styles.errorInput]}
         />
-        {formErrors?.email?.hasError && (
-          <Text style={styles.errorText}>{formErrors.email.message}</Text>
+        {formErrors?.newPassword?.hasError && (
+          <Text style={styles.errorText}>{formErrors.newPassword.message}</Text>
+        )}
+        <Text style={styles.label}>Confirm password</Text>
+        <TextInput
+          placeholder='Confirm password'
+          defaultValue={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+          style={[styles.input, formErrors.confirmPassword.hasError && styles.errorInput]}
+        />
+        {formErrors?.confirmPassword?.hasError && (
+          <Text style={styles.errorText}>{formErrors.confirmPassword.message}</Text>
         )}
         <TouchableOpacity onPress={handleSubmit} style={styles.confirmEmailBtn}>
           <Text style={styles.buttonText}>Change password</Text>
@@ -59,7 +106,7 @@ const ChooseNewPassword = ({ navigation }) => {
   )
 }
 
-export default withSafeAreaView(ChooseNewPassword)
+export default withSafeAreaView(ChooseNewPasswordScreen)
 
 const styles = StyleSheet.create({
   buttonContainer: {

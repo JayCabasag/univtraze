@@ -6,7 +6,6 @@ import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import { StatusBar } from 'expo-status-bar'
 
 const WelcomeScreen = ({ navigation }) => {
-  console.log(navigation.isFocused())
   return (
     <View style={styles.container}>
       <ImageBackground

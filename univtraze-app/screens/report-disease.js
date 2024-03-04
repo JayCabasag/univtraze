@@ -24,6 +24,7 @@ import { isEmpty, uploadImageAsync } from '../utils/helpers'
 import LoadingModal from '../components/LoadingModal'
 import { genericPostRequest } from '../services/api/genericPostRequest'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 const ReportDiseaseScreen = ({ navigation }) => {
   // Notifications Variables

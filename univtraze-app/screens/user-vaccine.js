@@ -21,6 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import VaccinationRecordModal from '../components/VaccinationAddRecordModal'
 import VaccinationEditRecordModal from '../components/VaccinationEditRecordModal'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 const UserVaccine = ({ navigation }) => {
   const { state: auth } = useAuth()

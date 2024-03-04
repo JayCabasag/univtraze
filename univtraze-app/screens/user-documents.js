@@ -31,6 +31,7 @@ import { useUser } from '../services/store/user/UserContext'
 import { genericUpdateRequest } from '../services/api/genericUpdateRequest'
 import { convertNameToInitials } from '../utils/formatters'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 if (!getApps().length) {
   initializeApp(firebaseConfig)

@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import WelcomeScreen from '../screens/welcome'
 import SignInScreen from '../screens/signin'
@@ -22,6 +22,7 @@ import { useUser } from '../services/store/user/UserContext'
 import UserInformationScreen from '../screens/user-information'
 import UserSelectTypeScreen from '../screens/user-select-type'
 import UserDocumentsScreen from '../screens/user-documents'
+import ChooseNewPasswordScreen from '../screens/choose-new-password'
 import { StatusBar } from 'expo-status-bar'
 import { isEmpty } from '../utils/helpers'
 import { COLORS } from '../utils/app_constants'
@@ -40,7 +41,7 @@ export default function MainNavigation({ onLayoutView }) {
 
   return (
     <NavigationContainer onReady={onLayoutView}>
-      <MainStack.Navigator screenOptions={{ headerShown: false }}>
+      <MainStack.Navigator screenOptions={{ headerShown: false, statusBarColor: COLORS.PRIMARY }}>
         {isAuthenticated ? (
           <MainStack.Group>
             {isEmpty(userState?.user?.type) ? (
@@ -79,15 +80,15 @@ export default function MainNavigation({ onLayoutView }) {
           </MainStack.Group>
         ) : (
           <MainStack.Group>
-            <MainStack.Screen name='welcome' component={WelcomeScreen} />
+            <MainStack.Screen name='welcome' component={WelcomeScreen}/>
             <MainStack.Screen name='signin' component={SignInScreen} />
             <MainStack.Screen name='signup' component={SignUpScreen} />
             <MainStack.Screen name='forgot-password' component={ForgotPasswordScreen} />
+            <MainStack.Screen name='choose-new-password' component={ChooseNewPasswordScreen} />
           </MainStack.Group>
         )}
         <MainStack.Screen name='terms-and-conditions' component={TermsAndConditionsScreen} />
       </MainStack.Navigator>
-      <StatusBar style='auto' />
     </NavigationContainer>
   )
 }

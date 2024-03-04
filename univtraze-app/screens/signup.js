@@ -22,6 +22,7 @@ import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 const SignUpScreen = ({ navigation }) => {
   const { signIn } = useAuth()
@@ -121,7 +122,6 @@ const SignUpScreen = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaView style={styles.safeAreaView}>
       <KeyboardAvoidingView style={styles.container} behavior='height'>
         <Header navigation={navigation} />
         <LoadingModal
@@ -199,17 +199,12 @@ const SignUpScreen = ({ navigation }) => {
           </View>
         </Modal>
       </KeyboardAvoidingView>
-    </SafeAreaView>
   )
 }
 
 export default withSafeAreaView(SignUpScreen)
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: COLORS.SECONDARY
-  },
   centeredView: {
     backgroundColor: 'rgba(250, 250, 250, .7)',
     flex: 1,

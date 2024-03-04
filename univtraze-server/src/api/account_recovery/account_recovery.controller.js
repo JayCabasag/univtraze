@@ -60,7 +60,7 @@ module.exports = {
             });
           }
           return res.status(200).json({
-            message: 'New recovery password was sent to your email',
+            message: messages.RECOVERY_PASSWORD_SENT,
           });
         });
       });
@@ -71,7 +71,7 @@ module.exports = {
 
     if (error) {
       return res.status(400).json({
-        message: 'Invalid payload',
+        message: messages.INVALID_PAYLOAD,
       });
     }
 
@@ -79,20 +79,20 @@ module.exports = {
     getUserByEmail(datas.email, (error, results) => {
       if (error) {
         return res.status(500).json({
-          message: 'Internal server error',
+          message: messages.INTERNAL_SERVER_ERROR,
         });
       }
 
       if (!results) {
         return res.status(404).json({
-          message: 'Email not found',
+          message: messages.EMAIL_NOT_FOUND,
         });
       }
       const isRecoveryPasswordMatched = compareSync(datas.recovery_password, results.recovery_password);
 
       if (!isRecoveryPasswordMatched) {
         return res.status(401).json({
-          message: "Recovery password don't match.",
+          message: messages.RECOVERY_PASSWORD_INCORRECT,
         });
       }
 
@@ -103,20 +103,20 @@ module.exports = {
     const { error } = changeUserPasswordViaRecoveryCodeSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
-        message: 'Invalid payload',
+        message: messages.INVALID_PAYLOAD,
       });
     }
 
     getUserByEmail(req.body.email, (error, results) => {
       if (error) {
         return res.status(500).json({
-          message: 'Internal server error',
+          message: messages.INTERNAL_SERVER_ERROR,
         });
       }
 
       if (!results) {
         return res.status(404).json({
-          message: 'Email not found',
+          message: messages.RECORD_NOT_FOUND,
         });
       }
 
@@ -124,13 +124,13 @@ module.exports = {
       isRecoveryCodeWithin30Minutes(req.body, (error, isWithin30Minutes) => {
         if (error) {
           return res.status(500).json({
-            message: 'Internal server error',
+            message: messages.INTERNAL_SERVER_ERROR,
           });
         }
 
         if (!isWithin30Minutes) {
           return res.status(400).json({
-            message: 'Recovery password expired',
+            message: messages.EXPIRED_CREDENTIALS,
           });
         }
 
@@ -138,7 +138,7 @@ module.exports = {
 
         if (!isMatchedRecoveryCode) {
           return res.status(401).json({
-            message: 'Recovery password is incorrect',
+            message: messages.RECOVERY_PASSWORD_INCORRECT,
           });
         }
 
@@ -147,11 +147,11 @@ module.exports = {
         updateUserPassword(req.body, (error, _results) => {
           if (error) {
             return res.status(500).json({
-              message: 'Internal server error',
+              message: messages.INTERNAL_SERVER_ERROR,
             });
           }
           return res.status(200).json({
-            message: 'Password updated succefully',
+            message: messages.RECORD_UPDATED_SUCCESSFULLY,
           });
         });
       });

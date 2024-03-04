@@ -22,6 +22,7 @@ import CustomPicker from '../components/ui/CustomPicker'
 import CustomCalendar from '../components/ui/CustomCalendar'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import { isEmpty } from '../utils/helpers'
+import { StatusBar } from 'expo-status-bar'
 
 const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
   const scrollViewContainerRef = useRef()

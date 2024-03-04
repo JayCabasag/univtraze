@@ -35,6 +35,9 @@ const messages = {
     MISSING_PARAMETERS: "Missing parameters",
     INVALID_FORMAT: "Invalid format",
     UNEXPECTED_ERROR: "Unexpected error",
+    RECOVERY_PASSWORD_SENT: "Recovery password was sent to your email",
+    RECOVERY_PASSWORD_INCORRECT: "Recovery password don't match",
+    RECORD_UPDATED_SUCCESSFULLY: "Record updated successfully"
   };
   
   module.exports = messages;
