@@ -3,8 +3,10 @@ import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import WelcomeImgBackground from '../assets/welcome-bg.png'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import { StatusBar } from 'expo-status-bar'
 
 const WelcomeScreen = ({ navigation }) => {
+  console.log(navigation.isFocused())
   return (
     <View style={styles.container}>
       <ImageBackground

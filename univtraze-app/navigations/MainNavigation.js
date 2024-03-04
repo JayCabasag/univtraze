@@ -24,6 +24,7 @@ import UserSelectTypeScreen from '../screens/user-select-type'
 import UserDocumentsScreen from '../screens/user-documents'
 import { StatusBar } from 'expo-status-bar'
 import { isEmpty } from '../utils/helpers'
+import { COLORS } from '../utils/app_constants'
 
 const MainStack = createNativeStackNavigator()
 

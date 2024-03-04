@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Alert,
 } from 'react-native'
 import React, { useState,Fragment } from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
@@ -14,6 +15,8 @@ import { emailRegEx } from '../utils/regex'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
 import useFormErrors from '../hooks/useFormErrors'
 import { genericGetRequest } from '../services/api/genericGetRequest'
+import { isEmpty } from "../utils/helpers"
+import { StatusBar } from 'expo-status-bar'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
@@ -30,7 +33,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const handleSubmit = async () => {
     if (isEmpty(email)){
-      return setFormErrors("email", "Email is reuired");
+      return setFormErrors("email", "Email is required");
     }
     if (!emailRegEx.test(email)){
       return setFormErrors("email", "Email is not valid");
@@ -38,8 +41,8 @@ const ForgotPasswordScreen = ({ navigation }) => {
     
     try {
       setShowLoadingModal(true)
-      await genericGetRequest("account-recovery/recovery-code");
-      
+      const res = await genericGetRequest("account-recovery/recovery-code", { email });
+      console.log(res.data)
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
         { text: 'OK', onPress: () => console.log('OK') }
@@ -64,9 +67,11 @@ const ForgotPasswordScreen = ({ navigation }) => {
             placeholder='Email Address'
             defaultValue={email}
             onChangeText={(text) => setEmail(text)}
-            style={styles.input}
+            style={[styles.input, formErrors.email.hasError && styles.errorInput]}
           />
-
+          {formErrors?.email?.hasError && (
+            <Text style={styles.errorText}>{formErrors.email.message}</Text>
+          )}
           {showCodeInput && (
             <Fragment>
               <Text style={styles.label}>Code</Text>
@@ -132,6 +137,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffff',
     borderWidth: 1,
     borderColor: COLORS.PRIMARY
+  },
+  errorInput: {
+    borderColor: COLORS.RED
+  },
+  errorText: {
+    width: '100%',
+    textAlign: 'left',
+    fontFamily: FONT_FAMILY.POPPINS_MEDIUM,
+    fontSize: 14,
+    color: COLORS.RED,
+    marginTop: 5
   },
   inputContainer: {
     display: 'flex',
