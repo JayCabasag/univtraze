@@ -2,7 +2,7 @@ const { getEmailRecoveryCode, changePasswordViaRecoveryCode } = require('./accou
 
 const router = require('express').Router();
 
-router.get('/recovery-code', getEmailRecoveryCode);
+router.post('/recovery-code', getEmailRecoveryCode);
 router.post('/change-password', changePasswordViaRecoveryCode);
 
 module.exports = router;

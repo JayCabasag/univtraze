@@ -17,6 +17,7 @@ import useFormErrors from '../hooks/useFormErrors'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import { isEmpty } from "../utils/helpers"
 import { StatusBar } from 'expo-status-bar'
+import { genericPostRequest } from '../services/api/genericPostRequest'
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState('')
@@ -41,7 +42,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     
     try {
       setShowLoadingModal(true)
-      const res = await genericGetRequest("account-recovery/recovery-code", { email });
+      const res = await genericPostRequest("account-recovery/recovery-code", { email });
       console.log(res.data)
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
