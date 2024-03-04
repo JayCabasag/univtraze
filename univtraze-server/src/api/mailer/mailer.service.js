@@ -51,7 +51,7 @@ module.exports = {
         <div style="font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px;">
           <p style="font-size: 16px;">Your recovery password is <span style="color: #0000FF">${data.unhashed_recovery_password}</span>.</p>
           <hr style="border: 0; border-top: 1px solid #ddd;">
-          <p style="font-size: 16px;"><strong style="color: #FF0000">Note:</strong> This is only valid for 15 minutes</p>
+          <p style="font-size: 16px;"><strong style="color: #FF0000">Note:</strong> This is only valid for 30 minutes</p>
           <img src='cid:logo' alt="Clinic Logo" style="width: 100%; margin-top: 20px;">
         </div>
       `.trim(),
