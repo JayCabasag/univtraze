@@ -139,7 +139,7 @@ const UserInformationScreen = ({ navigation, route: { params: userType } }) => {
       return setFormErrors('phoneNumber', 'Phone number is invalid')
     }
 
-    if (isEmpty(addressRegion )) {
+    if (isEmpty(addressRegion)) {
       scrollToCurrentAddress()
       return setFormErrors('region', 'Region address is required')
     }

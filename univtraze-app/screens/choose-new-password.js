@@ -17,36 +17,12 @@ import useFormErrors from '../hooks/useFormErrors'
 import { isEmpty } from '../utils/helpers'
 import { genericPostRequest } from '../services/api/genericPostRequest'
 
-const ForgotPasswordScreen = ({ navigation }) => {
+const ChooseNewPassword = ({ navigation }) => {
   const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(['email'])
 
   const [email, setEmail] = useState('')
-  const [showCodeInput, setShowCodeInput] = useState(false)
   const [recoveryCode, setRecoveryCode] = useState('')
   const [showLoadingModal, setShowLoadingModal] = useState(false)
-
-  const handleSubmit = async () => {
-    resetFormErrors()
-    if (isEmpty(email)) {
-      return setFormErrors('email', 'Email is required')
-    }
-    if (!emailRegEx.test(email)) {
-      return setFormErrors('email', 'Email is not valid')
-    }
-    console.log(emailRegEx.test('email'))
-    try {
-      setShowLoadingModal(true)
-      await genericPostRequest('account-recovery/recovery-code', { email })
-      Alert.alert('success', 'Recovery password is sent to your email.')
-      setShowCodeInput(true)
-    } catch (error) {
-      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
-        { text: 'OK', onPress: () => console.log('OK') }
-      ])
-    } finally {
-      setShowLoadingModal(false)
-    }
-  }
 
   const changePassword = () => {}
 
@@ -60,7 +36,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       <Header navigation={navigation} />
       <View style={styles.inputContainer}>
         <Text style={styles.headerText}>Forgot password</Text>
-        <Text style={styles.forgotPasswordDescription}>
+        <Text>
           If you have forgotten your password, enter the email address associated with your account
           below. We will send you a recovery password to this email address, allowing you to reset
           your password and regain access to your account.
@@ -75,41 +51,15 @@ const ForgotPasswordScreen = ({ navigation }) => {
         {formErrors?.email?.hasError && (
           <Text style={styles.errorText}>{formErrors.email.message}</Text>
         )}
-        {showCodeInput && (
-          <Fragment>
-            <Text style={styles.label}>Code</Text>
-            <TextInput
-              placeholder='Recovery code'
-              defaultValue={recoveryCode}
-              onChangeText={setRecoveryCode}
-              style={styles.input}
-            />
-          </Fragment>
-        )}
-        {showCodeInput && (
-          <Text onPress={handleSubmit} style={styles.resendRecoveryCodeText}>
-            Resend code
-          </Text>
-        )}
-        {!showCodeInput && (
-          <TouchableOpacity onPress={handleSubmit} style={styles.confirmEmailBtn}>
-            <Text style={styles.buttonText}>Send to email</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
-      <View style={styles.buttonContainer}>
-        {showCodeInput && (
-          <TouchableOpacity onPress={changePassword} style={styles.verifyBtn}>
-            <Text style={styles.buttonText}>Verify</Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity onPress={handleSubmit} style={styles.confirmEmailBtn}>
+          <Text style={styles.buttonText}>Change password</Text>
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   )
 }
 
-export default withSafeAreaView(ForgotPasswordScreen)
+export default withSafeAreaView(ChooseNewPassword)
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -184,11 +134,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     paddingVertical: 20,
     fontFamily: FONT_FAMILY.POPPINS_BOLD
-  },
-  forgotPasswordDescription: {
-    fontFamily: FONT_FAMILY.POPPINS_LIGHT,
-    color: COLORS.TEXT_BLACK,
-    fontSize: 14
   },
   successMessage: {
     textAlign: 'left',

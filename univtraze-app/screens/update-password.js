@@ -46,7 +46,7 @@ function UpdatePasswordScreen({ navigation }) {
     if (newPassword.length < 7) {
       return setFormErrors('newPassword', 'New password too short')
     }
-    if (isEmpty(confirmPassword )) {
+    if (isEmpty(confirmPassword)) {
       return setFormErrors('confirmPassword', 'Confirm password is required is required')
     }
     if (newPassword != confirmPassword) {

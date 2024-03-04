@@ -400,7 +400,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'    
+    alignItems: 'center'
   },
   backIcon: {
     height: 75,

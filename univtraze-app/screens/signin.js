@@ -44,7 +44,7 @@ const SignInScreen = ({ navigation }) => {
     if (isEmpty(password)) {
       return setFormErrors('password', 'Password is required.')
     }
-    
+
     try {
       setShowLoadingModal(true)
       setLoadingMessage('Checking your credentials...')
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'    
+    alignItems: 'center'
   },
   backIcon: {
     height: 60,

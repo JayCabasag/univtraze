@@ -13,7 +13,7 @@ module.exports = {
       },
     );
   },
-  
+
   isRecoveryCodeWithin30Minutes: (data, callBack) => {
     pool.query(
       `SELECT 
@@ -31,5 +31,5 @@ module.exports = {
         return callBack(null, results[0]?.is_valid ?? false);
       },
     );
-  }
+  },
 };

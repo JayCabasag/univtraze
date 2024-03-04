@@ -30,10 +30,9 @@ const {
 } = require('./user.service');
 const { genSaltSync, hashSync, compareSync } = require('bcrypt');
 const { sign } = require('jsonwebtoken');
-const schemas = require('../../utils/helpers/schemas');
-const { USER_TYPE } = require('../../utils/helpers/types');
-const { updateUserProfileSchema, changeUserPasswordSchema, sendUserRecoveryCodeSchema } = require('./user.schema');
-const { sendRecoveryPassword } = require('../mailer/mailer.service');
+const schemas = require("./../../utils/helpers/schemas")
+const { USER_TYPE } = require("../../utils/helpers/types")
+const { updateUserProfileSchema, changeUserPasswordSchema } = require('./user.schema');
 
 module.exports = {
   createUser: (req, res) => {

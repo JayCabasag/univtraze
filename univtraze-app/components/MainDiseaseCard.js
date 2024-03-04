@@ -19,9 +19,7 @@ export default function MainDiseaseCard({ top = false, data }) {
           <Image source={VirusIcon} style={styles.virus2Styles} />
         </View>
         <Text style={styles.cardHeaderTextStyle}>{name}</Text>
-        <Text style={styles.recoveredPercentageText}>
-          {recoveredPercentage}% Recovered
-        </Text>
+        <Text style={styles.recoveredPercentageText}>{recoveredPercentage}% Recovered</Text>
         <ProgressBar
           value={recoveredPercentage}
           progressBarContainerStyles={styles.progressBarContainerStyles}
