@@ -56,7 +56,7 @@ module.exports = {
         });
       }
 
-      if (results.length !== 0) {
+      if (results) {
         return res.status(409).json({
           message: 'Email already have an account',
         });
