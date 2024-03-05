@@ -96,7 +96,7 @@ export default withSafeAreaView(UserSelectTypeScreen)
 
 const styles = StyleSheet.create({
   customTopNav: {
-    marginTop: StatusBar.currentHeight + (Platform.OS == 'ios' ? 60 : 10),
+    marginTop: 20,
     width: '100%',
     display: 'flex',
     justifyContent: 'flex-end',

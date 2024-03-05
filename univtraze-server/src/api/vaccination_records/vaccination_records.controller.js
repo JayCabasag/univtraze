@@ -84,7 +84,7 @@ module.exports = {
     });
   },
   getVaccinationRecords: (req, res) => {
-    const userId = req.query['user-id'];
+    const userId = req.query['user_id'];
 
     if (userId) {
       return getVaccinationRecordsFilterByUserId(userId, (error, results) => {
@@ -93,11 +93,14 @@ module.exports = {
             message: 'Internal server error',
           });
         }
+
         return res.status(200).json({
           results,
         });
       });
     }
+
+    console.log(userId)
 
     getVaccinationRecords((error, results) => {
       if (error) {
