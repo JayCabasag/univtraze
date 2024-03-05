@@ -4,12 +4,14 @@ const {
   updateAdminCredentials,
   signUpAdmin,
   signInAdmin,
+  verifyAdmin,
 } = require('./admin.controller');
 const router = require('express').Router();
 const { checkToken } = require('../../auth/token_validator');
 
 router.post('/signup', signUpAdmin);
 router.post('/signin', signInAdmin);
+router.get('/verify', checkToken, verifyAdmin);
 router.post('/resetAdminPassword', resetAdminPassword);
 router.post('/updateAdminPassword', updateAdminPassword);
 router.post('/updateAdminCredentials', checkToken, updateAdminCredentials);
