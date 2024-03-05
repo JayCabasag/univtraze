@@ -1,4 +1,5 @@
 const schemas = require('../../utils/helpers/schemas');
+const { sendDiseaseReportConfirmationEmail } = require('../mailer/mailer.service');
 const { getUserById } = require('../users/user.service');
 const {
   addDiseaseCase,
@@ -59,12 +60,27 @@ module.exports = {
               });
             }
 
-            delete userResults.password;
-            delete userResults.provider;
-            return res.status(200).json({
-              user: userResults,
-              disese_case: results,
-            });
+            const emailPayload = {
+              email: userResults.email,
+              case_number: req.body.case_number,
+              date_reported: new Date(results.created_at).toLocaleDateString()
+            }
+
+            sendDiseaseReportConfirmationEmail(emailPayload, (error, _emailResult) => {
+              if (error) {
+                return res.status(500).json({
+                  message: "Internal server error"
+                })
+              }
+
+              delete userResults.password;
+              delete userResults.provider;
+              return res.status(200).json({
+                user: userResults,
+                disese_case: results,
+              });
+              
+            })
           });
         });
       });

@@ -17,8 +17,6 @@ const {
   getVisitorDetailsById,
   getStudentDetailsById,
   getAllUsers,
-  updateUserRecoveryPassword,
-  sendLinkToEmail,
   checkIfEmailAndRecoveryPasswordMatched,
   updateUserPassword,
   updateProfileInfoStudent,

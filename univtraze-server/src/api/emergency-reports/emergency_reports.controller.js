@@ -1,4 +1,5 @@
 const schemas = require('../../utils/helpers/schemas');
+const { sendDiseaseReportConfirmationEmail, sendEmergencyReportConfirmationEmail } = require('../mailer/mailer.service');
 const { getRoomById } = require('../rooms/room.service');
 const { getUserById } = require('../users/user.service');
 const { createEmergencyReport, getEmergencyReportById } = require('./emergency_reports.service');
@@ -57,11 +58,25 @@ module.exports = {
               });
             }
 
-            return res.status(200).json({
-              results,
-              reported_by: userResults,
-              room: roomResults,
-            });
+            const emailPayload = {
+              email: userResults.email,
+              case_number: results.id,
+              date_reported: new Date(results.created_at).toLocaleDateString()
+            }
+
+            sendEmergencyReportConfirmationEmail(emailPayload, (error, _emailResult) => {
+              if (error) {
+                return res.status(500).json({
+                  message: "Internal server error"
+                })
+              }
+
+              return res.status(200).json({
+                results,
+                reported_by: userResults,
+                room: roomResults,
+              });
+            })
           });
         });
       });
