@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use('/api/temperature-history', require('./api/temperature_history/temp_history.router'));
 app.use('/api/users', require('./api/users/user.router'));
-app.use('/api/admin', require('./api/admins/admin.router'));
+app.use('/api/admins', require('./api/admins/admin.router'));
 app.use('/api/vaccination-records', require('./api/vaccination_records/vaccination_records.router'));
 app.use('/api/rooms', require('./api/rooms/room.router'));
 app.use('/api/covid_cases', require('./api/covid_cases/covid_case.router'));

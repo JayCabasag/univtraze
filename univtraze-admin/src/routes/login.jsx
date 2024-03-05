@@ -37,7 +37,7 @@ function Login() {
         password: password,
       };
 
-      const res = await genericPostRequest('admin/loginAdmin', payload);
+      const res = await genericPostRequest('admins/signin', payload);
       localStorage.setItem('token', res.token);
       localStorage.setItem('admin', JSON.stringify(res.admin));
 
