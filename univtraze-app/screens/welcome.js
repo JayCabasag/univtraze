@@ -3,7 +3,6 @@ import React from 'react'
 import { COLORS, FONT_FAMILY } from '../utils/app_constants'
 import WelcomeImgBackground from '../assets/welcome-bg.png'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
-import { StatusBar } from 'expo-status-bar'
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -44,7 +43,7 @@ const WelcomeScreen = ({ navigation }) => {
   )
 }
 
-export default withSafeAreaView(WelcomeScreen)
+export default WelcomeScreen
 
 const styles = StyleSheet.create({
   container: {

@@ -23,9 +23,7 @@ import UserInformationScreen from '../screens/user-information'
 import UserSelectTypeScreen from '../screens/user-select-type'
 import UserDocumentsScreen from '../screens/user-documents'
 import ChooseNewPasswordScreen from '../screens/choose-new-password'
-import { StatusBar } from 'expo-status-bar'
 import { isEmpty } from '../utils/helpers'
-import { COLORS } from '../utils/app_constants'
 
 const MainStack = createNativeStackNavigator()
 
@@ -41,7 +39,7 @@ export default function MainNavigation({ onLayoutView }) {
 
   return (
     <NavigationContainer onReady={onLayoutView}>
-      <MainStack.Navigator screenOptions={{ headerShown: false, statusBarColor: COLORS.PRIMARY }}>
+      <MainStack.Navigator screenOptions={{ headerShown: false, statusBarTranslucent: true }}>
         {isAuthenticated ? (
           <MainStack.Group>
             {isEmpty(userState?.user?.type) ? (

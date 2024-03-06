@@ -42,7 +42,9 @@ const Menu = ({ visible, toggleBottomNavigationView, navigation }) => {
 
   const onNavigate = (route) => {
     toggleBottomNavigationView()
-    navigation.navigate(route)
+    setTimeout(() => {
+      navigation.navigate(route)
+    }, 500)
   }
 
   return (
