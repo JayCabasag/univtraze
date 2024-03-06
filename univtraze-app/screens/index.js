@@ -24,6 +24,7 @@ import MainDiseaseCard from '../components/MainDiseaseCard'
 import { useNotifications } from '../services/store/notifications/NotificationsContext'
 import { useFocusEffect } from '@react-navigation/native'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
+import ReportsGraph from '../components/ReportsGraph'
 
 const IndexScreen = ({ navigation }) => {
   const { state: user, updateUserDetails } = useUser()
@@ -216,16 +217,11 @@ const IndexScreen = ({ navigation }) => {
 
         <View style={styles.phUpdateContainer}>
           <Text numberOfLines={1} style={styles.sectionHeaderText}>
-            Leading Diseases
+            Disease reports overview
           </Text>
-          <Text style={styles.sectionSubText}>Commonly reported diseases</Text>
+          <Text style={styles.sectionSubText}>Top 5 Commonly reported diseases</Text>
           <View style={styles.mainDiseaseContainer}>
-            {leadingDiseasesList.length == 0 && (
-              <Text style={styles.sectionSubText}>Nothing here...</Text>
-            )}
-            {leadingDiseasesList.map((leadingDisease, index) => (
-              <MainDiseaseCard key={index} top data={leadingDisease} />
-            ))}
+            <ReportsGraph data={leadingDiseasesList}/>
           </View>
         </View>
       </View>

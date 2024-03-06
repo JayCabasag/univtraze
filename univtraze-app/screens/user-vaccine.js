@@ -21,7 +21,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import VaccinationRecordModal from '../components/VaccinationAddRecordModal'
 import VaccinationEditRecordModal from '../components/VaccinationEditRecordModal'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
-import { StatusBar } from 'expo-status-bar'
 
 const UserVaccine = ({ navigation }) => {
   const { state: auth } = useAuth()
@@ -31,7 +30,6 @@ const UserVaccine = ({ navigation }) => {
   const userToken = auth.userToken
 
   const [vaccinationRecords, setVaccinationRecords] = useState([])
-  const [showLoadingModal, setShowLoadingModal] = useState(false)
   const [showVaccinationAddRecordModal, setShowVaccinationAddRecordModal] = useState(false)
   const [showVaccinationEditRecordModal, setShowVaccinationEditRecordModal] = useState(false)
   const [vaccinationRecordForEditing, setVaccinationRecordForEditing] = useState(null)
@@ -42,7 +40,7 @@ const UserVaccine = ({ navigation }) => {
       if (!userId || !userToken) return
       try {
         setRefreshing(true)
-        const res = await genericGetRequest(`vaccination-records?userd_id=${userId}`, userToken)
+        const res = await genericGetRequest(`vaccination-records?user_id=${userId}`, userToken)
         setVaccinationRecords(res.results)
       } catch (error) {
         console.log(error)
@@ -102,11 +100,7 @@ const UserVaccine = ({ navigation }) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.addNewBtnContainer}>
-          <TouchableOpacity
-            disabled={showLoadingModal}
-            style={styles.addNewBtn}
-            onPress={handleAddNew}
-          >
+          <TouchableOpacity disabled={refreshing} style={styles.addNewBtn} onPress={handleAddNew}>
             <Ionicons name='add' size={24} color={COLORS.WHITE} />
             <Text style={styles.addNewBtnText}>Add new</Text>
           </TouchableOpacity>

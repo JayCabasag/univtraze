@@ -19,7 +19,7 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import { StatusBar } from 'expo-status-bar'
 
 const ForgotPasswordScreen = ({ navigation }) => {
-  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(['email', "recoveryCode"])
+  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(['email', 'recoveryCode'])
 
   const [email, setEmail] = useState('')
   const [showCodeInput, setShowCodeInput] = useState(false)
@@ -50,15 +50,15 @@ const ForgotPasswordScreen = ({ navigation }) => {
   }
 
   const verifyRecoveryPassword = async () => {
-    resetFormErrors();
+    resetFormErrors()
     if (isEmpty(email)) {
       return setFormErrors('email', 'Email is required')
     }
     if (!emailRegEx.test(email)) {
       return setFormErrors('email', 'Email is not valid')
     }
-    if (isEmpty(recoveryCode)){
-      return setFormErrors("recoveryCode", "Recovery code is required")
+    if (isEmpty(recoveryCode)) {
+      return setFormErrors('recoveryCode', 'Recovery code is required')
     }
 
     try {
@@ -67,8 +67,8 @@ const ForgotPasswordScreen = ({ navigation }) => {
         email,
         recovery_password: recoveryCode
       }
-      await genericPostRequest("account-recovery/verify", payload);
-      navigation.push("choose-new-password", { recoveryCode, email })
+      await genericPostRequest('account-recovery/verify', payload)
+      navigation.push('choose-new-password', { recoveryCode, email })
     } catch (error) {
       Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
         { text: 'OK', onPress: () => console.log('OK') }
@@ -89,7 +89,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
       <View style={styles.inputContainer}>
         <Text style={styles.headerText}>Forgot password</Text>
         <Text style={styles.forgotPasswordDescription}>
-         Enter your email below. We'll send a recovery password to reset it and regain access.
+          Enter your email below. We'll send a recovery password to reset it and regain access.
         </Text>
         <Text style={styles.label}>Email</Text>
         <TextInput

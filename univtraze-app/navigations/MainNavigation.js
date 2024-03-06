@@ -80,7 +80,7 @@ export default function MainNavigation({ onLayoutView }) {
           </MainStack.Group>
         ) : (
           <MainStack.Group>
-            <MainStack.Screen name='welcome' component={WelcomeScreen}/>
+            <MainStack.Screen name='welcome' component={WelcomeScreen} />
             <MainStack.Screen name='signin' component={SignInScreen} />
             <MainStack.Screen name='signup' component={SignUpScreen} />
             <MainStack.Screen name='forgot-password' component={ForgotPasswordScreen} />

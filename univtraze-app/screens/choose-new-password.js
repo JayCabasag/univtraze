@@ -18,48 +18,51 @@ import { genericPostRequest } from '../services/api/genericPostRequest'
 import { StatusBar } from 'expo-status-bar'
 
 const ChooseNewPasswordScreen = ({ navigation, route }) => {
-  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors(['newPassword', "confirmPassword"])
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { resetFormErrors, setFormErrors, formErrors } = useFormErrors([
+    'newPassword',
+    'confirmPassword'
+  ])
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [showLoadingModal, setShowLoadingModal] = useState(false)
 
   if (!route.params.recoveryCode) {
-    return navigation.goBack();
+    return navigation.goBack()
   }
 
   if (!route.params.email) {
-    return navigation.goBack();
+    return navigation.goBack()
   }
 
   const handleSubmit = async () => {
-    resetFormErrors();
-    if (isEmpty(newPassword)){
-        return setFormErrors("newPassword", "New password is required");
+    resetFormErrors()
+    if (isEmpty(newPassword)) {
+      return setFormErrors('newPassword', 'New password is required')
     }
-    if (isEmpty(confirmPassword)){
-        return setFormErrors("confirmPassword", "Confirm password is required.")
+    if (isEmpty(confirmPassword)) {
+      return setFormErrors('confirmPassword', 'Confirm password is required.')
     }
-    if (!isStrictEquals(newPassword, confirmPassword)){
-        return setFormErrors("confirmPassword", "Confirm passwor don't match.")
+    if (!isStrictEquals(newPassword, confirmPassword)) {
+      return setFormErrors('confirmPassword', "Confirm passwor don't match.")
     }
     try {
-        setShowLoadingModal(true)
-        const payload = {
-            "email": route.params.email,
-            "recovery_password": route.params.recoveryCode,
-            "new_password": confirmPassword
-        }
-        await genericPostRequest("account-recovery/change-password", payload)
-        Alert.alert("Success", "Password changed succefully", [
-            {text: "Ok", onPress: () => navigation.navigate("signin")}
-        ])
+      setShowLoadingModal(true)
+      const payload = {
+        email: route.params.email,
+        recovery_password: route.params.recoveryCode,
+        new_password: confirmPassword
+      }
+      await genericPostRequest('account-recovery/change-password', payload)
+      Alert.alert('Success', 'Password changed succefully', [
+        { text: 'Ok', onPress: () => navigation.navigate('signin') }
+      ])
     } catch (error) {
-        console.log(error)
-        Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
-            { text: 'OK', onPress: () => console.log('OK') }
-        ])
+      console.log(error)
+      Alert.alert('Failed', error?.response?.data?.message ?? 'Unknown error', [
+        { text: 'OK', onPress: () => console.log('OK') }
+      ])
     } finally {
-        setShowLoadingModal(false)
+      setShowLoadingModal(false)
     }
   }
 
@@ -73,9 +76,7 @@ const ChooseNewPasswordScreen = ({ navigation, route }) => {
       <Header navigation={navigation} />
       <View style={styles.inputContainer}>
         <Text style={styles.headerText}>Choose new password</Text>
-        <Text>
-        Select a new password to update your account credentials.
-        </Text>
+        <Text>Select a new password to update your account credentials.</Text>
         <Text style={styles.label}>New password</Text>
         <TextInput
           placeholder='New password'
