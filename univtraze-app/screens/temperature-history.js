@@ -6,17 +6,16 @@ import { COLORS, FEVERISH, FONT_FAMILY } from '../utils/app_constants'
 import { useAuth } from '../services/store/auth/AuthContext'
 import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
-import { useUserTemperatures } from '../services/store/user-temperature/UserTemperature'
 import TopNavigation from '../components/TopNavigation'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
-import { StatusBar } from 'expo-status-bar'
 
 const TemperatureHistoryScreen = ({ navigation }) => {
   const { state: auth } = useAuth()
   const { state: user } = useUser()
-  const { temperatures, updateUserTemperatures } = useUserTemperatures()
   const userId = user.user.id
   const userToken = auth.userToken
+
+  const [temperatures, setTemperatures] = React.useState([])
 
   const [refreshing, setRefreshing] = React.useState(false)
   const onRefresh = React.useCallback(() => {
@@ -24,7 +23,7 @@ const TemperatureHistoryScreen = ({ navigation }) => {
     const getRoomVisited = async () => {
       try {
         const res = await genericGetRequest(`temperature-history?user_id=${userId}`, userToken)
-        updateUserTemperatures({ temperatures: res.results })
+        setTemperatures(res.results)
       } catch (error) {
         console.log('Hehhe', error)
       } finally {
@@ -34,7 +33,7 @@ const TemperatureHistoryScreen = ({ navigation }) => {
     getRoomVisited()
   }, [userId, userToken])
 
-  const currentTemperature = temperatures[0].temperature * 1
+  const currentTemperature = temperatures[0]?.temperature ?? 0 * 1
 
   return (
     <View style={styles.container}>

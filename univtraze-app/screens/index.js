@@ -20,7 +20,6 @@ import { useUser } from '../services/store/user/UserContext'
 import { genericGetRequest } from '../services/api/genericGetRequest'
 import { useAuth } from '../services/store/auth/AuthContext'
 import DiseaseReportCard from '../components/DiseaseReportCard'
-import MainDiseaseCard from '../components/MainDiseaseCard'
 import { useNotifications } from '../services/store/notifications/NotificationsContext'
 import { useFocusEffect } from '@react-navigation/native'
 import { withSafeAreaView } from '../hoc/withSafeAreaView'
@@ -221,7 +220,7 @@ const IndexScreen = ({ navigation }) => {
           </Text>
           <Text style={styles.sectionSubText}>Top 5 Commonly reported diseases</Text>
           <View style={styles.mainDiseaseContainer}>
-            <ReportsGraph data={leadingDiseasesList}/>
+            <ReportsGraph loading={refreshing} data={leadingDiseasesList} />
           </View>
         </View>
       </View>
