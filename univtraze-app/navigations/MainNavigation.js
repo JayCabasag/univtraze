@@ -1,4 +1,4 @@
-import { NavigationContainer, useNavigation } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import WelcomeScreen from '../screens/welcome'
 import SignInScreen from '../screens/signin'
@@ -7,7 +7,6 @@ import UserVaccine from '../screens/user-vaccine'
 import ForgotPasswordScreen from '../screens/forgot-password'
 import IndexScreen from '../screens'
 import VisitedRoomsScreen from '../screens/visited-rooms'
-import DailyAssessmentScreen from '../screens/daily-assessments'
 import ReportEmergencyScreen from '../screens/report-emergency'
 import ReportDiseaseScreen from '../screens/report-disease'
 import QrScannerScreen from '../screens/qr-scanner'
@@ -61,7 +60,6 @@ export default function MainNavigation({ onLayoutView }) {
                 <MainStack.Screen name='index' component={IndexScreen} />
                 <MainStack.Screen name='qr-scanner' component={QrScannerScreen} />
                 <MainStack.Screen name='visited-rooms' component={VisitedRoomsScreen} />
-                <MainStack.Screen name='daily-assessment' component={DailyAssessmentScreen} />
                 <MainStack.Screen name='report-emergency' component={ReportEmergencyScreen} />
                 <MainStack.Screen name='report-disease' component={ReportDiseaseScreen} />
                 <MainStack.Screen name='temperature-history' component={TemperatureHistoryScreen} />
