@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const port = 3000;
 const userRouter = require("./routes/users")
+const authRouter = require("./routes/auth")
 
 app.set("view engine", "ejs");
 
@@ -11,6 +12,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", userRouter)
+app.use("/auth", authRouter)
 
 app.listen(port, () => {
     console.clear();
