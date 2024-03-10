@@ -4,16 +4,18 @@ const path = require("path");
 const app = express();
 const port = 3000;
 const indexRouter = require("./routes/index")
-const userRouter = require("./routes/users")
+const attendanceRouter = require("./routes/attendance")
 const authRouter = require("./routes/auth")
+const roomRouter = require("./routes/rooms")
 
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs");
 
 app.use(express.static(path.join(__dirname, "../public")))
 app.use("/", indexRouter)
-app.use("/users", userRouter)
+app.use("/attendance", attendanceRouter)
 app.use("/auth", authRouter)
+app.use("/rooms", roomRouter)
 
 app.listen(port, () => {
     console.clear();
