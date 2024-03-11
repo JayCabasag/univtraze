@@ -16,7 +16,8 @@
 .bg-password-image {
   background: url($password-image);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 form.user {
