@@ -2,11 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/login", (req, res) => {
-    res.render("login")
+    res.render("auth/login")
 })
 
 router.get("/forgot-password", (req, res) => {
-    res.render("forgot-password")
+    res.render("auth/forgot-password")
 })
 
 router.get("/signout", (req, res) => {
