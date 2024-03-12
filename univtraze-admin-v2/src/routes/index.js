@@ -5,7 +5,7 @@ const overviewController = require("./../controllers/overview")
 router.get("/", async (req, res) => {
     const overview = await overviewController.getOverview();
     console.log(overview)
-    res.render("index")
+    res.render("index", { overview })
 })
 
 module.exports = router
