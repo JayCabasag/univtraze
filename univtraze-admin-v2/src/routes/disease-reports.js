@@ -1,8 +1,10 @@
 const express = require("express")
 const router = express.Router();
+const controller = require("../controllers/disease-reports")
 
-router.get("/", (req, res) => {
-    return res.render("disease-reports")
+router.get("/", async (req, res) => {
+    const diseaseReports = await controller.getDiseaseReports();
+    return res.render("disease-reports", { diseaseReports })
 })
 
 module.exports = router

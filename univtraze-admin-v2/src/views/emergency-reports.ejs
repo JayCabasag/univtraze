@@ -60,12 +60,12 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
-                                            <th>Age</th>
-                                            <th>Start date</th>
-                                            <th>Salary</th>
+                                            <th>Report Id</th>
+                                            <th>User Reporter</th>
+                                            <th>Patient name</th>
+                                            <th>Symptoms</th>
+                                            <th>Description</th>
+                                            <th>Date</th>
                                         </tr>
                                     </thead>
                                     <!-- <tfoot>
@@ -82,11 +82,29 @@
                                         <% emergencyReports.forEach(function (item) { %>
                                             <tr>
                                                 <td><%= item.id %></td>
-                                                <td><%= item.id %></td>
-                                                <td><%= item.id %></td>
-                                                <td><%= item.id %></td>
-                                                <td><%= item.id %></td>
-                                                <td><%= item.id %></td>
+                                                <td><%= item.reported_by %></td>
+                                                <td><%= item.patient_name %></td>
+                                                <td><%= item.symptoms %></td>
+                                                <td><%= item.description %></td>
+                                                <%
+                                                    function formatDate(date) {
+                                                        var d = new Date(date),
+                                                            month = '' + (d.getMonth() + 1),
+                                                            day = '' + d.getDate(),
+                                                            year = d.getFullYear(),
+                                                            hour = '' + d.getHours(),
+                                                            minute = '' + d.getMinutes();
+
+                                                        // Pad single digits with leading zeros
+                                                        if (month.length < 2) month = '0' + month;
+                                                        if (day.length < 2) day = '0' + day;
+                                                        if (hour.length < 2) hour = '0' + hour;
+                                                        if (minute.length < 2) minute = '0' + minute;
+
+                                                        return [month, day, year].join('-') + ' ' + [hour, minute].join(':');
+                                                    }
+                                                %>
+                                                <td><%= formatDate(item.created_at) %></td>
                                             </tr> 
                                         <% }) %>
                                     </tbody>
