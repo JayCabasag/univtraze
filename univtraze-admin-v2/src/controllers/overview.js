@@ -1,4 +1,5 @@
 const overviewModel = require('./../models/overview')
+const diseaseReportsModel = require('./../models/disease-reports')
 
 module.exports = class Overview {
     static async getOverview(){
@@ -14,6 +15,15 @@ module.exports = class Overview {
                 pendingCasesTotal: pendingCasesTotal.total || 0,
                 emergencyReportsTotal: emergencyReportsTotal.total || 0
             }
+        } catch (error) {
+            throw error
+        }
+    }
+
+    static async getDiseaseReportsData(){
+        try {
+            const monthlyDiseaseReports = await diseaseReportsModel.getMonthlyDiseaseReports();
+            return monthlyDiseaseReports
         } catch (error) {
             throw error
         }

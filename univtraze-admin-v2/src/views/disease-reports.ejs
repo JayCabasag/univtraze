@@ -79,13 +79,15 @@
                                         </tr>
                                     </tfoot> -->
                                     <tbody>
-                                        <% diseaseReports.forEach(function(item) { %>
+                                        <% diseaseReports.forEach(function(item) {
+                                           const status = item.status == 1 ? "Resolved" : "Active"    
+                                        %>
                                             <tr>
                                                 <td><%= item.id  %></td>
                                                 <td><%= item.user_id  %></td>
                                                 <td><%= item.case_number %></td>
                                                 <td><%= item.disease_name  %></td>
-                                                <td><%= item.status  %></td>
+                                                <td><%= status %></td>
                                                 <td><%= new Date(item.created_at).toLocaleDateString()  %></td>
                                             </tr>
                                         <%}) %>
