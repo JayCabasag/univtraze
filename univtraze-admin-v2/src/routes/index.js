@@ -7,6 +7,8 @@ router.get("/", async (req, res) => {
     return res.render("index", { overview })
 })
 
+// API
+
 router.get("/overview/charts/disease-reports", async (req, res) => {
     const diseaseReportsData = await overviewController.getDiseaseReportsData();
     const months = ["Jan", "Feb", "Mar","Apr","May", "Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
@@ -20,5 +22,16 @@ router.get("/overview/charts/disease-reports", async (req, res) => {
         }
     })
 })
+
+router.get("/overview/charts/cases", async (req, res) => {
+    const cases = await overviewController.getDiseaseReportsStatusTotal();
+    return res.status(200).json({
+        cases: {
+            active_total: cases.active_count || 0,
+            resolved_total: cases.resolved_count || 0
+        }
+    })
+})
+
 
 module.exports = router

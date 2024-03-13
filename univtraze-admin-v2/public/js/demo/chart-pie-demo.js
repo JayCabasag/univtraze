@@ -2,16 +2,32 @@
 Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 Chart.defaults.global.defaultFontColor = '#858796';
 
+async function getCasesStatusData(){
+  try {
+    const res = await fetch("/overview/charts/cases")
+    const data = await res.json();
+    return data
+  } catch (error) {
+    return null
+  }
+}
+
+getCasesStatusData().then(data => {
+
+const chartLabels = ["Resolved", "Active"];
+const activeCasesTotal = data.cases.active_total || 0;
+const resolvedCasesTotal = data.cases.resolved_total || 0;
+
 // Pie Chart Example
 var ctx = document.getElementById("myPieChart");
-var myPieChart = new Chart(ctx, {
+new Chart(ctx, {
   type: 'doughnut',
   data: {
-    labels: ["Direct", "Referral"],
+    labels: chartLabels,
     datasets: [{
-      data: [55, 30],
-      backgroundColor: ['#4e73df', '#1cc88a'],
-      hoverBackgroundColor: ['#2e59d9', '#17a673'],
+      data: [activeCasesTotal, resolvedCasesTotal],
+      backgroundColor: ['#36b9cc', '#f6c23e'],
+      hoverBackgroundColor: ['#369acc', '#f6ac3e'],
       hoverBorderColor: "rgba(234, 236, 244, 1)",
     }],
   },
@@ -33,3 +49,5 @@ var myPieChart = new Chart(ctx, {
     cutoutPercentage: 80,
   },
 });
+
+})

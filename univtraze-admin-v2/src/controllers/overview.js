@@ -4,13 +4,13 @@ const diseaseReportsModel = require('./../models/disease-reports')
 module.exports = class Overview {
     static async getOverview(){
         try {
-            const activeCasesTotal = await overviewModel.getDiseaseReportsTotal();
+            const resolvedCasesTotal = await overviewModel.getPendingCasesTotal();
             const diseaseReportsTotal = await overviewModel.getDiseaseReportsTotal();
-            const pendingCasesTotal = await overviewModel.getPendingCasesTotal();
-            const emergencyReportsTotal = await overviewModel.getPendingCasesTotal();
-            
+            const pendingCasesTotal = await overviewModel.getActiveCasesTotal();
+            const emergencyReportsTotal = await overviewModel.getEmergencyReportsTotal();
+
             return {
-                activeCasesTotal: activeCasesTotal.total || 0, 
+                resolvedCasesTotal: resolvedCasesTotal.total || 0, 
                 diseaseReportsTotal: diseaseReportsTotal.total || 0,
                 pendingCasesTotal: pendingCasesTotal.total || 0,
                 emergencyReportsTotal: emergencyReportsTotal.total || 0
@@ -24,6 +24,15 @@ module.exports = class Overview {
         try {
             const monthlyDiseaseReports = await diseaseReportsModel.getMonthlyDiseaseReports();
             return monthlyDiseaseReports
+        } catch (error) {
+            throw error
+        }
+    }
+
+    static async getDiseaseReportsStatusTotal(){
+        try {
+            const casesStatusTotal = await diseaseReportsModel.getCaseStatusTotal();
+            return casesStatusTotal
         } catch (error) {
             throw error
         }
