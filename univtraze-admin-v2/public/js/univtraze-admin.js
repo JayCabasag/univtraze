@@ -53,8 +53,13 @@
     e.preventDefault();
   });
 
-  $('#createNewRoomModal').on('show.bs.modal', function (event) {
-      console.log("Run")
-  })
-
+  $("#createRoomBtn").on('click', function(event) {
+    event.preventDefault();
+    var createRoomForm = $('.create-room-form-needs-validation');
+    if (createRoomForm[0].checkValidity() === false) {
+        createRoomForm.addClass('was-validated');
+    } else {
+        createRoomForm.submit();
+    }
+  });
 })(jQuery); // End of use strict
