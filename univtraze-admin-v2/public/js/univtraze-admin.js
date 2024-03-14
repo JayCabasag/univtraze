@@ -53,4 +53,8 @@
     e.preventDefault();
   });
 
+  $('#createNewRoomModal').on('show.bs.modal', function (event) {
+      console.log("Run")
+  })
+
 })(jQuery); // End of use strict

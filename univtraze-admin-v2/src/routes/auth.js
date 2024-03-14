@@ -14,7 +14,7 @@ router.get("/signout", (req, res) => {
 })
 
 router.get("/signup", (req, res) => {
-    return res.render("auth")
+    return res.render("auth", { route: "/auth"})
 })
 
 

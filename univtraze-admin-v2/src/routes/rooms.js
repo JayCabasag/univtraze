@@ -5,7 +5,7 @@ const controller = require("../controllers/rooms")
 router.get("/", async (req, res) => {
     const rooms = await controller.getAllRooms();
     console.log(rooms)
-    return res.render("rooms", { rooms })
+    return res.render("rooms", { rooms, route: "/rooms" })
 })
 
 module.exports = router

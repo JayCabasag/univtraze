@@ -4,7 +4,7 @@ const overviewController = require("./../controllers/overview")
 
 router.get("/", async (req, res) => {
     const overview = await overviewController.getOverview();
-    return res.render("index", { overview })
+    return res.render("index", { overview, route: "/"})
 })
 
 // API

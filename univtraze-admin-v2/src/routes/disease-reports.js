@@ -4,7 +4,7 @@ const controller = require("../controllers/disease-reports")
 
 router.get("/", async (req, res) => {
     const diseaseReports = await controller.getDiseaseReports();
-    return res.render("disease-reports", { diseaseReports })
+    return res.render("disease-reports", { diseaseReports, route: "/disease-reports" })
 })
 
 module.exports = router
