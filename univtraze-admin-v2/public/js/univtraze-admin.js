@@ -56,10 +56,46 @@
   $("#createRoomBtn").on('click', function(event) {
     event.preventDefault();
     var createRoomForm = $('.create-room-form-needs-validation');
+
     if (createRoomForm[0].checkValidity() === false) {
         createRoomForm.addClass('was-validated');
     } else {
-        createRoomForm.submit();
+        try {          
+          const roomNumber = $(".create-room-form").find("input[name='room-number']").val();
+          const roomName = $(".create-room-form").find("input[name='room-name']").val();
+          const buildingName = $(".create-room-form").find("input[name='building-name']").val();
+
+          const payload = {
+            "room_number": roomNumber,
+            "room_name": roomName,
+            "building_name": buildingName
+          }
+
+          fetch('/rooms', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload), // Set the body of the request as the FormData object
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json(); // Assuming the response is JSON, parse it
+          })
+          .then(data => {
+            // Handle the response data heres
+            console.log(data);
+          })
+          .catch(error => {
+            // Handle errors here
+            console.error('There was a problem with your fetch operation:', error);
+          });
+
+        } catch (error) {
+          // window.location.search = '?error=true';
+        }
     }
   });
 })(jQuery); // End of use strict
